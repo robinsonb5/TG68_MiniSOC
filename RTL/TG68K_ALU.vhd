@@ -756,28 +756,29 @@ PROCESS (clk, Reset, exe_opcode, exe_datatype, Flags, last_data_read, OP2out, fl
 PROCESS (exe_opcode, OP2out, muls_msb, mulu_reg, FAsign, mulu_sign, reg_QA, faktorB, result_mulu, signedOP)
 	BEGIN
 -- commenting out original longhand multiplier
-		IF (signedOP='1' AND faktorB(31)='1') OR FAsign='1' THEN
-			muls_msb <= mulu_reg(63);
-		ELSE
-			muls_msb <= '0';
-		END IF;	
+--		IF (signedOP='1' AND faktorB(31)='1') OR FAsign='1' THEN
+--			muls_msb <= mulu_reg(63);
+--		ELSE
+--			muls_msb <= '0';
+--		END IF;	
 	
-		IF signedOP='1' AND faktorB(31)='1' THEN
-			mulu_sign <= '1';
-		ELSE
-			mulu_sign <= '0';
-		END IF;	
+--		IF signedOP='1' AND faktorB(31)='1' THEN
+--			mulu_sign <= '1';
+--		ELSE
+--			mulu_sign <= '0';
+--		END IF;	
 
 		IF MUL_Mode=0 THEN	-- 16 Bit
-			result_mulu(63 downto 32) <= muls_msb&mulu_reg(63 downto 33);	
-			result_mulu(15 downto 0) <= 'X'&mulu_reg(15 downto 1);	
-			IF mulu_reg(0)='1' THEN
-				IF FAsign='1' THEN
-					result_mulu(63 downto 47) <= (muls_msb&mulu_reg(63 downto 48)-(mulu_sign&faktorB(31 downto 16)));	
-				ELSE
-					result_mulu(63 downto 47) <= (muls_msb&mulu_reg(63 downto 48)+(mulu_sign&faktorB(31 downto 16)));	
-				END IF;
-			END IF;	
+			result_mulu(63 downto 32) <= std_logic_vector(unsigned(OP2out(15 downto 0)) * unsigned(OP1out(15 downto 0)));
+--			result_mulu(63 downto 32) <= muls_msb&mulu_reg(63 downto 33);	
+--			result_mulu(15 downto 0) <= 'X'&mulu_reg(15 downto 1);	
+--			IF mulu_reg(0)='1' THEN
+--				IF FAsign='1' THEN
+--					result_mulu(63 downto 47) <= (muls_msb&mulu_reg(63 downto 48)-(mulu_sign&faktorB(31 downto 16)));	
+--				ELSE
+--					result_mulu(63 downto 47) <= (muls_msb&mulu_reg(63 downto 48)+(mulu_sign&faktorB(31 downto 16)));	
+--				END IF;
+--			END IF;	
 		ELSE				-- 32 Bit
 			result_mulu <= muls_msb&mulu_reg(63 downto 1);	
 			IF mulu_reg(0)='1' THEN

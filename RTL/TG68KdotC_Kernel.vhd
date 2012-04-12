@@ -709,7 +709,7 @@ PROCESS (clk)
 					data_write_tmp <= data_write_tmp;
 				ELSIF exec(exg)='1' THEN	
 					data_write_tmp <= OP1out;
-				ELSIF exec(get_ea_now)='1' AND ea_only='1' THEN		-- ist für pea
+				ELSIF exec(get_ea_now)='1' AND ea_only='1' THEN		-- ist fï¿½r pea
 					data_write_tmp <= addr;
 				ELSIF execOPC='1' THEN
 					data_write_tmp <= ALUout;
@@ -1908,7 +1908,7 @@ PROCESS (clk, cpu, OP1out, OP2out, opcode, exe_condition, nextpass, micro_state,
 									ELSE	
 										IF opcode(5 downto 3)="001" THEN --link.l
 											datatype <= "10";
-											set_exec(opcADD) <= '1';						--für displacement
+											set_exec(opcADD) <= '1';						--fï¿½r displacement
 											set_exec(Regwrena) <= '1';
 											set(no_Flags) <= '1';
 											IF decodeOPC='1' THEN
@@ -2017,7 +2017,7 @@ PROCESS (clk, cpu, OP1out, OP2out, opcode, exe_condition, nextpass, micro_state,
 											trapmake <= '1';
 									WHEN "1010000"|"1010001"|"1010010"|"1010011"|"1010100"|"1010101"|"1010110"|"1010111"=> 		--link
 										datatype <= "10";
-										set_exec(opcADD) <= '1';						--für displacement
+										set_exec(opcADD) <= '1';						--fï¿½r displacement
 										set_exec(Regwrena) <= '1';
 										set(no_Flags) <= '1';
 										IF decodeOPC='1' THEN
@@ -2557,7 +2557,7 @@ PROCESS (clk, cpu, OP1out, OP2out, opcode, exe_condition, nextpass, micro_state,
 ------------------------------------------------------------------------------		
 ------------------------------------------------------------------------------		
 		IF set_Z_error='1'  THEN		-- divu by zero
-			trapmake <= '1';			--wichtig für USP
+			trapmake <= '1';			--wichtig fï¿½r USP
 			IF trapd='0' THEN
 				writePC <= '1';
 			END IF;			
@@ -3001,13 +3001,27 @@ PROCESS (clk, cpu, OP1out, OP2out, opcode, exe_condition, nextpass, micro_state,
 					datatype <= "10";		--Long
 					
 				WHEN mul1	=>		-- mulu
-					IF opcode(15)='1' OR MUL_Mode=0 THEN
-						set_rot_cnt <= "001110";
-					ELSE
-						set_rot_cnt <= "011110";
+					datatype <= "10";
+					set(opcMULU) <= '1';
+					IF opcode(15)='0' AND (MUL_Mode=1 OR MUL_Mode=2) THEN
+						dest_2ndHbits <= '1';
+						source_2ndLbits <= '1';--???
+						set(write_lowlong) <= '1';
+						IF sndOPC(10)='1' THEN
+							setstate <="01";
+							next_micro_state <= mul_end2;
+						END IF;	
+						set(Regwrena) <= '1';
 					END IF;
-					setstate <="01";
-					next_micro_state <= mul2;
+					datatype <= "10";
+--					IF opcode(15)='1' OR MUL_Mode=0 THEN
+--						set_rot_cnt <= "000010";
+--					ELSE
+--						set_rot_cnt <= "000010";
+--					END IF;
+--					setstate <="01";
+--					next_micro_state <= mul2;
+--					next_micro_state <= mul_end1;
 				WHEN mul2	=>		-- mulu
 					setstate <="01";
 					IF rot_cnt="00001" THEN
