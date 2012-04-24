@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP2C20F484) Path("E:/FPGA/DE1/DE1_TG68Test2/") File("DE1TG68Test.sof") MfrSpec(OpMask(1));
+		Device PartName(EP2C20F484) Path("E:/FPGA/DE1/DE1_TG68Test/") File("DE1TG68Test.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

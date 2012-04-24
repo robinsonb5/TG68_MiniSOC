@@ -3003,7 +3003,7 @@ PROCESS (clk, cpu, OP1out, OP2out, opcode, exe_condition, nextpass, micro_state,
 				WHEN mul1	=>		-- mulu
 					datatype <= "10";
 					set(opcMULU) <= '1';
-					IF opcode(15)='0' AND (MUL_Mode=1 OR MUL_Mode=2) THEN
+					IF opcode(15)='0' AND (MUL_Mode=1 OR MUL_Mode=2) THEN -- Long form
 						dest_2ndHbits <= '1';
 						source_2ndLbits <= '1';--???
 						set(write_lowlong) <= '1';
@@ -3015,9 +3015,9 @@ PROCESS (clk, cpu, OP1out, OP2out, opcode, exe_condition, nextpass, micro_state,
 					END IF;
 					datatype <= "10";
 --					IF opcode(15)='1' OR MUL_Mode=0 THEN
---						set_rot_cnt <= "000010";
+--						set_rot_cnt <= "001110";
 --					ELSE
---						set_rot_cnt <= "000010";
+--						set_rot_cnt <= "011110";	-- Long form, twice as many cycles...
 --					END IF;
 --					setstate <="01";
 --					next_micro_state <= mul2;
@@ -3032,7 +3032,7 @@ PROCESS (clk, cpu, OP1out, OP2out, opcode, exe_condition, nextpass, micro_state,
 				WHEN mul_end1	=>		-- mulu
 					datatype <= "10";
 					set(opcMULU) <= '1';
-					IF opcode(15)='0' AND (MUL_Mode=1 OR MUL_Mode=2) THEN
+					IF opcode(15)='0' AND (MUL_Mode=1 OR MUL_Mode=2) THEN -- Long form
 						dest_2ndHbits <= '1';
 						source_2ndLbits <= '1';--???
 						set(write_lowlong) <= '1';

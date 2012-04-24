@@ -101,7 +101,7 @@ architecture logic of TG68K_ALU is
 	
     signal bcd_a		  : std_logic_vector(8 downto 0);
     signal bcd_s		  : std_logic_vector(8 downto 0);
-    signal result_mulu    : std_logic_vector(63 downto 0);
+    signal result_mulu    : std_logic_vector(65 downto 0);
     signal result_div     : std_logic_vector(63 downto 0);
     signal set_mV_Flag	  : std_logic;
     signal V_Flag	      : bit;
@@ -123,7 +123,7 @@ architecture logic of TG68K_ALU is
     signal mulu_sign	  : std_logic;
     signal mulu_signext	  : std_logic_vector(16 downto 0);
     signal muls_msb		  : std_logic;
-    signal mulu_reg       : std_logic_vector(63 downto 0);
+--    signal mulu_reg       : std_logic_vector(63 downto 0);
     signal FAsign		  : std_logic;
     signal faktorA  	  : std_logic_vector(31 downto 0);
     signal faktorB  	  : std_logic_vector(31 downto 0);
@@ -753,7 +753,7 @@ PROCESS (clk, Reset, exe_opcode, exe_datatype, Flags, last_data_read, OP2out, fl
 -------------------------------------------------------------------------------
 ---- MULU/MULS
 -------------------------------------------------------------------------------	
-PROCESS (exe_opcode, OP2out, muls_msb, mulu_reg, FAsign, mulu_sign, reg_QA, faktorB, result_mulu, signedOP)
+PROCESS (exe_opcode, OP2out, muls_msb, FAsign, mulu_sign, reg_QA, faktorB, result_mulu, signedOP)
 	BEGIN
 -- commenting out original longhand multiplier
 --		IF (signedOP='1' AND faktorB(31)='1') OR FAsign='1' THEN
@@ -768,8 +768,11 @@ PROCESS (exe_opcode, OP2out, muls_msb, mulu_reg, FAsign, mulu_sign, reg_QA, fakt
 --			mulu_sign <= '0';
 --		END IF;	
 
-		IF MUL_Mode=0 THEN	-- 16 Bit
-			result_mulu(63 downto 32) <= std_logic_vector(unsigned(OP2out(15 downto 0)) * unsigned(OP1out(15 downto 0)));
+-- FIXME - merge these two multipliers...  -  need to take care of data shifting
+		IF MUL_Mode=0 or opcode(15)='1' THEN	-- 16 Bit
+			result_mulu(65 downto 0) <= std_logic_vector(
+				signed((opcode(8) and OP2out(15)) & OP2out(15 downto 0)) *
+				signed((opcode(8) and OP1out(15)) & OP1out(15 downto 0))) & X"00000000";
 --			result_mulu(63 downto 32) <= muls_msb&mulu_reg(63 downto 33);	
 --			result_mulu(15 downto 0) <= 'X'&mulu_reg(15 downto 1);	
 --			IF mulu_reg(0)='1' THEN
@@ -780,21 +783,29 @@ PROCESS (exe_opcode, OP2out, muls_msb, mulu_reg, FAsign, mulu_sign, reg_QA, fakt
 --				END IF;
 --			END IF;	
 		ELSE				-- 32 Bit
-			result_mulu <= muls_msb&mulu_reg(63 downto 1);	
-			IF mulu_reg(0)='1' THEN
-				IF FAsign='1' THEN
-					result_mulu(63 downto 31) <= (muls_msb&mulu_reg(63 downto 32)-(mulu_sign&faktorB));	
-				ELSE
-					result_mulu(63 downto 31) <= (muls_msb&mulu_reg(63 downto 32)+(mulu_sign&faktorB));	
-				END IF;
-			END IF;	
+			result_mulu(65 downto 0) <= std_logic_vector(
+				signed(
+					(opcode(11) and OP2out(31))
+						& OP2out(31 downto 0)) *
+				signed(
+					(opcode(11) and OP1out(31))
+						& OP1out(31 downto 0)));
+
+--			result_mulu <= muls_msb&mulu_reg(63 downto 1);	
+--			IF mulu_reg(0)='1' THEN
+--				IF FAsign='1' THEN
+--					result_mulu(63 downto 31) <= (muls_msb&mulu_reg(63 downto 32)-(mulu_sign&faktorB));	
+--				ELSE
+--					result_mulu(63 downto 31) <= (muls_msb&mulu_reg(63 downto 32)+(mulu_sign&faktorB));	
+--				END IF;
+--			END IF;	
 		END IF;
-		IF exe_opcode(15)='1' OR MUL_Mode=0 THEN
-			faktorB(31 downto 16) <= OP2out(15 downto 0);
-			faktorB(15 downto 0) <= (OTHERS=>'0');
-		ELSE	
-			faktorB <= OP2out;
-		END IF;
+--		IF exe_opcode(15)='1' OR MUL_Mode=0 THEN
+--			faktorB(31 downto 16) <= OP2out(15 downto 0);
+--			faktorB(15 downto 0) <= (OTHERS=>'0');
+--		ELSE	
+--			faktorB <= OP2out;
+--		END IF;
 		IF (result_mulu(63 downto 32)=X"00000000" AND (signedOP='0' OR result_mulu(31)='0')) OR
 			(result_mulu(63 downto 32)=X"FFFFFFFF" AND signedOP='1' AND result_mulu(31)='1') THEN
 			set_mV_Flag <= '0';
@@ -808,16 +819,16 @@ PROCESS (clk)
 		IF rising_edge(clk) THEN
 			IF clkena_lw='1' THEN
 				IF micro_state=mul1 THEN
-					mulu_reg(63 downto 32) <= (OTHERS=>'0');
+--					mulu_reg(63 downto 32) <= (OTHERS=>'0');
 					IF divs='1' AND ((exe_opcode(15)='1' AND reg_QA(15)='1') OR (exe_opcode(15)='0' AND reg_QA(31)='1')) THEN				--MULS Neg faktor
 						FAsign <= '1';
-						mulu_reg(31 downto 0) <= 0-reg_QA;
+--						mulu_reg(31 downto 0) <= 0-reg_QA;
 					ELSE
 						FAsign <= '0';
-						mulu_reg(31 downto 0) <= reg_QA;
+--						mulu_reg(31 downto 0) <= reg_QA;
 					END IF;	
-				ELSIF exec(opcMULU)='0' THEN
-					mulu_reg <= result_mulu;	
+--				ELSIF exec(opcMULU)='0' THEN
+--					mulu_reg <= result_mulu;	
 				END IF;
 			END IF;
 		END IF;

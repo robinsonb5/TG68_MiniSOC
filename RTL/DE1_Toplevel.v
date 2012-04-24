@@ -189,9 +189,9 @@ SEG7_LUT_4 			u0	(	HEX0,HEX1,HEX2,HEX3,mSEG7_DIG );
 
 TG68Test myTG68Test
 (	
-	.clk(CLOCK_24),
-	.src(SW),
-	.reset(!KEY[0]),
+	.clk(CLOCK_50),
+	.src({SW[9:5],SW[5],SW[5],SW[4],SW[4],SW[4],SW[3],SW[3],SW[3:0]}),
+	.reset_in(!KEY[0]),
 	.counter(mSEG7_DIG)
 );
 
