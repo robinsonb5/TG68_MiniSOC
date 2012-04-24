@@ -190,9 +190,29 @@ SEG7_LUT_4 			u0	(	HEX0,HEX1,HEX2,HEX3,mSEG7_DIG );
 TG68Test myTG68Test
 (	
 	.clk(CLOCK_50),
+//	.clk50(CLOCK_50),
 	.src({SW[9:5],SW[5],SW[5],SW[4],SW[4],SW[4],SW[3],SW[3],SW[3:0]}),
-	.reset_in(!KEY[0]),
-	.counter(mSEG7_DIG)
+	.reset_in(KEY[0]),
+	.counter(mSEG7_DIG),
+	
+	// video
+	.vga_hsync(VGA_HS),
+	.vga_vsync(VGA_VS),
+	.vga_red(VGA_R),
+	.vga_green(VGA_G),
+	.vga_blue(VGA_B),
+	
+	// sdram
+	.sdr_data(DRAM_DQ),
+	.sdr_addr(DRAM_ADDR),
+	.sdr_dqm({DRAM_UDQM,DRAM_LDQM}),
+	.sdr_we(DRAM_WE_N),
+	.sdr_cas(DRAM_CAS_N),
+	.sdr_ras(DRAM_RAS_N),
+	.sdr_cs(DRAM_CS_N),
+	.sdr_ba({DRAM_BA_1,DRAM_BA_0}),
+	.sdr_clk(DRAM_CLK),
+	.sdr_clkena(DRAM_CKE)
 );
 
 endmodule
