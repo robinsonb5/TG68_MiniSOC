@@ -224,7 +224,7 @@ begin
 						cpu_datain <= X"66f8";
 					when X"01c" =>
 						cpu_datain <= X"5242";
-						cpu_datain <= X"60ea";
+--						cpu_datain <= X"60ea";
 					when X"01e" =>
 						cpu_datain <= X"60ec";
 					when others =>
@@ -235,7 +235,7 @@ begin
 						write_address<=cpu_addr(23 downto 0);
 						write_pending<='1';
 				end if;
-				prgstate<=wait1;
+				prgstate<=wait2;
 			when wait1 =>
 				prgstate<=wait2;
 			when wait2 =>
@@ -333,19 +333,17 @@ mysdram : entity work.sdram
 --		if rising_edge(vsync) then
 --			counter <= counter+1;
 --		end if;
-		if rising_edge(clk114) then
-			if currentX=0 and currentY=0 then
-				vgaaddr<=X"100000";
-				else if dtack0='0' then
-					vgaaddr<=vgaaddr+2;
-				end if;
-			end if;
-		end if;
 
 		if rising_edge(clk114) then
 			if end_of_pixel = '1' then
 
-				if currentX<640 and currentY<480 then
+				if currentX=0 and currentY=0 then
+					vgaaddr<=X"100000";
+				elsif currentX<640 and currentY<480 then
+					if dtack0='0' then
+						vgaaddr<=vgaaddr+2;
+					end if;
+
 --					case counter(9 downto 8) is
 --						when "00" =>
 							wred <= unsigned(ramword(15 downto 8)); -- currentX(7 downto 0)+counter(7 downto 0);
