@@ -53,6 +53,9 @@
 --   cache hit?  Then decrement the counter once per cycle.  (or perhaps an n-bit shift register?)
 --   Then when a new read cycle comes in, fill the first cacheline with zero counter?
 
+-- Cachelines as described above will use a lot of LEs.  Might be better to use an M4K block
+-- (or M9K on CIII).  Probably still need to store cached addresses in registers for speed of access,
+-- but can fetch the actual data from M4k much faster than SDRAM.
  
 library ieee;
 use ieee.std_logic_1164.all;
@@ -145,7 +148,7 @@ begin
 			reset => reset,
 			addr => Addr0,
 			hit => vga_cachehit,
-			stale => open,
+--			stale => open,
 			data_in => sdata_reg,
 			data_out => dataout0,
 			dtack	=> dtack0,

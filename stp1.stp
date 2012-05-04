@@ -4,12 +4,13 @@
   </display_tree>
   <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
-    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2012/04/27 17:48:42  #0">
+    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2012/05/04 23:01:17  #0">
       <clock name="TG68Test:myTG68Test|sdram:mysdram|sysclk" polarity="posedge" tap_mode="classic"/>
       <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="128" trigger_in_enable="no" trigger_out_enable="no"/>
       <top_entity/>
       <signal_vec>
         <trigger_input_vec>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cachefill" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[0]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[10]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[11]" tap_mode="classic" type="combinatorial"/>
@@ -34,94 +35,90 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[7]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[8]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[9]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[10]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[11]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[12]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[13]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[14]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[15]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[16]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[17]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[18]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[19]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[20]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[21]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[22]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[23]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[4]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[5]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[6]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[7]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[8]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[9]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[10]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[11]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[12]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[13]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[14]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[15]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[16]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[17]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[18]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[19]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[20]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[21]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[22]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[23]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[24]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[25]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[26]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[27]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[28]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[29]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[30]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[31]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[32]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[33]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[34]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[35]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[36]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[37]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[38]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[39]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[40]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[41]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[42]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[43]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[44]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[45]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[46]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[47]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[48]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[49]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[4]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[50]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[51]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[52]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[53]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[54]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[55]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[56]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[57]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[58]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[59]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[5]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[60]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[61]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[62]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[63]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[6]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[7]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[8]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][9]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[0]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[10]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[11]" tap_mode="classic" type="combinatorial"/>
@@ -154,17 +151,25 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[7]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[8]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[3]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|dtack" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|fill" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|hit" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[5]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|req" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|reset" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|stale" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|init_done" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[1]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_cas" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_ras" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_we" tap_mode="classic" type="combinatorial"/>
@@ -212,8 +217,13 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[7]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[8]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.idle" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port0" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port1" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.refresh" tap_mode="classic" type="combinatorial"/>
         </trigger_input_vec>
         <data_input_vec>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cachefill" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[0]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[10]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[11]" tap_mode="classic" type="combinatorial"/>
@@ -238,94 +248,90 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[7]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[8]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[9]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[10]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[11]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[12]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[13]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[14]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[15]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[16]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[17]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[18]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[19]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[20]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[21]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[22]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[23]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[4]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[5]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[6]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[7]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[8]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[9]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[10]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[11]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[12]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[13]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[14]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[15]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[16]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[17]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[18]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[19]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[20]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[21]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[22]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[23]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[24]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[25]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[26]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[27]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[28]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[29]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[30]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[31]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[32]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[33]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[34]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[35]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[36]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[37]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[38]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[39]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[40]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[41]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[42]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[43]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[44]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[45]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[46]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[47]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[48]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[49]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[4]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[50]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[51]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[52]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[53]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[54]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[55]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[56]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[57]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[58]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[59]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[5]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[60]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[61]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[62]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[63]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[6]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[7]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[8]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][9]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[0]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[10]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[11]" tap_mode="classic" type="combinatorial"/>
@@ -358,17 +364,25 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[7]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[8]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[3]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|dtack" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|fill" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|hit" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[5]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|req" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|reset" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|stale" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|init_done" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[1]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_cas" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_ras" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_we" tap_mode="classic" type="combinatorial"/>
@@ -416,8 +430,13 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[7]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[8]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.idle" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port0" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port1" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.refresh" tap_mode="classic" type="combinatorial"/>
         </data_input_vec>
         <storage_qualifier_input_vec>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cachefill" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[0]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[10]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[11]" tap_mode="classic" type="combinatorial"/>
@@ -442,94 +461,90 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[7]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[8]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[9]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[10]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[11]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[12]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[13]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[14]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[15]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[16]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[17]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[18]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[19]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[20]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[21]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[22]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[23]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[4]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[5]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[6]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[7]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[8]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[9]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[10]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[11]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[12]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[13]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[14]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[15]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[16]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[17]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[18]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[19]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[20]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[21]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[22]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[23]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[24]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[25]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[26]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[27]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[28]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[29]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[30]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[31]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[32]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[33]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[34]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[35]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[36]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[37]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[38]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[39]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[40]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[41]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[42]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[43]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[44]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[45]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[46]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[47]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[48]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[49]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[4]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[50]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[51]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[52]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[53]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[54]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[55]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[56]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[57]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[58]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[59]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[5]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[60]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[61]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[62]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[63]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[6]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[7]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[8]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][16]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][17]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][18]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][19]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][20]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][21]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][22]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][23]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][9]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[0]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[10]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[11]" tap_mode="classic" type="combinatorial"/>
@@ -562,17 +577,25 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[7]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[8]" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_out[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[3]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|dtack" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|fill" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|hit" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[5]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|req" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|reset" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|stale" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[0]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[1]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[2]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[3]" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|init_done" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[1]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_cas" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_ras" tap_mode="classic" type="combinatorial"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sd_we" tap_mode="classic" type="combinatorial"/>
@@ -620,6 +643,10 @@
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[7]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[8]" tap_mode="classic" type="register"/>
           <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata_reg[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.idle" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port0" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port1" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.refresh" tap_mode="classic" type="combinatorial"/>
         </storage_qualifier_input_vec>
       </signal_vec>
       <presentation>
@@ -650,98 +677,6 @@
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[1]"/>
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[0]"/>
           </bus>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr" order="msb_to_lsb" radix="hex" state="collapse" type="register">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[23]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[22]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[21]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[20]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[19]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[18]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[17]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[16]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[15]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[14]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[13]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[12]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0]"/>
-          </bus>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata" order="msb_to_lsb" radix="hex" state="collapse" type="register">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[63]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[62]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[61]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[60]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[59]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[58]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[57]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[56]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[55]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[54]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[53]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[52]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[51]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[50]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[49]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[48]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[47]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[46]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[45]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[44]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[43]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[42]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[41]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[40]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[39]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[38]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[37]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[36]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[35]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[34]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[33]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[32]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[31]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[30]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[29]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[28]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[27]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[26]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[25]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[24]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[23]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[22]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[21]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[20]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[19]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[18]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[17]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[16]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[15]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[14]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[13]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[12]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[0]"/>
-          </bus>
           <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[15]"/>
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[14]"/>
@@ -783,13 +718,6 @@
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|hit"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|req"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|reset"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|stale"/>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid" order="msb_to_lsb" radix="hex" state="collapse" type="register">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[0]"/>
-          </bus>
           <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|sdata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[15]"/>
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[14]"/>
@@ -842,8 +770,126 @@
           </bus>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sd_ras"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sd_cas"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|init_done"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sd_we"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port0"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port1"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.idle"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.refresh"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cachefill"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[0]"/>
+          </bus>
         </data_view>
         <setup_view>
           <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
@@ -872,98 +918,6 @@
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[1]"/>
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|addr[0]"/>
           </bus>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr" order="msb_to_lsb" radix="hex" state="collapse" type="register">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[23]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[22]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[21]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[20]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[19]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[18]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[17]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[16]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[15]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[14]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[13]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[12]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0]"/>
-          </bus>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata" order="msb_to_lsb" radix="hex" state="collapse" type="register">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[63]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[62]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[61]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[60]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[59]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[58]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[57]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[56]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[55]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[54]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[53]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[52]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[51]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[50]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[49]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[48]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[47]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[46]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[45]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[44]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[43]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[42]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[41]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[40]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[39]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[38]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[37]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[36]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[35]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[34]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[33]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[32]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[31]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[30]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[29]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[28]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[27]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[26]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[25]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[24]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[23]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[22]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[21]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[20]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[19]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[18]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[17]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[16]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[15]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[14]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[13]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[12]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cachedata[0]"/>
-          </bus>
           <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[15]"/>
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|data_in[14]"/>
@@ -1005,13 +959,6 @@
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|hit"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|req"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|reset"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|stale"/>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid" order="msb_to_lsb" radix="hex" state="collapse" type="register">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|valid[0]"/>
-          </bus>
           <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|sdata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[15]"/>
             <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[14]"/>
@@ -1064,21 +1011,139 @@
           </bus>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sd_ras"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sd_cas"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|init_done"/>
           <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sd_we"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|delay[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port0"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.port1"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.idle"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdram_port.refresh"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cachefill"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[0][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[1][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[2][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3]" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][23]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][22]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][21]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][20]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][19]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][18]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][17]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][16]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|cacheaddr[3][3]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|rdline[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrline[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|wrlsb[0]"/>
+          </bus>
         </setup_view>
       </presentation>
-      <trigger CRC="DDE97BBA" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2012/04/27 17:48:42  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
+      <trigger CRC="D34D39EF" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2012/05/04 23:18:17  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic">
+          <level enabled="yes" name="condition1" type="basic">'TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|req' == falling edge &amp;&amp; 'TG68Test:myTG68Test|sdram:mysdram|cacheline:vgacache1|reset' == high
             <power_up enabled="yes">
             </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
-          <transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-            <pwr_up_transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pwr_up_transitional>
+          <transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+            <pwr_up_transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pwr_up_transitional>
           </transitional>
           <storage_qualifier_level type="basic">
             <power_up>
@@ -1097,14 +1162,14 @@
           </storage_qualifier_level>
         </storage_qualifier_events>
         <log>
-          <data global_temp="1" name="log: 2012/04/27 23:52:00  #0" power_up_mode="false" sample_depth="128" trigger_position="16">00001001000110001010111000001001000010000010111000111111011110110001111110011101110001111111101101100010111111000011111111101100001111111110110000101011111111001000100100010011101010001000111111111011000000100100011000101011100000100100001000001011100011111101111011000111111001110111000111111110110110001011111100010011101010001000111111111011000010101111101001000001000001001110101000100100111010100010000010010001100010101110000010010000100000101110001111110111101100011111100111011100011111111011011000101111110001001110101000100011111111101100001010111111110010001001000100111010100010010011101010001000001001000010000110111000001001000010000010111000111111011110110001111110011101110001111111101101100010111111000100111010100010001111111110110000101011111111001000100100010011101010001001001110101000100000100100001000011011100000100100001000011011100011111101111011000111111001110111000111111110110110001011111100010011101010001000111111111011001001100000111100100010010001001110101000100100111010100010000010010000100001101110000010010000100001101110001111110111101100011111100111011100011111111011011000101111110001001110101000100011111111101100101110000011110010001001000100111010100010010011101010001000001001000010000110111000001001000010000110111000111111011110110001111110011101110001111111101101100010111111000100111010100010001111111110110010111000001111001000100100010011101010001001001110101000100000100100001000011011100000100100001000011011100011111101111011000111111001110111000111111110110110001011111100010011101010001000111111111011001011100000111100100010010001001110101000100100111010100010000010010000100001101110000010010000100001101110001111110111101100011111100111011100011111111011011000101111110001001110101000100011111111101100101110000011110010001001000100111010100010010011101010001000001001000010000110111000001001000010000110111000111111011110110001111110011101110001111111101101100010111111000100111010100010001111111110110010111000001111001000100100010011101010001001001110101000100000100100001000011011100000100100001000011011100011111101111011000111111001110111000111111110110110001011111100010011101010001000111111111011001011100000111100100010010001001110101000100100111010100010000010010000100001101110000010010000100001101110001111110111101100011111100111011100011111111011011000101111110001001110101000100011111111101100101110000011010010001001000100111010100010010011101010001000001001000010000110111000001001000010000110111000111111011110110001111110011101110001111111101101100010111111000100111010100010001111111110110010111000001111001000100100010011101010001001001110101000100000100100001000011011100000100100001000011011100011111101111011000111111001110111000111111110110110001011111100010011101010001000111111111011001011100000111100100010010000000000000000000100111010100010000010010000100001101110000010010000100001101110001111110111101100011111100111011100011111111011011000101111110000000000000000000011111111101100101110000010110100110111000000000000000000000000000000000000001001000010000110111000001001000010000110111000111111011110110001111110011101110001111111101101100010111111000000000000000000001111111110110010111000001111001000100100000000000000000000000000000000000000100100001000011011100000100100001000011011100011111101111011000111111001110111000111111110110110001011111100000000000000000000111111111011001011100000111100100010010000000000000000000000000000000000000010010000100001101110000010010000100001101110001111110111101100011111100111011100011111111011011000101111110000000000000000000011111111101100101110000011110010001001001011111111101100000000000000000000001001000010000110111000001001000010000110111000111111011110110001111110011101110001111111101101100010111111001011111111101100001111111110110011111000001111001000100100001111100001110010111111111011000000100100001000011011100000100100011000011011100011111101111011000111111001110111000111111111110110001011111100001111100001110000111111111011001111100001111100100010010010111110000111000011111000011100000010010000100001101110000010010000100011101110001111110111101100011111100000111100011111111111011000101111110010111110000111001011111111101100011110001111110010001001000011111100011100101111100001110000001001000010000110111000001001000110001110111000111111000101110001111110000011110001111111111101100010111111000011111100011100101111111110110001111001111111001000100100001111110001110000111111000111000000100100001000011011100000100100001000011011100011111100010111000111011000001110000111111101110110001111111100001111110001110010111111111011000010101111111100100010010000111111000111000011111100011100000010010001100001101110000010010000100001101110001111110001011100011101100000111000011111110111011000111111110000111111000111001011111111101100001010111111110010001001000011111100011100001111110001110000001001000110000110111000001001000010000110111000111111000101110001110110000011100001111111011101100011111111000011111100011100001111100001110000101011111111001000100100001111110001110000111111000111000000100100011000011011100000100100001000011011100011111100010111000111011000001110000111111101110110001111111100001111110001110000111110000111000010101111111100100010010000111111000111000011111100011100000010010001100001101110000010010000100001101110001111110001011100011101100000111000011111110111011000111111110000111111000111000011111000011100001010111111110010001001000011111100011100001111110001110000001001000010001110111000001001000010000110111000111111000101110001110110000011100001111111011101100011111111000011111100011100001111100001110000101011111111001000100100001111110001110000111111000111000000100100001000111011100000100100001000011011100011111100010111000111011000001110000111111101110110001111111100001111110001110010111110000111000010101111111100100010010000111111000111000011111100011100000010010000100011101110000010010000100001101110001111110001011100011101100000111000011111110111011000111111110000111111000111001011111000011100001010111111110010001001000011111100011100001111110001110000001001000010001110111000001001000010000110111000111111000101110001110110000011100001111111011101100011111111000011111100011100101111100001110000101011111101101011111000001111110001110000111111000111000000100100011000111011100000100100001000011011100011111100010111000111011000001110000111111101110110001111111100001111110001110010111110000111000010101111111100100010010000111111000111000011111100011100000010010001100011101110000010010000100001101110001111110001011100011101100000111000011111110111011000111111110000111111000111000011111100011100001010111111110010001001001100111010100010001111110001110000001001000110001110111000001001000010000110111000111111000101110001110110000011100001111111011101100011111111001100111010100010001111110001110000101011111010110000010000110011101010001011001110101000100000100100011000111011100000100100001000011011100011111100010111000111011000001110000111111101110110001111111100110011101010001000111111000111000010101111111100100010010011001110101000101100111010100010000010010000100000011110000010010000100001101110001111110001011100011101100000111000011111110111011000111111110011001110101000100011111100011100001010111111110010001001001100111010100010110011101010001000001001000010000001111000001001000010000001111000111111000101110001110110000011100001111111011101100011111111001100111010100010001111110001110010011000001111001000100100110011101010001011001110101000100000100100001000000111100000100100001000000111100011111100010111000111011000001110000111111101110110001111111100110011101010001000111111000111001011100000111100100010010011001110101000101100111010100010000010010000100000011110000010010000100000011110001111110001011100011101100000111000011111110111011000111111110011001110101000100011111100011100101110000011110010001001001100111010100010110011101010001000001001000010000001111000001001000010000001111000111111000101110001110110000011100001111111011101100011111111001100111010100010001111110001110010111000001111001000100100110011101010001011001110101000100000100100001000000111100000100100001000000111100011111100010111000111011000001110000111111101110110001111111100110011101010001000111111000111001011100000111100100010010011001110101000101100111010100010000010010000100000011110000010010000100000011110001111110001011100011101100000111000011111110111011000111111110011001110101000100011111100011100101110000011110010001001001100111010100010110011101010001000001001000010000001111000001001000010000001111000111111000101110001110110000011100001111111011101100011111111001100111010100010001111110001110010111000001111001000100100110011101010001011001110101000100000100100001000000111100000100100001000000111100011111100010111000111011000001110000111111101110110001111111100110011101010001000111111000111001011100000110100100010010011001110101000101100111010100010000010010000100000011110000010010000100000011110001111110001011100011101100000111000011111110111011000111111110011001110101000100011111100011100101110000011110010001001001100111010100010110011101010001000001001000010000001111000001001000010000001111000111111000101110001110110000011100001111111011101100011111111001100111010100010001111110001110010111000001111001000100100000000000000000011001110101000100000100100001000000111100000100100001000000111100011111100010111000111011000001110000111111101110110001111111100000000000000000000111111000111001011100000101101000011110000000000000000000000000000000000000010010000100000011110000010010000100000011110001111110001011100011101100000111000011111110111011000111111110000000000000000000011111100011100101110000011110010001001000000000000000000000000000000000000001001000010000001111000001001000010000001111000111111000101110001110110000011100001111111011101100011111111000000000000000000001111110001110010111000001111001000100100000000000000000000000000000000000000100100001000000111100000100100001000000111100011111100010111000111011000001110000111111101110110001111111100000000000000000000111111000111001011100000111100100010010010111111000111000000000000000000000010010000100000011110000010010000100000011110001111110001011100011101100000111000011111110111011000111111110010111111000111000011111100011100111110000011110010001001000011111010011100101111110001110000001001000010000001111000001001000110000001111000111111000101110001110110000011100001111111000011100011111111000011111010011100001111110001110011111000011111001000100100101111101001110000111110100111000000100100001000000111100000100100001000100111100011111100010111000111011001001110000111111100001110001111111100101111101001110010111111000111000111100011111100100010010000111111100111001011111010011100000010010000100000011110000010010001100010011110001111110101011100011101100100111000011111110000111000111111110000111111100111001011111100011100011110011111110010001001000011111110011100001111111001110000001001000010000001111000001001000010000001111000111111010101110001111110010011100001111111000011100011111111000011111110011100101111110001110000101011111111001000100100001111111001110000111111100111000000100100011000000111100000100100001000000111100011111101010111000111111001001110000111111100001110001111111100001111111001110010111111000111000010101111111100100010010000111111100111000011111110011100000010010001100000011110000010010000100000011110001111110101011100011111100100111000011111110000111000111111110000111111100111000011111010011100001010111111110010001001000011111110011100001111111001110000001001000110000001111000001001000010000001111000111111010101110001111110010011100001111111000011100011111111000011111110011100001111101001110000101011111111001000100100001111111001110000111111100111000000100100011000000111100000100100001000000111100011111101010111000111111001001110000111111100001110001111111100001111111001110000111110100111000010101111111100100010010000111111100111000011111110011100000010010000100010011110000010010000100000011110001111110101011100011111100100111000011111110000111000111111110000111111100111000011111010011100001010111111110010001001000011111110011100001111111001110000001001000010001001111000001001000010000001111000111111010101110001111110010011100001111111000011100011111111000011111110011100101111101001110000101011111111001000100100001111111001110000111111100111000000100100001000100111100000100100001000000111100011111101010111000111111001001110000111111100001110001111111100001111111001110010111110100111000010101111111100100010010000111111100111000011111110011100000010010000100010011110000010010000100000011110001111110101011100011111100100111000011111110000111000111111110000111111100111001011111010011100001010111111011010111110000011111110011100001111111001110000001001000110001001111000001001000010000001111000111111010101110001111110010011100001111111000011100011111111000011111110011100101111101001110000101011111111001000100100001111111001110000111111100111000000100100011000100111100000100100001000000111100011111101010111000111111001001110000111111100001110001111111100001111111001110000111111100111000010101111111100100010010001001111101000100011111110011100000010010001100010011110000010010000100000011110001111110101011100011111100100111000011111110000111000111111110001001111101000100011111110011100001010111110100101000100000100111110100010010011111010001000001001000110001001111000001001000010000001111000111111010101110001111110010011100001111111000011100011111111000100111110100010001111111001110000101011111111001000100100010011111010001001001111101000100000100100001000010111100000100100001000000111100011111101010111000111111001001110000111111100001110001111111100010011111010001000111111100111000010101111111100100010010001001111101000100100111110100010000010010000100001011110000010010000100001011110001111110101011100011111100100111000011111110000111000111111110001001111101000100011111110011100100110000011110010001001000100111110100010010011111010001000001001000010000101111000001001000010000101111000111111010101110001111110010011100001111111000011100011111111000100111110100010001111111001110010111000001111001000100100010011111010001001001111101000100000100100001000010111100000100100001000010111100011111101010111000111111001001110000111111100001110001111111100010011111010001000111111100111001011100000111100100010010001001111101000100100111110100010000010010000100001011110000010010000100001011110001111110101011100011111100100111000011111110000111000111111110001001111101000100011111110011100101110000011110010001001000100111110100010010011111010001000001001000010000101111000001001000010000101111000111111010101110001111110010011100001111111000011100011111111000100111110100010001111111001110010111000001111001000100100010011111010001001001111101000100000100100001000010111100000100100001000010111100011111101010111000111111001001110000111111100001110001111111100010011111010001000111111100111001011100000111100100010010001001111101000100100111110100010000010010000100001011110000010010000100001011110001111110101011100011111100100111000011111110000111000111111110001001111101000100011111110011100101110000011110010001001000100111110100010010011111010001000001001000010000101111000001001000010000101111000111111010101110001111110010011100001111111000011100011111111000100111110100010001111111001110010111000001101001000100100010011111010001001001111101000100000100100001000010111100000100100001000010111100011111101010111000111111001001110000111111100001110001111111100010011111010001000111111100111001011100000111100100010010001001111101000100100111110100010000010010000100001011110000010010000100001011110001111110101011100011111100100111000011111110000111000111111110001001111101000100011111110011100101110000011110010001001000000000000000000010011111010001000001001000010000101111000001001000010000101111000111111010101110001111110010011100001111111000011100011111111000000000000000000001111111001110010111000001011010010111100000000000000000000000000000000000000100100001000010111100000100100001000010111100011111101010111000111111001001110000111111100001110001111111100000000000000000000111111100111001011100000111100100010010000000000000000000000000000000000000010010000100001011110000010010000100001011110001111110101011100011111100100111000011111110000111000111111110000000000000000000011111110011100101110000011110010001001000000000000000000000000000000000000001001000010000101111000001001000010000101111000111111010101110001111110010011100001111111000011100011111111000000000000000000001111111001110010111000001111001000100100101111111001110000000000000000000000100100001000010111100000100100001000010111100011111101010111000111111001001110000111111100001110001111111100101111111001110000111111100111001111100000111100100010010000111110010111001011111110011100000010010000100001011110000010010001100001011110001111110101011100011111100100111000011111110100111000111111110000111110010111000011111110011100111110000111110010001001001011111001011100001111100101110000001001000010000101111000001001000010001101111000111111010101110001111110001011100001111111010011100011111111001011111001011100101111111001110001111000111111001000100100001111110101110010111110010111000000100100001000010111100000100100011000110111100011111100110111000111111000101110000111111101001110001111111100001111110101110010111111100111000111100111111100100010010000111111010111000011111101011100000010010000100001011110000010010000100001011110001111110011011100011101100010111100011111110100111000111111110000111111010111001011111110011100001010111111110010001001000011111101011100001111110101110000001001000110000101111000001001000010000101111000111111001101110001110110001011110001111111010011100011111111000011111101011100101111111001110000101011111111001000100100001111110101110000111111010111000000100100011000010111100000100100001000010111100011111100110111000111011000101111000111111101001110001111111100001111110101110000111110010111000010101111111100100010010000111111010111000011111101011100000010010001100001011110000010010000100001011110001111110011011100011101100010111100011111110100111000111111110000111111010111000011111001011100001010111111110010001001000011111101011100001111110101110000001001000110000101111000001001000010000101111000111111001101110001110110001011110001111111010011100011111111000011111101011100001111100101110000101011111111001000100100001111110101110000111111010111000000100100001000110111100000100100001000010111100011111100110111000111011000101111000111111101001110001111111100001111110101110000111110010111000010101111111100100010010000111111010111000011111101011100000010010000100011011110000010010000100001011110001111110011011100011101100010111100011111110100111000111111110000111111010111001011111001011100001010111111110010001001000011111101011100001111110101110000001001000010001101111000001001000010000101111000111111001101110001110110001011110001111111010011100011111111000011111101011100101111100101110000101011111111001000100100001111110101110000111111010111000000100100001000110111100000100100001000010111100011111100110111000111011000101111000111111101001110001111111100001111110101110010111110010111000010101111110110101111100000111111010111000011111101011100000010010001100011011110000010010000100001011110001111110011011100011101100010111100011111110100111000111111110000111111010111001011111001011100001010111111110010001001000011111101011100001111110101110000001001000110001101111000001001000010000101111000111111001101110001110110001011110001111111010011100011111111000011111101011100001111110101110000101011111111001000100100110011111010001000111111010111000000100100011000110111100000100100001000010111100011111100110111000111011000101111000111111101001110001111111100110011111010001000111111010111000010101111101011010001000011001111101000101100111110100010000010010001100011011110000010010000100001011110001111110011011100011101100010111100011111110100111000111111110011001111101000100011111101011100001010111111110010001001001100111110100010110011111010001000001001000010000011111000001001000010000101111000111111001101110001110110001011110001111111010011100011111111001100111110100010001111110101110000101011111111001000100100110011111010001011001111101000100000100100001000001111100000100100001000001111100011111100110111000111011000101111000111111101001110001111111100110011111010001000111111010111001001100000111100100010010011001111101000101100111110100010000010010000100000111110000010010000100000111110001111110011011100011101100010111100011111110100111000111111110011001111101000100011111101011100101110000011110010001001001100111110100010110011111010001000001001000010000011111000001001000010000011111000111111001101110001110110001011110001111111010011100011111111001100111110100010001111110101110010111000001111001000100100110011111010001011001111101000100000100100001000001111100000100100001000001111100011111100110111000111011000101111000111111101001110001111111100110011111010001000111111010111001011100000111100100010010011001111101000101100111110100010000010010000100000111110000010010000100000111110001111110011011100011101100010111100011111110100111000111111110011001111101000100011111101011100101110000011110010001001001100111110100010110011111010001000001001000010000011111000001001000010000011111000111111001101110001110110001011110001111111010011100011111111001100111110100010001111110101110010111000001111001000100100110011111010001011001111101000100000100100001000001111100000100100001000001111100011111100110111000111011000101111000111111101001110001111111100110011111010001000111111010111001011100000111100100010010011001111101000101100111110100010000010010000100000111110000010010000100000111110001111110011011100011101100010111100011111110100111000111111110011001111101000100011111101011100101110000011010010001001001100111110100010110011111010001000001001000010000011111000001001000010000011111000111111001101110001110110001011110001111111010011100011111111001100111110100010001111110101110010111000001111001000100100110011111010001011001111101000100000100100001000001111100000100100001000001111100011111100110111000111011000101111000111111101001110001111111100110011111010001000111111010111001011100000111100100010010000000000000000001100111110100010000010010000100000111110000010010000100000111110001111110011011100011101100010111100011111110100111000111111110000000000000000000011111101011100101110000010110100011111000000000000000000000000000000000000001001000010000011111000001001000010000011111000111111001101110001110110001011110001111111010011100011111111000000000000000000001111110101110010111000001111001000100100000000000000000000000000000000000000100100001000001111100000100100001000001111100011111100110111000111011000101111000111111101001110001111111100000000000000000000111111010111001011100000111100100010010000000000000000000000000000000000000010010000100000111110000010010000100000111110001111110011011100011101100010111100011111110100111000111111110000000000000000000011111101011100101110000011110010001001001011111101011100000000000000000000001001000010000011111000001001000010000011111000111111001101110001110110001011110001111111010011100011111111001011111101011100001111110101110011111000001111001000100100001111101101110010111111010111000000100100001000001111100000100100011000001111100011111100110111000111011000101111000111111100101110001111111100001111101101110000111111010111001111100001111100100010010010111110110111000011111011011100000010010000100000111110000010010000100010111110001111110011011100011101100110111100011111110010111000111111110010111110110111001011111101011100011110001111110010001001000011111111011100101111101101110000001001000010000011111000001001000110001011111000111111011101110001110110011011110001111111001011100011111111000011111111011100101111110101110001111001111111001000100100001111111101110000111111110111000000100100001000001111100000100100001000001111100011111101110111000111111001101111000111111100101110001111111100001111111101110010111111010111000010101111111100100010010000111111110111000011111111011100000010010001100000111110000010010000100000111110001111110111011100011111100110111100011111110010111000111111110000111111110111001011111101011100001010111111110010001001000011111111011100001111111101110000001001000110000011111000001001000010000011111000111111011101110001111110011011110001111111001011100011111111000011111111011100001111101101110000101011111111001000100100001111111101110000111111110111000000100100011000001111100000100100001000001111100011111101110111000111111001101111000111111100101110001111111100001111111101110000111110110111000010101111111100100010010000111111110111000011111111011100000010010001100000111110000010010000100000111110001111110111011100011111100110111100011111110010111000111111110000111111110111000011111011011100001010111111110010001001000011111111011100001111111101110000001001000010001011111000001001000010000011111000111111011101110001111110011011110001111111001011100011111111000011111111011100001111101101110000101011111111001000100100001111111101110000111111110111000000100100001000101111100000100100001000001111100011111101110111000111111001101111000111111100101110001111111100001111111101110010111110110111000010101111111100100010010000111111110111000011111111011100000010010000100010111110000010010000100000111110001111110111011100011111100110111100011111110010111000111111110000111111110111001011111011011100001010111111110010001001000011111111011100001111111101110000001001000010001011111000001001000010000011111000111111011101110001111110011011110001111111001011100011111111000011111111011100101111101101110000101011111101101011111000001111111101110000111111110111000000100100011000101111100000100100001000001111100011111101110111000111111001101111000111111100101110001111111100001111111101110010111110110111000010101111111100100010010000111111110111000011111111011100</data>
+          <data global_temp="1" name="log: 2012/05/04 23:43:26  #0" power_up_mode="false" sample_depth="128" trigger_position="16">00000100100001000001110000001001000100001110000001001000100011010000001001000100000110000001001000100010110000011101111001000000101111100111010001010000001110001110010001001000011101111001000001110111100100000100000010010000100000111000000100100010000111000000100100010001101000000100100010000011000000100100010001011000001110111100100000010111110011100100101000000111000111001000100100001110111100100000111011110010000010000001001000010000011100000010010001000011100000010010001000110100000010010001000001100000010010001000101100000111011110010000001011100101110001010100000011100011100100010010000111011110010000011101111001000001000000100100001000001110000001001000100001110000001001000100011010000001001000100000110000001001000100010110000011101111001000000101110010111000100010000001110001110010001001000011101111001000001110111100100000100000010010000100000111000000100100010000111000000100100010001101000000100100010000011000000100100010001011000001110111100100000010111001011100010001000000111000111001000100100001110111100100000111011110010000010000001001000010000011100000010010001000011100000010010001000110100000010010001000001100000010010001000101100000111011110010000001011100101110001000100000011100011100100010010000111011110010000011101111001000001000000100100011000001110000001001000100001110000001001000100011010000001001000100000110000001001000100010110000011101111001000000101110010111000100010000001110001010010001001000011101111001000001110111100100001000000010010001100000111000000100100010000111000000100100010001101000000100100010000011000000100100010001011000001110111100100000010111001011100010001000000111000111001000100100001110111100100000111011110010000100000001001000110000011100000010010001000011100000010010001000110100000010010001000001100000010010001000101100000111011110010001001011100101110001000100000011100011100100010010000000000000000000011101111001000010000000100100011000001110000001001000100001110000001001000100011010000001001000100000110000001001000100010110000000000000000000100101110010111000100010000001110000110100011100000000000000000000000000000000000001000000010010000100010111000000100100010000111000000100100010001101000000100100010000011000000100100010001011000000000000000000010010111001011100010001000000111000111001000100100000000000000000000000000000000000100000001001000010001011100000010010001000011100000010010001000110100000010010001000001100000010010001000101100000000000000000001001011100101110001000100000011100011100100010010000000000000000000000000000000000010000000100100001000101110000001001000100001110000001001000100011010000001001000100000110000001001000100010110000000000000000000000101101010111000100010000001110001110010001001000001011110101110000000000000000001001000010010000100010111000000100100010000111000000100100010001101000000100100010000011000000100100010001011000000101111010111000010110101011100010011000000111000111001000100100100101111010111000010111101011100100100001001000110001011100000010010001000011100000010010001000110100000010010001000001100000010010001000101100010010111101011100001011010101110001001100000011101011100100010010000010110011011101001011110101110010010000100100011000101110000001001000100001110000001001000100011010000001001000100000110000001001000100010110000001011001101110000101101010111000100110000001110011110010001001001001011001101110000101100110111001001000010010001100010111000000100100010000111000000100100010001101000000100100010000011000000100100010001011000100101100110111010010110101011100010011000000011011111001000100100100101100110111010010110011011100100000001001000110001011100000010010001000011100000010010001000110100000010010001000001100000010010001000101100010010110011011101001011010101110001000100000001100011100100010010010010110011011101001011001101110010000000100100001000011110000001001000100001110000001001000100011010000001001000100000110000001001000100010110001001011001101110100101101010111000100010000000110001110010001001001001011001101110100101100110111001000000010010000100001111000000100100010000111000000100100010001111000000100100010000011000000100100010001011000100101100110111010010110101011100000000000000111000111001000100100100101100110111010010110011011101000000001001000010000111100000010010001000011100000010010001000111100000010010001000001100000010010001000101100010010110011011100001011100101110100010110000011010011100100010010010010110011011101001011001101110100000000100100001000011110000001001000100001110000001001000100011110000001001000100000110000001001000100010110001001011001101110000101110010111001001011000001101001010010001001001001011001101110100101100110111001000000010010000100001111000000100100010000111000000100100010001111000000100100010000011000000100100010001011000100101100110111000010111101011100010101100000110100111001000100100100101100110111010010110011011100100000001001000010000111100000010010001000011100000010010001000111100000010010001000001100000010010001000101100010010110011011100001011110101110001000110000011010011100100010010000000000000000001001011001101110010000000100100001000011110000001001000100001110000001001000100011110000001001000100000110000001001000100010110000000000000000000000101111010111000100011000001101000110100111100000000000000000000000000000000000001000000010010000100001111000000100100010000111000000100100010001111000000100100010000011000000100100010001011000000000000000000000010111101011100010001100000110100111001110111000000000000000000000000000000000000100000001001000110000111100000010010001000011100000010010001000111100000010010001000001100000010010001000101100000000000000000000001011110101110001000110000011010011100111011100000000000000000000000000000000000010000000100100011000011110000001001000100001110000001001000100011110000001001000100000110000001001000100010110000000000000000000000101111010111000100011000001101001110011101110000001011101101110000000000000000001001000010010001100001111000000100100010000111000000100100010001111000000100100010000011000000100100010001011000000101110110111010010111101011100010011100000110100111001110111000100101110110111000010111011011100100100001001000110000111100000010010001000011100000010010001000111100000010010001000001100000010010001000101100010010111011011101001011110101110001001110000011011011100111011100000010110111011101001011101101110010010000100100001000111110000001001000100001110000001001000100011110000001001000100000110000001001000100010110000001011011101110100101111010111000100111000001101011110011101110001001011011101110000101101110111001001000010010000100011111000000100100010000111000000100100010001111000000100100010000011000000100100010001011000100101101110111010010111101011100010011100000010111111001110111000100101101110111010010110111011100100000001001000010001111100000010010001000011100000010010001000111100000010010001000001100000010010001000101100010010110111011100001011001101110001000110000001010011100111011100010010110111011101001011011101110010000000100100001000111110000001001000100001110000001001000100011110000001001000100000110000001001000100010110001001011011101110000101100110111000100011000000101001110011101110001001011011101110100101101110111001000000010010001100011111000000100100010000111000000100100010001111000000100100010000011000000100100010001011000100101101110111000010110011011100010001100000010100101001110111000100101101110111010010110111011100010000001001000110001111100000010010001000011100000010010001000111100000010010001000001100000010010001000101100010010110111011100001011001101110001000110000001010011100100010010010010110111011101001011011101110001000000100100011000111110000001001000100001110000001001000100011110000001001000100000110000001001000100010110001001011011101110100101100110111000100011000000101001110010001001001011101111001000100101101110111000100000010010001100011111000000100100010000111000000100100010001111000000100100010000011000000100100010001011000101110111100100010010110011011100010001100000010100010010000110100101110111100100010111011110010000010000001001000010000000010000010010001000011100000010010001000111100000010010001000001100000010010001000101100010111011110010001001011001101110001000110000001010011100100010010010111011110010001011101111001000001000000100100001000000001000001001000100001110000001001000100011110000001001000100000001000001001000100010110001011101111001000100101100110111000000001000001101001110010001001001011101111001000101110111100100000100000010010000100000000100000100100010000111000000100100010001111000000100100010000000100000100100010001011000101110111100100000010111101011101000101010000111100111001000100100101110111100100010111011110010000010000001001000010000000010000010010001000011100000010010001000111100000010010001000000010000010010001000101100010111011110010000001011110101110010010101000011110011100100010010010111011110010001011101111001000001000000100100001000000001000001001000100001110000001001000100011110000001001000100000001000001001000100010110001011101111001000000101110110111000101010100001111001110010001001001011101111001000101110111100100000100000010010000100000000100000100100010000111000000100100010001111000000100100010000000100000100100010001011000101110111100100000010111011011100010001010000111100111001000100100101110111100100010111011110010000010000001001000010000000010000010010001000011100000010010001000111100000010010001000000010000010010001000101100010111011110010000001011101101110001000101000011110011100100010010010111011110010001011101111001000001000000100100001000000001000001001000100001110000001001000100011110000001001000100000001000001001000100010110001011101111001000000101110110111000100010100001111001110010001001001011101111001000101110111100100000100000010010001100000000100000100100010000111000000100100010001111000000100100010000000100000100100010001011000101110111100100000010111011011100010001010000111100111001000100100101110111100100010111011110010000010000001001000110000000010000010010001000011100000010010001000111100000010010001000000010000010010001000101100010111011110010000001011101101110001000101000011110010100100010010010111011110010001011101111001000010000000100100011000000001000001001000100001110000001001000100011110000001001000100000001000001001000100010110001011101111001000100101110110111000100010100001111001110010001001001011101111001000101110111100100001000000010010001100000000100000100100010000111000000100100010001111000000100100010000000100000100100010001011000101110111100100010010111011011100010001010000111100111001000100100000000000000000010111011110010000100000001001000010001000010000010010001000011100000010010001000111100000010010001000000010000010010001000101100000000000000000001001011101101110001000101000011110001101000000100000000000000000000000000000000000010000000100100001000100001000001001000100001110000001001000100011110000001001000100000001000001001000100010110000000000000000000100101110110111000100010100001111001110010001001000000000000000000000000000000000001000000010010000100010000100000100100010000111000000100100010001111000000100100010000000100000100100010001011000000000000000000000010110111011100010001010000111100111001000100100000000000000000000000000000000000100000001001000010001000010000010010001000011100000010010001000111100000010010001000000010000010010001000101100000000000000000000001011011101110001000101000011110011100100010010000010111111011100000000000000000010010000100100011000100001000001001000100001110000001001000100011110000001001000100000001000001001000100010110000001011111101110000101101110111000100110100001111001110010001001001001011111101110000101111110111001001000010010001100010000100000100100010000111000000100100010001111000000100100010000000100000100100010001011000100101111110111000010110111011100010011010000111110111001000100100000101100001111010010111111011100100100001001000110001000010000010010001000011100000010010001000111100000010010001000000010000010010001000101100000010110000111101001011011101110001001101000011110111100100010010010010110000111100001011000011110010010000100100011000100001000001001000100001110000001001000100011110000001001000100000001000001001000100010110001001011000011110100101101110111000100110100000111111110010001001001001011000011110100101100001111001000000010010000100001000100000100100010000111000000100100010001111000000100100010000000100000100100010001011000100101100001111010010110111011100010001010000011100111001000100100100101100001111010010110000111100100000001001000010000100010000010010001000011100000010010001000111100000010010001000000010000010010001000100010010010110000111101001011011101110000000001000011110011100100010010010010110000111101001011000011110010000000100100001000010001000001001000100001110000001001000100011110000001001000100000001000001001000100010001001001011000011110000101110110111010001011100001100001010010001001001001011000011110100101100001111001000000010010000100001000100000100100010000111000000100100010001111000000100100010000000100000100100010001000100100101100001111000010111011011100100101110000110000111001000100100100101100001111010010110000111100100000001001000010000100010000010010001000011100000010010001000111100000010010001000000010000010010001000100010010010110000111100001011111101110001010111000011000011100100010010000000000000000001001011000011110010000000100100001000010001000001001000100001110000001001000100011110000001001000100000001000001001000100010001000000000000000000000101111110111000100011100001100000110100100010000000000000000000000000000000000001000000010010000100001000100000100100010000111000000100100010001111000000100100010000000100000100100010001000100000000000000000000010111111011100010001110000110000111001000100100000000000000000000000000000000000100000001001000010000100010000010010001000011100000010010001000111100000010010001000000010000010010001000100010000000000000000000001011111101110001000111000011000011100100010010000000000000000000000000000000000010000000100100011000010001000001001000100001110000001001000100011110000001001000100000001000001001000100010001000000000000000000000101111110111000100011100001100001110011101110000001011100011110000000000000000001001000010010001100001000100000100100010000111000000100100010001111000000100100010000000100000100100010001000100000101110001111000010111111011100010011110000110000111001110111000100101110001111000010111000111100100100001001000110000100010000010010001000011100000010010001000111100000010010001000000010000010010001000100010010010111000111101001011111101110001001111000011001011100111011100000010110100111101001011100011110010010000100100011000010001000001001000100001110000001001000100011110000001001000100000001000001001000100010001000001011010011110100101111110111000100111100001100011110011101110001001011010011110000101101001111001001000010010000100011000100000100100010000111000000100100010001111000000100100010000000100000100100010001000100100101101001111010010111111011100010011110000010011111001110111000100101101001111010010110100111100100000001001000010001100010000010010001000011100000010010001000111100000010010001000000010000010010001000100010010010110100111101001011111101110001000111000001000011100111011100010010110100111101001011010011110010000000100100001000110001000001001000100001110000001001000100011110000001001000100000001000001001000100010001001001011010011110000101100001111000100011100000100001110011101110001001011010011110100101101001111001000000010010000100011000100000100100010000111000000100100010001111000000100100010000000100000100100010001000100100101101001111000010110000111100010001110000010000101001110111000100101101001111010010110100111100010000001001000110001100010000010010001000011100000010010001000111100000010010001000000010000010010001000100010010010110100111100001011000011110001000111000001000011100100010010010010110100111101001011010011110001000000100100011000110001000001001000100001110000001001000100011110000001001000100000001000001001000100010001001001011010011110000101100001111000100011100000100001110010001001000011101000101000100101101001111000100000010010001100011000100000100100010000111000000100100010001111000000100100010000000100000100100010001000100001110100010100010010110000111100010001110000010000010110000110100001110100010100000111010001010000010000001001000110001100010000010010001000011100000010010001000111100000010010001000000010000010010001000100010000111010001010001001011000011110001000111000001000011100100010010000111010001010000011101000101000001000000100100001000001001000001001000100001110000001001000100011110000001001000100000001000001001000100010001000011101000101000100101100001111000100011100000100001110010001001000011101000101000001110100010100000100000010010000100000100100000100100010000100100000100100010001111000000100100010000000100000100100010001000100001110100010100010010110000111100000000110000110000111001000100100001110100010100000111010001010000010000001001000010000010010000010010001000010010000010010001000111100000010010001000000010000010010001000100010000111010001010000001011111101110100010100000011100011100100010010000111010001010000011101000101000001000000100100001000001001000001001000100001001000001001000100011110000001001000100000001000001001000100010001000011101000101000000101111110111001001010000001110001110010001001000011101000101000001110100010100000100000010010000100000100100000100100010000100100000100100010001111000000100100010000000100000100100010001000100001110100010100000010111000111100010101000000111000111001000100100001110100010100000111010001010000010000001001000010000010010000010010001000010010000010010001000111100000010010001000000010000010010001000100010000111010001010000001011100011110001000100000011100011100100010010000111010001010000011101000101000001000000100100001000001001000001001000100001001000001001000100011110000001001000100000001000001001000100010001000011101000101000000101110001111000100010000001110001110010001001000011101000101000001110100010100000100000010010000100000100100000100100010000100100000100100010001111000000100100010000000100000100100010001000100001110100010100000010111000111100010001000000111000111001000100100001110100010100000111010001010000010000001001000110000010010000010010001000010010000010010001000111100000010010001000000010000010010001000100010000111010001010000001011100011110001000100000011100010100100010010000111010001010000011101000101000010000000100100011000001001000001001000100001001000001001000100011110000001001000100000001000001001000100010001000011101000101000000101110001111000100010000001110001110010001001000011101000101000001110100010100001000000010010001100000100100000100100010000100100000100100010001111000000100100010000000100000100100010001000100001110100010100010010111000111100010001000000111000111001000100100000000000000000000111010001010000100000001001000110000010010000010010001000010010000010010001000111100000010010001000000010000010010001000100010000000000000000001001011100011110001000100000011100001101000100100000000000000000000000000000000000010000000100100001000101001000001001000100001001000001001000100011110000001001000100000001000001001000100010001000000000000000000100101110001111000100010000001110001110010001001000000000000000000000000000000000001000000010010000100010100100000100100010000100100000100100010001111000000100100010000000100000100100010001000100000000000000000010010111000111100010001000000111000111001000100100000000000000000000000000000000000100000001001000010001010010000010010001000010010000010010001000111100000010010001000000010000010010001000100010000000000000000000001011010011110001000100000011100011100100010010000010111100111100000000000000000010010000100100001000101001000001001000100001001000001001000100011110000001001000100000001000001001000100010001000001011110011110000101101001111000100110000001110001110010001001001001011110011110000101111001111001001000010010001100010100100000100100010000100100000100100010001111000000100100010000000100000100100010001000100100101111001111000010110100111100010011000000111010111001000100100000101100101111010010111100111100100100001001000110001010010000010010001000010010000010010001000111100000010010001000000010000010010001000100010000010110010111100001011010011110001001100000011100111100100010010010010110010111100001011001011110010010000100100011000101001000001001000100001001000001001000100011110000001001000100000001000001001000100010001001001011001011110100101101001111000100110000000110111110010001001001001011001011110100101100101111001000000010010001100010100100000100100010000100100000100100010001111000000100100010000000100000100100010001000100100101100101111010010110100111100010001000000011000111001000100100100101100101111010010110010111100100000001001000010000110010000010010001000010010000010010001000111100000010010001000000010000010010001000100010010010110010111101001011010011110001000100000001100011100100010010010010110010111101001011001011110010000000100100001000011001000001001000100001001000001001000100011001000001001000100000001000001001000100010001001001011001011110100101101001111000000000000001110001110010001001001001011001011110100101100101111010000000010010000100001100100000100100010000100100000100100010001100100000100100010000000100000100100010001000100100101100101111000010111000111101000101100000110100111001000100100100101100101111010010110010111101000000001001000010000110010000010010001000010010000010010001000110010000010010001000000010000010010001000100010010010110010111100001011100011110010010110000011010010100100010010010010110010111101001011001011110010000000100100001000011001000001001000100001001000001001000100011001000001001000100000001000001001000100010001001001011001011110000101111001111000101011000001101001110010001001001001011001011110100101100101111001000000010010000100001100100000100100010000100100000100100010001100100000100100010000000100000100100010001000100100101100101111000010111100111100010001100000110100111001000100100000000000000000010010110010111100100000001001000010000110010000010010001000010010000010010001000110010000010010001000000010000010010001000100010000000000000000000001011110011110001000110000011010001101001100100000000000000000000000000000000000010000000100100001000011001000001001000100001001000001001000100011001000001001000100000001000001001000100010001000000000000000000000101111001111000100011000001101001110011101110000000000000000000000000000000000001000000010010001100001100100000100100010000100100000100100010001100100000100100010000000100000100100010001000100000000000000000000010111100111100010001100000110100111001110111000000000000000000000000000000000000100000001001000110000110010000010010001000010010000010010001000110010000010010001000000010000010010001000100010000000000000000000001011110011110001000110000011010011100111011100000010111010111100000000000000000010010000100100011000011001000001001000100001001000001001000100011001000001001000100000001000001001000100010001000001011101011110100101111001111000100111000001101001110011101110001001011101011110000101110101111001001000010010001100001100100000100100010000100100000100100010001100100000100100010000000100000100100010001000100100101110101111010010111100111100010011100000110110111001110111000000101101101111010010111010111100100100001001000010001110010000010010001000010010000010010001000110010000010010001000000010000010010001000100010000010110110111101001011110011110001001110000011010111100111011100010010110110111100001011011011110010010000100100001000111001000001001000100001001000001001000100011001000001001000100000001000001001000100010001001001011011011110100101111001111000100111000000101111110011101110001001011011011110100101101101111001000000010010000100011100100000100100010000100100000100100010001100100000100100010000000100000100100010001000100100101101101111000010110010111100010001100000010100111001110111000100101101101111010010110110111100100000001001000010001110010000010010001000010010000010010001000110010000010010001000000010000010010001000100010010010110110111100001011001011110001000110000001010011100111011100010010110110111101001011011011110010000000100100011000111001000001001000100001001000001001000100011001000001001000100000001000001001000100010001001001011011011110000101100101111000100011000000101001010011101110001001011011011110100101101101111000100000010010001100011100100000100100010000100100000100100010001100100000100100010000000100000100100010001000100100101101101111000010110010111100010001100000010100111001000100100100101101101111010010110110111100010000001001000110001110010000010010001000010010000010010001000110010000010010001000000010000010010001000100010010010110110111101001011001011110001000110000001010011100100010010010111010001010001001011011011110001000000100100011000111001000001001000100001001000001001000100011001000001001000100000001000001001000100010001001011101000101000100101100101111000100011000000101000100101001101001011101000101000101110100010100000100000010010000100000010100000100100010000100100000100100010001100100000100100010000000100000100100010001000100101110100010100010010110010111100010001100000010100111001000100100101110100010100010111010001010000010000001001000010000001010000010010001000010010000010010001000110010000010010001000001010000010010001000100010010111010001010001001011001011110000000010000011010011100100010010010111010001010001011101000101000001000000100100001000000101000001001000100001001000001001000100011001000001001000100000101000001001000100010001001011101000101000000101111001111010001010100001111001110010001001001011101000101000101110100010100000100000010010000100000010100000100100010000100100000100100010001100100000100100010000010100000100100010001000100101110100010100000010111100111100100101010000111100111001000100100101110100010100010111010001010000010000001001000010000001010000010010001000010010000010010001000110010000010010001000001010000010010001000100010010111010001010000001011101011110001010101000011110011100100010010010111010001010001011101000101000001000000100100001000000101000001001000100001001000001001000100011001000001001000100000101000001001000100010001001011101000101000000101110101111000100010100001111001110010001001001011101000101000101110100010100000100000010010000100000010100000100100010000100100000100100010001100100000100100010000010100000100100010001000100101110100010100000010111010111100010001010000111100111001000100100101110100010100010111010001010000010000001001000010000001010000010010001000010010000010010001000110010000010010001000001010000010010001000100010010111010001010000001011101011110001000101000011110011100100010010010111010001010001011101000101000001000000100100011000000101000001001000100001001000001001000100011001000001001000100000101000001001000100010001001011101000101000000101110101111000100010100001111001110010001001001011101000101000101110100010100000100000010010001100000010100000100100010000100100000100100010001100100000100100010000010100000100100010001000100101110100010100000010111010111100010001010000111100101001000100100101110100010100010111010001010000100</data>
           <extradata>1111111111111111T111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
         </log>
       </trigger>
     </signal_set>
     <position_info>
       <single attribute="active tab" value="0"/>
-      <single attribute="data horizontal scroll position" value="18"/>
+      <single attribute="data horizontal scroll position" value="13"/>
       <single attribute="data vertical scroll position" value="0"/>
       <single attribute="setup horizontal scroll position" value="0"/>
       <single attribute="setup vertical scroll position" value="0"/>
@@ -1119,8 +1184,8 @@
   <global_info>
     <single attribute="active instance" value="0"/>
     <single attribute="config widget visible" value="1"/>
-    <single attribute="data log widget visible" value="1"/>
-    <single attribute="hierarchy widget visible" value="1"/>
+    <single attribute="data log widget visible" value="0"/>
+    <single attribute="hierarchy widget visible" value="0"/>
     <single attribute="instance widget visible" value="1"/>
     <single attribute="jtag widget visible" value="1"/>
     <single attribute="sof manager visible" value="0"/>
