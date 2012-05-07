@@ -135,7 +135,7 @@ signal refreshpending : std_logic :='0';
 --
 --signal ramdelay : unsigned(15 downto 0);
 
-signal vga_cachehit : std_logic;
+--signal vga_cachehit : std_logic;
 signal cachefill : std_logic;
 signal cachereq : std_logic;
 
@@ -147,7 +147,7 @@ begin
 			clk => sysclk,
 			reset => reset,
 			addr => Addr0,
-			hit => vga_cachehit,
+--			hit => vga_cachehit,
 --			stale => open,
 			data_in => sdata_reg,
 			data_out => dataout0,

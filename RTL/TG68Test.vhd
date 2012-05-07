@@ -52,6 +52,7 @@ signal end_of_pixel : std_logic;
 
 signal vgaaddr : unsigned(23 downto 0);
 signal ramword : std_logic_vector(15 downto 0);
+signal ramword2 : std_logic_vector(15 downto 0);
 
 --
 signal reset : std_logic := '0';
@@ -337,18 +338,19 @@ mysdram : entity work.sdram
 		if rising_edge(clk114) then
 			if end_of_pixel = '1' then
 
-				if currentX=0 and currentY=0 then
+				if vga_vsync='0' then
 					vgaaddr<=X"100000";
 				elsif currentX<640 and currentY<480 then
 					if dtack0='0' then
+						ramword2<=ramword;
 						vgaaddr<=vgaaddr+2;
 					end if;
 
 --					case counter(9 downto 8) is
 --						when "00" =>
-							wred <= unsigned(ramword(15 downto 8)); -- currentX(7 downto 0)+counter(7 downto 0);
-							wgreen <= unsigned(ramword(11 downto 4)); -- currentY(7 downto 0)+counter(9 downto 2);
-							wblue	<=	unsigned(ramword(7 downto 0)); -- currentY(9 downto 2)+counter(11 downto 4);
+							wred <= unsigned(ramword2(15 downto 8)); -- currentX(7 downto 0)+counter(7 downto 0);
+							wgreen <= unsigned(ramword2(11 downto 4)); -- currentY(7 downto 0)+counter(9 downto 2);
+							wblue	<=	unsigned(ramword2(7 downto 0)); -- currentY(9 downto 2)+counter(11 downto 4);
 --						when "01" =>
 --							wred <= currentX(8 downto 1);
 --							wgreen <= "00000000";
