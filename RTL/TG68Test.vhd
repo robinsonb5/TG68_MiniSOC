@@ -103,32 +103,32 @@ vga_green<=wgreen(7 downto 4);
 vga_blue<=wblue(7 downto 4);
 
 
-myTG68 : entity work.TG68KdotC_Kernel
-	generic map
-	(
-		MUL_Mode => 1
-	)
-   port map
-	(
-		clk => clk114,
-      nReset => reset,
-      clkena_in => cpu_clkena,
-      data_in => cpu_datain,
-		IPL => "111",
-		IPL_autovector => '0',
-		CPU => "00",
-		addr => cpu_addr,
-		data_write => cpu_dataout,
-		nWr => cpu_r_w,
-		nUDS => cpu_uds,
-		nLDS => cpu_lds,
-		busstate => busstate,
-		nResetOut => tg68_ready,
-		FC => open,
--- for debug		
-		skipFetch => open,
-		regin => open
-	);
+--myTG68 : entity work.TG68KdotC_Kernel
+--	generic map
+--	(
+--		MUL_Mode => 1
+--	)
+--   port map
+--	(
+--		clk => clk114,
+--      nReset => reset,
+--      clkena_in => cpu_clkena,
+--      data_in => cpu_datain,
+--		IPL => "111",
+--		IPL_autovector => '0',
+--		CPU => "00",
+--		addr => cpu_addr,
+--		data_write => cpu_dataout,
+--		nWr => cpu_r_w,
+--		nUDS => cpu_uds,
+--		nLDS => cpu_lds,
+--		busstate => busstate,
+--		nResetOut => tg68_ready,
+--		FC => open,
+---- for debug		
+--		skipFetch => open,
+--		regin => open
+--	);
 
 
 -- mul Test program: 
@@ -186,74 +186,86 @@ myTG68 : entity work.TG68KdotC_Kernel
 -- SDRAM test program:
 -- 7000 7400 2202 41F9 0010 0000 30C1 5241 5340 66F8 5242 60EC
 
-process(clk114,cpu_addr)
+--process(clk114,cpu_addr)
+--begin
+--	if rising_edge(clk114) then
+--		if write_pending='1' and dtack1='0' then
+--			write_pending<='0';
+--		end if;
+--		case prgstate is
+--			when run =>
+--				cpu_clkena<='0';
+--				prgstate<=mem;
+--			when mem =>
+--				case cpu_addr(11 downto 0) is
+--					-- We have a simple program encoded here...
+--					-- (longword at 0 is initial stack pointer (0), while
+--					-- longword at 4 is initial program counter, 0x00000008)
+--					when X"006" =>
+--						cpu_datain <= X"0008";
+--					when X"008" =>
+--						cpu_datain <= X"7000";
+--					when X"00a" =>
+--						cpu_datain <= X"7400";
+--					when X"00c" =>
+--						cpu_datain <= X"2202";
+--					when X"00e" =>
+--						cpu_datain <= X"41f9";
+--					when X"010" =>
+--						cpu_datain <= X"0010";
+--					when X"012" =>
+--						cpu_datain <= X"0000";
+--					when X"014" =>
+--						cpu_datain <= X"30c1";
+--					when X"016" =>
+--						cpu_datain <= X"5241";
+--					when X"018" =>
+--						cpu_datain <= X"5340";
+--					when X"01a" =>
+--						cpu_datain <= X"66f8";
+--					when X"01c" =>
+--						cpu_datain <= X"5242";
+----						cpu_datain <= X"60ea";
+--					when X"01e" =>
+--						cpu_datain <= X"60ec";
+--					when others =>
+--						cpu_datain <= X"0000";
+--				end case;
+--				if cpu_addr(20)='1' and cpu_r_w='0' then
+--						counter<=unsigned(cpu_dataout);
+--						write_address<=cpu_addr(23 downto 0);
+--						write_pending<='1';
+--				end if;
+--				prgstate<=wait2;
+--			when wait1 =>
+--				prgstate<=wait2;
+--			when wait2 =>
+--				if (ready or not tg68_ready)='1' then
+--					cpu_clkena<='1';
+--					prgstate<=run;
+--				end if;
+--			when others =>
+--				null;
+--		end case;
+----		elsif busstate/="01" then	-- Does this cycle involve mem access if so, wait?
+----			cpu_clkena<='0';
+----		end if;
+----		cpu_clkena<=(not cpu_clkena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
+--	end if;
+--end process;
+
+process(clk)
 begin
-	if rising_edge(clk114) then
+	if rising_edge(clk) then
 		if write_pending='1' and dtack1='0' then
 			write_pending<='0';
+		elsif write_pending='0' then
+			counter<=counter+1;
+			write_address<="0001000" & std_logic_vector(counter) & '0';
+			write_pending<='1';
 		end if;
-		case prgstate is
-			when run =>
-				cpu_clkena<='0';
-				prgstate<=mem;
-			when mem =>
-				case cpu_addr(11 downto 0) is
-					-- We have a simple program encoded here...
-					-- (longword at 0 is initial stack pointer (0), while
-					-- longword at 4 is initial program counter, 0x00000008)
-					when X"006" =>
-						cpu_datain <= X"0008";
-					when X"008" =>
-						cpu_datain <= X"7000";
-					when X"00a" =>
-						cpu_datain <= X"7400";
-					when X"00c" =>
-						cpu_datain <= X"2202";
-					when X"00e" =>
-						cpu_datain <= X"41f9";
-					when X"010" =>
-						cpu_datain <= X"0010";
-					when X"012" =>
-						cpu_datain <= X"0000";
-					when X"014" =>
-						cpu_datain <= X"30c1";
-					when X"016" =>
-						cpu_datain <= X"5241";
-					when X"018" =>
-						cpu_datain <= X"5340";
-					when X"01a" =>
-						cpu_datain <= X"66f8";
-					when X"01c" =>
-						cpu_datain <= X"5242";
---						cpu_datain <= X"60ea";
-					when X"01e" =>
-						cpu_datain <= X"60ec";
-					when others =>
-						cpu_datain <= X"0000";
-				end case;
-				if cpu_addr(20)='1' and cpu_r_w='0' then
-						counter<=unsigned(cpu_dataout);
-						write_address<=cpu_addr(23 downto 0);
-						write_pending<='1';
-				end if;
-				prgstate<=wait2;
-			when wait1 =>
-				prgstate<=wait2;
-			when wait2 =>
-				if (ready or not tg68_ready)='1' then
-					cpu_clkena<='1';
-					prgstate<=run;
-				end if;
-			when others =>
-				null;
-		end case;
---		elsif busstate/="01" then	-- Does this cycle involve mem access if so, wait?
---			cpu_clkena<='0';
---		end if;
---		cpu_clkena<=(not cpu_clkena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
 	end if;
 end process;
-
 
 -- SDRAM
 mysdram : entity work.sdram 

@@ -124,7 +124,11 @@ type sdram_states is (ph0,ph1,ph2,ph3,ph4,ph5,ph6,ph7,ph8,ph9,ph10,ph11,ph12,ph1
 signal sdram_state		: sdram_states;
 
 type sdram_ports is (idle,refresh,port0,port1);
-signal sdram_port : sdram_ports :=refresh;
+
+signal sdram_slot1 : sdram_ports :=refresh;
+signal sdram_slot2 : sdram_ports :=idle;
+signal slot1_bank : std_logic_vector(1 downto 0) := "00";
+signal slot2_bank : std_logic_vector(1 downto 0) := "11";
 
 -- refresh timer
 signal refreshcounter : unsigned(12 downto 0);	-- 13 bits gives us 8192 cycles between refreshes => pretty conservative.
@@ -166,13 +170,23 @@ begin
 
 		-- Attend to refresh counter
 		refreshcounter<=refreshcounter+"0000000000001";
-		if sdram_port=refresh then
+		if sdram_slot1=refresh then
 			refreshpending<='0';
 		elsif refreshcounter(12 downto 4)="000000000" then
 			refreshpending<='1';
 		end if;
 
-				case sdram_state is	
+				case sdram_state is
+						when ph2 =>
+							case sdram_slot2 is
+--								when port0 =>
+--									qdataout0 <= sdata_reg;
+								when port1 =>
+									qdataout1 <= sdata_reg;
+								when others =>
+									null;
+							end case;
+
 						when ph7 =>	
 								-- Data should be ready at phase 10
 						when ph8 =>	
@@ -181,9 +195,9 @@ begin
 									-- Mark cache line to be filled here
 								end if;
 						when ph10 =>	-- Burst mode - first word
-							case sdram_port is
-								when port0 =>
-									qdataout0 <= sdata_reg;
+							case sdram_slot1 is
+--								when port0 =>
+--									qdataout0 <= sdata_reg;
 								when port1 =>
 									qdataout1 <= sdata_reg;
 								when others =>
@@ -252,30 +266,34 @@ begin
 
 			case sdram_state is	--LATENCY=3
 				when ph0 =>	
-							sdram_state <= ph1;
+					sdram_state <= ph1;
 				when ph1 =>	
-							sdram_state <= ph2;
+					if sdram_slot2=port0 then
+						cachefill<='1';
+					end if;
+					sdram_state <= ph2;
 				when ph2 =>
-							sdram_state <= ph3;
---							enaRDreg <= '1';
+					sdram_state <= ph3;
+--					enaRDreg <= '1';
 				when ph3 =>	-- stay on phase 2 if there's nothing to do.  Can respond fast that way.
-							if sdram_port=idle and init_done='1' then
-								sdram_state<=ph2;
-							else
+--							if sdram_slot1=idle and init_done='1' then
+--								sdram_state<=ph2;
+--							else
 								sdram_state <= ph4;
-							end if;
+--							end if;
 				when ph4 =>	sdram_state <= ph5;
-							sdwrite <= '1';
+					sdwrite <= '1';
 				when ph5 => sdram_state <= ph6;
-							sdwrite <= '1';
+					sdwrite <= '1';
+					cachefill<='0';
 				when ph6 =>	sdram_state <= ph7;
-							sdwrite <= '1';
+					sdwrite <= '1';
 --							enaWRreg <= '1';
 --							ena7RDreg <= '1';
 				when ph7 =>	sdram_state <= ph8;
 				when ph8 =>	sdram_state <= ph9;
 				when ph9 =>	sdram_state <= ph10;
-					if sdram_port=port0 then
+					if sdram_slot1=port0 then
 						cachefill<='1';
 					end if;
 				when ph10 => sdram_state <= ph11;
@@ -286,8 +304,10 @@ begin
 				when ph12 => sdram_state <= ph13;
 --					cachefill<='1';
 				when ph13 => sdram_state <= ph14;	-- Skip a few phases...
+					sdwrite<='1';
 					cachefill<='0';
-				when ph14 => sdram_state <= ph2;
+				when ph14 => sdram_state <= ph15;
+						sdwrite<='1';
 						if initstate /= "1111" THEN -- 16 complete phase cycles before we allow the rest of the design to come out of reset.
 							initstate <= initstate+1;
 						else
@@ -296,6 +316,7 @@ begin
 --							enaWRreg <= '1';
 --							ena7WRreg <= '1';
 				when ph15 => sdram_state <= ph0;
+					sdwrite<='1';
 				when others => sdram_state <= ph0;
 			end case;	
 		END IF;	
@@ -304,6 +325,7 @@ begin
 
 	
 	process (sysclk, initstate, datain, init_done, casaddr, refreshcycle) begin
+
 
 		if rising_edge(sysclk) THEN -- rising edge
 --		ba <= Addr(22 downto 21);
@@ -314,6 +336,9 @@ begin
 			sdaddr <= "XXXXXXXXXXXX";
 			ba <= "00";
 			dqm <= "00";  -- safe defaults for everything...
+
+			dtack1<='1';
+
 			-- The following block only happens during reset.
 			if init_done='0' then
 				if sdram_state =ph2 then
@@ -349,7 +374,49 @@ begin
 -- bits 20 downto 9 are the row address, set in phase 2.
 -- bits 23, 8 downto 1
 
--- Time slot control					
+-- In the interests of interleaving bank access, rearrange this somewhat
+-- We're transferring 4 word bursts, so 8 bytes at a time, so leave lower 3 bits
+-- as they are, but try making the next two the bank select bits
+
+-- Bank select will thus be addr(4 downto 3),
+-- Column will be addr(10 downto 5) & addr(2 downto 1) instead of addr(8 downto 1)
+-- Row will be addr(22 downto 11) instead of (20 downto 9)
+
+--  ph0
+--
+--  ph1
+--						Data word 1
+--  ph2
+--						Data word 2
+--  ph3 Active first bank / Autorefresh (RAS)
+--						Data word 3 -  Assert dtack, propagates next cycle by which time all data is valid.
+--  ph4
+--						Data word 4
+--  ph5 ReadA (CAS) (drive data)
+
+--  ph6 (drive data)
+
+--  ph7 (drive data)
+
+--  ph8
+--						Active second bank
+--  ph9 Data word 1
+
+-- ph10 Data word 2
+
+-- ph11 Data word 3  -  Assert dtack, propagates next cycle by which time all data is valid.
+
+-- ph12 Data word 4
+
+-- ph13
+--						ReadA (CAS) (drive data)
+-- ph14
+--						(drive data)
+-- ph15
+--						(drive data)
+
+-- Time slot control			
+		
 				-- Phase 2: set defaults and set chip select in temp registers.			
 				if sdram_state=ph2 THEN
 					cas_sd_cs <= '0';  -- Only the lowest bit has any significance...
@@ -357,11 +424,13 @@ begin
 					cas_sd_cas <= '1';
 					cas_sd_we <= '1';
 
-					sdram_port<=idle;
-					if wr1='0' and sdram_port/=port1 then	-- Port 1
-						sdram_port<=port1;
-						sdaddr <= Addr1(20 downto 9);
-						ba <= Addr1(22 downto 21);
+					sdram_slot1<=idle;
+					if wr1='0' and sdram_slot1/=port1 and (Addr1(4 downto 3)/=slot2_bank or sdram_slot2=idle) then	-- Port 1
+--					if wr1='0' and sdram_slot1/=port1 then	-- Port 1
+						sdram_slot1<=port1;
+						sdaddr <= Addr1(22 downto 11);
+						ba <= Addr1(4 downto 3);
+						slot1_bank <= Addr0(4 downto 3);
 						cas_dqm <= wrU1& wrL1;
 						casaddr <= Addr1;-- (23 downto 3) & "000"; -- read whole cache line in burst mode.
 						datain <= datawr1;
@@ -370,14 +439,16 @@ begin
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
 					elsif refreshpending='1' then	-- refreshcycle
-						sdram_port<=refresh;
+						sdram_slot1<=refresh;
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
 						sd_cas <= '0'; --AUTOREFRESH
-					elsif cachereq='1' then
-						sdram_port<=port0;
-						sdaddr <= Addr0(20 downto 9);
-						ba <= Addr0(22 downto 21);
+					elsif cachereq='1' and (Addr0(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
+--					elsif cachereq='1' then
+						sdram_slot1<=port0;
+						sdaddr <= Addr0(22 downto 11);
+						ba <= Addr0(4 downto 3);
+						slot1_bank <= Addr0(4 downto 3);
 						cas_dqm <= wrU0& wrL0;
 						casaddr <= Addr0(23 downto 3) & "000"; -- read whole cache line in burst mode.
 						datain <= datawr0;
@@ -387,12 +458,27 @@ begin
 						sd_ras <= '0';
 					end if;
 				END IF;
+				
+				
+				if sdram_state=ph3 THEN
+					-- Second slot's dtack...
+					case sdram_slot2 is
+--						when port0 =>
+--							dtack0<='0';
+						when port1 =>
+							dtack1<='0';
+						when others =>
+							null;
+					end case;
+				END IF;
+				
+				
 				-- Phase 5: set column address strobe
 				if sdram_state=ph5 then
 					-- Why do we fold bit 23 in here? That would give us 9 bits of column address, but we only have 8?
 --					sdaddr <=  '0' & '1' & '0' & casaddr(23)&casaddr(8 downto 1);--auto precharge
-					sdaddr <=  "0100" & casaddr(8 downto 1);--auto precharge
-					ba <= casaddr(22 downto 21);
+					sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
+					ba <= casaddr(4 downto 3);
 					sd_cs <= cas_sd_cs; 
 					IF cas_sd_we='0' THEN
 						dqm <= cas_dqm;
@@ -402,10 +488,48 @@ begin
 					sd_we  <= cas_sd_we;
 				END IF;
 
---				dtack0<='1';
-				dtack1<='1';
+				
+				-- Phase 8: second window
+				-- handle avoiding bank clashes here...
+				if sdram_state=ph8 THEN
+					cas_sd_cs <= '0';  -- Only the lowest bit has any significance...
+					cas_sd_ras <= '1';
+					cas_sd_cas <= '1';
+					cas_sd_we <= '1';
+
+					sdram_slot2<=idle;
+					if refreshpending='1' then
+						sdram_slot2<=idle;
+					elsif wr1='0' and (Addr1(4 downto 3)/=slot1_bank or sdram_slot1=idle) then	-- Port 1
+						sdram_slot2<=port1;
+						sdaddr <= Addr1(22 downto 11);
+						ba <= Addr1(4 downto 3);
+						slot2_bank <= Addr1(4 downto 3);
+						cas_dqm <= wrU1& wrL1;
+						casaddr <= Addr1;-- (23 downto 3) & "000"; -- read whole cache line in burst mode.
+						datain <= datawr1;
+						cas_sd_cas <= '0';
+						cas_sd_we <= wr1;
+						sd_cs <= '0'; --ACTIVE
+						sd_ras <= '0';
+					elsif cachereq='1' and (Addr0(4 downto 3)/=slot1_bank or sdram_slot1=idle) then
+						sdram_slot2<=port0;
+						sdaddr <= Addr0(22 downto 11);
+						ba <= Addr0(4 downto 3);
+						slot2_bank <= Addr0(4 downto 3);
+						cas_dqm <= wrU0& wrL0;
+						casaddr <= Addr0(23 downto 3) & "000"; -- read whole cache line in burst mode.
+						datain <= datawr0;
+						cas_sd_cas <= '0';
+						cas_sd_we <= wr0;
+						sd_cs <= '0'; --ACTIVE
+						sd_ras <= '0';
+					end if;
+				end if;
+				
+				
 				if sdram_state=ph11 then
-					case sdram_port is
+					case sdram_slot1 is
 --						when port0 =>
 --							dtack0<='0';
 						when port1 =>
@@ -414,7 +538,20 @@ begin
 							null;
 					end case;
 				end if;
-							
+
+				-- Phase 13 - CAS for second window...
+				if sdram_state=ph13 then
+					sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
+					ba <= casaddr(4 downto 3);
+					sd_cs <= cas_sd_cs; 
+					IF cas_sd_we='0' THEN
+						dqm <= cas_dqm;
+					END IF;
+					sd_ras <= cas_sd_ras;
+					sd_cas <= cas_sd_cas;
+					sd_we  <= cas_sd_we;
+				END IF;
+				
 			END IF;	
 		END IF;	
 	END process;		

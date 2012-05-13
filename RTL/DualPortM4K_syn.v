@@ -33,7 +33,7 @@
 //applicable agreement for further details.
 
 
-//altsyncram ADDRESS_REG_B="CLOCK0" CLOCK_ENABLE_INPUT_A="BYPASS" CLOCK_ENABLE_INPUT_B="BYPASS" CLOCK_ENABLE_OUTPUT_A="BYPASS" CLOCK_ENABLE_OUTPUT_B="BYPASS" DEVICE_FAMILY="Cyclone II" NUMWORDS_A=256 NUMWORDS_B=256 OPERATION_MODE="DUAL_PORT" OUTDATA_ACLR_B="NONE" OUTDATA_REG_B="CLOCK0" POWER_UP_UNINITIALIZED="FALSE" RAM_BLOCK_TYPE="M4K" READ_DURING_WRITE_MODE_MIXED_PORTS="DONT_CARE" WIDTH_A=18 WIDTH_B=18 WIDTH_BYTEENA_A=1 WIDTHAD_A=8 WIDTHAD_B=8 address_a address_b clock0 data_a q_b wren_a
+//altsyncram ADDRESS_REG_B="CLOCK0" CLOCK_ENABLE_INPUT_A="BYPASS" CLOCK_ENABLE_INPUT_B="BYPASS" CLOCK_ENABLE_OUTPUT_A="BYPASS" CLOCK_ENABLE_OUTPUT_B="BYPASS" DEVICE_FAMILY="Cyclone II" NUMWORDS_A=256 NUMWORDS_B=256 OPERATION_MODE="DUAL_PORT" OUTDATA_ACLR_B="NONE" OUTDATA_REG_B="UNREGISTERED" POWER_UP_UNINITIALIZED="FALSE" RAM_BLOCK_TYPE="M4K" READ_DURING_WRITE_MODE_MIXED_PORTS="DONT_CARE" WIDTH_A=18 WIDTH_B=18 WIDTH_BYTEENA_A=1 WIDTHAD_A=8 WIDTHAD_B=8 address_a address_b clock0 data_a q_b wren_a
 //VERSION_BEGIN 11.1SP1 cbx_altsyncram 2011:11:23:21:09:51:SJ cbx_cycloneii 2011:11:23:21:09:51:SJ cbx_lpm_add_sub 2011:11:23:21:09:51:SJ cbx_lpm_compare 2011:11:23:21:09:51:SJ cbx_lpm_decode 2011:11:23:21:09:51:SJ cbx_lpm_mux 2011:11:23:21:09:51:SJ cbx_mgl 2011:11:23:21:11:22:SJ cbx_stratix 2011:11:23:21:09:51:SJ cbx_stratixii 2011:11:23:21:09:51:SJ cbx_stratixiii 2011:11:23:21:09:51:SJ cbx_stratixv 2011:11:23:21:09:51:SJ cbx_util_mgl 2011:11:23:21:09:51:SJ  VERSION_END
 // synthesis VERILOG_INPUT_VERSION VERILOG_2001
 // altera message_off 10463
@@ -139,7 +139,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_0.port_b_address_clock = "clock0",
 		ram_block1a_0.port_b_address_width = 8,
 		ram_block1a_0.port_b_data_out_clear = "none",
-		ram_block1a_0.port_b_data_out_clock = "clock0",
+		ram_block1a_0.port_b_data_out_clock = "none",
 		ram_block1a_0.port_b_data_width = 1,
 		ram_block1a_0.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_0.port_b_disable_ce_on_output_registers = "on",
@@ -202,7 +202,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_1.port_b_address_clock = "clock0",
 		ram_block1a_1.port_b_address_width = 8,
 		ram_block1a_1.port_b_data_out_clear = "none",
-		ram_block1a_1.port_b_data_out_clock = "clock0",
+		ram_block1a_1.port_b_data_out_clock = "none",
 		ram_block1a_1.port_b_data_width = 1,
 		ram_block1a_1.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_1.port_b_disable_ce_on_output_registers = "on",
@@ -265,7 +265,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_2.port_b_address_clock = "clock0",
 		ram_block1a_2.port_b_address_width = 8,
 		ram_block1a_2.port_b_data_out_clear = "none",
-		ram_block1a_2.port_b_data_out_clock = "clock0",
+		ram_block1a_2.port_b_data_out_clock = "none",
 		ram_block1a_2.port_b_data_width = 1,
 		ram_block1a_2.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_2.port_b_disable_ce_on_output_registers = "on",
@@ -328,7 +328,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_3.port_b_address_clock = "clock0",
 		ram_block1a_3.port_b_address_width = 8,
 		ram_block1a_3.port_b_data_out_clear = "none",
-		ram_block1a_3.port_b_data_out_clock = "clock0",
+		ram_block1a_3.port_b_data_out_clock = "none",
 		ram_block1a_3.port_b_data_width = 1,
 		ram_block1a_3.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_3.port_b_disable_ce_on_output_registers = "on",
@@ -391,7 +391,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_4.port_b_address_clock = "clock0",
 		ram_block1a_4.port_b_address_width = 8,
 		ram_block1a_4.port_b_data_out_clear = "none",
-		ram_block1a_4.port_b_data_out_clock = "clock0",
+		ram_block1a_4.port_b_data_out_clock = "none",
 		ram_block1a_4.port_b_data_width = 1,
 		ram_block1a_4.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_4.port_b_disable_ce_on_output_registers = "on",
@@ -454,7 +454,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_5.port_b_address_clock = "clock0",
 		ram_block1a_5.port_b_address_width = 8,
 		ram_block1a_5.port_b_data_out_clear = "none",
-		ram_block1a_5.port_b_data_out_clock = "clock0",
+		ram_block1a_5.port_b_data_out_clock = "none",
 		ram_block1a_5.port_b_data_width = 1,
 		ram_block1a_5.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_5.port_b_disable_ce_on_output_registers = "on",
@@ -517,7 +517,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_6.port_b_address_clock = "clock0",
 		ram_block1a_6.port_b_address_width = 8,
 		ram_block1a_6.port_b_data_out_clear = "none",
-		ram_block1a_6.port_b_data_out_clock = "clock0",
+		ram_block1a_6.port_b_data_out_clock = "none",
 		ram_block1a_6.port_b_data_width = 1,
 		ram_block1a_6.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_6.port_b_disable_ce_on_output_registers = "on",
@@ -580,7 +580,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_7.port_b_address_clock = "clock0",
 		ram_block1a_7.port_b_address_width = 8,
 		ram_block1a_7.port_b_data_out_clear = "none",
-		ram_block1a_7.port_b_data_out_clock = "clock0",
+		ram_block1a_7.port_b_data_out_clock = "none",
 		ram_block1a_7.port_b_data_width = 1,
 		ram_block1a_7.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_7.port_b_disable_ce_on_output_registers = "on",
@@ -643,7 +643,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_8.port_b_address_clock = "clock0",
 		ram_block1a_8.port_b_address_width = 8,
 		ram_block1a_8.port_b_data_out_clear = "none",
-		ram_block1a_8.port_b_data_out_clock = "clock0",
+		ram_block1a_8.port_b_data_out_clock = "none",
 		ram_block1a_8.port_b_data_width = 1,
 		ram_block1a_8.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_8.port_b_disable_ce_on_output_registers = "on",
@@ -706,7 +706,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_9.port_b_address_clock = "clock0",
 		ram_block1a_9.port_b_address_width = 8,
 		ram_block1a_9.port_b_data_out_clear = "none",
-		ram_block1a_9.port_b_data_out_clock = "clock0",
+		ram_block1a_9.port_b_data_out_clock = "none",
 		ram_block1a_9.port_b_data_width = 1,
 		ram_block1a_9.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_9.port_b_disable_ce_on_output_registers = "on",
@@ -769,7 +769,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_10.port_b_address_clock = "clock0",
 		ram_block1a_10.port_b_address_width = 8,
 		ram_block1a_10.port_b_data_out_clear = "none",
-		ram_block1a_10.port_b_data_out_clock = "clock0",
+		ram_block1a_10.port_b_data_out_clock = "none",
 		ram_block1a_10.port_b_data_width = 1,
 		ram_block1a_10.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_10.port_b_disable_ce_on_output_registers = "on",
@@ -832,7 +832,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_11.port_b_address_clock = "clock0",
 		ram_block1a_11.port_b_address_width = 8,
 		ram_block1a_11.port_b_data_out_clear = "none",
-		ram_block1a_11.port_b_data_out_clock = "clock0",
+		ram_block1a_11.port_b_data_out_clock = "none",
 		ram_block1a_11.port_b_data_width = 1,
 		ram_block1a_11.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_11.port_b_disable_ce_on_output_registers = "on",
@@ -895,7 +895,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_12.port_b_address_clock = "clock0",
 		ram_block1a_12.port_b_address_width = 8,
 		ram_block1a_12.port_b_data_out_clear = "none",
-		ram_block1a_12.port_b_data_out_clock = "clock0",
+		ram_block1a_12.port_b_data_out_clock = "none",
 		ram_block1a_12.port_b_data_width = 1,
 		ram_block1a_12.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_12.port_b_disable_ce_on_output_registers = "on",
@@ -958,7 +958,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_13.port_b_address_clock = "clock0",
 		ram_block1a_13.port_b_address_width = 8,
 		ram_block1a_13.port_b_data_out_clear = "none",
-		ram_block1a_13.port_b_data_out_clock = "clock0",
+		ram_block1a_13.port_b_data_out_clock = "none",
 		ram_block1a_13.port_b_data_width = 1,
 		ram_block1a_13.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_13.port_b_disable_ce_on_output_registers = "on",
@@ -1021,7 +1021,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_14.port_b_address_clock = "clock0",
 		ram_block1a_14.port_b_address_width = 8,
 		ram_block1a_14.port_b_data_out_clear = "none",
-		ram_block1a_14.port_b_data_out_clock = "clock0",
+		ram_block1a_14.port_b_data_out_clock = "none",
 		ram_block1a_14.port_b_data_width = 1,
 		ram_block1a_14.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_14.port_b_disable_ce_on_output_registers = "on",
@@ -1084,7 +1084,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_15.port_b_address_clock = "clock0",
 		ram_block1a_15.port_b_address_width = 8,
 		ram_block1a_15.port_b_data_out_clear = "none",
-		ram_block1a_15.port_b_data_out_clock = "clock0",
+		ram_block1a_15.port_b_data_out_clock = "none",
 		ram_block1a_15.port_b_data_width = 1,
 		ram_block1a_15.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_15.port_b_disable_ce_on_output_registers = "on",
@@ -1147,7 +1147,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_16.port_b_address_clock = "clock0",
 		ram_block1a_16.port_b_address_width = 8,
 		ram_block1a_16.port_b_data_out_clear = "none",
-		ram_block1a_16.port_b_data_out_clock = "clock0",
+		ram_block1a_16.port_b_data_out_clock = "none",
 		ram_block1a_16.port_b_data_width = 1,
 		ram_block1a_16.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_16.port_b_disable_ce_on_output_registers = "on",
@@ -1210,7 +1210,7 @@ module  DualPortM4K_altsyncram
 		ram_block1a_17.port_b_address_clock = "clock0",
 		ram_block1a_17.port_b_address_width = 8,
 		ram_block1a_17.port_b_data_out_clear = "none",
-		ram_block1a_17.port_b_data_out_clock = "clock0",
+		ram_block1a_17.port_b_data_out_clock = "none",
 		ram_block1a_17.port_b_data_width = 1,
 		ram_block1a_17.port_b_disable_ce_on_input_registers = "on",
 		ram_block1a_17.port_b_disable_ce_on_output_registers = "on",
@@ -1311,7 +1311,7 @@ endmodule
 // Retrieval info: PRIVATE: MIFfilename STRING ""
 // Retrieval info: PRIVATE: OPERATION_MODE NUMERIC "2"
 // Retrieval info: PRIVATE: OUTDATA_ACLR_B NUMERIC "0"
-// Retrieval info: PRIVATE: OUTDATA_REG_B NUMERIC "1"
+// Retrieval info: PRIVATE: OUTDATA_REG_B NUMERIC "0"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "2"
 // Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_MIXED_PORTS NUMERIC "2"
 // Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_PORT_A NUMERIC "3"
@@ -1347,7 +1347,7 @@ endmodule
 // Retrieval info: CONSTANT: NUMWORDS_B NUMERIC "256"
 // Retrieval info: CONSTANT: OPERATION_MODE STRING "DUAL_PORT"
 // Retrieval info: CONSTANT: OUTDATA_ACLR_B STRING "NONE"
-// Retrieval info: CONSTANT: OUTDATA_REG_B STRING "CLOCK0"
+// Retrieval info: CONSTANT: OUTDATA_REG_B STRING "UNREGISTERED"
 // Retrieval info: CONSTANT: POWER_UP_UNINITIALIZED STRING "FALSE"
 // Retrieval info: CONSTANT: RAM_BLOCK_TYPE STRING "M4K"
 // Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_MIXED_PORTS STRING "DONT_CARE"
