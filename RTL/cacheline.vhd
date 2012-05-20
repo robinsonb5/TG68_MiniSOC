@@ -11,7 +11,8 @@ entity cacheline is
 	port(
 		clk : in std_logic;
 		reset : in std_logic;
-		addr : in std_logic_vector(23 downto 0);
+		addrin : in std_logic_vector(23 downto 0);
+		addrout : out std_logic_vector(23 downto 0);
 --		hit : out std_logic;	-- Needed?  Indicates a cache hit, but not necessarily data valid.
 		data_in : in std_logic_vector(15 downto 0);	
 		data_out : out std_logic_vector(15 downto 0);
@@ -42,7 +43,7 @@ myM4K : entity work.DualPortM4k
 	port map
 	(
 		clock => clk,
-		rdaddress => rdline & addr(2 downto 1),
+		rdaddress => rdline & addrin(2 downto 1),
 		wraddress => "0000" & wrline & wrlsb(1 downto 0),
 		data => "00" & data_in,
 		wren => fill,
@@ -57,20 +58,20 @@ myM4K : entity work.DualPortM4k
 		hit<='1';
 		-- FIXME - need to drop DTACK when address changes - RAM fetch will take about 2 cycles.
 		-- We match omitting the lower 3 bits of the address, 
-		if cacheaddr(0)(23 downto 3) = addr(23 downto 3) then
+		if cacheaddr(0)(23 downto 3) = addrin(23 downto 3) then
 			rdline<="000000";
-		elsif cacheaddr(1)(23 downto 3) = addr(23 downto 3) then
+		elsif cacheaddr(1)(23 downto 3) = addrin(23 downto 3) then
 			rdline<="000001";
-		elsif cacheaddr(2)(23 downto 3) = addr(23 downto 3) then
+		elsif cacheaddr(2)(23 downto 3) = addrin(23 downto 3) then
 			rdline<="000010";
-		elsif cacheaddr(3)(23 downto 3) = addr(23 downto 3) then
+		elsif cacheaddr(3)(23 downto 3) = addrin(23 downto 3) then
 			rdline<="000011";
 		else
 			hit<='0';
 			dtack<='1';
 		end if;
 
-		if(addr(2 downto 1)/=rdlsb(1 downto 0)) then -- drop DTACK as soon as the address changes
+		if(addrin(2 downto 1)/=rdlsb(1 downto 0)) then -- drop DTACK as soon as the address changes
 			dtack<='1';
 		end if;
 	
@@ -89,11 +90,11 @@ myM4K : entity work.DualPortM4k
 --				delay<=delay(2 downto 0) & '0';
 --			end if;
 
-			if addr(2 downto 1)=rdlsb(1 downto 0) and req_s='0' then
+			if addrin(2 downto 1)=rdlsb(1 downto 0) and (req_s='0' or rdline/=wrline) then
 				dtack_s<='0';
 			else
 				dtack_s<='1'; -- delay dtack while data is fetched from RAM.
-				rdlsb(1 downto 0)<=addr(2 downto 1);
+				rdlsb(1 downto 0)<=addrin(2 downto 1);
 			end if;
 
 			if fill='1' then	-- Are we currently receiving data from SDRAM?	
@@ -111,17 +112,19 @@ myM4K : entity work.DualPortM4k
 			else -- Request ending?  If so, can shortly assert DTACK.
 			end if;
 			
-			if hit='0' then
+			-- Need to hold the next address at this point until the bus is clear...
+			if hit='0' and req_s='0' then
+				addrout<=addrin;
 				-- Not in cache - store address and trigger a request...
 				case wrline is
 					when "00" =>
-						cacheaddr(0)(23 downto 3)<=addr(23 downto 3);
+						cacheaddr(0)(23 downto 3)<=addrin(23 downto 3);
 					when "01" =>
-						cacheaddr(1)(23 downto 3)<=addr(23 downto 3);
+						cacheaddr(1)(23 downto 3)<=addrin(23 downto 3);
 					when "10" =>
-						cacheaddr(2)(23 downto 3)<=addr(23 downto 3);
+						cacheaddr(2)(23 downto 3)<=addrin(23 downto 3);
 					when "11" =>
-						cacheaddr(3)(23 downto 3)<=addr(23 downto 3);
+						cacheaddr(3)(23 downto 3)<=addrin(23 downto 3);
 					when others =>
 						null;
 				end case;

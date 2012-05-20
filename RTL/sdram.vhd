@@ -79,15 +79,12 @@ port
 	reset		: in std_logic;
 	reset_out	: out std_logic;
 
--- Port 0
-	datawr0		: in std_logic_vector(15 downto 0);	-- Data in from minimig
-	Addr0		: in std_logic_vector(23 downto 0);	-- Address in from Minimig
-	wr0			: in std_logic;	-- Read/write from Minimig
-	wrL0		: in std_logic;	-- Minimig write lower byte
-	wrU0		: in std_logic;	-- Minimig write upper byte
-	dataout0		: out std_logic_vector(15 downto 0); -- Data destined for Minimig
-	dtack0	: buffer std_logic;
-
+-- Port 0 - VGA
+	vga_data	: out std_logic_vector(15 downto 0);
+	vga_req : in std_logic;
+	vga_newframe : in std_logic;
+	vga_refresh : in std_logic;
+	
 	-- Port 1
 	datawr1		: in std_logic_vector(15 downto 0);	-- Data in from minimig
 	Addr1		: in std_logic_vector(23 downto 0);	-- Address in from Minimig
@@ -140,26 +137,49 @@ signal refreshpending : std_logic :='0';
 --signal ramdelay : unsigned(15 downto 0);
 
 --signal vga_cachehit : std_logic;
-signal cachefill : std_logic;
-signal cachereq : std_logic;
+signal vga_sdrfill : std_logic;
+signal vga_sdrreq : std_logic;
+signal vga_sdraddr : std_logic_vector(23 downto 0);
+
+-- Since VGA has absolute priority, we keep track of the next bank and disallow accesses
+-- to either the current or next bank in the interleaved access slots.
+signal vga_sdrbank : unsigned(1 downto 0);
+signal vga_nextbank : unsigned(1 downto 0);
+
 
 begin
 
-	vgacache1 : entity work.cacheline
-		port map
-		(
+--	vgacache1 : entity work.
+--		port map
+--		(
+--			clk => sysclk,
+--			reset => reset,
+--			addrin => Addr0,
+--			addrout => cacheaddr,
+----			hit => vga_cachehit,
+----			stale => open,
+--			data_in => sdata_reg,
+--			data_out => dataout0,
+--			dtack	=> dtack0,
+--			fill => cachefill,
+--			req => cachereq
+--		);
+
+	-- VGACache
+	vgacache1 : entity work.vgacache
+		port map(
 			clk => sysclk,
 			reset => reset,
-			addr => Addr0,
---			hit => vga_cachehit,
---			stale => open,
-			data_in => sdata_reg,
-			data_out => dataout0,
-			dtack	=> dtack0,
-			fill => cachefill,
-			req => cachereq
+			reqin => vga_req,
+			newframe => vga_newframe,
+			addrout => vga_sdraddr,
+			data_in => sdata,
+			data_out => vga_data,
+			fill => vga_sdrfill,
+			req => vga_sdrreq
 		);
 
+	
 	process (sysclk, reset) begin
 	
 --		dataout0 <= qdataout0;	-- Forward data from holding register
@@ -169,10 +189,12 @@ begin
 		elsif rising_edge(sysclk) THEN
 
 		-- Attend to refresh counter
-		refreshcounter<=refreshcounter+"0000000000001";
+--		refreshcounter<=refreshcounter+"0000000000001";
 		if sdram_slot1=refresh then
 			refreshpending<='0';
-		elsif refreshcounter(12 downto 4)="000000000" then
+--		elsif refreshcounter(12 downto 4)="000000000" then
+--			refreshpending<='1';
+		elsif vga_refresh='1' then
 			refreshpending<='1';
 		end if;
 
@@ -269,7 +291,7 @@ begin
 					sdram_state <= ph1;
 				when ph1 =>	
 					if sdram_slot2=port0 then
-						cachefill<='1';
+						vga_sdrfill<='1';
 					end if;
 					sdram_state <= ph2;
 				when ph2 =>
@@ -285,7 +307,7 @@ begin
 					sdwrite <= '1';
 				when ph5 => sdram_state <= ph6;
 					sdwrite <= '1';
-					cachefill<='0';
+					vga_sdrfill<='0';
 				when ph6 =>	sdram_state <= ph7;
 					sdwrite <= '1';
 --							enaWRreg <= '1';
@@ -294,7 +316,7 @@ begin
 				when ph8 =>	sdram_state <= ph9;
 				when ph9 =>	sdram_state <= ph10;
 					if sdram_slot1=port0 then
-						cachefill<='1';
+						vga_sdrfill<='1';
 					end if;
 				when ph10 => sdram_state <= ph11;
 --					cachefill<='1';
@@ -305,7 +327,7 @@ begin
 --					cachefill<='1';
 				when ph13 => sdram_state <= ph14;	-- Skip a few phases...
 					sdwrite<='1';
-					cachefill<='0';
+					vga_sdrfill<='0';
 				when ph14 => sdram_state <= ph15;
 						sdwrite<='1';
 						if initstate /= "1111" THEN -- 16 complete phase cycles before we allow the rest of the design to come out of reset.
@@ -327,7 +349,12 @@ begin
 	process (sysclk, initstate, datain, init_done, casaddr, refreshcycle) begin
 
 
-		if rising_edge(sysclk) THEN -- rising edge
+		if reset='0' then
+			sdram_slot1<=refresh;
+			sdram_slot2<=idle;
+			slot1_bank<="00";
+			slot2_bank<="11";
+		elsif rising_edge(sysclk) THEN -- rising edge
 --		ba <= Addr(22 downto 21);
 			sd_cs <='1';
 			sd_ras <= '1';
@@ -430,7 +457,7 @@ begin
 						sdram_slot1<=port1;
 						sdaddr <= Addr1(22 downto 11);
 						ba <= Addr1(4 downto 3);
-						slot1_bank <= Addr0(4 downto 3);
+						slot1_bank <= Addr1(4 downto 3);
 						cas_dqm <= wrU1& wrL1;
 						casaddr <= Addr1;-- (23 downto 3) & "000"; -- read whole cache line in burst mode.
 						datain <= datawr1;
@@ -443,17 +470,17 @@ begin
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
 						sd_cas <= '0'; --AUTOREFRESH
-					elsif cachereq='1' and (Addr0(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
+					elsif vga_sdrreq='1' and (vga_sdraddr(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
 --					elsif cachereq='1' then
 						sdram_slot1<=port0;
-						sdaddr <= Addr0(22 downto 11);
-						ba <= Addr0(4 downto 3);
-						slot1_bank <= Addr0(4 downto 3);
-						cas_dqm <= wrU0& wrL0;
-						casaddr <= Addr0(23 downto 3) & "000"; -- read whole cache line in burst mode.
-						datain <= datawr0;
+						sdaddr <= vga_sdraddr(22 downto 11);
+						ba <= vga_sdraddr(4 downto 3);
+						slot1_bank <= vga_sdraddr(4 downto 3);
+						cas_dqm <= "00";
+						casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
+						datain <= X"0000";
 						cas_sd_cas <= '0';
-						cas_sd_we <= wr0;
+						cas_sd_we <= '1';
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
 					end if;
@@ -512,16 +539,16 @@ begin
 						cas_sd_we <= wr1;
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
-					elsif cachereq='1' and (Addr0(4 downto 3)/=slot1_bank or sdram_slot1=idle) then
+					elsif vga_sdrreq='1' and (vga_sdraddr(4 downto 3)/=slot1_bank or sdram_slot1=idle) then
 						sdram_slot2<=port0;
-						sdaddr <= Addr0(22 downto 11);
-						ba <= Addr0(4 downto 3);
-						slot2_bank <= Addr0(4 downto 3);
-						cas_dqm <= wrU0& wrL0;
-						casaddr <= Addr0(23 downto 3) & "000"; -- read whole cache line in burst mode.
-						datain <= datawr0;
+						sdaddr <= vga_sdraddr(22 downto 11);
+						ba <= vga_sdraddr(4 downto 3);
+						slot1_bank <= vga_sdraddr(4 downto 3);
+						cas_dqm <= "00";
+						casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
+						datain <= X"0000";
 						cas_sd_cas <= '0';
-						cas_sd_we <= wr0;
+						cas_sd_we <= '1';
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
 					end if;

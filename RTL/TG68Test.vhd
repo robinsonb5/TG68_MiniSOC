@@ -49,10 +49,9 @@ signal wred : unsigned(7 downto 0);
 signal wgreen : unsigned(7 downto 0);
 signal wblue : unsigned(7 downto 0);
 signal end_of_pixel : std_logic;
-
-signal vgaaddr : unsigned(23 downto 0);
-signal ramword : std_logic_vector(15 downto 0);
-signal ramword2 : std_logic_vector(15 downto 0);
+signal end_of_line :std_logic;
+signal end_of_frame :std_logic;
+signal vga_data : std_logic_vector(15 downto 0);
 
 --
 signal reset : std_logic := '0';
@@ -62,9 +61,12 @@ signal sdr_ready : std_logic;
 signal ready : std_logic;
 signal write_address : std_logic_vector(23 downto 0);
 signal write_pending : std_logic :='0';
-signal dtack0 : std_logic;
 signal dtack1 : std_logic;
 signal clk114 : std_logic;
+signal vga_req : std_logic;
+signal vga_newframe : std_logic;
+
+signal framectr : unsigned(15 downto 0);
 
 type prgstates is (run,mem,wait1,wait2);
 signal prgstate : prgstates :=run;
@@ -254,9 +256,9 @@ vga_blue<=wblue(7 downto 4);
 --	end if;
 --end process;
 
-process(clk)
+process(clk114)
 begin
-	if rising_edge(clk) then
+	if rising_edge(clk114) then
 		if write_pending='1' and dtack1='0' then
 			write_pending<='0';
 		elsif write_pending='0' then
@@ -286,15 +288,12 @@ mysdram : entity work.sdram
 		reset => reset,
 		reset_out => sdr_ready,
 
-		datawr0 => X"0000",
-		Addr0 => std_logic_vector(vgaaddr),
-		wr0 => '1',	-- Read only for now...
-		wrL0 => '0', -- Always access full words for now...
-		wrU0 => '0', 
-		dataout0 => ramword,
-		dtack0 => dtack0,
+		vga_newframe => end_of_frame,
+		vga_req => vga_req,
+		vga_data => vga_data,
+		vga_refresh => end_of_line,
 
-		datawr1 => std_logic_vector(counter),
+		datawr1 => std_logic_vector(counter+framectr),
 		Addr1 => std_logic_vector(write_address),
 		wr1 => not write_pending,
 		wrL1 => '0', -- Always access full words for now...
@@ -321,8 +320,8 @@ mysdram : entity work.sdram
 			vSync => vga_vsync,
 
 			endOfPixel => end_of_pixel,
-			endOfLine => open,
-			endOfFrame => open,
+			endOfLine => end_of_line,
+			endOfFrame => end_of_frame,
 			currentX => currentX,
 			currentY => currentY,
 
@@ -343,47 +342,22 @@ mysdram : entity work.sdram
 -- -----------------------------------------------------------------------
 	process(clk114, currentX, currentY)
 	begin
---		if rising_edge(vsync) then
---			counter <= counter+1;
---		end if;
-
 		if rising_edge(clk114) then
-			if end_of_pixel = '1' then
-
-				if vga_vsync='0' then
-					vgaaddr<=X"100000";
-				elsif currentX<640 and currentY<480 then
-					if dtack0='0' then
-						ramword2<=ramword;
-						vgaaddr<=vgaaddr+2;
-					end if;
-
---					case counter(9 downto 8) is
---						when "00" =>
-							wred <= unsigned(ramword2(15 downto 8)); -- currentX(7 downto 0)+counter(7 downto 0);
-							wgreen <= unsigned(ramword2(11 downto 4)); -- currentY(7 downto 0)+counter(9 downto 2);
-							wblue	<=	unsigned(ramword2(7 downto 0)); -- currentY(9 downto 2)+counter(11 downto 4);
---						when "01" =>
---							wred <= currentX(8 downto 1);
---							wgreen <= "00000000";
---							wblue <= "00000000";
---						when "10" =>
---							wgreen <= currentX(8 downto 1);
---							wred <= "00000000";
---							wblue <= "00000000";
---						when "11" =>
---							wblue <= currentX(8 downto 1);
---							wred <= "00000000";
---							wgreen <= "00000000";
---					end case;
+			vga_newframe<='0';
+			if vga_vsync='0' then
+				vga_newframe<='1';
+			elsif currentX<640 and currentY<480 then
+				vga_req<='0';
+				if end_of_pixel='1' then
+					vga_req<='1';
+					wred <= unsigned(vga_data(15 downto 8));
+					wgreen <= unsigned(vga_data(11 downto 4));
+					wblue	<=	unsigned(vga_data(7 downto 0));
 				end if;
-				--
-				-- Never draw pixels outside the visual area
-				if (currentX >= 640) or (currentY >= 480) then
-					wred <= (others => '0');
-					wgreen <= (others => '0');
-					wblue <= (others => '0');
-				end if;
+			else
+				wred <= (others => '0');
+				wgreen <= (others => '0');
+				wblue <= (others => '0');
 			end if;
 		end if;
 	end process;
