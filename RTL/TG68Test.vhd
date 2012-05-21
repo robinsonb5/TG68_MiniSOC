@@ -288,7 +288,7 @@ mysdram : entity work.sdram
 		reset => reset,
 		reset_out => sdr_ready,
 
-		vga_newframe => end_of_frame,
+		vga_newframe => vga_newframe,
 		vga_req => vga_req,
 		vga_data => vga_data,
 		vga_refresh => end_of_line,
@@ -343,11 +343,9 @@ mysdram : entity work.sdram
 	process(clk114, currentX, currentY)
 	begin
 		if rising_edge(clk114) then
+			vga_req<='0';
 			vga_newframe<='0';
-			if vga_vsync='0' then
-				vga_newframe<='1';
-			elsif currentX<640 and currentY<480 then
-				vga_req<='0';
+			if currentX<640 and currentY<480 then
 				if end_of_pixel='1' then
 					vga_req<='1';
 					wred <= unsigned(vga_data(15 downto 8));
@@ -355,6 +353,17 @@ mysdram : entity work.sdram
 					wblue	<=	unsigned(vga_data(7 downto 0));
 				end if;
 			else
+				if currentY=481 then
+					if end_of_pixel='1' then
+						if  currentX(0)='0' and currentX>16 and currentX<48 then
+							vga_req<='1';
+						end if;
+						if end_of_pixel='1' and currentX=0 then
+							framectr<=framectr+1;
+							vga_newframe<='1';
+						end if;
+					end if;
+				end if;
 				wred <= (others => '0');
 				wgreen <= (others => '0');
 				wblue <= (others => '0');

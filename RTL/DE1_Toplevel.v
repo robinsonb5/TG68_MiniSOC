@@ -192,7 +192,7 @@ TG68Test myTG68Test
 	.clk(CLOCK_50),
 //	.clk50(CLOCK_50),
 	.src({SW[9:5],SW[5],SW[5],SW[4],SW[4],SW[4],SW[3],SW[3],SW[3:0]}),
-	.reset_in(KEY[0]),
+	.reset_in(SW[0]),
 	.counter(mSEG7_DIG),
 	
 	// video

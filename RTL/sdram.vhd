@@ -124,7 +124,7 @@ type sdram_ports is (idle,refresh,port0,port1);
 
 signal sdram_slot1 : sdram_ports :=refresh;
 signal sdram_slot2 : sdram_ports :=idle;
-signal slot1_bank : std_logic_vector(1 downto 0) := "00";
+--signal slot1_bank : std_logic_vector(1 downto 0) := "00";
 signal slot2_bank : std_logic_vector(1 downto 0) := "11";
 
 -- refresh timer
@@ -145,6 +145,7 @@ signal vga_sdraddr : std_logic_vector(23 downto 0);
 -- to either the current or next bank in the interleaved access slots.
 signal vga_sdrbank : unsigned(1 downto 0);
 signal vga_nextbank : unsigned(1 downto 0);
+signal port1bank : unsigned(1 downto 0);
 
 
 begin
@@ -201,8 +202,6 @@ begin
 				case sdram_state is
 						when ph2 =>
 							case sdram_slot2 is
---								when port0 =>
---									qdataout0 <= sdata_reg;
 								when port1 =>
 									qdataout1 <= sdata_reg;
 								when others =>
@@ -218,8 +217,6 @@ begin
 								end if;
 						when ph10 =>	-- Burst mode - first word
 							case sdram_slot1 is
---								when port0 =>
---									qdataout0 <= sdata_reg;
 								when port1 =>
 									qdataout1 <= sdata_reg;
 								when others =>
@@ -255,6 +252,7 @@ begin
 -- SDRAM Basic
 -------------------------------------------------------------------------
 	reset_out <= init_done;
+	port1bank <= unsigned(Addr1(4 downto 3));
 
 	process (sysclk, reset, sdwrite, datain) begin
 		IF sdwrite='1' THEN	-- Keep sdram data high impedence if not writing to it.
@@ -314,10 +312,10 @@ begin
 --							ena7RDreg <= '1';
 				when ph7 =>	sdram_state <= ph8;
 				when ph8 =>	sdram_state <= ph9;
-				when ph9 =>	sdram_state <= ph10;
 					if sdram_slot1=port0 then
 						vga_sdrfill<='1';
 					end if;
+				when ph9 =>	sdram_state <= ph10;
 				when ph10 => sdram_state <= ph11;
 --					cachefill<='1';
 --							enaRDreg <= '1';
@@ -325,15 +323,19 @@ begin
 --					cachefill<='1';
 				when ph12 => sdram_state <= ph13;
 --					cachefill<='1';
+					vga_sdrfill<='0';
 				when ph13 => sdram_state <= ph14;	-- Skip a few phases...
 					sdwrite<='1';
-					vga_sdrfill<='0';
-				when ph14 => sdram_state <= ph15;
+				when ph14 =>
 						sdwrite<='1';
 						if initstate /= "1111" THEN -- 16 complete phase cycles before we allow the rest of the design to come out of reset.
 							initstate <= initstate+1;
-						else
-							init_done <='1';	
+							sdram_state <= ph15;
+						elsif init_done='1' then
+							sdram_state <= ph15;
+						elsif vga_newframe='1' then
+							init_done <='1';
+							sdram_state <= ph0;
 						end if;
 --							enaWRreg <= '1';
 --							ena7WRreg <= '1';
@@ -352,7 +354,7 @@ begin
 		if reset='0' then
 			sdram_slot1<=refresh;
 			sdram_slot2<=idle;
-			slot1_bank<="00";
+			vga_sdrbank<="00";
 			slot2_bank<="11";
 		elsif rising_edge(sysclk) THEN -- rising edge
 --		ba <= Addr(22 downto 21);
@@ -452,30 +454,17 @@ begin
 					cas_sd_we <= '1';
 
 					sdram_slot1<=idle;
-					if wr1='0' and sdram_slot1/=port1 and (Addr1(4 downto 3)/=slot2_bank or sdram_slot2=idle) then	-- Port 1
---					if wr1='0' and sdram_slot1/=port1 then	-- Port 1
-						sdram_slot1<=port1;
-						sdaddr <= Addr1(22 downto 11);
-						ba <= Addr1(4 downto 3);
-						slot1_bank <= Addr1(4 downto 3);
-						cas_dqm <= wrU1& wrL1;
-						casaddr <= Addr1;-- (23 downto 3) & "000"; -- read whole cache line in burst mode.
-						datain <= datawr1;
-						cas_sd_cas <= '0';
-						cas_sd_we <= wr1;
-						sd_cs <= '0'; --ACTIVE
-						sd_ras <= '0';
-					elsif refreshpending='1' then	-- refreshcycle
+					if refreshpending='1' then	-- refreshcycle
 						sdram_slot1<=refresh;
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
 						sd_cas <= '0'; --AUTOREFRESH
-					elsif vga_sdrreq='1' and (vga_sdraddr(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
---					elsif cachereq='1' then
+					elsif vga_sdrreq='1' then
 						sdram_slot1<=port0;
 						sdaddr <= vga_sdraddr(22 downto 11);
 						ba <= vga_sdraddr(4 downto 3);
-						slot1_bank <= vga_sdraddr(4 downto 3);
+						vga_sdrbank <= unsigned(vga_sdraddr(4 downto 3));
+						vga_nextbank <= unsigned(vga_sdraddr(4 downto 3))+"01";
 						cas_dqm <= "00";
 						casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
 						datain <= X"0000";
@@ -527,28 +516,16 @@ begin
 					sdram_slot2<=idle;
 					if refreshpending='1' then
 						sdram_slot2<=idle;
-					elsif wr1='0' and (Addr1(4 downto 3)/=slot1_bank or sdram_slot1=idle) then	-- Port 1
+					elsif wr1='0' and unsigned(Addr1(4 downto 3))/=vga_sdrbank and unsigned(Addr1(4 downto 3))=vga_nextbank then	-- Port 1
 						sdram_slot2<=port1;
 						sdaddr <= Addr1(22 downto 11);
 						ba <= Addr1(4 downto 3);
 						slot2_bank <= Addr1(4 downto 3);
 						cas_dqm <= wrU1& wrL1;
-						casaddr <= Addr1;-- (23 downto 3) & "000"; -- read whole cache line in burst mode.
+						casaddr <= Addr1;
 						datain <= datawr1;
 						cas_sd_cas <= '0';
 						cas_sd_we <= wr1;
-						sd_cs <= '0'; --ACTIVE
-						sd_ras <= '0';
-					elsif vga_sdrreq='1' and (vga_sdraddr(4 downto 3)/=slot1_bank or sdram_slot1=idle) then
-						sdram_slot2<=port0;
-						sdaddr <= vga_sdraddr(22 downto 11);
-						ba <= vga_sdraddr(4 downto 3);
-						slot1_bank <= vga_sdraddr(4 downto 3);
-						cas_dqm <= "00";
-						casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
-						datain <= X"0000";
-						cas_sd_cas <= '0';
-						cas_sd_we <= '1';
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
 					end if;

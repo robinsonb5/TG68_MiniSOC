@@ -53,7 +53,7 @@ entity vgacache is
 		data_in : in std_logic_vector(15 downto 0);	
 		data_out : out std_logic_vector(15 downto 0);
 		fill : in std_logic; -- High when data is being written from SDRAM controller
-		req : out std_logic -- Request service from SDRAM controller
+		req : buffer std_logic -- Request service from SDRAM controller
 	);
 end entity;
 
@@ -64,6 +64,7 @@ signal buf2 : std_logic_vector(63 downto 0);
 signal buf3 : std_logic_vector(63 downto 0);
 signal incounter : unsigned(1 downto 0);
 signal outcounter : unsigned(1 downto 0);
+signal bufdone : std_logic;
 
 begin
 
@@ -87,9 +88,8 @@ begin
 						data_out<=buf1(31 downto 16);
 					when "11" =>
 						data_out<=buf1(15 downto 0);
+						bufdone<='1';
 						buf1<=buf2;
-						addrout<=std_logic_vector(unsigned(addrout)+4);
-						req<='1';
 				end case;
 				outcounter<=outcounter+1;
 			end if;
@@ -97,6 +97,7 @@ begin
 			if fill='1' then	-- Are we currently receiving data from SDRAM?	
 				case incounter is
 					when "00" =>
+						addrout<=std_logic_vector(unsigned(addrout)+8);
 						req<='0';
 						buf3(63 downto 48)<=data_in;
 					when "01" =>
@@ -107,8 +108,10 @@ begin
 						buf3(15 downto 0)<=data_in;
 				end case;
 				incounter<=incounter+1;
-			else
+			elsif bufdone='1' and req='0' then
 				buf2<=buf3;
+				bufdone<='0';
+				req<='1';
 			end if;
 		end if;
 	end process;
