@@ -67,6 +67,7 @@ signal vga_req : std_logic;
 signal vga_newframe : std_logic;
 
 signal framectr : unsigned(15 downto 0);
+signal resetctr : std_logic;
 
 type prgstates is (run,mem,wait1,wait2);
 signal prgstate : prgstates :=run;
@@ -100,9 +101,9 @@ begin
 end process;
 
 
-vga_red<=wred(7 downto 4);
-vga_green<=wgreen(7 downto 4);
-vga_blue<=wblue(7 downto 4);
+--vga_red<=wred(7 downto 4);
+--vga_green<=wgreen(7 downto 4);
+--vga_blue<=wblue(7 downto 4);
 
 
 --myTG68 : entity work.TG68KdotC_Kernel
@@ -259,12 +260,23 @@ vga_blue<=wblue(7 downto 4);
 process(clk114)
 begin
 	if rising_edge(clk114) then
+		resetctr<='0';
 		if write_pending='1' and dtack1='0' then
 			write_pending<='0';
 		elsif write_pending='0' then
-			counter<=counter+1;
-			write_address<="0001000" & std_logic_vector(counter) & '0';
+			if unsigned(write_address(19 downto 0))>=614400 then -- 640x480x2
+				write_address<=X"100000";
+				resetctr<='1';
+			else
+				write_address<="0001" & std_logic_vector(unsigned(write_address(19 downto 0))+2);
+			end if;
+			counter<=unsigned(write_address(16 downto 1));
+--			write_address<="0001000" & std_logic_vector(counter) & '0';
 			write_pending<='1';
+		end if;
+		
+		if resetctr='1' then
+			framectr<=framectr+1;
 		end if;
 	end if;
 end process;
@@ -335,6 +347,22 @@ mysdram : entity work.sdram
 			ySyncFr => to_unsigned(500, 12), -- Sync pulse 2
 			ySyncTo => to_unsigned(502, 12)
 		);
+		
+	-- VGADither
+	vgadithering : entity work.video_vga_dither
+		port map (
+			pixelclock => end_of_pixel,
+			X => currentX(9 downto 0),
+			Y => currentY(9 downto 0),
+			VSync => vga_vsync,
+			enable => '1',
+			iRed => wred,
+			iGreen => wgreen,
+			iBlue => wblue,
+			oRed => vga_red,
+			oGreen => vga_green,
+			oBlue => vga_blue
+		);
 
 
 	-- -----------------------------------------------------------------------
@@ -348,18 +376,17 @@ mysdram : entity work.sdram
 			if currentX<640 and currentY<480 then
 				if end_of_pixel='1' then
 					vga_req<='1';
-					wred <= unsigned(vga_data(15 downto 8));
-					wgreen <= unsigned(vga_data(11 downto 4));
-					wblue	<=	unsigned(vga_data(7 downto 0));
+					wred <= unsigned(vga_data(15 downto 11) & "000");
+					wgreen <= unsigned(vga_data(10 downto 5) & "00");
+					wblue	<=	unsigned(vga_data(4 downto 0) & "000");
 				end if;
 			else
 				if currentY=481 then
-					if end_of_pixel='1' then
+					if end_of_pixel='1' then -- Prefetch two cachelines
 						if  currentX(0)='0' and currentX>16 and currentX<48 then
 							vga_req<='1';
 						end if;
 						if end_of_pixel='1' and currentX=0 then
-							framectr<=framectr+1;
 							vga_newframe<='1';
 						end if;
 					end if;

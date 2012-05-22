@@ -472,6 +472,21 @@ begin
 						cas_sd_we <= '1';
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
+					elsif wr1='0' and Addr1(4 downto 3)/=slot2_bank then  -- FIXME - make this slot r/w
+						sdram_slot2<=port1;
+						sdaddr <= Addr1(22 downto 11);
+						ba <= Addr1(4 downto 3);
+						vga_sdrbank <= unsigned(Addr1(4 downto 3));
+						cas_dqm <= wrU1& wrL1;
+						casaddr <= Addr1;
+						datain <= datawr1;
+						cas_sd_cas <= '0';
+						cas_sd_we <= wr1;
+						sd_cs <= '0'; --ACTIVE
+						sd_ras <= '0';
+						if wr1='0' then
+							dtack1<='0';
+						end if;
 					end if;
 				END IF;
 				
@@ -481,8 +496,8 @@ begin
 					case sdram_slot2 is
 --						when port0 =>
 --							dtack0<='0';
-						when port1 =>
-							dtack1<='0';
+--						when port1 =>
+--							dtack1<='0'; -- FIXME - for writes we can DTACK quicker than this.
 						when others =>
 							null;
 					end case;
@@ -516,7 +531,10 @@ begin
 					sdram_slot2<=idle;
 					if refreshpending='1' then
 						sdram_slot2<=idle;
-					elsif wr1='0' and unsigned(Addr1(4 downto 3))/=vga_sdrbank and unsigned(Addr1(4 downto 3))=vga_nextbank then	-- Port 1
+					elsif wr1='0' and
+							(unsigned(Addr1(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
+							and unsigned(Addr1(4 downto 3))/=vga_nextbank then	-- Port 1
+							-- FIXME - make this slot r/w
 						sdram_slot2<=port1;
 						sdaddr <= Addr1(22 downto 11);
 						ba <= Addr1(4 downto 3);
@@ -528,6 +546,7 @@ begin
 						cas_sd_we <= wr1;
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
+						dtack1<='0';
 					end if;
 				end if;
 				
@@ -536,8 +555,8 @@ begin
 					case sdram_slot1 is
 --						when port0 =>
 --							dtack0<='0';
-						when port1 =>
-							dtack1<='0';
+--						when port1 =>
+--							dtack1<='0';
 						when others =>
 							null;
 					end case;
