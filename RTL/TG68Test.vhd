@@ -60,17 +60,21 @@ signal tg68_ready : std_logic;
 signal sdr_ready : std_logic;
 signal ready : std_logic;
 signal write_address : std_logic_vector(23 downto 0);
-signal write_pending : std_logic :='0';
+signal req_pending : std_logic :='0';
+--signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
 signal clk114 : std_logic;
 signal vga_req : std_logic;
 signal vga_newframe : std_logic;
 
+signal romdata : std_logic_vector(15 downto 0);
+signal ramdata : std_logic_vector(15 downto 0);
+
 signal framectr : unsigned(15 downto 0);
 signal resetctr : std_logic;
 
-type prgstates is (run,mem,wait1,wait2);
-signal prgstate : prgstates :=run;
+type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2);
+signal prgstate : prgstates :=wait2;
 begin
 
 sdr_clkena <='1';
@@ -87,7 +91,7 @@ mypll : ENTITY work.PLL
 
 process(clk114)
 begin
-	ready <= tg68_ready and sdr_ready and reset and not write_pending;
+	ready <= tg68_ready and sdr_ready and reset;
 
 	if reset_in='0' then
 		reset_counter<=X"FFFF";
@@ -106,32 +110,32 @@ end process;
 --vga_blue<=wblue(7 downto 4);
 
 
---myTG68 : entity work.TG68KdotC_Kernel
---	generic map
---	(
---		MUL_Mode => 1
---	)
---   port map
---	(
---		clk => clk114,
---      nReset => reset,
---      clkena_in => cpu_clkena,
---      data_in => cpu_datain,
---		IPL => "111",
---		IPL_autovector => '0',
---		CPU => "00",
---		addr => cpu_addr,
---		data_write => cpu_dataout,
---		nWr => cpu_r_w,
---		nUDS => cpu_uds,
---		nLDS => cpu_lds,
---		busstate => busstate,
---		nResetOut => tg68_ready,
---		FC => open,
----- for debug		
---		skipFetch => open,
---		regin => open
---	);
+myTG68 : entity work.TG68KdotC_Kernel
+	generic map
+	(
+		MUL_Mode => 1
+	)
+   port map
+	(
+		clk => clk114,
+      nReset => reset,
+      clkena_in => cpu_clkena,
+      data_in => cpu_datain,
+		IPL => "111",
+		IPL_autovector => '0',
+		CPU => "00",
+		addr => cpu_addr,
+		data_write => cpu_dataout,
+		nWr => cpu_r_w,
+		nUDS => cpu_uds,
+		nLDS => cpu_lds,
+		busstate => busstate,
+		nResetOut => tg68_ready,
+		FC => open,
+-- for debug		
+		skipFetch => open,
+		regin => open
+	);
 
 
 -- mul Test program: 
@@ -257,29 +261,102 @@ end process;
 --	end if;
 --end process;
 
-process(clk114)
+--process(clk114)
+--begin
+--	if rising_edge(clk114) then
+--		resetctr<='0';
+--		if write_pending='1' and dtack1='0' then
+--			write_pending<='0';
+--		elsif write_pending='0' then
+--			if unsigned(write_address(19 downto 0))>=614400 then -- 640x480x2
+--				write_address<=X"100000";
+--				resetctr<='1';
+--			else
+--				write_address<="0001" & std_logic_vector(unsigned(write_address(19 downto 0))+2);
+--			end if;
+--			counter<=unsigned(write_address(16 downto 1));
+----			write_address<="0001000" & std_logic_vector(counter) & '0';
+--			write_pending<='1';
+--		end if;
+--		
+--		if resetctr='1' then
+--			framectr<=framectr+1;
+--		end if;
+--	end if;
+--end process;
+
+
+mybootrom : entity work.BootRom
+	port map (
+		clock => clk114,
+		address => cpu_addr(8 downto 1),
+		q => romdata
+		);
+
+
+-- Make use of boot rom
+process(clk114,cpu_addr)
 begin
-	if rising_edge(clk114) then
-		resetctr<='0';
-		if write_pending='1' and dtack1='0' then
-			write_pending<='0';
-		elsif write_pending='0' then
-			if unsigned(write_address(19 downto 0))>=614400 then -- 640x480x2
-				write_address<=X"100000";
-				resetctr<='1';
-			else
-				write_address<="0001" & std_logic_vector(unsigned(write_address(19 downto 0))+2);
-			end if;
-			counter<=unsigned(write_address(16 downto 1));
---			write_address<="0001000" & std_logic_vector(counter) & '0';
-			write_pending<='1';
-		end if;
-		
-		if resetctr='1' then
-			framectr<=framectr+1;
-		end if;
+	if reset_in='0' then
+		prgstate<=wait2;
+		req_pending<='0';
+	elsif rising_edge(clk114) then
+		case prgstate is
+			when run =>
+				cpu_clkena<='0';
+				prgstate<=mem;
+			when mem =>
+				if busstate="01" then
+					prgstate<=wait2;
+				elsif cpu_addr(31 downto 12) = X"00000" then -- ROM access
+				-- FIXME SDRAM read needs to go here...
+					cpu_datain<=romdata;
+					prgstate<=rom;
+				else --if cpu_r_w='0' then
+					counter<=unsigned(cpu_dataout); -- Remove this...
+					write_address<=cpu_addr(23 downto 0);
+					req_pending<='1';
+					if cpu_r_w='0' then
+						prgstate<=waitwrite;
+					else	-- SDRAM read
+						prgstate<=waitread;		
+					end if;
+				end if;
+			when waitread =>
+				if dtack1='0' then
+					cpu_datain<=ramdata;
+					req_pending<='0';
+					cpu_clkena<='1';
+					prgstate<=run;
+				end if;
+			when waitwrite =>
+				if dtack1='0' then
+					req_pending<='0';
+					cpu_clkena<='1';
+					prgstate<=run;
+				end if;
+			when rom =>
+				cpu_datain<=romdata;
+				prgstate<=wait2;
+			when wait1 =>
+				prgstate<=wait2;
+			when wait2 =>
+				if (ready or not tg68_ready)='1' then
+					cpu_clkena<='1';
+					prgstate<=run;
+				end if;
+			when others =>
+				null;
+		end case;
+--		elsif busstate/="01" then	-- Does this cycle involve mem access if so, wait?
+--			cpu_clkena<='0';
+--		end if;
+--		cpu_clkena<=(not cpu_clkena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
 	end if;
 end process;
+
+
+
 
 -- SDRAM
 mysdram : entity work.sdram 
@@ -305,12 +382,13 @@ mysdram : entity work.sdram
 		vga_data => vga_data,
 		vga_refresh => end_of_line,
 
-		datawr1 => std_logic_vector(counter+framectr),
+		datawr1 => std_logic_vector(counter),
 		Addr1 => std_logic_vector(write_address),
-		wr1 => not write_pending,
+		req1 => req_pending,
+		wr1 => cpu_r_w,
 		wrL1 => '0', -- Always access full words for now...
 		wrU1 => '0', 
-		dataout1 => open,
+		dataout1 => ramdata,
 		dtack1 => dtack1
 	);
 

@@ -171,7 +171,7 @@ VCCIO4                       : C12       : power  :                   : 3.3V    
 GND*                         : C13       :        :                   :         : 4         :                
 GPIO_1[10]                   : C14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GND                          : C15       : gnd    :                   :         :           :                
-SD_CMD                       : C16       : bidir  : 3.3-V LVTTL       :         : 4         : N              
+SD_DAT3                      : C16       : bidir  : 3.3-V LVTTL       :         : 4         : N              
 GPIO_1[14]                   : C17       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[15]                   : C18       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[16]                   : C19       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
@@ -210,7 +210,7 @@ GND*                         : E7        :        :                   :         
 TDI                          : E8        : input  : 3.3-V LVTTL       :         : 3         : Y              
 GND*                         : E9        :        :                   :         : 3         :                
 VCCIO3                       : E10       : power  :                   : 3.3V    : 3         :                
-GND*                         : E11       :        :                   :         : 3         :                
+SD_CMD                       : E11       : bidir  : 3.3-V LVTTL       :         : 3         : N              
 CLOCK_27[1]                  : E12       : input  : 3.3-V LVTTL       :         : 3         : Y              
 VCCIO4                       : E13       : power  :                   : 3.3V    : 4         :                
 GPIO_1[4]                    : E14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
@@ -230,9 +230,9 @@ GND_PLL3                     : F5        : gnd    :                   :         
 GND_PLL3                     : F6        : gnd    :                   :         :           :                
 GNDA_PLL3                    : F7        : gnd    :                   :         :           :                
 GND*                         : F8        :        :                   :         : 3         :                
-SD_DAT                       : F9        : bidir  : 3.3-V LVTTL       :         : 3         : N              
+GND*                         : F9        :        :                   :         : 3         :                
 GND*                         : F10       :        :                   :         : 3         :                
-SD_CLK                       : F11       : output : 3.3-V LVTTL       :         : 3         : N              
+GND*                         : F11       :        :                   :         : 3         :                
 GPIO_1[8]                    : F12       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[9]                    : F13       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 UART_RXD                     : F14       : input  : 3.3-V LVTTL       :         : 4         : Y              
@@ -254,7 +254,7 @@ GND*                         : G7        :        :                   :         
 GND*                         : G8        :        :                   :         : 3         :                
 VCCIO3                       : G9        : power  :                   : 3.3V    : 3         :                
 GND                          : G10       : gnd    :                   :         :           :                
-GND*                         : G11       :        :                   :         : 3         :                
+SD_DAT                       : G11       : bidir  : 3.3-V LVTTL       :         : 3         : N              
 UART_TXD                     : G12       : output : 3.3-V LVTTL       :         : 4         : Y              
 GND                          : G13       : gnd    :                   :         :           :                
 VCCIO4                       : G14       : power  :                   : 3.3V    : 4         :                
@@ -273,10 +273,10 @@ HEX1[3]                      : H4        : output : 3.3-V LVTTL       :         
 HEX1[2]                      : H5        : output : 3.3-V LVTTL       :         : 2         : Y              
 HEX1[1]                      : H6        : output : 3.3-V LVTTL       :         : 2         : Y              
 GND*                         : H7        :        :                   :         : 3         :                
-SD_DAT3                      : H8        : bidir  : 3.3-V LVTTL       :         : 3         : N              
+GND*                         : H8        :        :                   :         : 3         :                
 GND*                         : H9        :        :                   :         : 3         :                
 GND*                         : H10       :        :                   :         : 3         :                
-GND*                         : H11       :        :                   :         : 3         :                
+SD_CLK                       : H11       : output : 3.3-V LVTTL       :         : 3         : N              
 GPIO_1[0]                    : H12       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[1]                    : H13       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[2]                    : H14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
@@ -311,11 +311,11 @@ GPIO_0[31]                   : J20       : bidir  : 3.3-V LVTTL       :         
 GPIO_0[26]                   : J21       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
 GPIO_0[27]                   : J22       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
 nCE                          : K1        :        :                   :         : 2         :                
-TCK                          : K2        : input  :                   :         : 2         :                
+altera_reserved_tck          : K2        : input  : 3.3-V LVTTL       :         : 2         : N              
 GND                          : K3        : gnd    :                   :         :           :                
 DATA0                        : K4        : input  :                   :         : 2         :                
-TDI                          : K5        : input  :                   :         : 2         :                
-TMS                          : K6        : input  :                   :         : 2         :                
+altera_reserved_tdi          : K5        : input  : 3.3-V LVTTL       :         : 2         : N              
+altera_reserved_tms          : K6        : input  : 3.3-V LVTTL       :         : 2         : N              
 GND                          : K7        : gnd    :                   :         :           :                
 NC                           : K8        :        :                   :         :           :                
 VCCINT                       : K9        : power  :                   : 1.2V    :           :                
@@ -336,7 +336,7 @@ CLOCK_50                     : L1        : input  : 3.3-V LVTTL       :         
 SW[9]                        : L2        : input  : 3.3-V LVTTL       :         : 2         : Y              
 VCCIO2                       : L3        : power  :                   : 3.3V    : 2         :                
 nCONFIG                      : L4        :        :                   :         : 2         :                
-TDO                          : L5        : output :                   :         : 2         :                
+altera_reserved_tdo          : L5        : output : 3.3-V LVTTL       :         : 2         : N              
 DCLK                         : L6        :        :                   :         : 2         :                
 NC                           : L7        :        :                   :         :           :                
 HEX3[4]                      : L8        : output : 3.3-V LVTTL       :         : 2         : Y              

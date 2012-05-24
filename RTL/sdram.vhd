@@ -88,6 +88,7 @@ port
 	-- Port 1
 	datawr1		: in std_logic_vector(15 downto 0);	-- Data in from minimig
 	Addr1		: in std_logic_vector(23 downto 0);	-- Address in from Minimig
+	req1		: in std_logic;
 	wr1			: in std_logic;	-- Read/write from Minimig
 	wrL1		: in std_logic;	-- Minimig write lower byte
 	wrU1		: in std_logic;	-- Minimig write upper byte
@@ -123,18 +124,16 @@ signal sdram_state		: sdram_states;
 type sdram_ports is (idle,refresh,port0,port1);
 
 signal sdram_slot1 : sdram_ports :=refresh;
+signal sdram_slot1_readwrite : std_logic;
 signal sdram_slot2 : sdram_ports :=idle;
+signal sdram_slot2_readwrite : std_logic;
+
 --signal slot1_bank : std_logic_vector(1 downto 0) := "00";
 signal slot2_bank : std_logic_vector(1 downto 0) := "11";
 
--- refresh timer
-signal refreshcounter : unsigned(12 downto 0);	-- 13 bits gives us 8192 cycles between refreshes => pretty conservative.
+-- refresh timer - once per scanline, so don't need the counter...
+-- signal refreshcounter : unsigned(12 downto 0);	-- 13 bits gives us 8192 cycles between refreshes => pretty conservative.
 signal refreshpending : std_logic :='0';
---re-engineer using a tighter state machine...
---
---type ramstates is (init1,init2,init3,init4,init5,read_active,read_ras,read_cas,read_data,write_active,write_ras,write_cas,idle);
---
---signal ramdelay : unsigned(15 downto 0);
 
 --signal vga_cachehit : std_logic;
 signal vga_sdrfill : std_logic;
@@ -472,8 +471,8 @@ begin
 						cas_sd_we <= '1';
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
-					elsif wr1='0' and Addr1(4 downto 3)/=slot2_bank then  -- FIXME - make this slot r/w
-						sdram_slot2<=port1;
+					elsif req1='1' and Addr1(4 downto 3)/=slot2_bank then
+						sdram_slot1<=port1;
 						sdaddr <= Addr1(22 downto 11);
 						ba <= Addr1(4 downto 3);
 						vga_sdrbank <= unsigned(Addr1(4 downto 3));
@@ -482,9 +481,10 @@ begin
 						datain <= datawr1;
 						cas_sd_cas <= '0';
 						cas_sd_we <= wr1;
+						sdram_slot1_readwrite <= wr1;
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
-						if wr1='0' then
+						if wr1='0' then -- FIXME preserve write cycle.
 							dtack1<='0';
 						end if;
 					end if;
@@ -496,8 +496,10 @@ begin
 					case sdram_slot2 is
 --						when port0 =>
 --							dtack0<='0';
---						when port1 =>
---							dtack1<='0'; -- FIXME - for writes we can DTACK quicker than this.
+						when port1 =>
+							if sdram_slot2_readwrite='1' then
+								dtack1<='0'; -- only for read cycles, write cycles can finish sooner.
+							end if;
 						when others =>
 							null;
 					end case;
@@ -531,10 +533,9 @@ begin
 					sdram_slot2<=idle;
 					if refreshpending='1' then
 						sdram_slot2<=idle;
-					elsif wr1='0' and
+					elsif req1='1' and
 							(unsigned(Addr1(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
 							and unsigned(Addr1(4 downto 3))/=vga_nextbank then	-- Port 1
-							-- FIXME - make this slot r/w
 						sdram_slot2<=port1;
 						sdaddr <= Addr1(22 downto 11);
 						ba <= Addr1(4 downto 3);
@@ -544,9 +545,12 @@ begin
 						datain <= datawr1;
 						cas_sd_cas <= '0';
 						cas_sd_we <= wr1;
+						sdram_slot2_readwrite <= wr1;
 						sd_cs <= '0'; --ACTIVE
 						sd_ras <= '0';
-						dtack1<='0';
+						if wr1='0' then
+							dtack1<='0';
+						end if;
 					end if;
 				end if;
 				
@@ -555,8 +559,10 @@ begin
 					case sdram_slot1 is
 --						when port0 =>
 --							dtack0<='0';
---						when port1 =>
---							dtack1<='0';
+						when port1 =>
+							if sdram_slot1_readwrite='1' then
+								dtack1<='0'; -- only for read cycles, write cycles can finish sooner.
+							end if;
 						when others =>
 							null;
 					end case;
