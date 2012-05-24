@@ -1,0 +1,94 @@
+00000008 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.12.0
+Created On: 24/05/2012 19:54:29
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Program    : TG68TestFirmware
+00000000                             3  * Written by : Alastair M. Robinson
+00000000                             4  * Date       : 2012-05-22
+00000000                             5  * Description: Simple program to test the TG68 processor.
+00000000                             6  *-----------------------------------------------------------
+00000000                             7  
+00000000  =000FFFFE                  8  PEN equ $ffffe
+00000000  =00100000                  9  FRAMEBUFFER equ $100000
+00000000  =00000280                 10  FB_WIDTH equ 640
+00000000  =000001E0                 11  FB_HEIGHT equ 480
+00000000                            12  
+00000000                            13          ORG     $0
+00000000= 007FFFFE                  14          dc.l    $7ffffe         ; Initial stack pointer
+00000004= 00000008                  15          dc.l    START
+00000008                            16          
+00000008                            17  START:                          ; first instruction of program
+00000008  33FC 3803 000FFFFE        18          move.w  #$3803,pen
+00000010  6100 0050                 19          bsr     FillScreen
+00000014                            20  
+00000014  7000                      21          move.l  #0,d0
+00000016  7201                      22          move.l  #1,d1
+00000018                            23  .mainloop
+00000018  5279 000FFFFE             24          add.w   #1,pen
+0000001E  0680 00000011             25          add.l   #17,d0
+00000024  0681 00000025             26          add.l   #37,d1
+0000002A  C0BC 000001FF             27          and.l   #511,d0
+00000030  C2BC 000000FF             28          and.l   #255,d1
+00000036  6100 000A                 29          bsr     Plot
+0000003A  60DC                      30          bra     .mainloop
+0000003C                            31  
+0000003C  103C 0009                 32          MOVE.B  #9,D0
+00000040  4E4F                      33          TRAP    #15             ; halt simulator
+00000042                            34  
+00000042                            35  
+00000042                            36  Plot                            ; X: d0, y: d1
+00000042  48E7 C080                 37          movem.l a0/d0-d1,-(a7)
+00000046  41F9 00100000             38          lea     FRAMEBUFFER,a0
+0000004C  C2FC 0500                 39          mulu    #FB_WIDTH*2,d1
+00000050  E380                      40          asl.l   #1,d0
+00000052  D081                      41          add.l   d1,d0
+00000054  D1C0                      42          add.l   d0,a0
+00000056  30B9 000FFFFE             43          move.w  pen,(a0)
+0000005C  4CDF 0103                 44          movem.l (a7)+,a0/d0-d1
+00000060  4E75                      45          rts
+00000062                            46  
+00000062                            47  FillScreen
+00000062  48E7 78F8                 48          movem.l a0-a4/d1-d4,-(a7)
+00000066  41F9 00100000             49          lea     FRAMEBUFFER,a0
+0000006C  203C 000001E0             50          move.l  #FB_HEIGHT,d0
+00000072  C0FC 0280                 51          mulu    #FB_WIDTH,d0
+00000076  23C0 00100000             52          move.l  d0,FRAMEBUFFER
+0000007C  D1C0                      53          add.l   d0,a0
+0000007E  D1C0                      54          add.l   d0,a0           ; Point to end of buffer
+00000080  E888                      55          lsr.l   #4,d0           ; We're moving 16 bytes at a time
+00000082  3239 000FFFFE             56          move.w  pen,d1
+00000088  4841                      57          swap    d1
+0000008A  3239 000FFFFE             58          move.w  pen,d1
+00000090  2401                      59          move.l  d1,d2
+00000092  2601                      60          move.l  d1,d3
+00000094  2801                      61          move.l  d1,d4
+00000096  2241                      62          move.l  d1,a1
+00000098  2441                      63          move.l  d1,a2
+0000009A  2641                      64          move.l  d1,a3
+0000009C  2841                      65          move.l  d1,a4
+0000009E                            66  .fillloop
+0000009E  48E0 7878                 67          movem.l a1-a4/d1-d4,-(a0)
+000000A2  5380                      68          sub.l   #1,d0
+000000A4  66F8                      69          bne     .fillloop
+000000A6  4CDF 1F1E                 70          movem.l (a7)+,a0-a4/d1-d4
+000000AA  4E75                      71          rts
+000000AC                            72                  
+000000AC                            73          END     START           ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+FB_HEIGHT           1E0
+FB_WIDTH            280
+FILLSCREEN          62
+FILLSCREEN:FILLLOOP  9E
+FRAMEBUFFER         100000
+PEN                 FFFFE
+PLOT                42
+START               8
+START:MAINLOOP      18
