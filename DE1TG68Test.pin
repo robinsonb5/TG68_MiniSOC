@@ -171,7 +171,7 @@ VCCIO4                       : C12       : power  :                   : 3.3V    
 GND*                         : C13       :        :                   :         : 4         :                
 GPIO_1[10]                   : C14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GND                          : C15       : gnd    :                   :         :           :                
-SD_DAT3                      : C16       : bidir  : 3.3-V LVTTL       :         : 4         : N              
+GND*                         : C16       :        :                   :         : 4         :                
 GPIO_1[14]                   : C17       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[15]                   : C18       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[16]                   : C19       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
@@ -210,7 +210,7 @@ GND*                         : E7        :        :                   :         
 TDI                          : E8        : input  : 3.3-V LVTTL       :         : 3         : Y              
 GND*                         : E9        :        :                   :         : 3         :                
 VCCIO3                       : E10       : power  :                   : 3.3V    : 3         :                
-SD_CMD                       : E11       : bidir  : 3.3-V LVTTL       :         : 3         : N              
+GND*                         : E11       :        :                   :         : 3         :                
 CLOCK_27[1]                  : E12       : input  : 3.3-V LVTTL       :         : 3         : Y              
 VCCIO4                       : E13       : power  :                   : 3.3V    : 4         :                
 GPIO_1[4]                    : E14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
@@ -231,7 +231,7 @@ GND_PLL3                     : F6        : gnd    :                   :         
 GNDA_PLL3                    : F7        : gnd    :                   :         :           :                
 GND*                         : F8        :        :                   :         : 3         :                
 GND*                         : F9        :        :                   :         : 3         :                
-GND*                         : F10       :        :                   :         : 3         :                
+SD_DAT3                      : F10       : bidir  : 3.3-V LVTTL       :         : 3         : N              
 GND*                         : F11       :        :                   :         : 3         :                
 GPIO_1[8]                    : F12       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[9]                    : F13       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
@@ -254,7 +254,7 @@ GND*                         : G7        :        :                   :         
 GND*                         : G8        :        :                   :         : 3         :                
 VCCIO3                       : G9        : power  :                   : 3.3V    : 3         :                
 GND                          : G10       : gnd    :                   :         :           :                
-SD_DAT                       : G11       : bidir  : 3.3-V LVTTL       :         : 3         : N              
+GND*                         : G11       :        :                   :         : 3         :                
 UART_TXD                     : G12       : output : 3.3-V LVTTL       :         : 4         : Y              
 GND                          : G13       : gnd    :                   :         :           :                
 VCCIO4                       : G14       : power  :                   : 3.3V    : 4         :                
@@ -276,7 +276,7 @@ GND*                         : H7        :        :                   :         
 GND*                         : H8        :        :                   :         : 3         :                
 GND*                         : H9        :        :                   :         : 3         :                
 GND*                         : H10       :        :                   :         : 3         :                
-SD_CLK                       : H11       : output : 3.3-V LVTTL       :         : 3         : N              
+SD_CMD                       : H11       : bidir  : 3.3-V LVTTL       :         : 3         : N              
 GPIO_1[0]                    : H12       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[1]                    : H13       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[2]                    : H14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
@@ -405,7 +405,7 @@ NC                           : P4        :        :                   :         
 DRAM_ADDR[7]                 : P5        : output : 3.3-V LVTTL       :         : 1         : Y              
 DRAM_ADDR[6]                 : P6        : output : 3.3-V LVTTL       :         : 1         : Y              
 VCCIO1                       : P7        : power  :                   : 3.3V    : 1         :                
-GND*                         : P8        :        :                   :         : 8         :                
+SD_CLK                       : P8        : output : 3.3-V LVTTL       :         : 8         : N              
 GND*                         : P9        :        :                   :         : 8         :                
 VCCINT                       : P10       : power  :                   : 1.2V    :           :                
 VCCINT                       : P11       : power  :                   : 1.2V    :           :                
@@ -505,7 +505,7 @@ GNDA_PLL4                    : V16       : gnd    :                   :         
 GND                          : V17       : gnd    :                   :         :           :                
 GND_PLL4                     : V18       : gnd    :                   :         :           :                
 LEDR[5]                      : V19       : output : 3.3-V LVTTL       :         : 6         : Y              
-GND*                         : V20       :        :                   :         : 6         :                
+SD_DAT                       : V20       : bidir  : 3.3-V LVTTL       :         : 6         : N              
 LEDG[3]                      : V21       : output : 3.3-V LVTTL       :         : 6         : Y              
 LEDG[2]                      : V22       : output : 3.3-V LVTTL       :         : 6         : Y              
 DRAM_DQ[4]                   : W1        : bidir  : 3.3-V LVTTL       :         : 1         : Y              

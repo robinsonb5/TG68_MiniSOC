@@ -1,6 +1,6 @@
 00000008 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.12.0
-Created On: 24/05/2012 23:33:11
+Created On: 27/05/2012 10:39:04
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Program    : TG68TestFirmware
@@ -20,8 +20,8 @@ Created On: 24/05/2012 23:33:11
 00000004= 00000008                  16          dc.l    START
 00000008                            17          
 00000008                            18  START:                          ; first instruction of program
-00000008  33FC 3803 000FFFFE        19          move.w  #$3803,pen
-00000010  6100 0116                 20          bsr     FillScreen
+00000008  33FC 0000 000FFFFE        19          move.w  #$0,pen
+00000010  6100 012A                 20          bsr     FillScreen
 00000014                            21  
 00000014  7000                      22          move.l  #0,d0
 00000016  7201                      23          move.l  #1,d1
@@ -112,7 +112,7 @@ Created On: 24/05/2012 23:33:11
 000000F4                           108          
 000000F4                           109  
 000000F4                           110  DrawRectangle   ; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
-000000F4  48E7 7800                111          movem.l d1-d4,-(a7)
+000000F4  48E7 7C00                111          movem.l d1-d5,-(a7)
 000000F8  D281                     112          add.l   d1,d1
 000000FA  C2FC 0280                113          mulu    #FB_WIDTH,d1    ; y offset
 000000FE  D1C1                     114          add.l   d1,a0
@@ -123,48 +123,54 @@ Created On: 24/05/2012 23:33:11
 0000010C  D080                     119          add.l   d0,d0
 0000010E                           120          
 0000010E  3839 000FFFFE            121          move.w  pen,d4
-00000114                           122  .yloop
-00000114  2202                     123          move.l  d2,d1
-00000116                           124  .xloop
-00000116  30C4                     125          move.w  d4,(a0)+
-00000118  5341                     126          subq.w  #1,d1
-0000011A  66FA                     127          bne     .xloop
-0000011C                           128  
-0000011C  D1C0                     129          add.l   d0,a0           ; Add modulo
-0000011E                           130  
-0000011E  5343                     131          subq.w  #1,d3
-00000120  66F2                     132          bne     .yloop
-00000122                           133  
-00000122  4CDF 001E                134          movem.l (a7)+,d1-d4
-00000126  4E75                     135          rts
-00000128                           136  
-00000128                           137  
-00000128                           138  FillScreen
-00000128  48E7 78F8                139          movem.l a0-a4/d1-d4,-(a7)
-0000012C  41F9 00100000            140          lea     FRAMEBUFFER,a0
-00000132  203C 000001E0            141          move.l  #FB_HEIGHT,d0
-00000138  C0FC 0280                142          mulu    #FB_WIDTH,d0
-0000013C  D1C0                     143          add.l   d0,a0
-0000013E  D1C0                     144          add.l   d0,a0           ; Point to end of buffer
-00000140  E888                     145          lsr.l   #4,d0           ; We're moving 16 bytes at a time
-00000142  3239 000FFFFE            146          move.w  pen,d1
-00000148  4841                     147          swap    d1
-0000014A  3239 000FFFFE            148          move.w  pen,d1
-00000150  2401                     149          move.l  d1,d2
-00000152  2601                     150          move.l  d1,d3
-00000154  2801                     151          move.l  d1,d4
-00000156  2241                     152          move.l  d1,a1
-00000158  2441                     153          move.l  d1,a2
-0000015A  2641                     154          move.l  d1,a3
-0000015C  2841                     155          move.l  d1,a4
-0000015E                           156  .fillloop
-0000015E  48E0 7878                157          movem.l a1-a4/d1-d4,-(a0)
-00000162  5380                     158          sub.l   #1,d0
-00000164  66F8                     159          bne     .fillloop
-00000166  4CDF 1F1E                160          movem.l (a7)+,a0-a4/d1-d4
-0000016A  4E75                     161          rts
-0000016C                           162                  
-0000016C                           163          END     START           ; last line of source
+00000114  E28C                     122          lsr.l   #1,d4
+00000116  C8BC 00007BEF            123          and.l   #%0111101111101111,d4   ; Remove MSBs
+0000011C                           124  .yloop
+0000011C  2202                     125          move.l  d2,d1
+0000011E                           126  .xloop
+0000011E  3A10                     127          move.w  (a0),d5
+00000120  E28D                     128          lsr.l   #1,d5
+00000122  CABC 00007BEF            129          and.l   #%0111101111101111,d5   ; Remove MSBs
+00000128  DA44                     130          add.w   d4,d5   
+0000012A  30C5                     131          move.w  d5,(a0)+
+0000012C  5341                     132          subq.w  #1,d1
+0000012E  66EE                     133          bne     .xloop
+00000130                           134  
+00000130  D1C0                     135          add.l   d0,a0           ; Add modulo
+00000132                           136  
+00000132  5343                     137          subq.w  #1,d3
+00000134  66E6                     138          bne     .yloop
+00000136                           139  
+00000136  4CDF 003E                140          movem.l (a7)+,d1-d5
+0000013A  4E75                     141          rts
+0000013C                           142  
+0000013C                           143  
+0000013C                           144  FillScreen
+0000013C  48E7 78F8                145          movem.l a0-a4/d1-d4,-(a7)
+00000140  41F9 00100000            146          lea     FRAMEBUFFER,a0
+00000146  203C 000001E0            147          move.l  #FB_HEIGHT,d0
+0000014C  C0FC 0280                148          mulu    #FB_WIDTH,d0
+00000150  D1C0                     149          add.l   d0,a0
+00000152  D1C0                     150          add.l   d0,a0           ; Point to end of buffer
+00000154  E888                     151          lsr.l   #4,d0           ; We're moving 16 bytes at a time
+00000156  3239 000FFFFE            152          move.w  pen,d1
+0000015C  4841                     153          swap    d1
+0000015E  3239 000FFFFE            154          move.w  pen,d1
+00000164  2401                     155          move.l  d1,d2
+00000166  2601                     156          move.l  d1,d3
+00000168  2801                     157          move.l  d1,d4
+0000016A  2241                     158          move.l  d1,a1
+0000016C  2441                     159          move.l  d1,a2
+0000016E  2641                     160          move.l  d1,a3
+00000170  2841                     161          move.l  d1,a4
+00000172                           162  .fillloop
+00000172  48E0 7878                163          movem.l a1-a4/d1-d4,-(a0)
+00000176  5380                     164          sub.l   #1,d0
+00000178  66F8                     165          bne     .fillloop
+0000017A  4CDF 1F1E                166          movem.l (a7)+,a0-a4/d1-d4
+0000017E  4E75                     167          rts
+00000180                           168                  
+00000180                           169          END     START           ; last line of source
 
 No errors detected
 No warnings generated
@@ -174,12 +180,12 @@ SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
 DRAWRECTANGLE       F4
-DRAWRECTANGLE:XLOOP  116
-DRAWRECTANGLE:YLOOP  114
+DRAWRECTANGLE:XLOOP  11E
+DRAWRECTANGLE:YLOOP  11C
 FB_HEIGHT           1E0
 FB_WIDTH            280
-FILLSCREEN          128
-FILLSCREEN:FILLLOOP  15E
+FILLSCREEN          13C
+FILLSCREEN:FILLLOOP  172
 FRAMEBUFFER         100000
 PEN                 FFFFE
 PLOT                76

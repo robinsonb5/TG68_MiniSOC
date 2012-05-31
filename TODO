@@ -1,0 +1,30 @@
+CPU cache - both instruction and data.
+(Discrete cachelines, and just one of each, or use a monolithic cache block?  The latter will be resource-hungry.)
+
+Writeback cache - to allow (a) the CPU to continue working while a write is in progress, and (b) to gang sequential
+writes into a single burst write.
+(Need to store the UDS/LDS bits along with the data.)
+
+Sprite controller
+
+Multiple screenmodes.
+ -> 8bit
+ -> lowres
+ -> scandoubled?
+ -> PAL?
+ -> VBlank interrupt?
+
+Need to handle interrupts in general.
+
+Sprite controller.  Just one sprite, can be 2 planes at 32 pixels wide, or 4 planes at 16 pixels wide.
+Need a colourtable of sorts.
+
+SD interface
+(DMA)?
+
+PS/2 controller 
+
+Hardware registers for framebuffer address
+
+Sound?
+

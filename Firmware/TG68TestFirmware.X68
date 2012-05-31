@@ -16,7 +16,7 @@ FB_HEIGHT equ 480
 	dc.l	START
 	
 START:				; first instruction of program
-	move.w	#$3803,pen
+	move.w	#$0,pen
 	bsr	FillScreen
 
 	move.l	#0,d0
@@ -108,7 +108,7 @@ Random
         
 
 DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
-	movem.l	d1-d4,-(a7)
+	movem.l	d1-d5,-(a7)
 	add.l	d1,d1
 	mulu	#FB_WIDTH,d1	; y offset
 	add.l	d1,a0
@@ -119,10 +119,16 @@ DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 	add.l	d0,d0
 	
 	move.w	pen,d4
+	lsr.l	#1,d4
+	and.l	#%0111101111101111,d4	; Remove MSBs
 .yloop
 	move.l	d2,d1
 .xloop
-	move.w	d4,(a0)+
+	move.w	(a0),d5
+	lsr.l	#1,d5
+	and.l	#%0111101111101111,d5	; Remove MSBs
+	add.w	d4,d5	
+	move.w	d5,(a0)+
 	subq.w	#1,d1
 	bne	.xloop
 
@@ -131,7 +137,7 @@ DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 	subq.w	#1,d3
 	bne	.yloop
 
-	movem.l	(a7)+,d1-d4
+	movem.l	(a7)+,d1-d5
 	rts
 
 
@@ -161,6 +167,7 @@ FillScreen
 	rts
 		
 	END	START		; last line of source
+
 
 
 

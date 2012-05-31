@@ -99,7 +99,7 @@ begin
 	elsif rising_edge(clk114) then
 		reset_counter<=reset_counter-1;
 		if reset_counter=X"0000" then
-			reset<='1';
+			reset<='1' and sdr_ready;
 		end if;
 	end if;
 end process;
@@ -265,9 +265,9 @@ myTG68 : entity work.TG68KdotC_Kernel
 --begin
 --	if rising_edge(clk114) then
 --		resetctr<='0';
---		if write_pending='1' and dtack1='0' then
---			write_pending<='0';
---		elsif write_pending='0' then
+--		if req_pending='1' and dtack1='0' then
+--			req_pending<='0';
+--		elsif req_pending='0' then
 --			if unsigned(write_address(19 downto 0))>=614400 then -- 640x480x2
 --				write_address<=X"100000";
 --				resetctr<='1';
@@ -276,7 +276,7 @@ myTG68 : entity work.TG68KdotC_Kernel
 --			end if;
 --			counter<=unsigned(write_address(16 downto 1));
 ----			write_address<="0001000" & std_logic_vector(counter) & '0';
---			write_pending<='1';
+--			req_pending<='1';
 --		end if;
 --		
 --		if resetctr='1' then
@@ -374,7 +374,7 @@ mysdram : entity work.sdram
 
 	-- Housekeeping
 		sysclk => clk114,
-		reset => reset,
+		reset => reset_in,
 		reset_out => sdr_ready,
 
 		vga_newframe => vga_newframe,
@@ -461,7 +461,7 @@ mysdram : entity work.sdram
 			else
 				if currentY=481 then
 					if end_of_pixel='1' then -- Prefetch two cachelines
-						if  currentX(0)='0' and currentX>16 and currentX<48 then
+						if  currentX(0)='0' and currentX>16 and currentX<45 then
 							vga_req<='1';
 						end if;
 						if end_of_pixel='1' and currentX=0 then
