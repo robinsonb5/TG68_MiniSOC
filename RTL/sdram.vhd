@@ -374,7 +374,7 @@ end process;
 				when ph3 =>
 					sdram_state <= ph4;
 				when ph4 =>	sdram_state <= ph5;
-					sdwrite <= '1';
+--					sdwrite <= '1';
 				when ph5 => sdram_state <= ph6;
 					sdwrite <= '1';
 					vga_sdrfill<='0';
@@ -400,7 +400,7 @@ end process;
 				when ph12 => sdram_state <= ph13;
 --					cachefill<='1';
 					vga_sdrfill<='0';
-					sdwrite<='1';
+--					sdwrite<='1';
 				when ph13 => sdram_state <= ph14;	-- Skip a few phases...
 					sdwrite<='1';
 				when ph14 =>
@@ -410,9 +410,9 @@ end process;
 							sdram_state <= ph15;
 						elsif init_done='1' then
 							sdram_state <= ph15;
-						elsif vga_newframe='1' then
+						elsif vga_newframe='1' then -- Delay SDRAM cycle until VBlank.
 							init_done <='1';
-							sdram_state <= ph0;
+							sdram_state <= ph15;
 						end if;
 --							enaWRreg <= '1';
 --							ena7WRreg <= '1';
@@ -535,7 +535,7 @@ end process;
 						cas_dqm <= "00";
 
 						sdram_slot1<=idle;
-						if refreshpending='1' then	-- refreshcycle
+						if refreshpending='1' and sdram_slot2=idle then	-- refreshcycle
 							sdram_slot1<=refresh;
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
@@ -547,7 +547,7 @@ end process;
 							vga_sdrbank <= unsigned(vga_sdraddr(4 downto 3));
 							vga_nextbank <= unsigned(vga_sdraddr(4 downto 3))+"01";
 							casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
-							datain <= X"0000";
+--							datain <= X"0000";
 							cas_sd_cas <= '0';
 							cas_sd_we <= '1';
 							sd_cs <= '0'; --ACTIVE
@@ -562,23 +562,24 @@ end process;
 							vga_sdrbank <= unsigned(writecache_addr(4 downto 3));
 							cas_dqm <= wrU1&wrL1;
 							casaddr <= writecache_addr&"000";
-							datain <= writecache_word0;
+--							datain <= writecache_word0;
 							cas_sd_cas <= '0';
 							cas_sd_we <= '0';
 							sdram_slot1_readwrite <= '0';
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';				
-						elsif req1='1' and wr1='1' and Addr1(4 downto 3)/=slot2_bank then
+						elsif req1='1' and wr1='1'
+								and (Addr1(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
 							sdram_slot1<=port1;
 							sdaddr <= Addr1(22 downto 11);
 							ba <= Addr1(4 downto 3);
 							vga_sdrbank <= unsigned(Addr1(4 downto 3)); -- slot1 bank
 							cas_dqm <= "00";
 							casaddr <= Addr1;
-							datain <= datawr1;
+--							datain <= datawr1;
 							cas_sd_cas <= '0';
-							cas_sd_we <= wr1;
-							sdram_slot1_readwrite <= wr1;
+							cas_sd_we <= '1';
+							sdram_slot1_readwrite <= '1';
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
 						end if;
@@ -589,23 +590,30 @@ end process;
 	--						when port0 =>
 	--							dtack0<='0';
 							when port1 =>
-								if sdram_slot2_readwrite='1' then
+--								if sdram_slot2_readwrite='1' then
 									port1_dtack<='0'; -- only for read cycles, write cycles can finish sooner.
-								end if;
+--								end if;
 							when others =>
 								null;
 						end case;
-		
+						if sdram_slot1=writecache then
+							writecache_burst<='1';	-- Close the door on new write data
+						end if;
+
+					when ph4 =>
+						null;
+						
 					when ph5 => -- Read or Write command
 						sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
 						ba <= casaddr(4 downto 3);
 						sd_cs <= cas_sd_cs; 
 
+						dqm <= cas_dqm;
+
 						sd_ras <= cas_sd_ras;
 						sd_cas <= cas_sd_cas;
 						sd_we  <= cas_sd_we;
 						if sdram_slot1=writecache then
-							writecache_burst<='1';
 							datain <= writecache_word0;
 							dqm <= writecache_dqm(1 downto 0);
 						end if;
@@ -616,7 +624,7 @@ end process;
 							dqm <= writecache_dqm(3 downto 2);
 						end if;
 
-					when ph7 => -- Final word of burst write
+					when ph7 => -- third word of burst write
 						if sdram_slot1=writecache then
 							datain <= writecache_word2;
 							dqm <= writecache_dqm(5 downto 4);
@@ -636,7 +644,7 @@ end process;
 						cas_dqm <= "00";
 
 						sdram_slot2<=idle;
-						if refreshpending='1' then
+						if refreshpending='1' or sdram_slot1=refresh then
 							sdram_slot2<=idle;
 						elsif writecache_req='1'
 								and sdram_slot1/=writecache
@@ -649,14 +657,14 @@ end process;
 							slot2_bank <= writecache_addr(4 downto 3);
 							cas_dqm <= wrU1&wrL1;
 							casaddr <= writecache_addr&"000";
-							datain <= writecache_word0;
+--							datain <= writecache_word0;
 							cas_sd_cas <= '0';
 							cas_sd_we <= '0';
 							sdram_slot2_readwrite <= '0';
 							sd_cs <= '0'; --ACTIVE
-							sd_ras <= '0';				
-						elsif req1='1' and wr1='1' and
-								(unsigned(Addr1(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
+							sd_ras <= '0';
+						elsif req1='1' and wr1='1'
+								and (unsigned(Addr1(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
 								and unsigned(Addr1(4 downto 3))/=vga_nextbank
 									then
 							sdram_slot2<=port1;
@@ -665,7 +673,7 @@ end process;
 							slot2_bank <= Addr1(4 downto 3);
 							cas_dqm <= "00";
 							casaddr <= Addr1;
-							datain <= datawr1;
+--							datain <= datawr1;
 							cas_sd_cas <= '0';
 							cas_sd_we <= '1';
 							sdram_slot2_readwrite <= '1';
@@ -678,13 +686,19 @@ end process;
 	--						when port0 =>
 	--							dtack0<='0';
 							when port1 =>
-								if sdram_slot1_readwrite='1' then
+--								if sdram_slot1_readwrite='1' then
 									port1_dtack<='0'; -- only for read cycles, write cycles can finish sooner.
-								end if;
+--								end if;
 							when others =>
 								null;
 						end case;
+						if sdram_slot2=writecache then
+							writecache_burst<='1';  -- close the door on new write data
+						end if;
 
+					when ph12 =>
+						null;
+						
 					-- Phase 13 - CAS for second window...
 					when ph13 =>
 						if sdram_slot2/=idle then
@@ -699,8 +713,7 @@ end process;
 							sd_we  <= cas_sd_we;
 							if sdram_slot2=writecache then
 								datain <= writecache_word0;
-								dqm <= cas_dqm(1 downto 0);
-								writecache_burst<='1';
+								dqm <= writecache_dqm(1 downto 0);
 							end if;
 						end if;
 

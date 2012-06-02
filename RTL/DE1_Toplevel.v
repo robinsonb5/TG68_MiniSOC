@@ -193,6 +193,8 @@ TG68Test myTG68Test
 //	.clk50(CLOCK_50),
 	.src({SW[9:5],SW[5],SW[5],SW[4],SW[4],SW[4],SW[3],SW[3],SW[3:0]}),
 	.reset_in(!SW[0]^KEY[0]),
+	.pausecpu(SW[1]),
+	.pausevga(SW[2]),
 	.counter(mSEG7_DIG),
 	
 	// video

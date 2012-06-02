@@ -9,6 +9,8 @@ entity TG68Test is
 		src 			: in std_logic_vector(15 downto 0);
 		counter 		: buffer unsigned(15 downto 0);
 		reset_in 	: in std_logic;
+		pausecpu		: in std_logic;
+		pausevga		: in std_logic;
 		
 		-- VGA
 		vga_red 		: out unsigned(3 downto 0);
@@ -49,7 +51,7 @@ signal wred : unsigned(7 downto 0);
 signal wgreen : unsigned(7 downto 0);
 signal wblue : unsigned(7 downto 0);
 signal end_of_pixel : std_logic;
-signal end_of_line :std_logic;
+signal refresh :std_logic;
 signal end_of_frame :std_logic;
 signal vga_data : std_logic_vector(15 downto 0);
 
@@ -119,7 +121,7 @@ myTG68 : entity work.TG68KdotC_Kernel
 	(
 		clk => clk114,
       nReset => reset,
-      clkena_in => cpu_clkena,
+      clkena_in => cpu_clkena and pausecpu,
       data_in => cpu_datain,
 		IPL => "111",
 		IPL_autovector => '0',
@@ -378,9 +380,9 @@ mysdram : entity work.sdram
 		reset_out => sdr_ready,
 
 		vga_newframe => vga_newframe,
-		vga_req => vga_req,
+		vga_req => vga_req and pausevga,
 		vga_data => vga_data,
-		vga_refresh => end_of_line,
+		vga_refresh => refresh,
 
 		datawr1 => std_logic_vector(counter),
 		Addr1 => std_logic_vector(write_address),
@@ -410,7 +412,7 @@ mysdram : entity work.sdram
 			vSync => vga_vsync,
 
 			endOfPixel => end_of_pixel,
-			endOfLine => end_of_line,
+			endOfLine => open,
 			endOfFrame => end_of_frame,
 			currentX => currentX,
 			currentY => currentY,
@@ -451,7 +453,10 @@ mysdram : entity work.sdram
 		if rising_edge(clk114) then
 			vga_req<='0';
 			vga_newframe<='0';
-			if currentX<640 and currentY<480 then
+			refresh<='0';
+			if currentX=640 and end_of_pixel='1' then
+				refresh<='1';
+			elsif currentX<640 and currentY<480 then
 				if end_of_pixel='1' then
 					vga_req<='1';
 					wred <= unsigned(vga_data(15 downto 11) & "000");

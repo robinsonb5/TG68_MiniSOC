@@ -76,6 +76,7 @@ begin
 			outcounter<="00";
 		elsif rising_edge(clk) then
 			if newframe='1' then
+				incounter<="00";
 				outcounter<="00";
 				addrout<=X"100000";
 			elsif reqin='1' then
