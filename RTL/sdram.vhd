@@ -20,45 +20,8 @@
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
  
--- Dual-port SDRAM controller.
--- Note: references to SPIHost here actually refer to the 2nd TG68 processor
  
--- TODO: cacheline 
--- Need a multi-word cacheline to deal with burst writes from the SDRAM controller
--- Ideally would be as transparent as possible - would prefer not to need the
--- tight timing between different parts of the design; would like to decouple
--- the Minimig clock from the SDRAM controller's phase.
--- The SDRAM controller is already using 4-word bursts, so 4-words, or 64 bits
--- would be a sensible size to use for cachelines.
-
--- Implementing a single cacheline is easy - just need to round down the address
--- to the nearest cacheline boundary, and delay the transaction until the requested
--- word is in cache.
-
--- What's trickier is implementing multiple cache lines.  Need a multi-port SDRAM
--- controller for a start. 
-
--- * Each cacheline should present itself to the SDRAM controller with an address and a request bit.
-
--- * The SDRam controller will scan them in order of priority and service the first
--- port to require attention.
-
--- All cachelines will be aware of the current input address, and will all have a "clear"
--- signal.  For simplicity and LE count, the cacheline will simply invalidate itself if a
--- write occurs on a cached address; the next read will then pull the newly-written data back in
--- from SDRAM.
-
--- The trickiest part is deciding which cacheline to use for a new read.
--- * Maybe maintain a counter for each cacheline, and bump the counter for every
---   cache hit?  Then decrement the counter once per cycle.  (or perhaps an n-bit shift register?)
---   Then when a new read cycle comes in, fill the first cacheline with zero counter?
-
--- Cachelines as described above will use a lot of LEs.  Might be better to use an M4K block
--- (or M9K on CIII).  Probably still need to store cached addresses in registers for speed of access,
--- but can fetch the actual data from M4k much faster than SDRAM.
- 
- 
--- Write cache implementation:
+-- Write cache implementation: (AMR)
 -- states:
 --    main:	wait for req1='1' and wr1='0'
 --				Compare addrin(23 downto 3) with stored address, or stored address is FFFFFF
@@ -77,6 +40,9 @@
 --			addr<=X"FFFFFF";
 --			dqms<=X"11111111";
 --			goto state main
+
+-- FIXME - widen write slot window
+-- FIXME - clash between slot2 write and slot 1 read
 
  
 library ieee;
@@ -323,72 +289,6 @@ end process;
 		);
 
 	
-	process (sysclk, reset) begin
-	
---		dataout0 <= qdataout0;	-- Forward data from holding register
---		dataout1 <= qdataout1;	-- Forward data from holding register
-		if reset = '0' THEN
-			null;
-		elsif rising_edge(sysclk) THEN
-
-		-- Attend to refresh counter
---		refreshcounter<=refreshcounter+"0000000000001";
-		if sdram_slot1=refresh then
-			refreshpending<='0';
---		elsif refreshcounter(12 downto 4)="000000000" then
---			refreshpending<='1';
-		elsif vga_refresh='1' then
-			refreshpending<='1';
-		end if;
-
-				case sdram_state is
-						when ph2 =>
-							case sdram_slot2 is
-								when port1 =>
---									qdataout1 <= sdata_reg;
-								when others =>
-									null;
-							end case;
-
-						when ph7 =>	
-								-- Data should be ready at phase 10
-						when ph8 =>	
-								if cas_sd_we='1' then
-									-- Read cycle...
-									-- Mark cache line to be filled here
-								end if;
-						when ph10 =>	-- Burst mode - first word
-							case sdram_slot1 is
-								when port1 =>
---									qdataout1 <= sdata_reg;
-								when others =>
-									null;
-							end case;
---								if zcache_fill='1' THEN
---									zcache(63 downto 48) <= sdata_reg;
---								end if;
-						when ph11 =>	-- Second word
---										if zcache_fill='1' THEN
---											zcache(47 downto 32) <= sdata_reg;
---										end if;
-						when ph12 =>	-- Third word
---										if zcache_fill='1' THEN
---											zcache(31 downto 16) <= sdata_reg;
---										end if;
-						when ph13 =>	-- Fourth word
---										if zcache_fill='1' THEN
---											zcache(15 downto 0) <= sdata_reg;
---										end if;
---										zcache_fill <= '0';
-						when ph15 =>
---										zena <= '0';
---										zvalid <= "1111"; -- Cache now contains valid data
---										Could do this a clock earlier, yes?
-						when others =>	null;
-					end case;	
-			end if;
-	end process;		
-	
 	
 -------------------------------------------------------------------------
 -- SDRAM Basic
@@ -428,14 +328,13 @@ end process;
 
 			case sdram_state is	--LATENCY=3
 				when ph0 =>	
-					if sdram_slot2=writecache then -- port1 and sdram_slot2_readwrite='0' then
+					if sdram_slot2=port0 then
+						vga_sdrfill<='1';
+					elsif sdram_slot2=writecache then -- port1 and sdram_slot2_readwrite='0' then
 						sdwrite<='1';
 					end if;
 					sdram_state <= ph1;
 				when ph1 =>	
-					if sdram_slot2=port0 then
-						vga_sdrfill<='1';
-					end if;
 					sdram_state <= ph2;
 				when ph2 =>
 					sdram_state <= ph3;
@@ -503,7 +402,18 @@ end process;
 			vga_sdrbank<="00";
 			slot2_bank<="11";
 		elsif rising_edge(sysclk) THEN -- rising edge
---		ba <= Addr(22 downto 21);
+	
+			-- Attend to refresh counter
+--			refreshcounter<=refreshcounter+"0000000000001";
+			if sdram_slot1=refresh then
+				refreshpending<='0';
+--			elsif refreshcounter(12 downto 4)="000000000" then
+--				refreshpending<='1';
+			elsif vga_refresh='1' then
+				refreshpending<='1';
+			end if;
+
+		--		ba <= Addr(22 downto 21);
 			sd_cs <='1';
 			sd_ras <= '1';
 			sd_cas <= '1';
@@ -575,10 +485,10 @@ end process;
 --  ph7 (drive data)
 
 --  ph8 (drive data)
---						Active second bank
 --  ph9 Data word 1
 
 -- ph10 Data word 2
+--						Active second bank
 
 -- ph11 Data word 3  -  Assert dtack, propagates next cycle by which time all data is valid.
 
@@ -612,33 +522,37 @@ end process;
 							sd_ras <= '0';
 							sd_cas <= '0'; --AUTOREFRESH
 						elsif vga_sdrreq='1' then
-							sdram_slot1<=port0;
-							sdaddr <= vga_sdraddr(22 downto 11);
-							ba <= vga_sdraddr(4 downto 3);
-							vga_sdrbank <= unsigned(vga_sdraddr(4 downto 3));
-							vga_nextbank <= unsigned(vga_sdraddr(4 downto 3))+"01";
-							casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
---							datain <= X"0000";
+							if vga_sdraddr(4 downto 3)/=slot2_bank or sdram_slot2=idle then
+								sdram_slot1<=port0;
+								sdaddr <= vga_sdraddr(22 downto 11);
+								ba <= vga_sdraddr(4 downto 3);
+								vga_sdrbank <= unsigned(vga_sdraddr(4 downto 3));
+								vga_nextbank <= unsigned(vga_sdraddr(4 downto 3))+"01";
+								casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
+	--							datain <= X"0000";
+								cas_sd_cas <= '0';
+								cas_sd_we <= '1';
+								sd_cs <= '0'; --ACTIVE
+								sd_ras <= '0';
+							else
+								vga_nextbank <= unsigned(vga_sdraddr(4 downto 3)); -- reserve bank for next access
+							end if;
+						elsif writecache_req='1'
+								and sdram_slot2/=writecache
+								and (writecache_addr(4 downto 3)/=slot2_bank or sdram_slot2=idle)
+									then
+							sdram_slot1<=writecache;
+							sdaddr <= writecache_addr(22 downto 11);
+							ba <= writecache_addr(4 downto 3);
+							vga_sdrbank <= unsigned(writecache_addr(4 downto 3));
+							cas_dqm <= wrU1&wrL1;
+							casaddr <= writecache_addr&"000";
+--							datain <= writecache_word0;
 							cas_sd_cas <= '0';
-							cas_sd_we <= '1';
+							cas_sd_we <= '0';
+							sdram_slot1_readwrite <= '0';
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
---						elsif writecache_req='1'
---								and sdram_slot2/=writecache
---								and (writecache_addr(4 downto 3)/=slot2_bank or sdram_slot2=idle)
---									then
---							sdram_slot1<=writecache;
---							sdaddr <= writecache_addr(22 downto 11);
---							ba <= writecache_addr(4 downto 3);
---							vga_sdrbank <= unsigned(writecache_addr(4 downto 3));
---							cas_dqm <= wrU1&wrL1;
---							casaddr <= writecache_addr&"000";
-----							datain <= writecache_word0;
---							cas_sd_cas <= '0';
---							cas_sd_we <= '0';
---							sdram_slot1_readwrite <= '0';
---							sd_cs <= '0'; --ACTIVE
---							sd_ras <= '0';
 						elsif readcache_req='1' --req1='1' and wr1='1'
 								and (Addr1(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
 							sdram_slot1<=port1;
@@ -699,9 +613,9 @@ end process;
 						end if;
 
 					when ph6 => -- Next word of burst write
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
+--						if sdram_slot2=port1 then
+--							readcache_fill<='1';
+--						end if;
 						if sdram_slot1=writecache then
 							datain <= writecache_word1;
 							dqm <= writecache_dqm(3 downto 2);
@@ -713,12 +627,22 @@ end process;
 							dqm <= writecache_dqm(5 downto 4);
 						end if;
 				
-					when ph8 => -- Second access slot...
+					when ph8 =>
 						if sdram_slot1=writecache then
 							datain <= writecache_word3;
 							dqm <= writecache_dqm(7 downto 6);
 							writecache_burst<='0';
 						end if;
+						if sdram_slot1=port1 then
+							readcache_fill<='1';
+						end if;
+
+					when ph9 =>
+						if sdram_slot1=port1 then
+							readcache_fill<='1';
+						end if;
+
+					when ph10 => -- Second access slot...
 						cas_sd_cs <= '0';  -- Only the lowest bit has any significance...
 						cas_sd_ras <= '1';
 						cas_sd_cas <= '1';
@@ -765,16 +689,6 @@ end process;
 						end if;
 
 						-- Fill - takes effect next cycle.
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
-
-					when ph9 =>
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
-
-					when ph10 =>
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
 						end if;

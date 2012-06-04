@@ -36,12 +36,8 @@ use IEEE.numeric_std.ALL;
 --As soon as buf3 is filled, we move the contents into buf2, and drop the req signal.
 --		
 
--- TODO:	prefetching variant
--- 		Multiple ports
---       Release DTACK quicker
---       Respond to address change quicker (or drop DTACK for 1 cycle.)
-
--- FIXME - need to take care of refresh cycle timing.  Make it coincide with HSync.
+--FIXME - need to signal to the SDRAM when a request is coming up, so the access slot
+--to the required bank can be kept clear.
 
 entity vgacache is
 	port(

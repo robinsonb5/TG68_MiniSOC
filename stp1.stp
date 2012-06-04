@@ -1636,13 +1636,12 @@
           </bus>
         </setup_view>
       </presentation>
-      <trigger CRC="FAAAEE45" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2012/06/02 22:02:03  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
+      <trigger CRC="FAAAEE45" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2012/06/02 22:02:03  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'TG68Test:myTG68Test|sdram:mysdram|wr1' == rising edge
             <power_up enabled="yes">
-            </power_up>
-            <op_node/>
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
