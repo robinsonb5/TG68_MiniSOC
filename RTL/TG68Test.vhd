@@ -54,6 +54,7 @@ signal end_of_pixel : std_logic;
 signal refresh :std_logic;
 signal end_of_frame :std_logic;
 signal vga_data : std_logic_vector(15 downto 0);
+signal chargen_pixel : std_logic;
 
 --
 signal reset : std_logic := '0';
@@ -444,6 +445,16 @@ mysdram : entity work.sdram
 			oBlue => vga_blue
 		);
 
+	mychargen : entity work.charactergenerator
+		port map (
+			clk => clk114,
+			reset => reset,
+			xpos => currentX(9 downto 0),
+			ypos => currentY(9 downto 0),
+			pixel_clock => end_of_pixel,
+			pixel => chargen_pixel
+		);
+
 
 	-- -----------------------------------------------------------------------
 -- VGA colors
@@ -459,9 +470,15 @@ mysdram : entity work.sdram
 			elsif currentX<640 and currentY<480 then
 				if end_of_pixel='1' then
 					vga_req<='1';
-					wred <= unsigned(vga_data(15 downto 11) & "000");
-					wgreen <= unsigned(vga_data(10 downto 5) & "00");
-					wblue	<=	unsigned(vga_data(4 downto 0) & "000");
+					if chargen_pixel='0' then
+						wred <= unsigned(vga_data(15 downto 11) & "000");
+						wgreen <= unsigned(vga_data(10 downto 5) & "00");
+						wblue	<=	unsigned(vga_data(4 downto 0) & "000");
+					else
+						wred <= "00000000";
+						wgreen <= "00000000";
+						wblue <= "00000000";
+					end if;
 				end if;
 			else
 				if currentY=481 then
