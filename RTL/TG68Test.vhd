@@ -55,6 +55,7 @@ signal refresh :std_logic;
 signal end_of_frame :std_logic;
 signal vga_data : std_logic_vector(15 downto 0);
 signal chargen_pixel : std_logic;
+signal chargen_window : std_logic;
 
 --
 signal reset : std_logic := '0';
@@ -446,13 +447,21 @@ mysdram : entity work.sdram
 		);
 
 	mychargen : entity work.charactergenerator
+		generic map (
+			xstart => 16,
+			xstop => 626,
+			ystart => 256,
+			ystop => 464,
+			border => 7
+		)
 		port map (
 			clk => clk114,
 			reset => reset,
 			xpos => currentX(9 downto 0),
 			ypos => currentY(9 downto 0),
 			pixel_clock => end_of_pixel,
-			pixel => chargen_pixel
+			pixel => chargen_pixel,
+			window => chargen_window
 		);
 
 
@@ -471,13 +480,19 @@ mysdram : entity work.sdram
 				if end_of_pixel='1' then
 					vga_req<='1';
 					if chargen_pixel='0' then
-						wred <= unsigned(vga_data(15 downto 11) & "000");
-						wgreen <= unsigned(vga_data(10 downto 5) & "00");
-						wblue	<=	unsigned(vga_data(4 downto 0) & "000");
+						if chargen_window='1' then
+							wred <= '0' & unsigned(vga_data(15 downto 11) & "00");
+							wgreen <= '0' & unsigned(vga_data(10 downto 5) & "0");
+							wblue	<=	'0' & unsigned(vga_data(4 downto 0) & "00");
+						else
+							wred <= unsigned(vga_data(15 downto 11) & "000");
+							wgreen <= unsigned(vga_data(10 downto 5) & "00");
+							wblue	<=	unsigned(vga_data(4 downto 0) & "000");				
+						end if;
 					else
-						wred <= "00000000";
-						wgreen <= "00000000";
-						wblue <= "00000000";
+						wred <= "11111111";
+						wgreen <= "11111111";
+						wblue <= "11111111";
 					end if;
 				end if;
 			else
