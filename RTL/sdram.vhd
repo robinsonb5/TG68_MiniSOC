@@ -68,10 +68,12 @@ port
 	reset_out	: out std_logic;
 
 -- Port 0 - VGA
+	vga_addr : in std_logic_vector(23 downto 0);
 	vga_data	: out std_logic_vector(15 downto 0);
 	vga_req : in std_logic;
+	vga_fill : out std_logic;
 	vga_newframe : in std_logic;
-	vga_refresh : in std_logic;
+	vga_refresh : in std_logic; -- SDRAM won't come out of reset without this.
 	
 	-- Port 1
 	datawr1		: in std_logic_vector(15 downto 0);	-- Data in from minimig
@@ -123,9 +125,9 @@ signal slot2_bank : std_logic_vector(1 downto 0) := "11";
 signal refreshpending : std_logic :='0';
 
 --signal vga_cachehit : std_logic;
-signal vga_sdrfill : std_logic;
-signal vga_sdrreq : std_logic;
-signal vga_sdraddr : std_logic_vector(23 downto 0);
+--signal vga_sdrfill : std_logic;
+--signal vga_sdrreq : std_logic;
+--signal vga_sdraddr : std_logic_vector(23 downto 0);
 
 -- Since VGA has absolute priority, we keep track of the next bank and disallow accesses
 -- to either the current or next bank in the interleaved access slots.
@@ -274,19 +276,19 @@ end process;
 		end if;
 	end process;
 
-	-- VGACache
-	vgacache1 : entity work.vgacache
-		port map(
-			clk => sysclk,
-			reset => reset,
-			reqin => vga_req,
-			newframe => vga_newframe,
-			addrout => vga_sdraddr,
-			data_in => sdata,
-			data_out => vga_data,
-			fill => vga_sdrfill,
-			req => vga_sdrreq
-		);
+--	-- VGACache
+--	vgacache1 : entity work.vgacache
+--		port map(
+--			clk => sysclk,
+--			reset => reset,
+--			reqin => vga_req,
+--			newframe => vga_newframe,
+--			addrout => vga_addr,
+--			data_in => sdata,
+--			data_out => vga_data,
+--			fill => vga_sdrfill,
+--			req => vga_sdrreq
+--		);
 
 	
 	
@@ -302,8 +304,10 @@ end process;
 		ELSE
 			sdata <= "ZZZZZZZZZZZZZZZZ";
 		END IF;
-		
---   sample SDRAM data
+
+		vga_data <= sdata;
+
+		--   sample SDRAM data
 		if rising_edge(sysclk) then
 			sdata_reg <= sdata;
 		END IF;	
@@ -329,7 +333,7 @@ end process;
 			case sdram_state is	--LATENCY=3
 				when ph0 =>	
 					if sdram_slot2=port0 then
-						vga_sdrfill<='1';
+						vga_fill<='1';
 					elsif sdram_slot2=writecache then -- port1 and sdram_slot2_readwrite='0' then
 						sdwrite<='1';
 					end if;
@@ -345,7 +349,7 @@ end process;
 --					sdwrite <= '1';
 				when ph5 => sdram_state <= ph6;
 					sdwrite <= '1';
-					vga_sdrfill<='0';
+					vga_fill<='0';
 				when ph6 =>	sdram_state <= ph7;
 					sdwrite <= '1';
 --							enaWRreg <= '1';
@@ -354,7 +358,7 @@ end process;
 					sdwrite <= '1';
 				when ph8 =>	sdram_state <= ph9;
 					if sdram_slot1=port0 then
-						vga_sdrfill<='1';
+						vga_fill<='1';
 					elsif sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
 						sdwrite<='1';
 					end if;
@@ -367,7 +371,7 @@ end process;
 --					cachefill<='1';
 				when ph12 => sdram_state <= ph13;
 --					cachefill<='1';
-					vga_sdrfill<='0';
+					vga_fill<='0';
 --					sdwrite<='1';
 				when ph13 => sdram_state <= ph14;	-- Skip a few phases...
 					sdwrite<='1';
@@ -378,7 +382,7 @@ end process;
 							sdram_state <= ph15;
 						elsif init_done='1' then
 							sdram_state <= ph15;
-						elsif vga_newframe='1' then -- Delay SDRAM cycle until VBlank.
+						elsif vga_refresh='1' then -- Delay here to establish phase relationship between SDRAM and VGA
 							init_done <='1';
 							sdram_state <= ph15;
 						end if;
@@ -521,21 +525,21 @@ end process;
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
 							sd_cas <= '0'; --AUTOREFRESH
-						elsif vga_sdrreq='1' then
-							if vga_sdraddr(4 downto 3)/=slot2_bank or sdram_slot2=idle then
+						elsif vga_req='1' then
+							if vga_addr(4 downto 3)/=slot2_bank or sdram_slot2=idle then
 								sdram_slot1<=port0;
-								sdaddr <= vga_sdraddr(22 downto 11);
-								ba <= vga_sdraddr(4 downto 3);
-								vga_sdrbank <= unsigned(vga_sdraddr(4 downto 3));
-								vga_nextbank <= unsigned(vga_sdraddr(4 downto 3))+"01";
-								casaddr <= vga_sdraddr(23 downto 3) & "000"; -- read whole cache line in burst mode.
+								sdaddr <= vga_addr(22 downto 11);
+								ba <= vga_addr(4 downto 3);
+								vga_sdrbank <= unsigned(vga_addr(4 downto 3));
+								vga_nextbank <= unsigned(vga_addr(4 downto 3))+"01";
+								casaddr <= vga_addr(23 downto 3) & "000"; -- read whole cache line in burst mode.
 	--							datain <= X"0000";
 								cas_sd_cas <= '0';
 								cas_sd_we <= '1';
 								sd_cs <= '0'; --ACTIVE
 								sd_ras <= '0';
 							else
-								vga_nextbank <= unsigned(vga_sdraddr(4 downto 3)); -- reserve bank for next access
+								vga_nextbank <= unsigned(vga_addr(4 downto 3)); -- reserve bank for next access
 							end if;
 						elsif writecache_req='1'
 								and sdram_slot2/=writecache

@@ -4,13 +4,14 @@ use IEEE.numeric_std.ALL;
 
 entity TG68Test is
 	port (
-		clk 			: in std_logic;
+		clk50 			: in std_logic;
 --		clk50			: in std_logic;
 		src 			: in std_logic_vector(15 downto 0);
 		counter 		: buffer unsigned(15 downto 0);
 		reset_in 	: in std_logic;
 		pausecpu		: in std_logic;
 		pausevga		: in std_logic;
+		buttons		: in std_logic_vector(2 downto 0);
 		
 		-- VGA
 		vga_red 		: out unsigned(3 downto 0);
@@ -67,9 +68,22 @@ signal write_address : std_logic_vector(23 downto 0);
 signal req_pending : std_logic :='0';
 --signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
-signal clk114 : std_logic;
+signal clk100 : std_logic;
+
+signal vga_addr : std_logic_vector(23 downto 0);
 signal vga_req : std_logic;
+signal vga_fill : std_logic;
+signal vga_refresh : std_logic;
 signal vga_newframe : std_logic;
+
+signal vga_reg_addr : std_logic_vector(11 downto 0);
+signal vga_reg_dataout : std_logic_vector(15 downto 0);
+signal vga_reg_datain : std_logic_vector(15 downto 0);
+signal vga_reg_rw : std_logic;
+
+signal vblank_int : std_logic;
+signal int_ack : std_logic;
+signal ints : std_logic_vector(2 downto 0);
 
 signal romdata : std_logic_vector(15 downto 0);
 signal ramdata : std_logic_vector(15 downto 0);
@@ -77,30 +91,30 @@ signal ramdata : std_logic_vector(15 downto 0);
 signal framectr : unsigned(15 downto 0);
 signal resetctr : std_logic;
 
-type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2);
+type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga);
 signal prgstate : prgstates :=wait2;
 begin
 
 sdr_clkena <='1';
-sdr_clk <=clk114;
+sdr_clk <=clk100;
 
 mypll : ENTITY work.PLL
 	port map
 	(
-		inclk0 => clk,
-		c0 => clk114,
+		inclk0 => clk50,
+		c0 => clk100,
 		locked => open
 	);
 
 
-process(clk114)
+process(clk100)
 begin
 	ready <= tg68_ready and sdr_ready and reset;
 
 	if reset_in='0' then
 		reset_counter<=X"FFFF";
 		reset<='0';
-	elsif rising_edge(clk114) then
+	elsif rising_edge(clk100) then
 		reset_counter<=reset_counter-1;
 		if reset_counter=X"0000" then
 			reset<='1' and sdr_ready;
@@ -113,6 +127,21 @@ end process;
 --vga_green<=wgreen(7 downto 4);
 --vga_blue<=wblue(7 downto 4);
 
+myint : entity work.interrupt_controller
+	port map(
+		clk => clk100,
+		reset => reset,
+		int7 => not buttons(2),
+		int1 => vblank_int,
+		int2 => not buttons(1),
+		int3 => not buttons(0),
+		int4 => '0',
+		int5 => '0',
+		int6 => '0',
+		int_out => ints,
+		ack => int_ack
+	);
+
 
 myTG68 : entity work.TG68KdotC_Kernel
 	generic map
@@ -121,11 +150,11 @@ myTG68 : entity work.TG68KdotC_Kernel
 	)
    port map
 	(
-		clk => clk114,
+		clk => clk100,
       nReset => reset,
       clkena_in => cpu_clkena and pausecpu,
       data_in => cpu_datain,
-		IPL => "111",
+		IPL => ints,
 		IPL_autovector => '0',
 		CPU => "00",
 		addr => cpu_addr,
@@ -142,169 +171,23 @@ myTG68 : entity work.TG68KdotC_Kernel
 	);
 
 
--- mul Test program: 
---	move.l	#$11,d0	; $7011
---.loop
---	move.l	d0,d1	; $2200
---	mulu	#$1234,d1	; $C2FC,$1234
---	move.l	d1,$100	; $21C1,$0100
---	bra.s	.loop	; $60F4
-
--- Address decoding
---process(clk,cpu_addr)
---begin
---	if rising_edge(clk) then
---		if cpu_clkena='0' then
---			case cpu_addr(11 downto 0) is
---				-- We have a simple program encoded here...
---				-- (longword at 0 is initial stack pointer (0), while
---				-- longword at 4 is initial program counter, 0x00000008)
---				when X"006" =>
---					cpu_datain <= X"0008";
---				when X"008" =>
---					cpu_datain <= X"7011";  -- moveq.l #$11,d0
---				when X"00A" =>
---	--				cpu_datain <= X"4440";	-- neg.w d0,
---					cpu_datain <= X"4e71";	-- nop
---				when X"00C" =>
---					cpu_datain <= X"2200";  -- move.l d0,d1
---				when X"00E" =>
---					cpu_datain <= X"c2fc";  -- mulu ....,d1
---	--				cpu_datain <= X"c3fc";  -- muls ....,d1
---				when X"010" =>
---					cpu_datain <= src;
---				when X"012" =>
---					cpu_datain <= X"31c1";  -- move.w d1,...
---				when X"014" =>
---					cpu_datain <= X"0100";  -- $100
---				when X"016" =>
---					cpu_datain <= X"60f4";  -- bra.s .loop
---				when X"100" =>
---					counter<=unsigned(cpu_dataout);
---					cpu_datain <= X"0000";
---				when others =>
---					cpu_datain <= X"0000";
---			end case;
-----			cpu_clkena<='1';
-----		elsif busstate/="01" then	-- Does this cycle involve mem access if so, wait?
-----			cpu_clkena<='0';
---		end if;
---		cpu_clkena<=(not cpu_clkena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
---	end if;
---end process;
---
-
--- SDRAM test program:
--- 7000 7400 2202 41F9 0010 0000 30C1 5241 5340 66F8 5242 60EC
-
---process(clk114,cpu_addr)
---begin
---	if rising_edge(clk114) then
---		if write_pending='1' and dtack1='0' then
---			write_pending<='0';
---		end if;
---		case prgstate is
---			when run =>
---				cpu_clkena<='0';
---				prgstate<=mem;
---			when mem =>
---				case cpu_addr(11 downto 0) is
---					-- We have a simple program encoded here...
---					-- (longword at 0 is initial stack pointer (0), while
---					-- longword at 4 is initial program counter, 0x00000008)
---					when X"006" =>
---						cpu_datain <= X"0008";
---					when X"008" =>
---						cpu_datain <= X"7000";
---					when X"00a" =>
---						cpu_datain <= X"7400";
---					when X"00c" =>
---						cpu_datain <= X"2202";
---					when X"00e" =>
---						cpu_datain <= X"41f9";
---					when X"010" =>
---						cpu_datain <= X"0010";
---					when X"012" =>
---						cpu_datain <= X"0000";
---					when X"014" =>
---						cpu_datain <= X"30c1";
---					when X"016" =>
---						cpu_datain <= X"5241";
---					when X"018" =>
---						cpu_datain <= X"5340";
---					when X"01a" =>
---						cpu_datain <= X"66f8";
---					when X"01c" =>
---						cpu_datain <= X"5242";
-----						cpu_datain <= X"60ea";
---					when X"01e" =>
---						cpu_datain <= X"60ec";
---					when others =>
---						cpu_datain <= X"0000";
---				end case;
---				if cpu_addr(20)='1' and cpu_r_w='0' then
---						counter<=unsigned(cpu_dataout);
---						write_address<=cpu_addr(23 downto 0);
---						write_pending<='1';
---				end if;
---				prgstate<=wait2;
---			when wait1 =>
---				prgstate<=wait2;
---			when wait2 =>
---				if (ready or not tg68_ready)='1' then
---					cpu_clkena<='1';
---					prgstate<=run;
---				end if;
---			when others =>
---				null;
---		end case;
-----		elsif busstate/="01" then	-- Does this cycle involve mem access if so, wait?
-----			cpu_clkena<='0';
-----		end if;
-----		cpu_clkena<=(not cpu_clkena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
---	end if;
---end process;
-
---process(clk114)
---begin
---	if rising_edge(clk114) then
---		resetctr<='0';
---		if req_pending='1' and dtack1='0' then
---			req_pending<='0';
---		elsif req_pending='0' then
---			if unsigned(write_address(19 downto 0))>=614400 then -- 640x480x2
---				write_address<=X"100000";
---				resetctr<='1';
---			else
---				write_address<="0001" & std_logic_vector(unsigned(write_address(19 downto 0))+2);
---			end if;
---			counter<=unsigned(write_address(16 downto 1));
-----			write_address<="0001000" & std_logic_vector(counter) & '0';
---			req_pending<='1';
---		end if;
---		
---		if resetctr='1' then
---			framectr<=framectr+1;
---		end if;
---	end if;
---end process;
-
-
 mybootrom : entity work.BootRom
 	port map (
-		clock => clk114,
-		address => cpu_addr(8 downto 1),
+		clock => clk100,
+		address => cpu_addr(9 downto 1),
 		q => romdata
 		);
 
 
 -- Make use of boot rom
-process(clk114,cpu_addr)
+process(clk100,cpu_addr)
 begin
 	if reset_in='0' then
 		prgstate<=wait2;
 		req_pending<='0';
-	elsif rising_edge(clk114) then
+	elsif rising_edge(clk100) then
+		int_ack<='0';
+		vga_reg_rw<='1';
 		case prgstate is
 			when run =>
 				cpu_clkena<='0';
@@ -312,19 +195,33 @@ begin
 			when mem =>
 				if busstate="01" then
 					prgstate<=wait2;
-				elsif cpu_addr(31 downto 12) = X"00000" then -- ROM access
-				-- FIXME SDRAM read needs to go here...
-					cpu_datain<=romdata;
-					prgstate<=rom;
-				else --if cpu_r_w='0' then
-					counter<=unsigned(cpu_dataout); -- Remove this...
-					write_address<=cpu_addr(23 downto 0);
-					req_pending<='1';
-					if cpu_r_w='0' then
-						prgstate<=waitwrite;
-					else	-- SDRAM read
-						prgstate<=waitread;		
-					end if;
+				else
+					case cpu_addr(31 downto 16) is
+						when X"FFFF" => -- Interrupt acknowledge cycle
+							-- CPU address bits 3 downto 1 contain the int number,
+							-- we respond with that number.  (Could just use autovectoring, of course.)
+							cpu_datain <= "0000000000000" & cpu_addr(3 downto 1);
+							int_ack<='1';
+							prgstate<=wait1;
+						when X"0080" => -- hardware registers
+							vga_reg_addr<=cpu_addr(11 downto 0);
+							vga_reg_rw<=cpu_r_w;
+							cpu_datain<=vga_reg_dataout;
+							vga_reg_datain<=cpu_dataout;
+							prgstate<=wait1;
+						when X"0000" => -- ROM access
+							cpu_datain<=romdata;
+							prgstate<=rom;
+						when others =>
+							counter<=unsigned(cpu_dataout); -- Remove this...
+							write_address<=cpu_addr(23 downto 0);
+							req_pending<='1';
+							if cpu_r_w='0' then
+								prgstate<=waitwrite;
+							else	-- SDRAM read
+								prgstate<=waitread;
+							end if;
+					end case;
 				end if;
 			when waitread =>
 				if dtack1='0' then
@@ -359,9 +256,7 @@ begin
 	end if;
 end process;
 
-
-
-
+	
 -- SDRAM
 mysdram : entity work.sdram 
 	port map
@@ -377,14 +272,17 @@ mysdram : entity work.sdram
 		ba	=> sdr_ba,
 
 	-- Housekeeping
-		sysclk => clk114,
+		sysclk => clk100,
 		reset => reset_in,
 		reset_out => sdr_ready,
 
-		vga_newframe => vga_newframe,
-		vga_req => vga_req and pausevga,
+		vga_addr => vga_addr,
 		vga_data => vga_data,
-		vga_refresh => refresh,
+		vga_fill => vga_fill,
+		vga_req => vga_req,
+		vga_refresh => vga_refresh,
+
+		vga_newframe => vga_newframe,
 
 		datawr1 => std_logic_vector(counter),
 		Addr1 => std_logic_vector(write_address),
@@ -396,121 +294,30 @@ mysdram : entity work.sdram
 		dtack1 => dtack1
 	);
 
-
--- Video
--- -----------------------------------------------------------------------
--- VGA timing configured for 640x480
--- -----------------------------------------------------------------------
-	myVgaMaster : entity work.video_vga_master
-		generic map (
-			clkDivBits => 4
-		)
+	myvga : entity work.vga_controller
 		port map (
-			clk => clk114,
-			-- 50 Mhz / (1+1) = 25 Mhz
-			clkDiv => X"3",
+		clk => clk100,
+		reset => reset,
 
-			hSync => vga_hsync,
-			vSync => vga_vsync,
+		reg_addr_in => vga_reg_addr,
+		reg_data_in => vga_reg_datain,
+		reg_data_out => vga_reg_dataout,
+		reg_rw => vga_reg_rw,
+		reg_uds => cpu_uds,
+		reg_lds => cpu_lds,
 
-			endOfPixel => end_of_pixel,
-			endOfLine => open,
-			endOfFrame => end_of_frame,
-			currentX => currentX,
-			currentY => currentY,
+		sdr_addrout => vga_addr,
+		sdr_datain => vga_data, 
+		sdr_fill => vga_fill,
+		sdr_req => vga_req,
+		sdr_refresh => vga_refresh,
 
-			-- Setup 640x480@60hz needs ~25 Mhz
-			hSyncPol => '0',
-			vSyncPol => '0',
-			xSize => to_unsigned(800, 12),
-			ySize => to_unsigned(525, 12),
-			xSyncFr => to_unsigned(656, 12), -- Sync pulse 96
-			xSyncTo => to_unsigned(752, 12),
-			ySyncFr => to_unsigned(500, 12), -- Sync pulse 2
-			ySyncTo => to_unsigned(502, 12)
-		);
-		
-	-- VGADither
-	vgadithering : entity work.video_vga_dither
-		port map (
-			pixelclock => end_of_pixel,
-			X => currentX(9 downto 0),
-			Y => currentY(9 downto 0),
-			VSync => vga_vsync,
-			enable => '1',
-			iRed => wred,
-			iGreen => wgreen,
-			iBlue => wblue,
-			oRed => vga_red,
-			oGreen => vga_green,
-			oBlue => vga_blue
-		);
-
-	mychargen : entity work.charactergenerator
-		generic map (
-			xstart => 16,
-			xstop => 626,
-			ystart => 256,
-			ystop => 464,
-			border => 7
-		)
-		port map (
-			clk => clk114,
-			reset => reset,
-			xpos => currentX(9 downto 0),
-			ypos => currentY(9 downto 0),
-			pixel_clock => end_of_pixel,
-			pixel => chargen_pixel,
-			window => chargen_window
-		);
-
-
-	-- -----------------------------------------------------------------------
--- VGA colors
--- -----------------------------------------------------------------------
-	process(clk114, currentX, currentY)
-	begin
-		if rising_edge(clk114) then
-			vga_req<='0';
-			vga_newframe<='0';
-			refresh<='0';
-			if currentX=640 and end_of_pixel='1' then
-				refresh<='1';
-			elsif currentX<640 and currentY<480 then
-				if end_of_pixel='1' then
-					vga_req<='1';
-					if chargen_pixel='0' then
-						if chargen_window='1' then
-							wred <= '0' & unsigned(vga_data(15 downto 11) & "00");
-							wgreen <= '0' & unsigned(vga_data(10 downto 5) & "0");
-							wblue	<=	'0' & unsigned(vga_data(4 downto 0) & "00");
-						else
-							wred <= unsigned(vga_data(15 downto 11) & "000");
-							wgreen <= unsigned(vga_data(10 downto 5) & "00");
-							wblue	<=	unsigned(vga_data(4 downto 0) & "000");				
-						end if;
-					else
-						wred <= "11111111";
-						wgreen <= "11111111";
-						wblue <= "11111111";
-					end if;
-				end if;
-			else
-				if currentY=481 then
-					if end_of_pixel='1' then -- Prefetch two cachelines
-						if  currentX(0)='0' and currentX>16 and currentX<45 then
-							vga_req<='1';
-						end if;
-						if end_of_pixel='1' and currentX=0 then
-							vga_newframe<='1';
-						end if;
-					end if;
-				end if;
-				wred <= (others => '0');
-				wgreen <= (others => '0');
-				wblue <= (others => '0');
-			end if;
-		end if;
-	end process;
+		hsync => vga_hsync,
+		vsync => vga_vsync,
+		vblank_int => vblank_int,
+		red => vga_red,
+		green => vga_green,
+		blue => vga_blue
+	);
 
 end architecture;

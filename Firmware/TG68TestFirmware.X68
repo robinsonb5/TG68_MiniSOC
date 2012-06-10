@@ -5,17 +5,42 @@
 * Description: Simple program to test the TG68 processor.
 *-----------------------------------------------------------
 
+FRAMECOUNTER equ $ffff8
 RANDOMSEED equ $ffffa
 PEN equ $ffffe
 FRAMEBUFFER equ	$100000
 FB_WIDTH equ 640
-FB_HEIGHT equ 480
+FB_HEIGHT equ 960
+
+STACK equ $7ffffe
+VGAREGS equ $800000
+FBPTH equ $0000	; Framebuffer pointer - must be 64-bit aligned.
+FBPTL equ $0002
 
 	ORG	$0
-	dc.l	$7ffffe		; Initial stack pointer
+	dc.l	STACK		; Initial stack pointer
 	dc.l	START
 	
+	ORG	$0060
+	dc.l	Crash
+	dc.l	Int1
+	dc.l	Int2
+	dc.l	Int3
+	dc.l	Int4
+	dc.l	Int5
+	dc.l	Int6	
+	dc.l	Int7
+
+	ORG	$0100
 START:				; first instruction of program
+	lea	STACK,a7
+	lea	FRAMEBUFFER,a0	; Set initial framebuffer pointer.
+	lea	VGAREGS,a6
+	move.l	a0,(FBPTH,a6)
+	move.w	#0,FRAMECOUNTER
+
+	move.w	#$2000,SR	; Enable all interrupts
+
 	move.w	#$0,pen
 	bsr	FillScreen
 
@@ -165,11 +190,54 @@ FillScreen
 	bne	.fillloop
 	movem.l	(a7)+,a0-a4/d1-d4
 	rts
-		
+
+
+Crash
+	rte
+
+int1
+	movem.l	a0/d0,-(a7)
+
+	move.w	FRAMECOUNTER,d0
+	addq.w	#1,d0
+	cmp.w	#960,d0
+	bne	.skip
+	move.w	#0,d0
+.skip
+	move.w	d0,FRAMECOUNTER
+	cmp.w	#480,d0
+	blt	.skip2
+	sub.w	#960,d0
+	neg.w	d0
+.skip2
+	mulu	#(FB_WIDTH*2),d0
+	add.l	#FRAMEBUFFER,d0
+	lea	VGAREGS,a0
+	move.l	d0,(FBPTH,a0)
+
+	movem.l	(a7)+,a0/d0
+	rte
+
+int2
+	rte
+
+int3
+	rte
+
+int4
+	rte
+
+int5
+	rte
+
+int6
+	rte
+
+int7
+	rte
+
+
 	END	START		; last line of source
-
-
-
 
 
 

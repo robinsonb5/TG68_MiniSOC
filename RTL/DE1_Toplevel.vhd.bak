@@ -1,25 +1,32 @@
-// Toplevel port definitions taken from the DE1 default example code 
+-- Toplevel file for Altera DE1 board
 
-module DE1_Toplevel
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.ALL;
+
+-- -----------------------------------------------------------------------
+
+
+entity chameleon_pong_top is
+port
 	(
-		////////////////////	Clock Input	 	////////////////////	 
-		CLOCK_24,						//	24 MHz
-		CLOCK_27,						//	27 MHz
-		CLOCK_50,						//	50 MHz
-		EXT_CLOCK,						//	External Clock
-		////////////////////	Push Button		////////////////////
-		KEY,							//	Pushbutton[3:0]
-		////////////////////	DPDT Switch		////////////////////
-		SW,								//	Toggle Switch[9:0]
-		////////////////////	7-SEG Dispaly	////////////////////
-		HEX0,							//	Seven Segment Digit 0
-		HEX1,							//	Seven Segment Digit 1
-		HEX2,							//	Seven Segment Digit 2
-		HEX3,							//	Seven Segment Digit 3
-		////////////////////////	LED		////////////////////////
-		LEDG,							//	LED Green[7:0]
-		LEDR,							//	LED Red[9:0]
-		////////////////////////	UART	////////////////////////
+		-- clock inputs
+		CLOCK_24 : in std_logic_vector(1 downto 0),	-- 24 Mhz
+		CLOCK_27 : in std_logic_vector(1 downto 0),	-- 27 MHz
+		CLOCK_50 : in std_logic,	-- 50 MHz
+		EXT_CLOCK : in std_logic,	-- External Clock
+
+		KEY : in std_logic(3 downto 0), -- Push-buttons
+		SW : in std_logic(9 downto 0), -- Toggle switches
+
+		HEX0 : out std_logic_vector(6 downto 0), -- 7seg digit 0
+		HEX1 : out std_logic_vector(6 downto 0), -- 7seg digit 1
+		HEX2 : out std_logic_vector(6 downto 0), -- 7seg digit 2
+		HEX3 : out std_logic_vector(6 downto 0), -- 7seg digit 3
+
+		LEDG : out std_logic_vector(7 downto 0), -- Green LEDs
+		LEDG : out std_logic_vector(7 downto 0), -- Red LEDs
+
 		UART_TXD,						//	UART Transmitter
 		UART_RXD,						//	UART Receiver
 		/////////////////////	SDRAM Interface		////////////////
@@ -84,24 +91,6 @@ module DE1_Toplevel
 		GPIO_1							//	GPIO Connection 1
 	);
 
-////////////////////////	Clock Input	 	////////////////////////
-input	[1:0]	CLOCK_24;				//	24 MHz
-input	[1:0]	CLOCK_27;				//	27 MHz
-input			CLOCK_50;				//	50 MHz
-input			EXT_CLOCK;				//	External Clock
-////////////////////////	Push Button		////////////////////////
-input	[3:0]	KEY;					//	Pushbutton[3:0]
-////////////////////////	DPDT Switch		////////////////////////
-input	[9:0]	SW;						//	Toggle Switch[9:0]
-////////////////////////	7-SEG Dispaly	////////////////////////
-output	[6:0]	HEX0;					//	Seven Segment Digit 0
-output	[6:0]	HEX1;					//	Seven Segment Digit 1
-output	[6:0]	HEX2;					//	Seven Segment Digit 2
-output	[6:0]	HEX3;					//	Seven Segment Digit 3
-////////////////////////////	LED		////////////////////////////
-output	[7:0]	LEDG;					//	LED Green[7:0]
-output	[9:0]	LEDR;					//	LED Red[9:0]
-////////////////////////////	UART	////////////////////////////
 output			UART_TXD;				//	UART Transmitter
 input			UART_RXD;				//	UART Receiver
 ///////////////////////		SDRAM Interface	////////////////////////
@@ -189,12 +178,10 @@ SEG7_LUT_4 			u0	(	HEX0,HEX1,HEX2,HEX3,mSEG7_DIG );
 
 TG68Test myTG68Test
 (	
-	.clk50(CLOCK_50),
+	.clk(CLOCK_50),
+//	.clk50(CLOCK_50),
 	.src({SW[9:5],SW[5],SW[5],SW[4],SW[4],SW[4],SW[3],SW[3],SW[3:0]}),
-	.reset_in(!SW[0]^KEY[0]),
-	.pausecpu(SW[1]),
-	.pausevga(SW[2]),
-	.buttons(KEY[3:1]),
+	.reset_in(KEY[0]),
 	.counter(mSEG7_DIG),
 	
 	// video
