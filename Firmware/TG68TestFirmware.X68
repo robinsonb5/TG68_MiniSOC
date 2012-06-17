@@ -13,9 +13,19 @@ FB_WIDTH equ 640
 FB_HEIGHT equ 960
 
 STACK equ $7ffffe
+
 VGAREGS equ $800000
+
+SPRITEBUFFER equ $ff000	; Sprite data (can't reference from ROM unless we copy the ROM to RAM at startup...)
+
 FBPTH equ $0000	; Framebuffer pointer - must be 64-bit aligned.
 FBPTL equ $0002
+
+SP0PTH equ $0100 ; Pointer to sprite 0's data - must be 64-bit aligned.
+SP0PTL equ $0102
+SP0XPOS	equ $0104
+SP0YPOS equ $0106
+
 
 	ORG	$0
 	dc.l	STACK		; Initial stack pointer
@@ -38,6 +48,8 @@ START:				; first instruction of program
 	lea	VGAREGS,a6
 	move.l	a0,(FBPTH,a6)
 	move.w	#0,FRAMECOUNTER
+
+	bsr	CopySprite
 
 	move.w	#$2000,SR	; Enable all interrupts
 
@@ -192,11 +204,46 @@ FillScreen
 	rts
 
 
+CopySprite:	; Copy sprite data
+	movem.l	a0-a1/d0,-(a7)
+	lea	SpriteData,a0
+	lea	SPRITEBUFFER,a1
+	moveq.l	#15,d0
+.cpyloop
+	move.l	(a0)+,(a1)+
+	move.l	(a0)+,(a1)+
+	dbf	d0,.cpyloop
+	lea	VGAREGS,a0
+	lea	SPRITEBUFFER,a1
+	move.l	a1,(SP0PTH,a0)
+	movem.l	(a7)+,a0-a1/d0
+	rts
+
+
+SpriteData:
+	dc.l	$CF000000,$00000000
+	dc.l	$8CFFF000,$00000000
+	dc.l	$08CCFFF0,$00000000
+	dc.l	$08CCCCFF,$FF000000
+	dc.l	$088CCCCC,$CFFF0000
+	dc.l	$008CCCCC,$CCC80000
+	dc.l	$0088CCCC,$CC800000
+	dc.l	$0008CCCC,$CF000000
+	dc.l	$0008CCCC,$CCF00000
+	dc.l	$00088CC8,$CCCF0000
+	dc.l	$00008C80,$8CCCF000
+	dc.l	$00008800,$08CCCF00
+	dc.l	$00000000,$008CCCF0
+	dc.l	$00000000,$0008CCC8
+	dc.l	$00000000,$00008C80
+	dc.l	$00000000,$00000800
+
+
 Crash
 	rte
 
 int1
-	movem.l	a0/d0,-(a7)
+	movem.l	a0-a1/d0-d1,-(a7)
 
 	move.w	FRAMECOUNTER,d0
 	addq.w	#1,d0
@@ -210,12 +257,19 @@ int1
 	sub.w	#960,d0
 	neg.w	d0
 .skip2
+	move.w	d0,d1
 	mulu	#(FB_WIDTH*2),d0
 	add.l	#FRAMEBUFFER,d0
 	lea	VGAREGS,a0
 	move.l	d0,(FBPTH,a0)
 
-	movem.l	(a7)+,a0/d0
+	move.w	d1,(SP0XPOS,a0)
+	move.w	d1,(SP0YPOS,a0)
+
+	lea	SPRITEBUFFER,a1
+	move.l	a1,(SP0PTH,a0)
+
+	movem.l	(a7)+,a0-a1/d0-d1
 	rte
 
 int2
@@ -238,6 +292,9 @@ int7
 
 
 	END	START		; last line of source
+
+
+
 
 
 

@@ -75,6 +75,7 @@ signal vga_req : std_logic;
 signal vga_fill : std_logic;
 signal vga_refresh : std_logic;
 signal vga_newframe : std_logic;
+signal sdr_idle : std_logic;
 
 signal vga_reg_addr : std_logic_vector(11 downto 0);
 signal vga_reg_dataout : std_logic_vector(15 downto 0);
@@ -91,7 +92,7 @@ signal ramdata : std_logic_vector(15 downto 0);
 signal framectr : unsigned(15 downto 0);
 signal resetctr : std_logic;
 
-type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga);
+type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga,hardware);
 signal prgstate : prgstates :=wait2;
 begin
 
@@ -206,9 +207,8 @@ begin
 						when X"0080" => -- hardware registers
 							vga_reg_addr<=cpu_addr(11 downto 0);
 							vga_reg_rw<=cpu_r_w;
-							cpu_datain<=vga_reg_dataout;
 							vga_reg_datain<=cpu_dataout;
-							prgstate<=wait1;
+							prgstate<=hardware;
 						when X"0000" => -- ROM access
 							cpu_datain<=romdata;
 							prgstate<=rom;
@@ -238,6 +238,9 @@ begin
 				end if;
 			when rom =>
 				cpu_datain<=romdata;
+				prgstate<=wait2;
+			when hardware =>
+				cpu_datain<=vga_reg_dataout;
 				prgstate<=wait2;
 			when wait1 =>
 				prgstate<=wait2;
@@ -280,6 +283,7 @@ mysdram : entity work.sdram
 		vga_data => vga_data,
 		vga_fill => vga_fill,
 		vga_req => vga_req,
+		vga_idle => sdr_idle,
 		vga_refresh => vga_refresh,
 
 		vga_newframe => vga_newframe,
@@ -310,6 +314,7 @@ mysdram : entity work.sdram
 		sdr_datain => vga_data, 
 		sdr_fill => vga_fill,
 		sdr_req => vga_req,
+		sdr_idle => sdr_idle,
 		sdr_refresh => vga_refresh,
 
 		hsync => vga_hsync,

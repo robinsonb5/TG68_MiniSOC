@@ -71,6 +71,7 @@ port
 	vga_addr : in std_logic_vector(23 downto 0);
 	vga_data	: out std_logic_vector(15 downto 0);
 	vga_req : in std_logic;
+	vga_idle : in std_logic;
 	vga_fill : out std_logic;
 	vga_newframe : in std_logic;
 	vga_refresh : in std_logic; -- SDRAM won't come out of reset without this.
@@ -171,6 +172,7 @@ begin
 	dtack1 <= port1_dtack and writecache_dtack and readcache_dtack;
 	
 	if reset='0' then
+		writecache_req<='0';
 		writecache_dirty<='0';
 		writecache_dqm<="11111111";
 		writecache_state<=waitwrite;
@@ -405,6 +407,7 @@ end process;
 			sdram_slot2<=idle;
 			vga_sdrbank<="00";
 			slot2_bank<="11";
+			writecache_burst<='0';
 		elsif rising_edge(sysclk) THEN -- rising edge
 	
 			-- Attend to refresh counter
@@ -531,7 +534,9 @@ end process;
 								sdaddr <= vga_addr(22 downto 11);
 								ba <= vga_addr(4 downto 3);
 								vga_sdrbank <= unsigned(vga_addr(4 downto 3));
-								vga_nextbank <= unsigned(vga_addr(4 downto 3))+"01";
+								if vga_idle='0' then
+									vga_nextbank <= unsigned(vga_addr(4 downto 3))+"01";
+								end if;
 								casaddr <= vga_addr(23 downto 3) & "000"; -- read whole cache line in burst mode.
 	--							datain <= X"0000";
 								cas_sd_cas <= '0';
@@ -660,7 +665,7 @@ end process;
 						elsif writecache_req='1'
 								and sdram_slot1/=writecache
 								and (unsigned(writecache_addr(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
-								and unsigned(writecache_addr(4 downto 3))/=vga_nextbank
+								and (unsigned(writecache_addr(4 downto 3))/=vga_nextbank or vga_idle='1')
 									then
 							sdram_slot2<=writecache;
 							sdaddr <= writecache_addr(22 downto 11);
@@ -676,7 +681,7 @@ end process;
 							sd_ras <= '0';
 						elsif readcache_req='1' -- req1='1' and wr1='1'
 								and (unsigned(Addr1(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
-								and unsigned(Addr1(4 downto 3))/=vga_nextbank
+								and (unsigned(Addr1(4 downto 3))/=vga_nextbank or vga_idle='1')
 									then
 							sdram_slot2<=port1;
 							sdaddr <= Addr1(22 downto 11);

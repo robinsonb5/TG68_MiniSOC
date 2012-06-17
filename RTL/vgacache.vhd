@@ -2,61 +2,43 @@ library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.numeric_std.ALL;
 
--- Theory of operation
-
---Need a VGA cache that will keep up with 1 word per 4-cycles.
---The SDRAM controller runs on a 16-cycle phase, and shifts 4 words per burst, so
---we will saturate one port of the SDRAM controller
---The other port can perform operations when the bank is not equal to either
---the current or next bank used by the VGA cache.
---To this end we will hardcode a framebuffer pointer, and have a "new frame" signal which will
---reset this hardcoded pointer.
---
---We will have three buffers, each 4 words in size; the first is the current data, which will be clocked out
---one word at a time.
---
---Need a req signal which will be activated at the start of each pixel.
---case counter is
---	when "00" =>
---		vgadata<=buf1(63 downto 48);
---	when "01" =>
---		vgadata<=buf1(47 downto 32);
---	when "02" =>
---		vgadata<=buf1(31 downto 16);
---	when "02" =>
---		vgadata<=buf1(15 downto 0);
---		buf1<=buf2;
---		fetchptr<=fetchptr+4;
---		sdr_req<='1';
---end case;
---
---Alternatively, could use a multiplier to shift the data - might use fewer LEs?
---
---In the meantime, we will constantly fetch data from SDRAM, and feed it into buf3.
---As soon as buf3 is filled, we move the contents into buf2, and drop the req signal.
---		
-
---FIXME - need to signal to the SDRAM when a request is coming up, so the access slot
---to the required bank can be kept clear.
 
 entity vgacache is
 	port(
 		clk : in std_logic;
 		reset : in std_logic;
-		reqin : in std_logic;
-		addrin : in std_logic_vector(23 downto 0);
-		setaddr : in std_logic;
---		newframe : in std_logic;
-		addrout : buffer std_logic_vector(23 downto 0);
-		data_in : in std_logic_vector(15 downto 0);	
+
+		idle : in std_logic; -- indicates that the beam is off-picture so we can attend to other channels.
+		addrin : in std_logic_vector(23 downto 0); -- shared address input
+
+		-- VGA interface
+		setvga : in std_logic;	-- Set current address as VGA pointer
+		vga_req : in std_logic;
 		data_out : out std_logic_vector(15 downto 0);
+
+		-- Sprite interface
+		setsprite0 : in std_logic;	-- Set current address as Sprite0 pointer
+		sprite0_out : out std_logic_vector(3 downto 0);
+		sprite0_req : in std_logic;
+
+		-- SDRAM interface
+		addrout : buffer std_logic_vector(23 downto 0);
+		data_in : in std_logic_vector(15 downto 0);
 		fill : in std_logic; -- High when data is being written from SDRAM controller
-		req : buffer std_logic -- Request service from SDRAM controller
+		req : buffer std_logic; -- Request service from SDRAM controller
+		lowpri : out std_logic -- indicate to SDRAM that immediate response is not vital.
 	);
 end entity;
 
 architecture rtl of vgacache is
 
+signal sprite0addr : std_logic_vector(23 downto 0);
+signal sprite0buf : std_logic_vector(63 downto 0);
+signal sprite0pending : std_logic;
+signal sprite0fill : std_logic;
+signal spritecounter : unsigned(3 downto 0) := "0000";
+
+signal framebufferaddr : std_logic_vector(23 downto 0);
 signal buf1 : std_logic_vector(63 downto 0);
 signal buf2 : std_logic_vector(63 downto 0);
 signal buf3 : std_logic_vector(63 downto 0);
@@ -77,14 +59,21 @@ begin
 			incounter<="00";
 			outcounter<="00";
 			cachestate<=run;
+			sprite0fill<='0';
 		elsif rising_edge(clk) then
-			if setaddr='1' then	-- Set the framebuffer address and start preloading data...
+
+			if setvga='1' then	-- Set the framebuffer address and start preloading data...
 				outcounter<="00";
 				addrout<=addrin;
+				framebufferaddr<=addrin;
 				cachestate<=preload;
 				req<='1';
 			end if;
 			
+			if setsprite0='1' then
+				sprite0addr<=addrin;
+			end if;
+
 			case cachestate is
 				when preload =>
 					if fill='1' then
@@ -109,7 +98,15 @@ begin
 					end if;
 
 				when run =>
-					if reqin='1' then
+					if sprite0_req='1' then
+						sprite0_out<=sprite0buf(63 downto 60);
+						sprite0buf<=sprite0buf(59 downto 0) & "0000";
+						if spritecounter="0000" then
+							sprite0pending<='1';
+						end if;
+						spritecounter<=spritecounter+1;
+					end if;
+					if vga_req='1' then
 						case outcounter is
 							when "00" =>
 								data_out<=buf1(63 downto 48);
@@ -124,27 +121,55 @@ begin
 						end case;
 						outcounter<=outcounter+1;
 					end if;
-
+				when others =>
+					null;
 			end case;
 
-			if fill='1' then	-- Are we currently receiving data from SDRAM?	
-				case incounter is
-					when "00" =>
-						addrout<=std_logic_vector(unsigned(addrout)+8);
-						req<='0';
-						buf3(63 downto 48)<=data_in;
-					when "01" =>
-						buf3(47 downto 32)<=data_in;
-					when "10" =>
-						buf3(31 downto 16)<=data_in;
-					when "11" =>
-						buf3(15 downto 0)<=data_in;
-				end case;
+			if fill='1' then
+				if sprite0fill='1' then -- Are we currently receiving data from SDRAM?	
+					case incounter is
+						when "00" =>
+							sprite0addr<=std_logic_vector(unsigned(sprite0addr)+8);
+							req<='0';
+							sprite0buf(63 downto 48)<=data_in;
+						when "01" =>
+							sprite0buf(47 downto 32)<=data_in;
+						when "10" =>
+							sprite0buf(31 downto 16)<=data_in;
+						when "11" =>
+							sprite0buf(15 downto 0)<=data_in;
+							sprite0fill<='0';
+					end case;
+				else
+					case incounter is
+						when "00" =>
+							framebufferaddr<=std_logic_vector(unsigned(framebufferaddr)+8);
+							req<='0';
+							buf3(63 downto 48)<=data_in;
+						when "01" =>
+							buf3(47 downto 32)<=data_in;
+						when "10" =>
+							buf3(31 downto 16)<=data_in;
+						when "11" =>
+							buf3(15 downto 0)<=data_in;
+					end case;
+				end if;
 				incounter<=incounter+1;
 			elsif bufdone='1' and req='0' then
 				buf2<=buf3;
 				bufdone<='0';
+				addrout<=framebufferaddr;
 				req<='1';
+			elsif idle='1' and sprite0pending='1' and req='0' then
+				addrout<=sprite0addr;
+				req<='1';
+				sprite0fill<='1';
+				sprite0pending<='0';
+				lowpri<='1';
+			end if;
+			
+			if idle='0' then
+				lowpri<='0';
 			end if;
 		end if;
 	end process;
