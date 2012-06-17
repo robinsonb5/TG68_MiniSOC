@@ -107,7 +107,8 @@ entity vga_controller is
 		sdr_datain : in std_logic_vector(15 downto 0);	-- from SDRAM
 		sdr_fill : in std_logic; -- High when data is being written from SDRAM controller
 		sdr_req : buffer std_logic; -- Request service from SDRAM controller
-		sdr_idle : buffer std_logic; -- Indicate to SDR controller when requests are not critical timewise
+		sdr_reservebank : buffer std_logic; -- Indicate to SDR controller when requests are not critical timewise
+		sdr_reserveaddr : buffer std_logic_vector(23 downto 0); -- Indicate to SDR controller when requests are not critical timewise
 		sdr_refresh : out std_logic;
 
 		vblank_int : out std_logic;
@@ -144,7 +145,6 @@ architecture rtl of vga_controller is
 	signal end_of_pixel : std_logic;
 	signal vga_newframe : std_logic;
 	signal vgacache_req : std_logic;
-	signal vgacache_idle : std_logic;
 	signal vgadata : std_logic_vector(15 downto 0);
 	signal oddframe : std_logic;	-- Toggled each frame, used for dithering
 
@@ -197,7 +197,7 @@ begin
 			reset => reset,
 
 			addrin => vga_pointer,
-			idle => vgacache_idle,
+--			idle => sdr_reservebank,
 
 			vga_req => vgacache_req,
 			data_out => vgadata,
@@ -211,7 +211,9 @@ begin
 			data_in => sdr_datain,
 			fill => sdr_fill,
 			req => sdr_req,
-			lowpri => sdr_idle
+--			reservebank => sdr_reservebank,
+--			reservebank => open,
+			reserveaddr => sdr_reserveaddr
 		);
 
 	mychargen : entity work.charactergenerator
@@ -233,7 +235,7 @@ begin
 		);
 
 	-- Handle CPU access to hardware registers
-		
+	
 	process(clk,reset)
 	begin
 		if reset='0' then
@@ -340,7 +342,7 @@ begin
 		
 		if reset='0' then
 			vgacache_req <='0';
-			vgacache_idle<='0';
+			sdr_reservebank<='1';
 		elsif rising_edge(clk) then
 			vblank_int<='0';
 			vgacache_req<='0';
@@ -348,7 +350,7 @@ begin
 			vgacache_req<='0';
 			set_sprite0<='0';
 			if end_of_pixel='1' then
-				vgacache_idle<='0';
+				sdr_reservebank<='1';
 			-- Dither: bit 1: temporal dithering, alternate lines swapped each frame
 				--         bit 0: spatial dithering, alternate pixels
 				dither<="0000" & (currentY(0) xor oddframe) & (currentX(0) xor currentY(0));
@@ -409,8 +411,8 @@ begin
 					end if;
 					
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
-					if currentX<(htotal - 16) then	-- Signal to SDRAM controller that we're
-						vgacache_idle<='1'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
+					if currentX<(htotal - 6) then	-- Signal to SDRAM controller that we're
+						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
 					end if;
 				end if;
 			end if;

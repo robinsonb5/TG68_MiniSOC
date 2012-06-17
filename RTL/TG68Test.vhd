@@ -75,7 +75,8 @@ signal vga_req : std_logic;
 signal vga_fill : std_logic;
 signal vga_refresh : std_logic;
 signal vga_newframe : std_logic;
-signal sdr_idle : std_logic;
+signal vga_reservebank : std_logic; -- Keep bank clear for instant access.
+signal vga_reserveaddr : std_logic_vector(23 downto 0); -- to SDRAM
 
 signal vga_reg_addr : std_logic_vector(11 downto 0);
 signal vga_reg_dataout : std_logic_vector(15 downto 0);
@@ -97,13 +98,14 @@ signal prgstate : prgstates :=wait2;
 begin
 
 sdr_clkena <='1';
-sdr_clk <=clk100;
+--sdr_clk <=clk100;
 
 mypll : ENTITY work.PLL
 	port map
 	(
 		inclk0 => clk50,
-		c0 => clk100,
+		c0 => sdr_clk,
+		c1 => clk100,
 		locked => open
 	);
 
@@ -214,7 +216,7 @@ begin
 							prgstate<=rom;
 						when others =>
 							counter<=unsigned(cpu_dataout); -- Remove this...
-							write_address<=cpu_addr(23 downto 0);
+--							write_address<=cpu_addr(23 downto 0);
 							req_pending<='1';
 							if cpu_r_w='0' then
 								prgstate<=waitwrite;
@@ -283,13 +285,14 @@ mysdram : entity work.sdram
 		vga_data => vga_data,
 		vga_fill => vga_fill,
 		vga_req => vga_req,
-		vga_idle => sdr_idle,
 		vga_refresh => vga_refresh,
+		vga_reservebank => vga_reservebank,
+		vga_reserveaddr => vga_reserveaddr,
 
 		vga_newframe => vga_newframe,
 
 		datawr1 => std_logic_vector(counter),
-		Addr1 => std_logic_vector(write_address),
+		Addr1 => cpu_addr(23 downto 0),
 		req1 => req_pending,
 		wr1 => cpu_r_w,
 		wrL1 => '0', -- Always access full words for now...
@@ -314,7 +317,8 @@ mysdram : entity work.sdram
 		sdr_datain => vga_data, 
 		sdr_fill => vga_fill,
 		sdr_req => vga_req,
-		sdr_idle => sdr_idle,
+		sdr_reservebank => vga_reservebank,
+		sdr_reserveaddr => vga_reserveaddr,
 		sdr_refresh => vga_refresh,
 
 		hsync => vga_hsync,

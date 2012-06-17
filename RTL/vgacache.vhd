@@ -8,7 +8,7 @@ entity vgacache is
 		clk : in std_logic;
 		reset : in std_logic;
 
-		idle : in std_logic; -- indicates that the beam is off-picture so we can attend to other channels.
+--		idle : in std_logic; -- indicates that the beam is off-picture so we can attend to other channels.
 		addrin : in std_logic_vector(23 downto 0); -- shared address input
 
 		-- VGA interface
@@ -26,7 +26,7 @@ entity vgacache is
 		data_in : in std_logic_vector(15 downto 0);
 		fill : in std_logic; -- High when data is being written from SDRAM controller
 		req : buffer std_logic; -- Request service from SDRAM controller
-		lowpri : out std_logic -- indicate to SDRAM that immediate response is not vital.
+		reserveaddr : out std_logic_vector(23 downto 0)
 	);
 end entity;
 
@@ -66,6 +66,7 @@ begin
 				outcounter<="00";
 				addrout<=addrin;
 				framebufferaddr<=addrin;
+				reserveaddr<=std_logic_vector(unsigned(addrin)+8);
 				cachestate<=preload;
 				req<='1';
 			end if;
@@ -84,21 +85,18 @@ begin
 					if fill='0' then	-- drained, to trigger the next burst read.
 						cachestate<=preload3;
 						bufdone<='1';
-						lowpri<='0';
 					end if;
 					
 				when preload3 =>		-- once the next burst starts, we can be sure that buf2 contains
 					if fill='1' then 	-- valid data, so copy it to buf1...
 						buf1<=buf2;
 						cachestate<=preload4;
-						lowpri<='0';
 					end if;
 
 				when preload4 =>		-- Once again pretend the main buffer has been drained,
 					if fill='0' then 	-- and we're good to go.
 						bufdone<='1';
 						cachestate<=run;
-						lowpri<='0';
 					end if;
 
 				when run =>
@@ -149,6 +147,7 @@ begin
 					case incounter is
 						when "00" =>
 							framebufferaddr<=std_logic_vector(unsigned(framebufferaddr)+8);
+							reserveaddr<=std_logic_vector(unsigned(framebufferaddr)+8);
 							req<='0';
 							buf3(63 downto 48)<=data_in;
 						when "01" =>
@@ -165,18 +164,15 @@ begin
 				bufdone<='0';
 				addrout<=framebufferaddr;
 				req<='1';
-				lowpri<='0';
-			elsif idle='1' and sprite0pending='1' and req='0' then
+			-- FIXME - will this be a problem with low-res screenmodes and cycles being snuck in?
+--			elsif idle='1' and sprite0pending='1' and req='0' then
+			elsif sprite0pending='1' and req='0' then
 				addrout<=sprite0addr;
 				req<='1';
 				sprite0fill<='1';
 				sprite0pending<='0';
-				lowpri<='1';
 			end if;
 			
-			if idle='0' then
-				lowpri<='0';
-			end if;
 		end if;
 	end process;
 end architecture;

@@ -71,11 +71,12 @@ port
 	vga_addr : in std_logic_vector(23 downto 0);
 	vga_data	: out std_logic_vector(15 downto 0);
 	vga_req : in std_logic;
-	vga_idle : in std_logic;
 	vga_fill : out std_logic;
 	vga_newframe : in std_logic;
 	vga_refresh : in std_logic; -- SDRAM won't come out of reset without this.
-	
+	vga_reservebank : in std_logic; -- Keep a bank clear for instant access in slot 1
+	vga_reserveaddr : in std_logic_vector(23 downto 0);
+
 	-- Port 1
 	datawr1		: in std_logic_vector(15 downto 0);	-- Data in from minimig
 	Addr1		: in std_logic_vector(23 downto 0);	-- Address in from Minimig - FIXME case
@@ -118,7 +119,9 @@ signal sdram_slot1_readwrite : std_logic;
 signal sdram_slot2 : sdram_ports :=idle;
 signal sdram_slot2_readwrite : std_logic;
 
---signal slot1_bank : std_logic_vector(1 downto 0) := "00";
+-- Since VGA has absolute priority, we keep track of the next bank and disallow accesses
+-- to either the current or next bank in the interleaved access slots.
+signal slot1_bank : std_logic_vector(1 downto 0) := "00";
 signal slot2_bank : std_logic_vector(1 downto 0) := "11";
 
 -- refresh timer - once per scanline, so don't need the counter...
@@ -130,11 +133,8 @@ signal refreshpending : std_logic :='0';
 --signal vga_sdrreq : std_logic;
 --signal vga_sdraddr : std_logic_vector(23 downto 0);
 
--- Since VGA has absolute priority, we keep track of the next bank and disallow accesses
--- to either the current or next bank in the interleaved access slots.
-signal vga_sdrbank : unsigned(1 downto 0);
-signal vga_nextbank : unsigned(1 downto 0);
-signal port1bank : unsigned(1 downto 0);
+--signal vga_nextbank : unsigned(1 downto 0);
+--signal port1bank : unsigned(1 downto 0);
 signal port1_dtack : std_logic;
 
 type writecache_states is (waitwrite,fill,finish);
@@ -298,7 +298,7 @@ end process;
 -- SDRAM Basic
 -------------------------------------------------------------------------
 	reset_out <= init_done;
-	port1bank <= unsigned(Addr1(4 downto 3));
+--	port1bank <= unsigned(Addr1(4 downto 3));
 
 	process (sysclk, reset, sdwrite, datain) begin
 		IF sdwrite='1' THEN	-- Keep sdram data high impedence if not writing to it.
@@ -405,7 +405,7 @@ end process;
 		if reset='0' then
 			sdram_slot1<=refresh;
 			sdram_slot2<=idle;
-			vga_sdrbank<="00";
+			slot1_bank<="00";
 			slot2_bank<="11";
 			writecache_burst<='0';
 		elsif rising_edge(sysclk) THEN -- rising edge
@@ -533,18 +533,18 @@ end process;
 								sdram_slot1<=port0;
 								sdaddr <= vga_addr(22 downto 11);
 								ba <= vga_addr(4 downto 3);
-								vga_sdrbank <= unsigned(vga_addr(4 downto 3));
-								if vga_idle='0' then
-									vga_nextbank <= unsigned(vga_addr(4 downto 3))+"01";
-								end if;
+								slot1_bank <= vga_addr(4 downto 3);
+--								if vga_idle='0' then
+--									vga_nextbank <= unsigned(vga_addr(4 downto 3))+"01";
+--								end if;
 								casaddr <= vga_addr(23 downto 3) & "000"; -- read whole cache line in burst mode.
 	--							datain <= X"0000";
 								cas_sd_cas <= '0';
 								cas_sd_we <= '1';
 								sd_cs <= '0'; --ACTIVE
 								sd_ras <= '0';
-							else
-								vga_nextbank <= unsigned(vga_addr(4 downto 3)); -- reserve bank for next access
+--							else
+--								vga_nextbank <= unsigned(vga_addr(4 downto 3)); -- reserve bank for next access
 							end if;
 						elsif writecache_req='1'
 								and sdram_slot2/=writecache
@@ -553,7 +553,7 @@ end process;
 							sdram_slot1<=writecache;
 							sdaddr <= writecache_addr(22 downto 11);
 							ba <= writecache_addr(4 downto 3);
-							vga_sdrbank <= unsigned(writecache_addr(4 downto 3));
+							slot1_bank <= writecache_addr(4 downto 3);
 							cas_dqm <= wrU1&wrL1;
 							casaddr <= writecache_addr&"000";
 --							datain <= writecache_word0;
@@ -567,7 +567,7 @@ end process;
 							sdram_slot1<=port1;
 							sdaddr <= Addr1(22 downto 11);
 							ba <= Addr1(4 downto 3);
-							vga_sdrbank <= unsigned(Addr1(4 downto 3)); -- slot1 bank
+							slot1_bank <= Addr1(4 downto 3); -- slot1 bank
 							cas_dqm <= "00";
 							casaddr <= Addr1(23 downto 3) & "000";
 --							datain <= datawr1;
@@ -664,9 +664,9 @@ end process;
 							sdram_slot2<=idle;
 						elsif writecache_req='1'
 								and sdram_slot1/=writecache
-								and (unsigned(writecache_addr(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
-								and (unsigned(writecache_addr(4 downto 3))/=vga_nextbank or vga_idle='1')
-									then
+								and (writecache_addr(4 downto 3)/=slot1_bank or sdram_slot1=idle)
+								and (writecache_addr(4 downto 3)/=vga_reserveaddr(4 downto 3)
+									or vga_reservebank='0') then  -- Safe to use this slot with this bank?
 							sdram_slot2<=writecache;
 							sdaddr <= writecache_addr(22 downto 11);
 							ba <= writecache_addr(4 downto 3);
@@ -680,9 +680,9 @@ end process;
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
 						elsif readcache_req='1' -- req1='1' and wr1='1'
-								and (unsigned(Addr1(4 downto 3))/=vga_sdrbank or sdram_slot1=idle)
-								and (unsigned(Addr1(4 downto 3))/=vga_nextbank or vga_idle='1')
-									then
+								and (Addr1(4 downto 3)/=slot1_bank or sdram_slot1=idle)
+								and (Addr1(4 downto 3)/=vga_reserveaddr(4 downto 3)
+									or vga_reservebank='0') then  -- Safe to use this slot with this bank?
 							sdram_slot2<=port1;
 							sdaddr <= Addr1(22 downto 11);
 							ba <= Addr1(4 downto 3);
