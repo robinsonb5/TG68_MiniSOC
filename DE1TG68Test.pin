@@ -208,7 +208,7 @@ VCCD_PLL3                    : E5        : power  :                   : 1.2V    
 VCCA_PLL3                    : E6        : power  :                   : 1.2V    :           :                
 GND*                         : E7        :        :                   :         : 3         :                
 TDI                          : E8        : input  : 3.3-V LVTTL       :         : 3         : Y              
-GND*                         : E9        :        :                   :         : 3         :                
+SD_CLK                       : E9        : output : 3.3-V LVTTL       :         : 3         : N              
 VCCIO3                       : E10       : power  :                   : 3.3V    : 3         :                
 GND*                         : E11       :        :                   :         : 3         :                
 CLOCK_27[1]                  : E12       : input  : 3.3-V LVTTL       :         : 3         : Y              
@@ -230,9 +230,9 @@ GND_PLL3                     : F5        : gnd    :                   :         
 GND_PLL3                     : F6        : gnd    :                   :         :           :                
 GNDA_PLL3                    : F7        : gnd    :                   :         :           :                
 GND*                         : F8        :        :                   :         : 3         :                
-SD_CLK                       : F9        : output : 3.3-V LVTTL       :         : 3         : N              
-SD_CMD                       : F10       : bidir  : 3.3-V LVTTL       :         : 3         : N              
-SD_DAT                       : F11       : bidir  : 3.3-V LVTTL       :         : 3         : N              
+GND*                         : F9        :        :                   :         : 3         :                
+GND*                         : F10       :        :                   :         : 3         :                
+SD_DAT3                      : F11       : bidir  : 3.3-V LVTTL       :         : 3         : N              
 GPIO_1[8]                    : F12       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GPIO_1[9]                    : F13       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 UART_RXD                     : F14       : input  : 3.3-V LVTTL       :         : 4         : Y              
@@ -372,7 +372,7 @@ NC                           : M15       :        :                   :         
 NC                           : M16       :        :                   :         :           :                
 MSEL0                        : M17       :        :                   :         : 6         :                
 GND*                         : M18       :        :                   :         : 6         :                
-SD_DAT3                      : M19       : bidir  : 3.3-V LVTTL       :         : 6         : N              
+GND*                         : M19       :        :                   :         : 6         :                
 VCCIO6                       : M20       : power  :                   : 3.3V    : 6         :                
 EXT_CLOCK                    : M21       : input  : 3.3-V LVTTL       :         : 6         : Y              
 SW[2]                        : M22       : input  : 3.3-V LVTTL       :         : 6         : Y              
@@ -546,9 +546,9 @@ FL_ADDR[9]                   : Y13       : output : 3.3-V LVTTL       :         
 FL_WE_N                      : Y14       : output : 3.3-V LVTTL       :         : 7         : Y              
 GND                          : Y15       : gnd    :                   :         :           :                
 FL_ADDR[2]                   : Y16       : output : 3.3-V LVTTL       :         : 7         : Y              
-GND*                         : Y17       :        :                   :         : 7         :                
+SD_DAT                       : Y17       : bidir  : 3.3-V LVTTL       :         : 7         : N              
 LEDR[6]                      : Y18       : output : 3.3-V LVTTL       :         : 6         : Y              
 LEDR[3]                      : Y19       : output : 3.3-V LVTTL       :         : 6         : Y              
-GND*                         : Y20       :        :                   :         : 6         :                
+SD_CMD                       : Y20       : bidir  : 3.3-V LVTTL       :         : 6         : N              
 LEDG[7]                      : Y21       : output : 3.3-V LVTTL       :         : 6         : Y              
 LEDG[6]                      : Y22       : output : 3.3-V LVTTL       :         : 6         : Y              

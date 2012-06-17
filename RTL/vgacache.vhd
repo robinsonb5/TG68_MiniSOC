@@ -72,6 +72,7 @@ begin
 			
 			if setsprite0='1' then
 				sprite0addr<=addrin;
+				sprite0pending<='1';
 			end if;
 
 			case cachestate is
@@ -83,25 +84,28 @@ begin
 					if fill='0' then	-- drained, to trigger the next burst read.
 						cachestate<=preload3;
 						bufdone<='1';
+						lowpri<='0';
 					end if;
 					
 				when preload3 =>		-- once the next burst starts, we can be sure that buf2 contains
 					if fill='1' then 	-- valid data, so copy it to buf1...
 						buf1<=buf2;
 						cachestate<=preload4;
+						lowpri<='0';
 					end if;
 
 				when preload4 =>		-- Once again pretend the main buffer has been drained,
 					if fill='0' then 	-- and we're good to go.
 						bufdone<='1';
 						cachestate<=run;
+						lowpri<='0';
 					end if;
 
 				when run =>
 					if sprite0_req='1' then
 						sprite0_out<=sprite0buf(63 downto 60);
 						sprite0buf<=sprite0buf(59 downto 0) & "0000";
-						if spritecounter="0000" then
+						if spritecounter="1111" then
 							sprite0pending<='1';
 						end if;
 						spritecounter<=spritecounter+1;
@@ -131,13 +135,14 @@ begin
 						when "00" =>
 							sprite0addr<=std_logic_vector(unsigned(sprite0addr)+8);
 							req<='0';
-							sprite0buf(63 downto 48)<=data_in;
+							sprite0_out<=data_in(15 downto 12);
+							sprite0buf(63 downto 52)<=data_in(11 downto 0);
 						when "01" =>
-							sprite0buf(47 downto 32)<=data_in;
+							sprite0buf(51 downto 36)<=data_in;
 						when "10" =>
-							sprite0buf(31 downto 16)<=data_in;
+							sprite0buf(35 downto 20)<=data_in;
 						when "11" =>
-							sprite0buf(15 downto 0)<=data_in;
+							sprite0buf(19 downto 4)<=data_in;
 							sprite0fill<='0';
 					end case;
 				else
@@ -160,6 +165,7 @@ begin
 				bufdone<='0';
 				addrout<=framebufferaddr;
 				req<='1';
+				lowpri<='0';
 			elsif idle='1' and sprite0pending='1' and req='0' then
 				addrout<=sprite0addr;
 				req<='1';

@@ -358,34 +358,34 @@ begin
 					vgacache_req<='1';
 
 					-- Now dither the pixel.  If we're drawing a pixel from the character
-					-- generator, or the pixel is already at max, we just draw max to avoid overflow.
-					if chargen_pixel='1' or (chargen_window='0' and vgadata(15 downto 12)="1111") then
-						ored <= "111111";
-					elsif sprite_col(3)='1' then
+					-- generator or sprites, or the pixel is already at max, we don't dither. (Avoids overflow)
+					if sprite_col(3)='1' then
 						ored <= sprite_col(2) & sprite_col(2) & sprite_col(2) & 
 							sprite_col(2) & sprite_col(2) & sprite_col(2);
+					elsif chargen_pixel='1' or (chargen_window='0' and vgadata(15 downto 12)="1111") then
+						ored <= "111111";
 					elsif chargen_window='1' then
 						ored <= unsigned('0'&vgadata(15 downto 11)) + dither;
 					else
 						ored <= unsigned(vgadata(15 downto 11)&'0') + dither;
 					end if;
 
-					if chargen_pixel='1' or (chargen_window='0' and vgadata(10 downto 7)="1111") then
-						ogreen <= "111111";
-					elsif sprite_col(3)='1' then
+					if sprite_col(3)='1' then
 						ogreen <= sprite_col(1) & sprite_col(1) & sprite_col(1) & 
 							sprite_col(1) & sprite_col(1) & sprite_col(1);
+					elsif chargen_pixel='1' or (chargen_window='0' and vgadata(10 downto 7)="1111") then
+						ogreen <= "111111";
 					elsif chargen_window='1' then
 						ogreen <= unsigned('0'&vgadata(10 downto 6)) + dither;
 					else
 						ogreen <= unsigned(vgadata(10 downto 5)) + dither;
 					end if;
 
-					if chargen_pixel='1' or (chargen_window='0' and vgadata(4 downto 1)="1111") then
-						oblue <= "111111";
-					elsif sprite_col(3)='1' then
+					if sprite_col(3)='1' then
 						oblue <= sprite_col(0) & sprite_col(0) & sprite_col(0) & 
 							sprite_col(0) & sprite_col(0) & sprite_col(0);
+					elsif chargen_pixel='1' or (chargen_window='0' and vgadata(4 downto 1)="1111") then
+						oblue <= "111111";
 					elsif chargen_window='1' then
 						oblue <= unsigned('0'&vgadata(4 downto 0)) + dither;
 					else
@@ -403,13 +403,13 @@ begin
 						vblank_int<='1';
 					end if;
 
-					if currentY=vsize and currentX=2 then
+					if currentY=vtotal and currentX=0 then
 						vga_pointer<=sprite0_pointer;
 						set_sprite0<='1';
 					end if;
 					
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
-					if currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
+					if currentX<(htotal - 16) then	-- Signal to SDRAM controller that we're
 						vgacache_idle<='1'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
 					end if;
 				end if;
