@@ -51,8 +51,8 @@ MyMessage
 
 START:				; first instruction of program
 	lea	STACK,a7
-	lea	TextBuffer,a1
 
+	lea	TextBuffer,a1
 	lea	MyMessage,a0
 	bsr	_strcpy
 
@@ -292,19 +292,23 @@ _strcpy	; A0: src, A1: dst
 	move.b	d0,(a1)+
 	bne	_strcpy
 	rts
+	
 
 int2	; UART interrupt
-	movem.l	d0/a0-a1,-(a7)
+	movem.l	d0-d1/a0,-(a7)
 	moveq.l	#0,d1
 	move.w	TEXTBUFFERPTR,d1
 	lea	TEXTBUFFER,a0
 	move.w	PERREGS,d0	; Read data - low byte contains character from UART
+	btst	#9,d0		; Rx intterupt?
+	beq	.skip
 	move.b	d0,(a0,d1)
 	addq.w	#1,d1
 	and.w	#$7ff,d1	; 2048 byte buffer
 	move.w	d1,TEXTBUFFERPTR
-
-	movem.l	(a7)+,d0/a0-a1
+	move.w	d0,PERREGS	; Echo received byte back to terminal.
+.skip
+	movem.l	(a7)+,d0-d1/a0
 	rte
 
 int3
@@ -324,6 +328,7 @@ int7
 
 
 	END	START		; last line of source
+
 
 
 

@@ -1,200 +1,310 @@
 <session jtag_chain="USB-Blaster [USB-0]" jtag_device="@1: EP2C(15|20) (0x020B30DD)" sof_file="DE1TG68Test.sof">
   <display_tree gui_logging_enabled="0">
-    <display_branch instance="auto_signaltap_0" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
+    <display_branch instance="auto_signaltap_0" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
   </display_tree>
   <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
-    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2012/06/19 19:29:27  #0">
-      <clock name="TG68Test:myTG68Test|PLL:mypll|c2" polarity="posedge" tap_mode="classic"/>
+    <position_info>
+      <single attribute="active tab" value="1"/>
+      <single attribute="data horizontal scroll position" value="58"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="setup horizontal scroll position" value="0"/>
+      <single attribute="setup vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="8"/>
+      <single attribute="zoom offset denominator" value="8"/>
+      <single attribute="zoom offset numerator" value="130959"/>
+    </position_info>
+    <signal_set global_temp="1" name="signal_set: 2012/06/23 18:30:57  #0">
+      <clock name="TG68Test:myTG68Test|PLL:mypll|c1" polarity="posedge" tap_mode="classic"/>
       <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="512" trigger_in_enable="no" trigger_out_enable="no"/>
       <top_entity/>
       <signal_vec>
         <trigger_input_vec>
-          <wire name="TG68Test:myTG68Test|PLL:mypll|c0" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|PLL:mypll|c1" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cas_sd_cas" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[0]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[10]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[11]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[1]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[2]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[3]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[4]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[5]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[6]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[7]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[8]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[9]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[0]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[10]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[11]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[12]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[13]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[14]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[15]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[1]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[2]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[3]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[4]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[5]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[6]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[7]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[8]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_req" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_rw" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxint" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txgo" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txint" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|uart_int" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|reset" tap_mode="classic" type="register"/>
         </trigger_input_vec>
         <data_input_vec>
-          <wire name="TG68Test:myTG68Test|PLL:mypll|c0" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|PLL:mypll|c1" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cas_sd_cas" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[0]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[10]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[11]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[1]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[2]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[3]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[4]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[5]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[6]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[7]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[8]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[9]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[0]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[10]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[11]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[12]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[13]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[14]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[15]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[1]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[2]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[3]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[4]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[5]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[6]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[7]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[8]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_req" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_rw" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxint" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txgo" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txint" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|uart_int" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|reset" tap_mode="classic" type="register"/>
         </data_input_vec>
         <storage_qualifier_input_vec>
-          <wire name="TG68Test:myTG68Test|PLL:mypll|c0" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|PLL:mypll|c1" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|cas_sd_cas" tap_mode="classic" type="register"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[0]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[10]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[11]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[1]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[2]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[3]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[4]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[5]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[6]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[7]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[8]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[9]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[0]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[10]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[11]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[12]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[13]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[14]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[15]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[1]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[2]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[3]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[4]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[5]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[6]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[7]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[8]" tap_mode="classic" type="combinatorial"/>
-          <wire name="TG68Test:myTG68Test|sdram:mysdram|sdata[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_addr[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[10]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[11]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[12]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[13]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[14]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[15]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[2]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[3]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[4]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[5]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[6]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[7]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[8]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_datain[9]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_req" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|per_reg_rw" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[0]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[1]" tap_mode="classic" type="register"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxint" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txgo" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txint" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|peripheral_controller:myperipheral|uart_int" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:myTG68Test|reset" tap_mode="classic" type="register"/>
         </storage_qualifier_input_vec>
       </signal_vec>
       <presentation>
         <data_view>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|PLL:mypll|c0"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|PLL:mypll|c1"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cas_sd_cas"/>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[0]"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|uart_int"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxint"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txint"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txgo"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints" order="msb_to_lsb" radix="hex" state="expand" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[0]"/>
           </bus>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|sdata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[15]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[14]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[13]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[12]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[0]"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[0]"/>
           </bus>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|reset"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|per_reg_addr" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|per_reg_datain" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_req"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_rw"/>
         </data_view>
         <setup_view>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|PLL:mypll|c0"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|PLL:mypll|c1"/>
-          <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|cas_sd_cas"/>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdaddr[0]"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|uart_int"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxint"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txint"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txgo"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|ser_ints[0]"/>
           </bus>
-          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|sdram:mysdram|sdata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[15]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[14]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[13]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[12]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[11]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[10]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[9]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[8]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[7]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[6]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[5]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[4]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[3]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[2]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[1]"/>
-            <net is_signal_inverted="no" name="TG68Test:myTG68Test|sdram:mysdram|sdata[0]"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxdata[0]"/>
           </bus>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|reset"/>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|per_reg_addr" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_addr[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|interrupt_controller:myint|int_out[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="TG68Test:myTG68Test|per_reg_datain" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[15]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[14]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[13]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[12]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[11]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[10]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[9]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[8]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[7]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[6]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[5]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[4]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[3]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[2]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[1]"/>
+            <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_datain[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_req"/>
+          <net is_signal_inverted="no" name="TG68Test:myTG68Test|per_reg_rw"/>
         </setup_view>
       </presentation>
-      <trigger CRC="8E3540AA" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2012/06/19 19:29:27  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
+      <trigger attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2012/06/23 18:30:57  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic"><power_up enabled="yes">
-            </power_up><op_node/>
+          <level enabled="yes" name="condition1" type="basic">'TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxint' == rising edge
+            <power_up enabled="yes">
+            </power_up>
+            <op_node/>
           </level>
         </events>
         <storage_qualifier_events>
-          <transitional>0000000000000000000000000000000
-            <pwr_up_transitional>0000000000000000000000000000000</pwr_up_transitional>
+          <transitional>000000000000000000000000000000000000000000000000
+            <pwr_up_transitional>000000000000000000000000000000000000000000000000</pwr_up_transitional>
           </transitional>
           <storage_qualifier_level type="basic">
             <power_up>
@@ -212,23 +322,8 @@
             <op_node/>
           </storage_qualifier_level>
         </storage_qualifier_events>
-        <log>
-          <data global_temp="1" name="log: 2012/06/19 19:42:45  #0" power_up_mode="false" sample_depth="512" trigger_position="64">00010001010001100000001010011101101000101000110000000101001110110100010100011000000010100111000010001010001100000001010011101100100010111000000000101001110000010001011100000000010100111011001000101110000000001010011101101000101000110000000101001110000100010100011000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111011010001010001100000001010011100001000101000110000000011001100110100010100011000000001100110000010001010001100000000110011001101000101000110000000011001100111100010100011000000001100110000110001010001100000000110011001111000101000110000000011001100001100010100011000000001100110011110001010001100000000110011001111000101000110000000011001100001100010100011000000001100110011101000101110000000000110011000010100010111000000000101001110111010001011100000000010100111011110001010001100000001010011100011000101000110000000101001110111100010100011000000010100111000110001010001100000001010011101111000101000110000000101001110111100010100011000000010100111000110001010001100000001010011101111000101000110000000101001110001100010100011000000010100111011110001010001100000001010011101101001010111010000000101001110000100101011101000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111011010001010001100000001010011100001000101000110000000101001110110010001011100000000010100111000001000101110000000001010011101100100010111000000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110000100010100011000000010100111011010001010001100000001010011101101000101000110000000101001110000100010100011000000001100110011010001010001100000000110011000001000101000110000000011001100110100010100011000000001100110011010001010001100000000110011000001000101000110000000011001100110000000000000000000001100110000000000000000000000000110011001100000000000000000000011001100110000000000000000000001100110000000000000000000000000110011001100100010101000000000011001100000010001010100000000010100111011001000101010000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110110100101011101000000010100111000010010101110100000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011101100000000000000000000101001110000000000000000000000010100111011001000101110000000001010011100000100010111000000000101001110110010001011100000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110110100010100011000000010100111000010001010001100000000110011001101000101000110000000011001100000100010100011000000001100110011010001010001100000000110011001101000101000110000000011001100000100010100011000000001100110011000000000000000000000110011000000000000000000000000011001100110000000000000000000001100110011000000000000000000000110011000000000000000000000000011001100110010001010100000000001100110000001000101010000000001010011101100100010101000000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111011010010101110100000001010011100001001010111010000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110110000000000000000000010100111000000000000000000000001010011101100100110111000000000101001110000010011011100000000010100111011001001101110000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111011000000000000000000001010011100000000000000000000000011001100110000000000000000000001100110000000000000000000000000110011001100000000000000000000011001100111000000000000000000001100110000100000000000000000000110011001110000000000000000000011001100001000000000000000000001100110011100000000000000000000110011001110000000000000000000011001100001000000000000000000001100110011101001101110000000000110011000010100110111000000000101001110111010011011100000000010100111011110001010001100000001010011100011000101000110000000101001110111100010100011000000010100111000110001010001100000001010011101111000101000110000000101001110111100010100011000000010100111000110001010001100000001010011101110000000000000000000101001110001000000000000000000010100111011100000000000000000001010011101101001010111010000000101001110000100101011101000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110010011011100000000010100111000001001101110000000001010011101100100110111000000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011101100000000000000000000101001110000000000000000000000001100110011000000000000000000000110011000000000000000000000000011000100110000000000000000000001101010011100000000000000000000110101000010000000000000000000011000100111000000000000000000001100010000100000000000000000000110001001110000000000000000000011000100111000000000000000000001100010000100000000000000000000110001001110100110111000000000011000100001010011011100000000010100111011101001101110000000001010011101110000000000000000000101001110001000000000000000000010100111011100000000000000000001010011100010000000000000000000101001110111000000000000000000010100111011100000000000000000001010011100010000000000000000000101001110111000000000000000000010100111000100000000000000000001010011101110000000000000000000101001110110100101011101000000010100111000010010101110100000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011101100000000000000000000101001110000000000000000000000010100111011001001101110000000001010011100000100110111000000000101001110110010011011100000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110110000000000000000000010100111000000000000000000000000110001001101000101000110000000011000100000100010100011000000001100010011010001010001100000000110001001111000101000110000000011000100001100010100011000000001100010011110001010001100000000110001000011000101000110000000011000100111100010100011000000001100010011110001010001100000000110001000011000101000110000000011000100111010011011100000000001100010000101001101110000000001010011101110100110111000000000101001110111100010100011000000010100111000110001010001100000001010011101111000101000110000000101001110001100010100011000000010100111011110001010001100000001010011101111000101000110000000101001110001100010100011000000010100111011110001010001100000001010011100011000101000110000000101001110111100010100011000000010100111011010010101110100000001010011100001001010111010000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110110100010100011000000010100111000010001010001100000001010011101100100110111000000000101001110000010011011100000000010100111011001001101110000000001010011101101000101000110000000101001110000100010100011000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111011010001010001100000001010011100001000101000110000000011000100110100010100011000000001100010000010001010001100000000110001001101000101000110000000011000100110100010100011000000001100010000010001010001100000000110001001100000000000000000000011000100000000000000000000000001100010011000000000000000000000110001001100000000000000000000011000100000000000000000000000001100010011001000101010000000000110001000000100010101000000000101001110110010001010100000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110000100010100011000000010100111011010001010001100000001010011101101001010111010000000101001110000100101011101000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111011010001010001100000001010011100001000101000110000000101001110110010000111100000000010100111000001000011110000000001010011101100100001111000000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110000100010100011000000010100111011010001010001100000001010011101101000101000110000000101001110000100010100011000000001100010011010001010001100000000110001000001000101000110000000011000100110100010100011000000001100010011010001010001100000000110001000001000101000110000000011000100110100010100011000000001100010000010001010001100000000110001001101000101000110000000011000100110100010100011000000001100010000010001010001100000000110001001100100010101000000000011000100000010001010100000000010100111011001000101010000000001010011101101000101000110000000101001110000100010100011000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111011010001010001100000001010011100001000101000110000000001010011110100010100011000000000101001100010001010001100000000010100111101000101000110000000001010011110100101011101000000000101001100010010101110100000000010100111101000101000110000000001010011000100010100011000000000101001111010001010001100000000010100111101000101000110000000001010011000100010100011000000000101001111001000011110000000000010100110000100001111000000000101001110110010000111100000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110110000000000000000000010100111000000000000000000000000110001001100000000000000000000011000100000000000000000000000001100010011000000000000000000000110001001110000000000000000000011000100001000000000000000000001100010011100000000000000000000110001000010000000000000000000011000100111000000000000000000001100010011100000000000000000000110001000010000000000000000000011000100111010000111100000000001100010000101000011110000000001010011101110100001111000000000101001110111000000000000000000010100111000100000000000000000001010011101110000000000000000000101001110001000000000000000000010100111011100000000000000000001010011101110000000000000000000101001110001000000000000000000010100111011100000000000000000001010011100010000000000000000000101001110111000000000000000000010100111011010010101110100000001010011100001001010111010000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110110000000000000000000010100111000000000000000000000001010011101100100001111000000000101001110000010000111100000000010100111011001000011110000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111011000000000000000000001010011100000000000000000000000011000100110000000000000000000001100010000000000000000000000000110001001100000000000000000000011000100111000000000000000000001100010000100000000000000000000110001001110000000000000000000011000100001000000000000000000001100010011100000000000000000000110001001110000000000000000000011000100001000000000000000000001100010011101000011110000000000110001000010100001111000000000101001110111010000111100000000010100111011100000000000000000001010011100010000000000000000000101001110111000000000000000000010100111000100000000000000000001010011101110000000000000000000101001110111100010100011000000010100111000110001010001100000001010011101111000101000110000000101001110001100010100011000000010100111011110001010001100000001010011101101001010111010000000101001110000100101011101000000010100111011010001010001100000001010011100001000101000110000000101001110110100010100011000000010100111011010001010001100000001010011100001000101000110000000101001110110010000111100000000010100111000001000011110000000001010011101100100001111000000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110000100010100011000000010100111011010001010001100000001010011101101000101000110000000101001110000100010100011000000001100010011010001010001100000000110001000001000101000110000000011000100110100010100011000000001100010011010001010001100000000110001000001000101000110000000011000100110000000000000000000001100010000000000000000000000000110001001100000000000000000000011000100110000000000000000000001100010000000000000000000000000110001001100100010101000000000011000100000010001010100000000010100111011001000101010000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110110100101011101000000010100111000010010101110100000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011101100000000000000000000101001110000000000000000000000010100111011001001011110000000001010011100000100101111000000000101001110110010010111100000000010100111011000000000000000000001010011100000000000000000000000101001110110100010100011000000010100111000010001010001100000001010011101101000101000110000000101001110110100010100011000000010100111000010001010001100000000110001001101000101000110000000011000100000100010100011000000001100010011010001010001100000000110001001111000101000110000000011000100001100010100011000000001100010011100000000000000000000110001000010000000000000000000011000100111000000000000000000001100010011100000000000000000000110001000010000000000000000000011000100111010010111100000000001100010000101001011110000000001010011101110100101111000000000101001110111000000000000000000010100111000100000000000000000001010011101110000000000000000000101001110001000000000000000000010100111011100000000000000000001010011101110000000000000000000101001110001000000000000000000010100111011100000000000000000001010011100010000000000000000000101001110111000000000000000000010100111011010010101110100000001010011100001001010111010000000101001110110000000000000000000010100111000000000000000000000001010011101100000000000000000000101001110110000000000000000000010100111000000000000000000000001010011101100100101111000000000101001110000010010111100000000010100111011001001011110000000001010011101100000000000000000000101001110000000000000000000000010100111011000000000000000000001010011100000000000000000000000101001110110000000000000000000010100111011000000000000000000001010011100000000000000000000000011000100110000000000000000000001100010000000000000000000000000110001001100000000000000000000011000100111000000000000000000001100010000100000000000000000000110001001110000000000000000000011000100001000000000000000000001100010011100000000000000000000110001001110000000000000000000011000100001000000000000000000001100010011101001011110000000000110001000010100101111000000000101001110111010010111100000000010100111011100000000000000000001010011100010000000000000000000101001110111000000000000000000010100111000100000000000000000001010011101110000000000000000000101001110</data>
-          <extradata>1111111111111111111111111111111111111111111111111111111111111111T111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
-        </log>
       </trigger>
     </signal_set>
-    <position_info>
-      <single attribute="active tab" value="1"/>
-      <single attribute="data horizontal scroll position" value="305"/>
-      <single attribute="data vertical scroll position" value="0"/>
-      <single attribute="setup horizontal scroll position" value="0"/>
-      <single attribute="setup vertical scroll position" value="0"/>
-      <single attribute="zoom level denominator" value="1"/>
-      <single attribute="zoom level numerator" value="8"/>
-      <single attribute="zoom offset denominator" value="8"/>
-      <single attribute="zoom offset numerator" value="130959"/>
-    </position_info>
   </instance>
   <mnemonics/>
   <static_plugin_mnemonics/>

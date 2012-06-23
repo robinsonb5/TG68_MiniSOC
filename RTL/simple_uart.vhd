@@ -7,10 +7,7 @@ use IEEE.numeric_std.ALL;
 
 entity simple_uart is
 	generic(
-		counter_bits : natural := 15;
-		-- clock_divisor divides the system clock into the width of a single serial bit, so
-		-- for a 50MHz clock, 19,200 baud, we'd use 50,000,000 / 19,200 = 2604 decimal, X"0A2C" hex
-		clock_divisor : unsigned(15 downto 0) := X"002C"
+		counter_bits : natural := 16
 	);
 	port(
 		clk : in std_logic;
@@ -23,6 +20,10 @@ entity simple_uart is
 		rxint : out std_logic;	-- Interrupt, momentary pulse when character received
 		txint : out std_logic;	-- Interrupt, momentary pulse when data has finished sending
 
+		-- clock_divisor divides the system clock into the width of a single serial bit, so
+		-- for a 50MHz clock, 19,200 baud, we'd use 50,000,000 / 19,200 = 2604 decimal, X"0A2C" hex
+		clock_divisor : unsigned(15 downto 0) := X"0A2C";
+
 		-- physical ports
 
 		rxd : in std_logic;
@@ -34,14 +35,14 @@ architecture rtl of simple_uart is
 
 signal rxd_sync : std_logic;
 
-signal rxcounter : unsigned(counter_bits downto 0);
+signal rxcounter : unsigned(counter_bits-1 downto 0);
 signal rxclock : std_logic;
 signal rxbuffer : std_logic_vector(8 downto 0);
 
 type rxstates is (idle, start, bits, stop);
 signal rxstate : rxstates := idle;
 
-signal txcounter : unsigned(counter_bits downto 0);
+signal txcounter : unsigned(counter_bits-1 downto 0);
 signal txclock : std_logic;
 signal txbuffer : std_logic_vector(17 downto 0);
 
@@ -102,7 +103,7 @@ begin
 
 			if rxstate=idle then
 				if rxd_sync='0' then	-- Start bit?  Set counter to half a bit width
-					rxcounter<='0' & clock_divisor(counter_bits downto 1);
+					rxcounter<='0' & clock_divisor(counter_bits-1 downto 1);
 				end if;
 			else
 				rxcounter<=rxcounter-1;
@@ -125,6 +126,7 @@ begin
 	begin
 		if reset='0' then
 			rxstate<=idle;
+			rxint<='0';
 		elsif rising_edge(clk) then
 			rxint<='0';
 			case rxstate is
@@ -173,6 +175,7 @@ begin
 			txstate<=idle;
 			txready<='1';
 			txd<='1';
+			txint<='0';
 		elsif rising_edge(clk) then
 			txint <='0';
 			case txstate is

@@ -212,6 +212,8 @@ begin
 		int_ack<='0';
 		vga_reg_rw<='1';
 		vga_reg_req<='0';
+		per_reg_rw<='1';
+		per_reg_req<='0';
 		case prgstate is
 			when run =>
 				cpu_clkena<='0';
@@ -278,7 +280,7 @@ begin
 				if vga_reg_dtack='0' then
 --					cpu_clkena<='1';
 --					prgstate<=run;
-					prgstate<=wait2;
+					prgstate<=wait1;
 				end if;
 			when peripheral =>
 				cpu_datain<=per_reg_dataout;
@@ -286,7 +288,7 @@ begin
 				if per_reg_dtack='0' then
 --					cpu_clkena<='1';
 --					prgstate<=run;
-					prgstate<=wait2;
+					prgstate<=wait1;
 				end if;
 			when wait1 =>
 				prgstate<=wait2;
