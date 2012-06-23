@@ -214,7 +214,11 @@ TG68Test myTG68Test
 	.sdr_cs(DRAM_CS_N),
 	.sdr_ba({DRAM_BA_1,DRAM_BA_0}),
 	.sdr_clk(DRAM_CLK),
-	.sdr_clkena(DRAM_CKE)
+	.sdr_clkena(DRAM_CKE),
+
+	// uart
+	.rxd(UART_RXD),
+	.txd(UART_TXD)
 );
 
 endmodule

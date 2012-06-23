@@ -5,6 +5,7 @@
 * Description: Simple program to test the TG68 processor.
 *-----------------------------------------------------------
 
+TEXTBUFFERPTR equ $ffff6	; Word
 FRAMECOUNTER equ $ffff8
 RANDOMSEED equ $ffffa
 PEN equ $ffffe
@@ -16,6 +17,8 @@ STACK equ $7ffffe
 
 VGAREGS equ $800000
 TEXTBUFFER equ $800800	; 2048 bytes
+
+PERREGS equ $810000 ; Peripheral registers
 
 SPRITEBUFFER equ $ff000	; Sprite data (can't reference from ROM unless we copy the ROM to RAM at startup...)
 
@@ -49,13 +52,16 @@ MyMessage
 START:				; first instruction of program
 	lea	STACK,a7
 	lea	TextBuffer,a1
+
 	lea	MyMessage,a0
 	bsr	_strcpy
 
 	lea	FRAMEBUFFER,a0	; Set initial framebuffer pointer.
 	lea	VGAREGS,a6
 	move.l	a0,(FBPTH,a6)
+
 	move.w	#0,FRAMECOUNTER
+	move.w	#0,TEXTBUFFERPTR
 
 	bsr	CopySprite
 
@@ -250,7 +256,7 @@ SpriteData:
 Crash
 	rte
 
-int1
+int1	; Vertical Blank Interrupt
 	movem.l	a0-a1/d0-d1,-(a7)
 
 	move.w	FRAMECOUNTER,d0
@@ -287,7 +293,18 @@ _strcpy	; A0: src, A1: dst
 	bne	_strcpy
 	rts
 
-int2
+int2	; UART interrupt
+	movem.l	d0/a0-a1,-(a7)
+	moveq.l	#0,d1
+	move.w	TEXTBUFFERPTR,d1
+	lea	TEXTBUFFER,a0
+	move.w	PERREGS,d0	; Read data - low byte contains character from UART
+	move.b	d0,(a0,d1)
+	addq.w	#1,d1
+	and.w	#$7ff,d1	; 2048 byte buffer
+	move.w	d1,TEXTBUFFERPTR
+
+	movem.l	(a7)+,d0/a0-a1
 	rte
 
 int3
@@ -307,6 +324,7 @@ int7
 
 
 	END	START		; last line of source
+
 
 
 

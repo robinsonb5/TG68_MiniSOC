@@ -4,18 +4,7 @@
   </display_tree>
   <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
-    <position_info>
-      <single attribute="active tab" value="1"/>
-      <single attribute="data horizontal scroll position" value="305"/>
-      <single attribute="data vertical scroll position" value="0"/>
-      <single attribute="setup horizontal scroll position" value="0"/>
-      <single attribute="setup vertical scroll position" value="0"/>
-      <single attribute="zoom level denominator" value="1"/>
-      <single attribute="zoom level numerator" value="8"/>
-      <single attribute="zoom offset denominator" value="8"/>
-      <single attribute="zoom offset numerator" value="130959"/>
-    </position_info>
-    <signal_set global_temp="1" name="signal_set: 2012/06/19 19:29:27  #0">
+    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2012/06/19 19:29:27  #0">
       <clock name="TG68Test:myTG68Test|PLL:mypll|c2" polarity="posedge" tap_mode="classic"/>
       <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="512" trigger_in_enable="no" trigger_out_enable="no"/>
       <top_entity/>
@@ -196,13 +185,11 @@
           </bus>
         </setup_view>
       </presentation>
-      <trigger CRC="8E3540AA" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2012/06/19 19:29:27  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
+      <trigger CRC="8E3540AA" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2012/06/19 19:29:27  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic">
-            <power_up enabled="yes">
-            </power_up>
-            <op_node/>
+          <level enabled="yes" name="condition1" type="basic"><power_up enabled="yes">
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
@@ -231,6 +218,17 @@
         </log>
       </trigger>
     </signal_set>
+    <position_info>
+      <single attribute="active tab" value="1"/>
+      <single attribute="data horizontal scroll position" value="305"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="setup horizontal scroll position" value="0"/>
+      <single attribute="setup vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="8"/>
+      <single attribute="zoom offset denominator" value="8"/>
+      <single attribute="zoom offset numerator" value="130959"/>
+    </position_info>
   </instance>
   <mnemonics/>
   <static_plugin_mnemonics/>

@@ -19,8 +19,12 @@ entity simple_uart is
 		txgo : in std_logic;			-- trigger transmission
 		txready : out std_logic;	-- ready to transmit
 		rxdata : out std_logic_vector(7 downto 0);
-		rxready : out std_logic;	-- byte received
+
+		rxint : out std_logic;	-- Interrupt, momentary pulse when character received
+		txint : out std_logic;	-- Interrupt, momentary pulse when data has finished sending
+
 		-- physical ports
+
 		rxd : in std_logic;
 		txd : out std_logic
 	);
@@ -121,9 +125,8 @@ begin
 	begin
 		if reset='0' then
 			rxstate<=idle;
-			rxready<='0';
 		elsif rising_edge(clk) then
-			rxready<='0';
+			rxint<='0';
 			case rxstate is
 				when idle =>
 					if rxd_sync='0' then
@@ -149,7 +152,7 @@ begin
 					if rxclock='1' then
 						if rxd_sync='1' then -- valid stop bit?
 							rxdata<=rxbuffer(8 downto 1);
-							rxready<='1';
+							rxint<='1';
 						end if;
 						rxstate<=idle;
 					end if;
@@ -171,6 +174,7 @@ begin
 			txready<='1';
 			txd<='1';
 		elsif rising_edge(clk) then
+			txint <='0';
 			case txstate is
 				when idle =>
 					if txgo='1' then
@@ -187,6 +191,7 @@ begin
 					if txbuffer(8)='0' then	-- Marker bit has reached bit 8
 						txstate<=idle;
 						txready<='1';
+						txint<='1';
 					end if;
 				when others =>
 					txstate<=idle;

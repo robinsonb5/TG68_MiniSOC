@@ -30,7 +30,11 @@ entity TG68Test is
 		sdr_cs		: out std_logic;
 		sdr_ba		: out std_logic_vector(1 downto 0);
 		sdr_clk		: out std_logic;
-		sdr_clkena	: out std_logic
+		sdr_clkena	: out std_logic;
+		
+		-- UART
+		rxd	: in std_logic;
+		txd	: out std_logic
 	);
 end entity;
 
@@ -78,14 +82,27 @@ signal vga_newframe : std_logic;
 signal vga_reservebank : std_logic; -- Keep bank clear for instant access.
 signal vga_reserveaddr : std_logic_vector(23 downto 0); -- to SDRAM
 
+-- VGA register block signals
+
 signal vga_reg_addr : std_logic_vector(11 downto 0);
 signal vga_reg_dataout : std_logic_vector(15 downto 0);
 signal vga_reg_datain : std_logic_vector(15 downto 0);
 signal vga_reg_rw : std_logic;
 signal vga_reg_req : std_logic;
 signal vga_reg_dtack : std_logic;
-
 signal vblank_int : std_logic;
+
+-- Peripheral register block signals
+
+signal per_reg_addr : std_logic_vector(11 downto 0);
+signal per_reg_dataout : std_logic_vector(15 downto 0);
+signal per_reg_datain : std_logic_vector(15 downto 0);
+signal per_reg_rw : std_logic;
+signal per_reg_req : std_logic;
+signal per_reg_dtack : std_logic;
+signal per_uart_int : std_logic;
+
+
 signal int_ack : std_logic;
 signal ints : std_logic_vector(2 downto 0);
 
@@ -95,7 +112,7 @@ signal ramdata : std_logic_vector(15 downto 0);
 signal framectr : unsigned(15 downto 0);
 signal resetctr : std_logic;
 
-type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga,hardware);
+type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga,vga,peripheral);
 signal prgstate : prgstates :=wait2;
 begin
 
@@ -138,7 +155,7 @@ myint : entity work.interrupt_controller
 		reset => reset,
 		int7 => not buttons(2),
 		int1 => vblank_int,
-		int2 => not buttons(1),
+		int2 => per_uart_int,
 		int3 => not buttons(0),
 		int4 => '0',
 		int5 => '0',
@@ -215,7 +232,13 @@ begin
 							vga_reg_rw<=cpu_r_w;
 							vga_reg_req<='1';
 							vga_reg_datain<=cpu_dataout;
-							prgstate<=hardware;
+							prgstate<=vga;
+						when X"0081" => -- more hardware registers
+							per_reg_addr<=cpu_addr(11 downto 0);
+							per_reg_rw<=cpu_r_w;
+							per_reg_req<='1';
+							per_reg_datain<=cpu_dataout;
+							prgstate<=peripheral;
 						when X"0000" => -- ROM access
 							cpu_datain<=romdata;
 							prgstate<=rom;
@@ -249,13 +272,21 @@ begin
 				cpu_datain<=romdata;
 --				prgstate<=wait2;
 				prgstate<=wait1;
-			when hardware =>
+			when vga =>
 				cpu_datain<=vga_reg_dataout;
 				vga_reg_rw<=cpu_r_w;
 				if vga_reg_dtack='0' then
 --					cpu_clkena<='1';
 --					prgstate<=run;
-					prgstate<=wait1;
+					prgstate<=wait2;
+				end if;
+			when peripheral =>
+				cpu_datain<=per_reg_dataout;
+				per_reg_rw<=cpu_r_w;
+				if per_reg_dtack='0' then
+--					cpu_clkena<='1';
+--					prgstate<=run;
+					prgstate<=wait2;
 				end if;
 			when wait1 =>
 				prgstate<=wait2;
@@ -343,5 +374,25 @@ mysdram : entity work.sdram
 		green => vga_green,
 		blue => vga_blue
 	);
+	
+	myperipheral : entity work.peripheral_controller
+		port map (
+		clk => clk100,
+		reset => reset,
 
+		reg_addr_in => per_reg_addr,
+		reg_data_in => per_reg_datain,
+		reg_data_out => per_reg_dataout,
+		reg_rw => per_reg_rw,
+		reg_uds => cpu_uds,
+		reg_lds => cpu_lds,
+		reg_dtack => per_reg_dtack,
+		reg_req => per_reg_req,
+
+		uart_int => per_uart_int,
+		uart_txd => txd,
+		uart_rxd => rxd
+	);
+
+	
 end architecture;
