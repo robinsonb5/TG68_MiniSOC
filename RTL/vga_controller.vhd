@@ -56,39 +56,6 @@ use IEEE.numeric_std.ALL;
 --		blue : std_logic_vector(4 downto 0);
 
 
--- Theory of operation of the cache
-
---Need a VGA cache that will keep up with 1 word per 4-cycles.
---The SDRAM controller runs on a 16-cycle phase, and shifts 4 words per burst, so
---we will saturate one port of the SDRAM controller as written
---The other port can perform operations when the bank is not equal to either
---the current or next bank used by the VGA cache.
---To this end we will hardcode a framebuffer pointer, and have a "new frame" signal which will
---reset this hardcoded pointer.
---
---We will have three buffers, each 4 words in size; the first is the current data, which will
--- be clocked out one word at a time.
---
---Need a req signal which will be activated at the start of each pixel.
---case counter is
---	when "00" =>
---		vgadata<=buf1(63 downto 48);
---	when "01" =>
---		vgadata<=buf1(47 downto 32);
---	when "02" =>
---		vgadata<=buf1(31 downto 16);
---	when "02" =>
---		vgadata<=buf1(15 downto 0);
---		buf1<=buf2;
---		fetchptr<=fetchptr+4;
---		sdr_req<='1';
---end case;
---
---Alternatively, could use a multiplier to shift the data - might use fewer LEs?
---
---In the meantime, we will constantly fetch data from SDRAM, and feed it into buf3.
---As soon as buf3 is filled, we move the contents into buf2, and drop the req signal.
---
 
 
 entity vga_controller is
@@ -102,6 +69,8 @@ entity vga_controller is
 		reg_rw : in std_logic;
 		reg_uds : in std_logic;
 		reg_lds : in std_logic;
+		reg_dtack : out std_logic;	-- Needed for char ram access.
+		reg_req : in std_logic;
 
 		sdr_addrout : buffer std_logic_vector(23 downto 0); -- to SDRAM
 		sdr_datain : in std_logic_vector(15 downto 0);	-- from SDRAM
@@ -154,9 +123,16 @@ architecture rtl of vga_controller is
 	signal dither : unsigned(5 downto 0);
 	signal sprite_col : unsigned(3 downto 0);
 
+	signal chargen_addr : std_logic_vector(10 downto 0);
+	signal chargen_datain : std_logic_vector(7 downto 0);
+	signal chargen_dataout : std_logic_vector(7 downto 0);
 	signal chargen_window : std_logic := '0';
 	signal chargen_pixel : std_logic := '0';
-	
+	signal chargen_rw : std_logic :='1';
+
+	type charramstates is (writeupperbyte,readupperbyte1,readupperbyte2,writelowerbyte,readlowerbyte1,readlowerbyte2);
+	signal charramstate : charramstates;			
+
 begin
 
 	red <= ored(5 downto 2);
@@ -170,6 +146,7 @@ begin
 		port map (
 			clk => clk,
 			clkDiv => X"3",	-- 100 Mhz / (3+1) = 25 Mhz
+--			clkDiv => X"4",	-- 125 Mhz / (4+1) = 25 Mhz
 
 			hSync => hsync,
 			vSync => vsync,
@@ -219,7 +196,7 @@ begin
 	mychargen : entity work.charactergenerator
 		generic map (
 			xstart => 16,
-			xstop => 626,
+			xstop => 624,
 			ystart => 256,
 			ystop => 464,
 			border => 7
@@ -231,7 +208,12 @@ begin
 			ypos => currentY(9 downto 0),
 			pixel_clock => end_of_pixel,
 			pixel => chargen_pixel,
-			window => chargen_window
+			window => chargen_window,
+			-- Char RAM access.
+			addrin => chargen_addr,
+			datain => chargen_datain,
+			dataout => chargen_dataout,
+			rw => chargen_rw
 		);
 
 	-- Handle CPU access to hardware registers
@@ -248,40 +230,78 @@ begin
 			reg_data_out<=X"0000";
 			sprite0_xpos<=X"000";
 			sprite0_ypos<=X"000";
+			chargen_addr<="00000000000";
 		elsif rising_edge(clk) then
-			case reg_addr_in is
-				when X"000" =>
---					reg_data_out<=X"00"&framebuffer_pointer(23 downto 16);
-					if reg_rw='0' and reg_uds='0' and reg_lds='0' then
-						framebuffer_pointer(23 downto 16) <= reg_data_in(7 downto 0);
-					end if;
-				when X"002" =>
---					reg_data_out<=framebuffer_pointer(15 downto 0);
-					if reg_rw='0' and reg_uds='0' and reg_lds='0' then
-						framebuffer_pointer(15 downto 0) <= reg_data_in;
-					end if;
-				when X"100" =>
---					reg_data_out<=X"00"&sprite0_pointer(23 downto 16);
-					if reg_rw='0' and reg_uds='0' and reg_lds='0' then
-						sprite0_pointer(23 downto 16) <= reg_data_in(7 downto 0);
-					end if;
-				when X"102" =>
---					reg_data_out<=sprite0_pointer(15 downto 0);
-					if reg_rw='0' and reg_uds='0' and reg_lds='0' then
-						sprite0_pointer(15 downto 0) <= reg_data_in;
-					end if;
-				when X"104" =>
-					if reg_rw='0' and reg_uds='0' and reg_lds='0' then
-						sprite0_xpos <= unsigned(reg_data_in(11 downto 0));
-					end if;
-				when X"106" =>
-					if reg_rw='0' and reg_uds='0' and reg_lds='0' then
-						sprite0_ypos <= unsigned(reg_data_in(11 downto 0));
-					end if;
-				when others =>
-					reg_data_out<=X"0000";
-			end case;
+			reg_dtack<='1';
+			chargen_rw<='1';
 
+			charramstate<=writeupperbyte; -- Reset state machine.
+			if reg_addr_in(11)='1' then	-- Character RAM access
+				-- Need to deal with both word and byte reads/writes.
+				-- We do one read and one write to both bytes on a 4-step cycle.
+				case charramstate is
+					when writeupperbyte =>
+						if reg_req='1' then
+							chargen_addr<=reg_addr_in(10 downto 1) & '0';	-- Upper byte
+							chargen_datain<=reg_data_in(15 downto 8);
+							if reg_rw='0' and reg_uds='0' then
+								chargen_rw<='0';
+							end if;
+							charramstate<=readupperbyte1;
+						end if;
+					when readupperbyte1 =>
+						charramstate<=readupperbyte2;	-- delay for data
+					when readupperbyte2 =>			
+						reg_data_out(15 downto 8)<=chargen_dataout;
+						charramstate<=writelowerbyte;
+					when writelowerbyte =>
+						chargen_addr<=reg_addr_in(10 downto 1) & '1';	-- lower byte
+						chargen_datain<=reg_data_in(7 downto 0);
+						if reg_rw='0' and reg_lds='0' then
+							chargen_rw<='0';
+						end if;
+						charramstate<=readlowerbyte1;
+					when readlowerbyte1 =>
+						charramstate<=readlowerbyte2;	-- delay for data
+					when readlowerbyte2 =>
+						reg_data_out(7 downto 0)<=chargen_dataout;
+						reg_dtack<='0';
+				end case;
+			elsif reg_req='1' then
+				case reg_addr_in is
+					when X"000" =>
+	--					reg_data_out<=X"00"&framebuffer_pointer(23 downto 16);
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							framebuffer_pointer(23 downto 16) <= reg_data_in(7 downto 0);
+						end if;
+					when X"002" =>
+	--					reg_data_out<=framebuffer_pointer(15 downto 0);
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							framebuffer_pointer(15 downto 0) <= reg_data_in;
+						end if;
+					when X"100" =>
+	--					reg_data_out<=X"00"&sprite0_pointer(23 downto 16);
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							sprite0_pointer(23 downto 16) <= reg_data_in(7 downto 0);
+						end if;
+					when X"102" =>
+	--					reg_data_out<=sprite0_pointer(15 downto 0);
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							sprite0_pointer(15 downto 0) <= reg_data_in;
+						end if;
+					when X"104" =>
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							sprite0_xpos <= unsigned(reg_data_in(11 downto 0));
+						end if;
+					when X"106" =>
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							sprite0_ypos <= unsigned(reg_data_in(11 downto 0));
+						end if;
+					when others =>
+						reg_data_out<=X"0000";
+				end case;
+				reg_dtack<='0';
+			end if;
 -- FBPTH equ $0000	; Framebuffer pointer - must be 64-bit aligned.
 -- FBPTL equ $0002
 

@@ -2,6 +2,40 @@ library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.numeric_std.ALL;
 
+-- Theory of operation of the cache
+
+--Need a VGA cache that will keep up with 1 word per 4-cycles.
+--The SDRAM controller runs on a 16-cycle phase, and shifts 4 words per burst, so
+--we will saturate one port of the SDRAM controller as written
+--The other port can perform operations when the bank is not equal to either
+--the current or next bank used by the VGA cache.
+--To this end we will hardcode a framebuffer pointer, and have a "new frame" signal which will
+--reset this hardcoded pointer.
+--
+--We will have three buffers, each 4 words in size; the first is the current data, which will
+-- be clocked out one word at a time.
+--
+--Need a req signal which will be activated at the start of each pixel.
+--case counter is
+--	when "00" =>
+--		vgadata<=buf1(63 downto 48);
+--	when "01" =>
+--		vgadata<=buf1(47 downto 32);
+--	when "02" =>
+--		vgadata<=buf1(31 downto 16);
+--	when "02" =>
+--		vgadata<=buf1(15 downto 0);
+--		buf1<=buf2;
+--		fetchptr<=fetchptr+4;
+--		sdr_req<='1';
+--end case;
+--
+--Alternatively, could use a multiplier to shift the data - might use fewer LEs?
+--
+--In the meantime, we will constantly fetch data from SDRAM, and feed it into buf3.
+--As soon as buf3 is filled, we move the contents into buf2, and drop the req signal.
+--
+
 
 entity vgacache is
 	port(

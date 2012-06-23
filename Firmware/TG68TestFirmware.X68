@@ -15,6 +15,7 @@ FB_HEIGHT equ 960
 STACK equ $7ffffe
 
 VGAREGS equ $800000
+TEXTBUFFER equ $800800	; 2048 bytes
 
 SPRITEBUFFER equ $ff000	; Sprite data (can't reference from ROM unless we copy the ROM to RAM at startup...)
 
@@ -42,8 +43,15 @@ SP0YPOS equ $0106
 	dc.l	Int7
 
 	ORG	$0100
+MyMessage
+	dc.b	'Hello World!  Just a quick test to see whether loading the character RAM from the processor is working properly!',0,0
+
 START:				; first instruction of program
 	lea	STACK,a7
+	lea	TextBuffer,a1
+	lea	MyMessage,a0
+	bsr	_strcpy
+
 	lea	FRAMEBUFFER,a0	; Set initial framebuffer pointer.
 	lea	VGAREGS,a6
 	move.l	a0,(FBPTH,a6)
@@ -272,6 +280,13 @@ int1
 	movem.l	(a7)+,a0-a1/d0-d1
 	rte
 
+
+_strcpy	; A0: src, A1: dst
+	move.b	(a0)+,d0
+	move.b	d0,(a1)+
+	bne	_strcpy
+	rts
+
 int2
 	rte
 
@@ -292,6 +307,8 @@ int7
 
 
 	END	START		; last line of source
+
+
 
 
 

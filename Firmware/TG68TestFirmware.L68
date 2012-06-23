@@ -1,6 +1,6 @@
-00000100 Starting Address
+00000172 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.12.0
-Created On: 17/06/2012 07:42:01
+Created On: 19/06/2012 07:38:57
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Program    : TG68TestFirmware
@@ -19,283 +19,298 @@ Created On: 17/06/2012 07:42:01
 00000000  =007FFFFE                 15  STACK equ $7ffffe
 00000000                            16  
 00000000  =00800000                 17  VGAREGS equ $800000
-00000000                            18  
-00000000  =000FF000                 19  SPRITEBUFFER equ $ff000 ; Sprite data (can't reference from ROM unless we copy the ROM to RAM at startup...)
-00000000                            20  
-00000000  =00000000                 21  FBPTH equ $0000 ; Framebuffer pointer - must be 64-bit aligned.
-00000000  =00000002                 22  FBPTL equ $0002
-00000000                            23  
-00000000  =00000100                 24  SP0PTH equ $0100 ; Pointer to sprite 0's data - must be 64-bit aligned.
-00000000  =00000102                 25  SP0PTL equ $0102
-00000000  =00000104                 26  SP0XPOS equ $0104
-00000000  =00000106                 27  SP0YPOS equ $0106
-00000000                            28  
+00000000  =00800800                 18  TEXTBUFFER equ $800800  ; 2048 bytes
+00000000                            19  
+00000000  =000FF000                 20  SPRITEBUFFER equ $ff000 ; Sprite data (can't reference from ROM unless we copy the ROM to RAM at startup...)
+00000000                            21  
+00000000  =00000000                 22  FBPTH equ $0000 ; Framebuffer pointer - must be 64-bit aligned.
+00000000  =00000002                 23  FBPTL equ $0002
+00000000                            24  
+00000000  =00000100                 25  SP0PTH equ $0100 ; Pointer to sprite 0's data - must be 64-bit aligned.
+00000000  =00000102                 26  SP0PTL equ $0102
+00000000  =00000104                 27  SP0XPOS equ $0104
+00000000  =00000106                 28  SP0YPOS equ $0106
 00000000                            29  
-00000000                            30          ORG     $0
-00000000= 007FFFFE                  31          dc.l    STACK           ; Initial stack pointer
-00000004= 00000100                  32          dc.l    START
-00000008                            33          
-00000060                            34          ORG     $0060
-00000060= 0000034E                  35          dc.l    Crash
-00000064= 00000350                  36          dc.l    Int1
-00000068= 000003AA                  37          dc.l    Int2
-0000006C= 000003AC                  38          dc.l    Int3
-00000070= 000003AE                  39          dc.l    Int4
-00000074= 000003B0                  40          dc.l    Int5
-00000078= 000003B2                  41          dc.l    Int6    
-0000007C= 000003B4                  42          dc.l    Int7
-00000080                            43  
-00000100                            44          ORG     $0100
-00000100                            45  START:                          ; first instruction of program
-00000100  4FF9 007FFFFE             46          lea     STACK,a7
-00000106  41F9 00100000             47          lea     FRAMEBUFFER,a0  ; Set initial framebuffer pointer.
-0000010C  4DF9 00800000             48          lea     VGAREGS,a6
-00000112  2D48 0000                 49          move.l  a0,(FBPTH,a6)
-00000116  33FC 0000 000FFFF8        50          move.w  #0,FRAMECOUNTER
-0000011E                            51  
-0000011E  6100 017E                 52          bsr     CopySprite
-00000122                            53  
-00000122  46FC 2000                 54          move.w  #$2000,SR       ; Enable all interrupts
-00000126                            55  
-00000126  33FC 0000 000FFFFE        56          move.w  #$0,pen
-0000012E  6100 012A                 57          bsr     FillScreen
-00000132                            58  
-00000132  7000                      59          move.l  #0,d0
-00000134  7201                      60          move.l  #1,d1
-00000136                            61  .mainloop
-00000136  5279 000FFFFE             62          add.w   #1,pen
-0000013C  6100 0076                 63          bsr     Random
-00000140  2600                      64          move.l  d0,d3
-00000142  6100 0070                 65          bsr     Random
-00000146  2400                      66          move.l  d0,d2
-00000148  6100 006A                 67          bsr     Random
-0000014C  2200                      68          move.l  d0,d1
-0000014E  6100 0064                 69          bsr     Random
-00000152                            70  
-00000152  80FC 027F                 71          divu    #FB_WIDTH-1,d0
-00000156  4240                      72          clr.w   d0
-00000158  4840                      73          swap    d0
-0000015A                            74  
-0000015A  82FC 03BF                 75          divu    #FB_HEIGHT-1,d1
-0000015E  4241                      76          clr.w   d1
-00000160  4841                      77          swap    d1
-00000162                            78          
-00000162  283C 0000027F             79          move.l  #FB_WIDTH-1,d4
-00000168  9880                      80          sub.l   d0,d4
-0000016A  84C4                      81          divu    d4,d2
-0000016C  4242                      82          clr.w   d2
-0000016E  4842                      83          swap    d2
-00000170                            84          
-00000170  283C 000003BF             85          move.l  #FB_HEIGHT-1,d4
-00000176  9881                      86          sub.l   d1,d4
-00000178  86C4                      87          divu    d4,d3
-0000017A  4243                      88          clr.w   d3
-0000017C  4843                      89          swap    d3
-0000017E                            90          
-0000017E  5242                      91          addq    #1,d2
-00000180  5243                      92          addq    #1,d3
-00000182  41F9 00100000             93          lea     FrameBuffer,a0
-00000188  6100 0088                 94          bsr     DrawRectangle
-0000018C  60A8                      95          bra     .mainloop
-0000018E                            96  
-0000018E  103C 0009                 97          MOVE.B  #9,D0
-00000192  4E4F                      98          TRAP    #15             ; halt simulator
-00000194                            99  
-00000194                           100  
-00000194                           101  Plot                            ; X: d0, y: d1
-00000194  48E7 C080                102          movem.l a0/d0-d1,-(a7)
-00000198  41F9 00100000            103          lea     FRAMEBUFFER,a0
-0000019E  C2FC 0500                104          mulu    #FB_WIDTH*2,d1
-000001A2  E380                     105          asl.l   #1,d0
-000001A4  D081                     106          add.l   d1,d0
-000001A6  D1C0                     107          add.l   d0,a0
-000001A8  30B9 000FFFFE            108          move.w  pen,(a0)
-000001AE  4CDF 0103                109          movem.l (a7)+,a0/d0-d1
-000001B2  4E75                     110          rts
-000001B4                           111  
-000001B4                           112  
-000001B4                           113  Random
-000001B4  48E7 6000                114          movem.l d1-d2,-(a7)
-000001B8  203C 000041A7            115          move.l  #16807,d0
-000001BE  2400                     116          move.l  d0,d2
-000001C0  C0F9 000FFFFC            117          mulu    RANDOMSEED+2,d0
-000001C6                           118  
-000001C6  2200                     119          move.l  d0,d1
-000001C8  9241                     120          sub.w   d1,d1
-000001CA  4841                     121          swap    d1
-000001CC  C4F9 000FFFFA            122          mulu    RANDOMSEED,d2
-000001D2  D481                     123          add.l   d1,d2
-000001D4                           124  
-000001D4  2202                     125          move.l  d2,d1
-000001D6  D281                     126          add.l   d1,d1
-000001D8  4241                     127          clr.w   d1
-000001DA  4841                     128          swap    d1
-000001DC                           129  
-000001DC  C0BC 0000FFFF            130          and.l   #$0000FFFF,d0
-000001E2  C0BC 7FFFFFFF            131          and.l   #$7FFFFFFF,d0
-000001E8  C4BC 00007FFF            132          and.l   #$00007FFF,d2
-000001EE  4842                     133          swap    D2
-000001F0  D481                     134          add.l   D1,D2
-000001F2  D082                     135          add.l   D2,D0
-000001F4                           136  
-000001F4  6A00 0008                137          bpl     .upd
-000001F8  0680 7FFFFFFF            138          add.l   #$7FFFFFFF,d0
-000001FE  23C0 000FFFFA            139  .upd    move.l  d0,RANDOMSEED
-00000204  4840                     140          swap    d0
-00000206  303C 0000                141          move.w  #0,d0
-0000020A  4840                     142          swap    d0
-0000020C  4CDF 0006                143          movem.l (a7)+,d1-d2
-00000210  4E75                     144          rts
-00000212                           145          
-00000212                           146  
-00000212                           147  DrawRectangle   ; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
-00000212  48E7 7C00                148          movem.l d1-d5,-(a7)
-00000216  D281                     149          add.l   d1,d1
-00000218  C2FC 0280                150          mulu    #FB_WIDTH,d1    ; y offset
-0000021C  D1C1                     151          add.l   d1,a0
-0000021E  D080                     152          add.l   d0,d0
-00000220  D1C0                     153          add.l   d0,a0           ; x offset
-00000222  203C 00000280            154          move.l  #FB_WIDTH,d0
-00000228  9082                     155          sub.l   d2,d0           ; modulo
-0000022A  D080                     156          add.l   d0,d0
-0000022C                           157          
-0000022C  3839 000FFFFE            158          move.w  pen,d4
-00000232  E28C                     159          lsr.l   #1,d4
-00000234  C8BC 00007BEF            160          and.l   #%0111101111101111,d4   ; Remove MSBs
-0000023A                           161  .yloop
-0000023A  2202                     162          move.l  d2,d1
-0000023C                           163  .xloop
-0000023C  3A10                     164          move.w  (a0),d5
-0000023E  E28D                     165          lsr.l   #1,d5
-00000240  CABC 00007BEF            166          and.l   #%0111101111101111,d5   ; Remove MSBs
-00000246  DA44                     167          add.w   d4,d5   
-00000248  30C5                     168          move.w  d5,(a0)+
-0000024A  5341                     169          subq.w  #1,d1
-0000024C  66EE                     170          bne     .xloop
-0000024E                           171  
-0000024E  D1C0                     172          add.l   d0,a0           ; Add modulo
-00000250                           173  
-00000250  5343                     174          subq.w  #1,d3
-00000252  66E6                     175          bne     .yloop
-00000254                           176  
-00000254  4CDF 003E                177          movem.l (a7)+,d1-d5
-00000258  4E75                     178          rts
-0000025A                           179  
-0000025A                           180  
-0000025A                           181  FillScreen
-0000025A  48E7 78F8                182          movem.l a0-a4/d1-d4,-(a7)
-0000025E  41F9 00100000            183          lea     FRAMEBUFFER,a0
-00000264  203C 000003C0            184          move.l  #FB_HEIGHT,d0
-0000026A  C0FC 0280                185          mulu    #FB_WIDTH,d0
-0000026E  D1C0                     186          add.l   d0,a0
-00000270  D1C0                     187          add.l   d0,a0           ; Point to end of buffer
-00000272  E888                     188          lsr.l   #4,d0           ; We're moving 16 bytes at a time
-00000274  3239 000FFFFE            189          move.w  pen,d1
-0000027A  4841                     190          swap    d1
-0000027C  3239 000FFFFE            191          move.w  pen,d1
-00000282  2401                     192          move.l  d1,d2
-00000284  2601                     193          move.l  d1,d3
-00000286  2801                     194          move.l  d1,d4
-00000288  2241                     195          move.l  d1,a1
-0000028A  2441                     196          move.l  d1,a2
-0000028C  2641                     197          move.l  d1,a3
-0000028E  2841                     198          move.l  d1,a4
-00000290                           199  .fillloop
-00000290  48E0 7878                200          movem.l a1-a4/d1-d4,-(a0)
-00000294  5380                     201          sub.l   #1,d0
-00000296  66F8                     202          bne     .fillloop
-00000298  4CDF 1F1E                203          movem.l (a7)+,a0-a4/d1-d4
-0000029C  4E75                     204          rts
-0000029E                           205  
-0000029E                           206  
-0000029E                           207  CopySprite:     ; Copy sprite data
-0000029E  48E7 80C0                208          movem.l a0-a1/d0,-(a7)
-000002A2  41F9 000002CE            209          lea     SpriteData,a0
-000002A8  43F9 000FF000            210          lea     SPRITEBUFFER,a1
-000002AE  700F                     211          moveq.l #15,d0
-000002B0                           212  .cpyloop
-000002B0  22D8                     213          move.l  (a0)+,(a1)+
-000002B2  22D8                     214          move.l  (a0)+,(a1)+
-000002B4  51C8 FFFA                215          dbf     d0,.cpyloop
-000002B8  41F9 00800000            216          lea     VGAREGS,a0
-000002BE  43F9 000FF000            217          lea     SPRITEBUFFER,a1
-000002C4  2149 0100                218          move.l  a1,(SP0PTH,a0)
-000002C8  4CDF 0301                219          movem.l (a7)+,a0-a1/d0
-000002CC  4E75                     220          rts
-000002CE                           221  
-000002CE                           222  
-000002CE                           223  SpriteData:
-000002CE= CF000000 00000000        224          dc.l    $CF000000,$00000000
-000002D6= 8CFFF000 00000000        225          dc.l    $8CFFF000,$00000000
-000002DE= 08CCFFF0 00000000        226          dc.l    $08CCFFF0,$00000000
-000002E6= 08CCCCFF FF000000        227          dc.l    $08CCCCFF,$FF000000
-000002EE= 088CCCCC CFFF0000        228          dc.l    $088CCCCC,$CFFF0000
-000002F6= 008CCCCC CCC80000        229          dc.l    $008CCCCC,$CCC80000
-000002FE= 0088CCCC CC800000        230          dc.l    $0088CCCC,$CC800000
-00000306= 0008CCCC CF000000        231          dc.l    $0008CCCC,$CF000000
-0000030E= 0008CCCC CCF00000        232          dc.l    $0008CCCC,$CCF00000
-00000316= 00088CC8 CCCF0000        233          dc.l    $00088CC8,$CCCF0000
-0000031E= 00008C80 8CCCF000        234          dc.l    $00008C80,$8CCCF000
-00000326= 00008800 08CCCF00        235          dc.l    $00008800,$08CCCF00
-0000032E= 00000000 008CCCF0        236          dc.l    $00000000,$008CCCF0
-00000336= 00000000 0008CCC8        237          dc.l    $00000000,$0008CCC8
-0000033E= 00000000 00008C80        238          dc.l    $00000000,$00008C80
-00000346= 00000000 00000800        239          dc.l    $00000000,$00000800
-0000034E                           240  
-0000034E                           241  
-0000034E                           242  Crash
-0000034E  4E73                     243          rte
-00000350                           244  
-00000350                           245  int1
-00000350  48E7 C0C0                246          movem.l a0-a1/d0-d1,-(a7)
-00000354                           247  
-00000354  3039 000FFFF8            248          move.w  FRAMECOUNTER,d0
-0000035A  5240                     249          addq.w  #1,d0
-0000035C  B07C 03C0                250          cmp.w   #960,d0
-00000360  6600 0006                251          bne     .skip
-00000364  303C 0000                252          move.w  #0,d0
-00000368                           253  .skip
-00000368  33C0 000FFFF8            254          move.w  d0,FRAMECOUNTER
-0000036E  B07C 01E0                255          cmp.w   #480,d0
-00000372  6D00 0008                256          blt     .skip2
-00000376  0440 03C0                257          sub.w   #960,d0
-0000037A  4440                     258          neg.w   d0
-0000037C                           259  .skip2
-0000037C  3200                     260          move.w  d0,d1
-0000037E  C0FC 0500                261          mulu    #(FB_WIDTH*2),d0
-00000382  0680 00100000            262          add.l   #FRAMEBUFFER,d0
-00000388  41F9 00800000            263          lea     VGAREGS,a0
-0000038E  2140 0000                264          move.l  d0,(FBPTH,a0)
-00000392                           265  
-00000392  3141 0104                266          move.w  d1,(SP0XPOS,a0)
-00000396  3141 0106                267          move.w  d1,(SP0YPOS,a0)
-0000039A                           268  
-0000039A  43F9 000FF000            269          lea     SPRITEBUFFER,a1
-000003A0  2149 0100                270          move.l  a1,(SP0PTH,a0)
-000003A4                           271  
-000003A4  4CDF 0303                272          movem.l (a7)+,a0-a1/d0-d1
-000003A8  4E73                     273          rte
-000003AA                           274  
-000003AA                           275  int2
-000003AA  4E73                     276          rte
-000003AC                           277  
-000003AC                           278  int3
-000003AC  4E73                     279          rte
-000003AE                           280  
-000003AE                           281  int4
-000003AE  4E73                     282          rte
-000003B0                           283  
-000003B0                           284  int5
-000003B0  4E73                     285          rte
-000003B2                           286  
-000003B2                           287  int6
-000003B2  4E73                     288          rte
-000003B4                           289  
-000003B4                           290  int7
-000003B4  4E73                     291          rte
-000003B6                           292  
-000003B6                           293  
-000003B6                           294          END     START           ; last line of source
+00000000                            30  
+00000000                            31          ORG     $0
+00000000= 007FFFFE                  32          dc.l    STACK           ; Initial stack pointer
+00000004= 00000172                  33          dc.l    START
+00000008                            34          
+00000060                            35          ORG     $0060
+00000060= 000003CE                  36          dc.l    Crash
+00000064= 000003D0                  37          dc.l    Int1
+00000068= 00000432                  38          dc.l    Int2
+0000006C= 00000434                  39          dc.l    Int3
+00000070= 00000436                  40          dc.l    Int4
+00000074= 00000438                  41          dc.l    Int5
+00000078= 0000043A                  42          dc.l    Int6    
+0000007C= 0000043C                  43          dc.l    Int7
+00000080                            44  
+00000100                            45          ORG     $0100
+00000100                            46  MyMessage
+00000100= 48 65 6C 6C 6F 20 ...     47          dc.b    'Hello World!  Just a quick test to see whether loading the character RAM from the processor is working properly!',0,0
+00000172                            48  
+00000172                            49  START:                          ; first instruction of program
+00000172  4FF9 007FFFFE             50          lea     STACK,a7
+00000178  43F9 00800800             51          lea     TextBuffer,a1
+0000017E  41F8 0100                 52          lea     MyMessage,a0
+00000182  6100 02A6                 53          bsr     _strcpy
+00000186                            54  
+00000186  41F9 00100000             55          lea     FRAMEBUFFER,a0  ; Set initial framebuffer pointer.
+0000018C  4DF9 00800000             56          lea     VGAREGS,a6
+00000192  2D48 0000                 57          move.l  a0,(FBPTH,a6)
+00000196  33FC 0000 000FFFF8        58          move.w  #0,FRAMECOUNTER
+0000019E                            59  
+0000019E  6100 017E                 60          bsr     CopySprite
+000001A2                            61  
+000001A2  46FC 2000                 62          move.w  #$2000,SR       ; Enable all interrupts
+000001A6                            63  
+000001A6  33FC 0000 000FFFFE        64          move.w  #$0,pen
+000001AE  6100 012A                 65          bsr     FillScreen
+000001B2                            66  
+000001B2  7000                      67          move.l  #0,d0
+000001B4  7201                      68          move.l  #1,d1
+000001B6                            69  .mainloop
+000001B6  5279 000FFFFE             70          add.w   #1,pen
+000001BC  6100 0076                 71          bsr     Random
+000001C0  2600                      72          move.l  d0,d3
+000001C2  6100 0070                 73          bsr     Random
+000001C6  2400                      74          move.l  d0,d2
+000001C8  6100 006A                 75          bsr     Random
+000001CC  2200                      76          move.l  d0,d1
+000001CE  6100 0064                 77          bsr     Random
+000001D2                            78  
+000001D2  80FC 027F                 79          divu    #FB_WIDTH-1,d0
+000001D6  4240                      80          clr.w   d0
+000001D8  4840                      81          swap    d0
+000001DA                            82  
+000001DA  82FC 03BF                 83          divu    #FB_HEIGHT-1,d1
+000001DE  4241                      84          clr.w   d1
+000001E0  4841                      85          swap    d1
+000001E2                            86          
+000001E2  283C 0000027F             87          move.l  #FB_WIDTH-1,d4
+000001E8  9880                      88          sub.l   d0,d4
+000001EA  84C4                      89          divu    d4,d2
+000001EC  4242                      90          clr.w   d2
+000001EE  4842                      91          swap    d2
+000001F0                            92          
+000001F0  283C 000003BF             93          move.l  #FB_HEIGHT-1,d4
+000001F6  9881                      94          sub.l   d1,d4
+000001F8  86C4                      95          divu    d4,d3
+000001FA  4243                      96          clr.w   d3
+000001FC  4843                      97          swap    d3
+000001FE                            98          
+000001FE  5242                      99          addq    #1,d2
+00000200  5243                     100          addq    #1,d3
+00000202  41F9 00100000            101          lea     FrameBuffer,a0
+00000208  6100 0088                102          bsr     DrawRectangle
+0000020C  60A8                     103          bra     .mainloop
+0000020E                           104  
+0000020E  103C 0009                105          MOVE.B  #9,D0
+00000212  4E4F                     106          TRAP    #15             ; halt simulator
+00000214                           107  
+00000214                           108  
+00000214                           109  Plot                            ; X: d0, y: d1
+00000214  48E7 C080                110          movem.l a0/d0-d1,-(a7)
+00000218  41F9 00100000            111          lea     FRAMEBUFFER,a0
+0000021E  C2FC 0500                112          mulu    #FB_WIDTH*2,d1
+00000222  E380                     113          asl.l   #1,d0
+00000224  D081                     114          add.l   d1,d0
+00000226  D1C0                     115          add.l   d0,a0
+00000228  30B9 000FFFFE            116          move.w  pen,(a0)
+0000022E  4CDF 0103                117          movem.l (a7)+,a0/d0-d1
+00000232  4E75                     118          rts
+00000234                           119  
+00000234                           120  
+00000234                           121  Random
+00000234  48E7 6000                122          movem.l d1-d2,-(a7)
+00000238  203C 000041A7            123          move.l  #16807,d0
+0000023E  2400                     124          move.l  d0,d2
+00000240  C0F9 000FFFFC            125          mulu    RANDOMSEED+2,d0
+00000246                           126  
+00000246  2200                     127          move.l  d0,d1
+00000248  9241                     128          sub.w   d1,d1
+0000024A  4841                     129          swap    d1
+0000024C  C4F9 000FFFFA            130          mulu    RANDOMSEED,d2
+00000252  D481                     131          add.l   d1,d2
+00000254                           132  
+00000254  2202                     133          move.l  d2,d1
+00000256  D281                     134          add.l   d1,d1
+00000258  4241                     135          clr.w   d1
+0000025A  4841                     136          swap    d1
+0000025C                           137  
+0000025C  C0BC 0000FFFF            138          and.l   #$0000FFFF,d0
+00000262  C0BC 7FFFFFFF            139          and.l   #$7FFFFFFF,d0
+00000268  C4BC 00007FFF            140          and.l   #$00007FFF,d2
+0000026E  4842                     141          swap    D2
+00000270  D481                     142          add.l   D1,D2
+00000272  D082                     143          add.l   D2,D0
+00000274                           144  
+00000274  6A00 0008                145          bpl     .upd
+00000278  0680 7FFFFFFF            146          add.l   #$7FFFFFFF,d0
+0000027E  23C0 000FFFFA            147  .upd    move.l  d0,RANDOMSEED
+00000284  4840                     148          swap    d0
+00000286  303C 0000                149          move.w  #0,d0
+0000028A  4840                     150          swap    d0
+0000028C  4CDF 0006                151          movem.l (a7)+,d1-d2
+00000290  4E75                     152          rts
+00000292                           153          
+00000292                           154  
+00000292                           155  DrawRectangle   ; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
+00000292  48E7 7C00                156          movem.l d1-d5,-(a7)
+00000296  D281                     157          add.l   d1,d1
+00000298  C2FC 0280                158          mulu    #FB_WIDTH,d1    ; y offset
+0000029C  D1C1                     159          add.l   d1,a0
+0000029E  D080                     160          add.l   d0,d0
+000002A0  D1C0                     161          add.l   d0,a0           ; x offset
+000002A2  203C 00000280            162          move.l  #FB_WIDTH,d0
+000002A8  9082                     163          sub.l   d2,d0           ; modulo
+000002AA  D080                     164          add.l   d0,d0
+000002AC                           165          
+000002AC  3839 000FFFFE            166          move.w  pen,d4
+000002B2  E28C                     167          lsr.l   #1,d4
+000002B4  C8BC 00007BEF            168          and.l   #%0111101111101111,d4   ; Remove MSBs
+000002BA                           169  .yloop
+000002BA  2202                     170          move.l  d2,d1
+000002BC                           171  .xloop
+000002BC  3A10                     172          move.w  (a0),d5
+000002BE  E28D                     173          lsr.l   #1,d5
+000002C0  CABC 00007BEF            174          and.l   #%0111101111101111,d5   ; Remove MSBs
+000002C6  DA44                     175          add.w   d4,d5   
+000002C8  30C5                     176          move.w  d5,(a0)+
+000002CA  5341                     177          subq.w  #1,d1
+000002CC  66EE                     178          bne     .xloop
+000002CE                           179  
+000002CE  D1C0                     180          add.l   d0,a0           ; Add modulo
+000002D0                           181  
+000002D0  5343                     182          subq.w  #1,d3
+000002D2  66E6                     183          bne     .yloop
+000002D4                           184  
+000002D4  4CDF 003E                185          movem.l (a7)+,d1-d5
+000002D8  4E75                     186          rts
+000002DA                           187  
+000002DA                           188  
+000002DA                           189  FillScreen
+000002DA  48E7 78F8                190          movem.l a0-a4/d1-d4,-(a7)
+000002DE  41F9 00100000            191          lea     FRAMEBUFFER,a0
+000002E4  203C 000003C0            192          move.l  #FB_HEIGHT,d0
+000002EA  C0FC 0280                193          mulu    #FB_WIDTH,d0
+000002EE  D1C0                     194          add.l   d0,a0
+000002F0  D1C0                     195          add.l   d0,a0           ; Point to end of buffer
+000002F2  E888                     196          lsr.l   #4,d0           ; We're moving 16 bytes at a time
+000002F4  3239 000FFFFE            197          move.w  pen,d1
+000002FA  4841                     198          swap    d1
+000002FC  3239 000FFFFE            199          move.w  pen,d1
+00000302  2401                     200          move.l  d1,d2
+00000304  2601                     201          move.l  d1,d3
+00000306  2801                     202          move.l  d1,d4
+00000308  2241                     203          move.l  d1,a1
+0000030A  2441                     204          move.l  d1,a2
+0000030C  2641                     205          move.l  d1,a3
+0000030E  2841                     206          move.l  d1,a4
+00000310                           207  .fillloop
+00000310  48E0 7878                208          movem.l a1-a4/d1-d4,-(a0)
+00000314  5380                     209          sub.l   #1,d0
+00000316  66F8                     210          bne     .fillloop
+00000318  4CDF 1F1E                211          movem.l (a7)+,a0-a4/d1-d4
+0000031C  4E75                     212          rts
+0000031E                           213  
+0000031E                           214  
+0000031E                           215  CopySprite:     ; Copy sprite data
+0000031E  48E7 80C0                216          movem.l a0-a1/d0,-(a7)
+00000322  41F9 0000034E            217          lea     SpriteData,a0
+00000328  43F9 000FF000            218          lea     SPRITEBUFFER,a1
+0000032E  700F                     219          moveq.l #15,d0
+00000330                           220  .cpyloop
+00000330  22D8                     221          move.l  (a0)+,(a1)+
+00000332  22D8                     222          move.l  (a0)+,(a1)+
+00000334  51C8 FFFA                223          dbf     d0,.cpyloop
+00000338  41F9 00800000            224          lea     VGAREGS,a0
+0000033E  43F9 000FF000            225          lea     SPRITEBUFFER,a1
+00000344  2149 0100                226          move.l  a1,(SP0PTH,a0)
+00000348  4CDF 0301                227          movem.l (a7)+,a0-a1/d0
+0000034C  4E75                     228          rts
+0000034E                           229  
+0000034E                           230  
+0000034E                           231  SpriteData:
+0000034E= CF000000 00000000        232          dc.l    $CF000000,$00000000
+00000356= 8CFFF000 00000000        233          dc.l    $8CFFF000,$00000000
+0000035E= 08CCFFF0 00000000        234          dc.l    $08CCFFF0,$00000000
+00000366= 08CCCCFF FF000000        235          dc.l    $08CCCCFF,$FF000000
+0000036E= 088CCCCC CFFF0000        236          dc.l    $088CCCCC,$CFFF0000
+00000376= 008CCCCC CCC80000        237          dc.l    $008CCCCC,$CCC80000
+0000037E= 0088CCCC CC800000        238          dc.l    $0088CCCC,$CC800000
+00000386= 0008CCCC CF000000        239          dc.l    $0008CCCC,$CF000000
+0000038E= 0008CCCC CCF00000        240          dc.l    $0008CCCC,$CCF00000
+00000396= 00088CC8 CCCF0000        241          dc.l    $00088CC8,$CCCF0000
+0000039E= 00008C80 8CCCF000        242          dc.l    $00008C80,$8CCCF000
+000003A6= 00008800 08CCCF00        243          dc.l    $00008800,$08CCCF00
+000003AE= 00000000 008CCCF0        244          dc.l    $00000000,$008CCCF0
+000003B6= 00000000 0008CCC8        245          dc.l    $00000000,$0008CCC8
+000003BE= 00000000 00008C80        246          dc.l    $00000000,$00008C80
+000003C6= 00000000 00000800        247          dc.l    $00000000,$00000800
+000003CE                           248  
+000003CE                           249  
+000003CE                           250  Crash
+000003CE  4E73                     251          rte
+000003D0                           252  
+000003D0                           253  int1
+000003D0  48E7 C0C0                254          movem.l a0-a1/d0-d1,-(a7)
+000003D4                           255  
+000003D4  3039 000FFFF8            256          move.w  FRAMECOUNTER,d0
+000003DA  5240                     257          addq.w  #1,d0
+000003DC  B07C 03C0                258          cmp.w   #960,d0
+000003E0  6600 0006                259          bne     .skip
+000003E4  303C 0000                260          move.w  #0,d0
+000003E8                           261  .skip
+000003E8  33C0 000FFFF8            262          move.w  d0,FRAMECOUNTER
+000003EE  B07C 01E0                263          cmp.w   #480,d0
+000003F2  6D00 0008                264          blt     .skip2
+000003F6  0440 03C0                265          sub.w   #960,d0
+000003FA  4440                     266          neg.w   d0
+000003FC                           267  .skip2
+000003FC  3200                     268          move.w  d0,d1
+000003FE  C0FC 0500                269          mulu    #(FB_WIDTH*2),d0
+00000402  0680 00100000            270          add.l   #FRAMEBUFFER,d0
+00000408  41F9 00800000            271          lea     VGAREGS,a0
+0000040E  2140 0000                272          move.l  d0,(FBPTH,a0)
+00000412                           273  
+00000412  3141 0104                274          move.w  d1,(SP0XPOS,a0)
+00000416  3141 0106                275          move.w  d1,(SP0YPOS,a0)
+0000041A                           276  
+0000041A  43F9 000FF000            277          lea     SPRITEBUFFER,a1
+00000420  2149 0100                278          move.l  a1,(SP0PTH,a0)
+00000424                           279  
+00000424  4CDF 0303                280          movem.l (a7)+,a0-a1/d0-d1
+00000428  4E73                     281          rte
+0000042A                           282  
+0000042A                           283  
+0000042A                           284  _strcpy ; A0: src, A1: dst
+0000042A  1018                     285          move.b  (a0)+,d0
+0000042C  12C0                     286          move.b  d0,(a1)+
+0000042E  66FA                     287          bne     _strcpy
+00000430  4E75                     288          rts
+00000432                           289  
+00000432                           290  int2
+00000432  4E73                     291          rte
+00000434                           292  
+00000434                           293  int3
+00000434  4E73                     294          rte
+00000436                           295  
+00000436                           296  int4
+00000436  4E73                     297          rte
+00000438                           298  
+00000438                           299  int5
+00000438  4E73                     300          rte
+0000043A                           301  
+0000043A                           302  int6
+0000043A  4E73                     303          rte
+0000043C                           304  
+0000043C                           305  int7
+0000043C  4E73                     306          rte
+0000043E                           307  
+0000043E                           308  
+0000043E                           309          END     START           ; last line of source
 
 No errors detected
 No warnings generated
@@ -304,41 +319,44 @@ No warnings generated
 SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
-COPYSPRITE          29E
-COPYSPRITE:CPYLOOP  2B0
-CRASH               34E
-DRAWRECTANGLE       212
-DRAWRECTANGLE:XLOOP  23C
-DRAWRECTANGLE:YLOOP  23A
+COPYSPRITE          31E
+COPYSPRITE:CPYLOOP  330
+CRASH               3CE
+DRAWRECTANGLE       292
+DRAWRECTANGLE:XLOOP  2BC
+DRAWRECTANGLE:YLOOP  2BA
 FBPTH               0
 FBPTL               2
 FB_HEIGHT           3C0
 FB_WIDTH            280
-FILLSCREEN          25A
-FILLSCREEN:FILLLOOP  290
+FILLSCREEN          2DA
+FILLSCREEN:FILLLOOP  310
 FRAMEBUFFER         100000
 FRAMECOUNTER        FFFF8
-INT1                350
-INT1:SKIP           368
-INT1:SKIP2          37C
-INT2                3AA
-INT3                3AC
-INT4                3AE
-INT5                3B0
-INT6                3B2
-INT7                3B4
+INT1                3D0
+INT1:SKIP           3E8
+INT1:SKIP2          3FC
+INT2                432
+INT3                434
+INT4                436
+INT5                438
+INT6                43A
+INT7                43C
+MYMESSAGE           100
 PEN                 FFFFE
-PLOT                194
-RANDOM              1B4
-RANDOM:UPD          1FE
+PLOT                214
+RANDOM              234
+RANDOM:UPD          27E
 RANDOMSEED          FFFFA
 SP0PTH              100
 SP0PTL              102
 SP0XPOS             104
 SP0YPOS             106
 SPRITEBUFFER        FF000
-SPRITEDATA          2CE
+SPRITEDATA          34E
 STACK               7FFFFE
-START               100
-START:MAINLOOP      136
+START               172
+START:MAINLOOP      1B6
+TEXTBUFFER          800800
 VGAREGS             800000
+_STRCPY             42A

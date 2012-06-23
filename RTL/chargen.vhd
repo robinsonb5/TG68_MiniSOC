@@ -17,7 +17,12 @@ entity charactergenerator is
 		ypos : in unsigned(9 downto 0);
 		pixel_clock : in std_logic;
 		pixel : out std_logic;
-		window : out std_logic
+		window : out std_logic;
+		-- Character RAM interface
+		addrin : in std_logic_vector(10 downto 0);
+		datain : in std_logic_vector(7 downto 0);
+		dataout : out std_logic_vector(7 downto 0);
+		rw : in std_logic
 	);
 end entity;
 
@@ -46,11 +51,12 @@ begin
 		clock_a => clk,
 		clock_b => clk,
 		address_a => std_logic_vector(rowaddr),
-		address_b => X"00" & "000",
+		address_b => addrin,	-- Port b is used to write new data to the char ram.
 		data_a => X"00",
-		data_b => X"00",
+		data_b => datain,
 		q_a => messagechar,
-		q_b => open
+		q_b => dataout,
+		wren_b => not rw
   );
 
 	process(clk, reset)

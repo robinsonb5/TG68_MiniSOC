@@ -82,6 +82,8 @@ signal vga_reg_addr : std_logic_vector(11 downto 0);
 signal vga_reg_dataout : std_logic_vector(15 downto 0);
 signal vga_reg_datain : std_logic_vector(15 downto 0);
 signal vga_reg_rw : std_logic;
+signal vga_reg_req : std_logic;
+signal vga_reg_dtack : std_logic;
 
 signal vblank_int : std_logic;
 signal int_ack : std_logic;
@@ -177,7 +179,7 @@ myTG68 : entity work.TG68KdotC_Kernel
 mybootrom : entity work.BootRom
 	port map (
 		clock => clk100,
-		address => cpu_addr(9 downto 1),
+		address => cpu_addr(10 downto 1),
 		q => romdata
 		);
 
@@ -188,16 +190,18 @@ begin
 	if reset_in='0' then
 		prgstate<=wait2;
 		req_pending<='0';
+		vga_reg_datain<=X"0000";
 	elsif rising_edge(clk100) then
 		int_ack<='0';
 		vga_reg_rw<='1';
+		vga_reg_req<='0';
 		case prgstate is
 			when run =>
 				cpu_clkena<='0';
 				prgstate<=mem;
 			when mem =>
 				if busstate="01" then
-					prgstate<=wait2;
+					prgstate<=wait1;
 				else
 					case cpu_addr(31 downto 16) is
 						when X"FFFF" => -- Interrupt acknowledge cycle
@@ -209,6 +213,7 @@ begin
 						when X"0080" => -- hardware registers
 							vga_reg_addr<=cpu_addr(11 downto 0);
 							vga_reg_rw<=cpu_r_w;
+							vga_reg_req<='1';
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=hardware;
 						when X"0000" => -- ROM access
@@ -229,21 +234,29 @@ begin
 				if dtack1='0' then
 					cpu_datain<=ramdata;
 					req_pending<='0';
-					cpu_clkena<='1';
-					prgstate<=run;
+					prgstate<=wait1;
+--					cpu_clkena<='1';
+--					prgstate<=run;
 				end if;
 			when waitwrite =>
 				if dtack1='0' then
 					req_pending<='0';
-					cpu_clkena<='1';
-					prgstate<=run;
+					prgstate<=wait1;
+--					cpu_clkena<='1';
+--					prgstate<=run;
 				end if;
 			when rom =>
 				cpu_datain<=romdata;
-				prgstate<=wait2;
+--				prgstate<=wait2;
+				prgstate<=wait1;
 			when hardware =>
 				cpu_datain<=vga_reg_dataout;
-				prgstate<=wait2;
+				vga_reg_rw<=cpu_r_w;
+				if vga_reg_dtack='0' then
+--					cpu_clkena<='1';
+--					prgstate<=run;
+					prgstate<=wait1;
+				end if;
 			when wait1 =>
 				prgstate<=wait2;
 			when wait2 =>
@@ -295,7 +308,7 @@ mysdram : entity work.sdram
 		Addr1 => cpu_addr(23 downto 0),
 		req1 => req_pending,
 		wr1 => cpu_r_w,
-		wrL1 => '0', -- Always access full words for now...
+		wrL1 => '0', -- FIXME Always access full words for now...
 		wrU1 => '0', 
 		dataout1 => ramdata,
 		dtack1 => dtack1
@@ -312,6 +325,8 @@ mysdram : entity work.sdram
 		reg_rw => vga_reg_rw,
 		reg_uds => cpu_uds,
 		reg_lds => cpu_lds,
+		reg_dtack => vga_reg_dtack,
+		reg_req => vga_reg_req,
 
 		sdr_addrout => vga_addr,
 		sdr_datain => vga_data, 

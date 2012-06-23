@@ -348,10 +348,10 @@ end process;
 				when ph3 =>
 					sdram_state <= ph4;
 				when ph4 =>	sdram_state <= ph5;
---					sdwrite <= '1';
+					vga_fill<='0';
+					sdwrite <= '1';
 				when ph5 => sdram_state <= ph6;
 					sdwrite <= '1';
-					vga_fill<='0';
 				when ph6 =>	sdram_state <= ph7;
 					sdwrite <= '1';
 --							enaWRreg <= '1';
@@ -374,8 +374,8 @@ end process;
 				when ph12 => sdram_state <= ph13;
 --					cachefill<='1';
 					vga_fill<='0';
---					sdwrite<='1';
-				when ph13 => sdram_state <= ph14;	-- Skip a few phases...
+					sdwrite<='1';
+				when ph13 => sdram_state <= ph14;
 					sdwrite<='1';
 				when ph14 =>
 						sdwrite<='1';
