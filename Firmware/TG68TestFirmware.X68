@@ -296,12 +296,12 @@ _strcpy	; A0: src, A1: dst
 
 int2	; UART interrupt
 	movem.l	d0-d1/a0,-(a7)
-	moveq.l	#0,d1
-	move.w	TEXTBUFFERPTR,d1
-	lea	TEXTBUFFER,a0
 	move.w	PERREGS,d0	; Read data - low byte contains character from UART
 	btst	#9,d0		; Rx intterupt?
 	beq	.skip
+	moveq.l	#0,d1
+	move.w	TEXTBUFFERPTR,d1
+	lea	TEXTBUFFER,a0
 	move.b	d0,(a0,d1)
 	addq.w	#1,d1
 	and.w	#$7ff,d1	; 2048 byte buffer

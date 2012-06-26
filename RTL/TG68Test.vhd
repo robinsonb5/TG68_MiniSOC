@@ -7,7 +7,7 @@ entity TG68Test is
 		clk50 			: in std_logic;
 --		clk50			: in std_logic;
 		src 			: in std_logic_vector(15 downto 0);
-		counter 		: buffer unsigned(15 downto 0);
+		counter 		: buffer std_logic_vector(15 downto 0);
 		reset_in 	: in std_logic;
 		pausecpu		: in std_logic;
 		pausevga		: in std_logic;
@@ -111,6 +111,8 @@ signal ramdata : std_logic_vector(15 downto 0);
 
 signal framectr : unsigned(15 downto 0);
 signal resetctr : std_logic;
+
+signal bootrom_overlay : std_logic;
 
 type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga,vga,peripheral);
 signal prgstate : prgstates :=wait2;
@@ -229,23 +231,33 @@ begin
 							cpu_datain <= "0000000000000" & cpu_addr(3 downto 1);
 							int_ack<='1';
 							prgstate<=wait1;
-						when X"0080" => -- hardware registers
+						when X"0080" => -- hardware registers - VGA controller
 							vga_reg_addr<=cpu_addr(11 downto 0);
 							vga_reg_rw<=cpu_r_w;
 							vga_reg_req<='1';
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=vga;
-						when X"0081" => -- more hardware registers
+						when X"0081" => -- more hardware registers - peripherals
 							per_reg_addr<=cpu_addr(11 downto 0);
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';
 							per_reg_datain<=cpu_dataout;
 							prgstate<=peripheral;
 						when X"0000" => -- ROM access
-							cpu_datain<=romdata;
-							prgstate<=rom;
+							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
+							if cpu_r_w='0' then	-- Pass writes through to RAM.
+								req_pending<='1';
+								prgstate<=waitwrite;
+							elsif bootrom_overlay='0' then
+								req_pending<='1';
+								prgstate<=waitread;	-- overlay disabled.
+							else
+--								cpu_datain<=romdata;
+								prgstate<=rom;
+							end if;
 						when others =>
-							counter<=unsigned(cpu_dataout); -- Remove this...
+--							datatoram<=cpu_dataout;
+--							counter<=unsigned(cpu_dataout); -- Remove this...
 --							write_address<=cpu_addr(23 downto 0);
 							req_pending<='1';
 							if cpu_r_w='0' then
@@ -337,12 +349,12 @@ mysdram : entity work.sdram
 
 		vga_newframe => vga_newframe,
 
-		datawr1 => std_logic_vector(counter),
+		datawr1 => cpu_dataout,
 		Addr1 => cpu_addr(23 downto 0),
 		req1 => req_pending,
 		wr1 => cpu_r_w,
-		wrL1 => '0', -- FIXME Always access full words for now...
-		wrU1 => '0', 
+		wrL1 => cpu_lds,
+		wrU1 => cpu_uds,
 		dataout1 => ramdata,
 		dtack1 => dtack1
 	);
@@ -381,7 +393,7 @@ mysdram : entity work.sdram
 		port map (
 		clk => clk100,
 		reset => reset,
-
+		
 		reg_addr_in => per_reg_addr,
 		reg_data_in => per_reg_datain,
 		reg_data_out => per_reg_dataout,
@@ -393,7 +405,10 @@ mysdram : entity work.sdram
 
 		uart_int => per_uart_int,
 		uart_txd => txd,
-		uart_rxd => rxd
+		uart_rxd => rxd,
+
+		bootrom_overlay => bootrom_overlay,
+		hex => counter
 	);
 
 	

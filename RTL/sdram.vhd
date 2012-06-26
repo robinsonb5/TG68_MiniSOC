@@ -233,6 +233,7 @@ end process;
 			readcache_state<=waitread;
 		elsif rising_edge(sysclk) then
 			readcache_dtack<='1';
+
 			case readcache_state is
 				when waitread =>
 					if req1='1' and wr1='1' then -- read cycle
@@ -275,6 +276,16 @@ end process;
 				when others =>
 					null;
 			end case;
+
+			-- Invalidate cacheline if the write cache is writing to the same address.
+			if writecache_dirty='1' and readcache_addr(23 downto 3) = writecache_addr(23 downto 3) then
+				readcache_dirty<='1';
+				-- Also cancel any read from the cache, and force a wait state.
+				readcache_req<='0';
+				readcache_state<=waitread;
+				readcache_dtack<='1';
+			end if;
+
 		end if;
 	end process;
 
