@@ -14,16 +14,6 @@ HEX equ $810006 ; HEX display
 	dc.l	STACK		; Initial stack pointer
 	dc.l	START
 
-	ORG	$0060
-	dc.l	Crash
-	dc.l	Crash
-	dc.l	Crash
-	dc.l	Crash
-	dc.l	Crash
-	dc.l	Crash
-	dc.l	Crash
-	dc.l	Crash
-
 START:				; first instruction of program
 	lea	STACK,a7
 
@@ -42,6 +32,7 @@ START:				; first instruction of program
 Crash
 	rte
 
+	; FIXME - move these into character RAM for safe keeping?
 SREC_BYTECOUNT	equ $ffff8
 SREC_COLUMN equ $ffff6
 SREC_ADDR equ $ffff2
@@ -49,6 +40,9 @@ SREC_TYPE equ $fffee
 SREC_ADDRSIZE equ $fffea
 SREC_COUNTER equ $fffe8 ; counts from 7 down to 0 to count the shifts required for each longword before bumping the address.
 
+
+	; Stores temporary value in d6 and d7 to avoid having to read from overlaid RAM.
+	
 Decodehex
 	and.l	#$df,d0	; To upper case, if necessary - numbers are now 16-25
 	sub.b	#55,d0	; Map 'A' onto decimal 10.
@@ -59,29 +53,37 @@ Decodehex
 
 DoDecode		; Takes address of longword in A0, rotates 4 bits left and ors in the decoded nybble.
 	bsr	DecodeHex
-	move.l	(a0),d1
-	lsl.l	#4,d1
-	or.w	d0,d1
-	move.l	d1,(a0)
+;;	move.l	d7,d1
+;;	lsl.l	#4,d1
+;;	or.w	d0,d1
+;;	move.l	d1,d7
+	lsl.l	#4,d6
+	or.b	d0,d6
+	move.l	d6,(a0)
 	rts
 
 DoDecodeByte	; Takes address of longword in A0, rotates 4 bits left and ors in the decoded nybble.
 	bsr	DecodeHex
-	move.b	(a0),d1
-	lsl.b	#4,d1
-	or.b	d0,d1
-	move.b	d1,(a0)
+;	move.b	d7,d1
+;	lsl.b	#4,d1
+;	or.b	d0,d1
+;	move.b	d1,d7
+	lsl.b	#4,d7
+	or.b	d0,d7
+	move.b	d7,(a0)
 	rts
 
 
 HandleByte
-	move.w	PERREGS,d0	; Read data - low byte contains character from UART
+;	move.w	PERREGS,d0	; Read data - low byte contains character from UART
 	add.w	#1,SREC_COLUMN
 
 	cmp.b	#'S',d0		; First byte of a record is S - reset column counter.
 	bne	.nots
 	move.w	#$FFFF,HEX	; Debug
 	moveq	#0,d1
+	move.l	d1,d7		; Accumulator for byte values
+	move.l	d1,d6		; Accumulator for longword values
 	move.w	d1,SREC_COLUMN
 	move.l	d1,SREC_ADDR
 	move.l	d1,SREC_BYTECOUNT
@@ -92,8 +94,8 @@ HandleByte
 	cmp.w	#1,SREC_COLUMN	; record type, high nybble
 	bne	.nottype
 	move.w	#$FFFE,HEX	; Debug
-	lea	SREC_TYPE,a0
-	bsr	DoDecode	; Called once, should result in type being in the lowest nybble bye of SREC_TYPE
+	lea	SREC_TYPE+3,a0
+	bsr	DoDecodeByte	; Called once, should result in type being in the lowest nybble bye of SREC_TYPE
 	move.l	SREC_TYPE,d1
 	cmp.l	#3,d1
 	ble	.dontinvert
@@ -115,8 +117,8 @@ HandleByte
 
 	cmp.w	#3,SREC_COLUMN	; Byte count
 	bgt	.notbc
-	lea	SREC_BYTECOUNT,a0
-	bsr	DoDecode	; Called twice, should result in bytecount being in the low byte of SREC_BYTECOUNT
+	lea	SREC_BYTECOUNT+3,a0
+	bsr	DoDecodeByte	; Called twice, should result in bytecount being in the low byte of SREC_BYTECOUNT
 	bra	.end
 	
 .notbc	; extract the address
@@ -161,9 +163,11 @@ HandleByte
 	beq	.end
 	move.l	SREC_ADDR,a0
 	lsl.l	#2,d0
-	move.l	(a0),d1
-	lsl.l	d0,d1
-	move.l	d1,(a0)
+;	move.l	(a0),d1
+;	lsl.l	d0,d1
+;	move.l	d1,(a0)
+	lsl.B	d0,d7
+	move.B	d7,(a0)
 	
 .nottype1
 	move.w	#$FFEE,HEX	; Debug
@@ -181,6 +185,7 @@ HandleByte
 	rts
 
 	END	START		; last line of source
+
 
 
 
