@@ -101,6 +101,7 @@ signal per_reg_rw : std_logic;
 signal per_reg_req : std_logic;
 signal per_reg_dtack : std_logic;
 signal per_uart_int : std_logic;
+signal per_timer_int : std_logic;
 
 
 signal int_ack : std_logic;
@@ -158,7 +159,7 @@ myint : entity work.interrupt_controller
 		int7 => not buttons(2),
 		int1 => vblank_int,
 		int2 => per_uart_int,
-		int3 => not buttons(0),
+		int3 => per_timer_int,
 		int4 => '0',
 		int5 => '0',
 		int6 => '0',
@@ -355,6 +356,7 @@ mysdram : entity work.sdram
 		wr1 => cpu_r_w,
 		wrL1 => cpu_lds,
 		wrU1 => cpu_uds,
+		cachesel => busstate(1), -- Use separate caches for instruction and data.  0 => inst, 1 => data
 		dataout1 => ramdata,
 		dtack1 => dtack1
 	);
@@ -406,6 +408,8 @@ mysdram : entity work.sdram
 		uart_int => per_uart_int,
 		uart_txd => txd,
 		uart_rxd => rxd,
+		
+		timer_int => per_timer_int,
 
 		bootrom_overlay => bootrom_overlay,
 		hex => counter
