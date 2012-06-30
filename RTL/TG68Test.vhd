@@ -34,7 +34,17 @@ entity TG68Test is
 		
 		-- UART
 		rxd	: in std_logic;
-		txd	: out std_logic
+		txd	: out std_logic;
+
+		-- PS/2 keyboard / mouse
+		ps2k_clk_in : in std_logic;
+		ps2k_dat_in : in std_logic;
+		ps2k_clk_out : out std_logic;
+		ps2k_dat_out : out std_logic;
+		ps2m_clk_in : in std_logic;
+		ps2m_dat_in : in std_logic;
+		ps2m_clk_out : out std_logic;
+		ps2m_dat_out : out std_logic	
 	);
 end entity;
 
@@ -102,7 +112,7 @@ signal per_reg_req : std_logic;
 signal per_reg_dtack : std_logic;
 signal per_uart_int : std_logic;
 signal per_timer_int : std_logic;
-
+signal per_ps2_int : std_logic;
 
 signal int_ack : std_logic;
 signal ints : std_logic_vector(2 downto 0);
@@ -160,7 +170,7 @@ myint : entity work.interrupt_controller
 		int1 => vblank_int,
 		int2 => per_uart_int,
 		int3 => per_timer_int,
-		int4 => '0',
+		int4 => per_ps2_int,
 		int5 => '0',
 		int6 => '0',
 		int_out => ints,
@@ -233,13 +243,13 @@ begin
 							int_ack<='1';
 							prgstate<=wait1;
 						when X"0080" => -- hardware registers - VGA controller
-							vga_reg_addr<=cpu_addr(11 downto 0);
+							vga_reg_addr<=cpu_addr(11 downto 1)&'0';
 							vga_reg_rw<=cpu_r_w;
 							vga_reg_req<='1';
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=vga;
 						when X"0081" => -- more hardware registers - peripherals
-							per_reg_addr<=cpu_addr(11 downto 0);
+							per_reg_addr<=cpu_addr(11 downto 1)&'0';
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';
 							per_reg_datain<=cpu_dataout;
@@ -406,10 +416,20 @@ mysdram : entity work.sdram
 		reg_req => per_reg_req,
 
 		uart_int => per_uart_int,
+		timer_int => per_timer_int,
+		ps2_int => per_ps2_int,
+
 		uart_txd => txd,
 		uart_rxd => rxd,
-		
-		timer_int => per_timer_int,
+
+		ps2k_clk_in => ps2k_clk_in,
+		ps2k_dat_in => ps2k_dat_in,
+		ps2k_clk_out => ps2k_clk_out,
+		ps2k_dat_out => ps2k_dat_out,
+		ps2m_clk_in => ps2m_clk_in,
+		ps2m_dat_in => ps2m_dat_in,
+		ps2m_clk_out => ps2m_clk_out,
+		ps2m_dat_out => ps2m_dat_out,
 
 		bootrom_overlay => bootrom_overlay,
 		hex => counter

@@ -19,9 +19,12 @@ VGAREGS equ $800000
 TEXTBUFFER equ $800800	; 2048 bytes
 
 PERREGS equ $810000 ; Peripheral registers
-KBD equ $810008
-MOUSE equ $81000A
 HEX equ $810006
+TIMERCON equ $81000e ; Timer control reg
+TIMER0DIV equ $810010
+TIMER1DIV equ $810012
+TIMER2DIV equ $810014
+TIMER3DIV equ $810016
 
 SPRITEBUFFER equ $ff000	; Sprite data (can't reference from ROM unless we copy the ROM to RAM at startup...)
 
@@ -32,12 +35,6 @@ SP0PTH equ $0100 ; Pointer to sprite 0's data - must be 64-bit aligned.
 SP0PTL equ $0102
 SP0XPOS	equ $0104
 SP0YPOS equ $0106
-
-TIMERCON equ $81000e ; Timer control reg
-TIMER0DIV equ $810010
-TIMER1DIV equ $810012
-TIMER2DIV equ $810014
-TIMER3DIV equ $810016
 
 
 	ORG	$0
@@ -59,6 +56,10 @@ MyMessage
 
 START:				; first instruction of program
 	lea	STACK,a7
+	
+	move.w	#$4000,TIMER1DIV
+	move.w	#$5000,TIMER2DIV
+	move.w	#$0060,TIMERCON	; Enable interrupt for Timer 1
 
 	lea	TextBuffer,a1
 	lea	MyMessage,a0
@@ -70,20 +71,8 @@ START:				; first instruction of program
 
 	move.w	#0,FRAMECOUNTER
 	move.w	#0,TEXTBUFFERPTR
-	
+
 	bsr	CopySprite
-
-
-	; Initialise mouse
-	move.w	#$2700,SR
-	move.w	#$f4,MOUSE
-.msloop
-	move.w	MOUSE,d0
-	btst	#11,d0
-	beq	.msloop	; wait for acknowledge byte
-
-	move.w	#$800,TIMER3DIV
-	move.w	#$0080,TIMERCON	; Enable interrupt for Timer 1
 
 	move.w	#$2000,SR	; Enable all interrupts
 
@@ -177,6 +166,7 @@ Random
 	movem.l	(a7)+,d1-d2
         rts
         
+	nop	; longword align inner loop
 
 DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 	movem.l	d1-d5,-(a7)
@@ -190,16 +180,10 @@ DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 	add.l	d0,d0
 	
 	move.w	pen,d4
-	lsr.l	#1,d4
-	and.l	#%0111101111101111,d4	; Remove MSBs
 .yloop
 	move.l	d2,d1
 .xloop
-	move.w	(a0),d5
-	lsr.l	#1,d5
-	and.l	#%0111101111101111,d5	; Remove MSBs
-	add.w	d4,d5	
-	move.w	d5,(a0)+
+	move.w	d4,(a0)+
 	subq.w	#1,d1
 	bne	.xloop
 
@@ -297,8 +281,8 @@ int1	; Vertical Blank Interrupt
 	lea	VGAREGS,a0
 	move.l	d0,(FBPTH,a0)
 
-;	move.w	d1,(SP0XPOS,a0)
-;	move.w	d1,(SP0YPOS,a0)
+	move.w	d1,(SP0XPOS,a0)
+	move.w	d1,(SP0YPOS,a0)
 
 	lea	SPRITEBUFFER,a1
 	move.l	a1,(SP0PTH,a0)
@@ -332,94 +316,19 @@ int2	; UART interrupt
 	rte
 
 int3
-	move.w	#0,mousecounter ; Reset mouse counter on timeout.
-	rte
-
-int4	; ps2
-	movem.l	d0-d4,-(a7)
-	move.w	MOUSE,d0
-	btst	#11,d0	; have we received a byte?
-	beq	.mousedone
-	move.w	#$800,TIMER3DIV - 
-	move.w	mousecounter,d1
-	addq.w	#1,d1
-	move.w	d1,mousecounter
-	subq.w	#1,d1
-	bne	.notb1
-	; first byte
-	; FIXME - use a timer to provide a timeout reset here, to keep things in sync
-.b1
-	move.w	#$ffff,d2
-	move.w	#$ffff,d3
-	btst	#4,d0
-	bne	.xneg
-	move.w	#0,d2
-.xneg
-	btst	#5,d0
-	bne	.yneg
-	move.w	#0,d3
-.yneg
-	move.w	d2,.mdx
-	move.w	d3,.mdy	
-	and.b	#7,d0
-	move.b	d0,.btn
-	bra	.mousedone
-.notb1
-	subq.w	#1,d1
-	bne	.notb2
-	move.b	d0,.mdx+1
-	bra	.mousedone
-.notb2
-	subq.w	#1,d1
-	bne	.notb3
-	move.b	d0,.mdy+1
-
-	move.w	.mousex,d0
-	add.w	.mdx,d0
-	bpl	.xpl
-	move.w	#0,d0
-.xpl
-	cmp.w	#FB_WIDTH,d0
-	blt	.xok
-	move.w	#FB_WIDTH-1,d0
-.xok
-	move.w	d0,VGAREGS+SP0XPOS
+	move.w	d0,-(a7)
+	move.w	TIMERCON,d0
 	move.w	d0,HEX
-	move.w	d0,.mousex
-
-	move.w	.mousey,d0
-	sub.w	.mdy,d0
-	bpl	.ypl
-	move.w	#0,d0
-.ypl
-	cmp.w	#FB_HEIGHT/2,d0
-	blt	.yok
-	move.w	#FB_HEIGHT/2-1,d0
-.yok
-	move.w	d0,VGAREGS+SP0YPOS
-	move.w	d0,.mousey
-
-	bra	.mousedone
-	
-.notb3	; overflow
-	move.w	#1,mousecounter
-	bra	.b1
-
-.mousedone
-	movem.l	(a7)+,d0-d4
+	btst	#1,d0
+	beq	.skip
+	neg.w	PEN
+.skip
+	move.w	(a7)+,d0
 	rte
 
-.mdx	dc.w	0
-.mdy	dc.w	0
-.btn	dc.b	0
-.mousex
-	dc.w	0
-.mousey
-	dc.w	0	
-mousecounter
-	dc.w	0
+int4
+	rte
 
-	
 int5
 	rte
 
@@ -431,6 +340,7 @@ int7
 
 
 	END	START		; last line of source
+
 
 
 

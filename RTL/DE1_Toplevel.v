@@ -141,8 +141,8 @@ output			SD_CLK;					//	SD Card Clock
 inout			I2C_SDAT;				//	I2C Data
 output			I2C_SCLK;				//	I2C Clock
 ////////////////////////	PS2		////////////////////////////////
-input		 	PS2_DAT;				//	PS2 Data
-input			PS2_CLK;				//	PS2 Clock
+inout		 	PS2_DAT;				//	PS2 Data
+inout			PS2_CLK;				//	PS2 Clock
 ////////////////////	USB JTAG link	////////////////////////////
 input  			TDI;					// CPLD -> FPGA (data in)
 input  			TCK;					// CPLD -> FPGA (clk)
@@ -181,6 +181,24 @@ reg		[27:0]	Cont;
 reg		[9:0]	mLEDR;
 reg				ST;
 
+
+// PS/2 keyboard
+wire PS2K_DAT_IN=PS2_DAT;
+wire PS2K_DAT_OUT;
+assign PS2_DAT = (PS2K_DAT_OUT == 1'b0) ? 1'b0 : 1'bz;
+wire PS2K_CLK_IN=PS2_CLK;
+wire PS2K_CLK_OUT;
+assign PS2_CLK = (PS2K_CLK_OUT == 1'b0) ? 1'b0 : 1'bz;
+
+// PS/2 Mouse
+wire PS2M_DAT_IN=GPIO_1[19];
+wire PS2M_DAT_OUT;
+assign GPIO_1[19] = (PS2M_DAT_OUT == 1'b0) ? 1'b0 : 1'bz;
+wire PS2M_CLK_IN=GPIO_1[18];
+wire PS2M_CLK_OUT;
+assign GPIO_1[18] = (PS2M_CLK_OUT == 1'b0) ? 1'b0 : 1'bz;
+
+
 always@(posedge CLOCK_50)		Cont	<=	Cont+1'b1;
 
 // assign	mSEG7_DIG	=	{	Cont[27:24],Cont[27:24],Cont[27:24],Cont[27:24]	};
@@ -218,7 +236,17 @@ TG68Test myTG68Test
 
 	// uart
 	.rxd(UART_RXD),
-	.txd(UART_TXD)
+	.txd(UART_TXD),
+	
+	// PS/2
+	.ps2k_clk_in(PS2K_CLK_IN),
+	.ps2k_dat_in(PS2K_DAT_IN),
+	.ps2k_clk_out(PS2K_CLK_OUT),
+	.ps2k_dat_out(PS2K_DAT_OUT),
+	.ps2m_clk_in(PS2M_CLK_IN),
+	.ps2m_dat_in(PS2M_DAT_IN),
+	.ps2m_clk_out(PS2M_CLK_OUT),
+	.ps2m_dat_out(PS2M_DAT_OUT)
 );
 
 endmodule
