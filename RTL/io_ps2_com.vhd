@@ -6,6 +6,8 @@
 -- Copyright 2005-2009 by Peter Wendrich (pwsoft@syntiac.com)
 -- http://www.syntiac.com
 --
+-- A few tweaks by Alastair M. Robinson
+--
 -- This source file is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published
 -- by the Free Software Foundation, either version 3 of the License, or
@@ -37,6 +39,7 @@
 -- inIdle       - Output is high when driver is waiting/idle.
 -- sendTrigger  - Make this signal 1 clock cycle high to send byte
 -- sendByte     - Actual byte send when sendTrigger is given
+-- sendDone     - High for 1 clock when send complete.  (AMR)
 -- recvTrigger  - Is 1 clock cycle high when byte is received.
 -- recvByte     - Last byte received from the ps/2 interface
 --
@@ -66,6 +69,7 @@ entity io_ps2_com is
 		sendTrigger : in std_logic;
 		sendByte : in std_logic_vector(7 downto 0);
 		sendBusy : out std_logic;
+		sendDone : out std_logic;
 		recvTrigger : out std_logic;
 		recvByte : out std_logic_vector(10 downto 0)
 	);
@@ -93,7 +97,6 @@ architecture rtl of io_ps2_com is
 begin
 	inIdle <= '1' when comState = stateIdle else '0';
 	sendBusy <= sendTrigger or sendTriggerLoc;
-
 --
 -- Noise and glitch filter on the clock-line
 	process(clk)
@@ -113,6 +116,7 @@ begin
 	process(clk)
 	begin
 		if rising_edge(clk) then
+			sendDone <= '0';
 			ps2_clk_out <= '1';
 			ps2_dat_out <= '1';
 			recvTrigger <= '0';
@@ -192,6 +196,7 @@ begin
 			when stateWaitAck =>
 				if (clkReg = '1') and (clkFilterCnt = 0) then
 					sendTriggerLoc <= '0';
+					sendDone<='1';
 					comState <= stateIdle;
 				end if;
 			--
