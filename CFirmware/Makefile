@@ -1,4 +1,4 @@
-C_SRC=main.c minisoc_hardware.c textbuffer.c
+C_SRC=main.c minisoc_hardware.c textbuffer.c textbuffer.h ints.c ints.h ps2.c ps2.h
 KLIBC_SRC=vsnprintf.c sprintf.c memcpy.c memcmp.c strcpy.c strcat.c strncat.c strncmp.c strlen.c memset.c strncpy.c strchr.c
 A_SRC=startup.s
 

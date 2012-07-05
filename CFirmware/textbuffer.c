@@ -80,3 +80,10 @@ int puts(const char *str)
 	return 0;
 }
 
+void ClearTextBuffer()
+{
+	int i=0;
+	long *p=(long *)VGACHARBUFFER;
+	for(i=0;i<2048;i+=4)
+		*p++=0;
+}
