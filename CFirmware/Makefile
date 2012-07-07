@@ -1,6 +1,6 @@
-C_SRC=main.c minisoc_hardware.c textbuffer.c textbuffer.h ints.c ints.h ps2.c ps2.h
+C_SRC=main.c minisoc_hardware.c textbuffer.c textbuffer.h ints.c ints.h ps2.c ps2.h keyboard.c keyboard.h
 KLIBC_SRC=vsnprintf.c sprintf.c memcpy.c memcmp.c strcpy.c strcat.c strncat.c strncmp.c strlen.c memset.c strncpy.c strchr.c
-A_SRC=startup.s
+A_SRC=startup.s draw.s
 
 BUILD_DIR=BUILD
 C_OBJ=$(patsubst %.c,$(BUILD_DIR)/%.o,$(C_SRC))
@@ -21,19 +21,25 @@ OUTPUT=out.srec
 LINK_SCRIPT=ldscript.ld
 LIBC_TARGET=libc.a
 
-all: $(BUILD_DIR) $(LIBC_TARGET) $(OUTPUT)
+BOOTSTRAP=bootstrap/bootstrap.mif
+
+all: $(BUILD_DIR) $(LIBC_TARGET) $(OUTPUT) $(BOOTSTRAP)
 
 clean:
 	rm -rf $(BUILD_DIR) $(LIBC_TARGET) $(ELF) $(OUTPUT)
+	cd bootstrap; $(MAKE) clean
 
 $(LIBC_TARGET): $(LIBC_OBJ)
 	$(AR) -r $(LIBC_TARGET) $(LIBC_OBJ)
 
 $(OUTPUT): $(ELF)
-	$(OBJCOPY) -O srec $(ELF) $(OUTPUT)
+	$(OBJCOPY) -O srec $(ELF) out.srec
 
 $(ELF): $(OBJ) $(LINK_SCRIPT)
 	$(CC) $(LDFLAGS) -o $@ -T $(LINK_SCRIPT) $(OBJ)
+
+$(BOOTSTRAP):
+	cd bootstrap; $(MAKE)
 
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)

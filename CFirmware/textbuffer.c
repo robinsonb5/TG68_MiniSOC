@@ -34,16 +34,25 @@ void charbuffer_write(const char *msg)
 			char c=*msg++;
 			if(!c)
 				return;
-			if(c=='\n')
+			if(c=='\b' && col>0)
+			{
+				--p;
+				*p=' ';
+				--col;
+			}
+			else if(c=='\n')
 			{
 				++row;
 				col=0;
 			}
-			*p++=c;
-			if(++col==text_cols)
+			else
 			{
-				col=0;
-				++row;
+				*p++=c;
+				if(++col==text_cols)
+				{
+					col=0;
+					++row;
+				}
 			}
 			if(row==text_rows)
 				scroll();
