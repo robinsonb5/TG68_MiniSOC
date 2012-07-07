@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <malloc.h>
 
 #include "minisoc_hardware.h"
 #include "ints.h"
@@ -6,7 +7,7 @@
 #include "keyboard.h"
 #include "textbuffer.h"
 
-short FrameBuffer[640*960];
+short *FrameBuffer;
 
 void extern DrawIteration();
 
@@ -64,12 +65,18 @@ void vblank_int()
 int c_entry()
 {
 	short counter=0;
+	void *ptr=0;
+
+	ClearTextBuffer();
+	printf("Heap_low: %lx, heap_top: %lx\n",&heap_low,&heap_top);
+	malloc_add(&heap_low, &heap_top-&heap_low);
 
 	PS2Init();
-	ClearTextBuffer();
 	SetSprite();
 
-	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)FrameBuffer;
+	FrameBuffer=malloc(sizeof(short)*640*960);
+
+	HW_VGA_L(FRAMEBUFFERPTR)=FrameBuffer;
 
 	EnableInterrupts();
 
@@ -81,6 +88,14 @@ int c_entry()
 
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
+
+
+	while((ptr=malloc(262144)))
+	{
+//		printf("Allocated %ld\n",(long)ptr);
+		++counter;
+	}
+	printf("malloc() returned zero after %d iterations\n",counter);
 
 	while(1)
 	{

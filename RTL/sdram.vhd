@@ -186,6 +186,7 @@ begin
 		writecache_state<=waitwrite;
 	elsif rising_edge(sysclk) then
 
+		-- FIXME - need to take into account byte writes to successive byte addresses.
 		writecache_dtack<='1';
 		case writecache_state is
 			when waitwrite =>

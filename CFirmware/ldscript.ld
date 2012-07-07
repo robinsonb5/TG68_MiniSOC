@@ -18,9 +18,8 @@ SECTIONS
 	.eh_frame : {
 	  *(.eh_frame)
 	}
-	heap_low = .; /* for _sbrk */
-	. = . + 0x1000; /* 64kB of heap memory */
-	heap_top = .; /* for _sbrk */
+	heap_low = .; /* region added to malloc heap */
+	heap_top = 0x7f0000;
 
 	stack_top = 0x7ffffe; /* for startup.s */
 	start = 0x100;

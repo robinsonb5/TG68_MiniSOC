@@ -8,8 +8,8 @@ Start:
 	move.l  #__e_bss,d0
 l1
 	cmp.l   d0,a0
-	beq.s   l2
-	clr.b   (a0)+
+	bge	  l2
+	clr.l   (a0)+
 	bra.s   l1
 l2
 	; Set up interrupt vectors...
