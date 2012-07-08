@@ -11,7 +11,7 @@ CC=m68k-elf-gcc
 AR=m68k-elf-ar
 VASM=vasmm68k_mot
 OBJCOPY=m68k-elf-objcopy
-CFLAGS+=-m$(ARCH) -Wall -Wno-char-subscripts -Os -fno-common -fomit-frame-pointer -I./include
+CFLAGS+=-m$(ARCH) -Wall -Wno-char-subscripts -O2 -fno-common -fomit-frame-pointer -I./include
 LDFLAGS+=-m$(ARCH) -Xlinker -Map=menu.map -nostartfiles -Lklibc
 
 ELF=out.elf

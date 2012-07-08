@@ -10,10 +10,11 @@
 
 short *FrameBuffer;
 
-void extern DrawIteration();
+extern short pen;
+extern void DrawIteration();
 
 static short framecount=0;
-short MouseX=0,MouseY=0;
+short MouseX=0,MouseY=0,MouseButtons=0;
 short mousetimeout=0;
 
 void vblank_int()
@@ -35,6 +36,7 @@ void vblank_int()
 		w1=PS2MouseRead();
 		w2=PS2MouseRead();
 		w3=PS2MouseRead();
+		MouseButtons=w1;
 //		printf("%02x %02x %02x\n",w1,w2,w3);
 		if(w1 & (1<<5))
 			w3|=0xff00;
@@ -83,7 +85,7 @@ void AddMemory()
 	size_t low;
 	size_t size;
 	low=(size_t)&heap_low;
-	low+=15;
+	low+=7;
 	low&=0xfffffff8; // Align to SDRAM burst boundary
 	size=((char*)&heap_top)-low;
 	printf("Heap_low: %lx, heap_size: %lx\n",low,size);
@@ -133,6 +135,11 @@ int c_entry()
 
 	while(1)
 	{
+		HW_PER(PER_HEX)=MouseButtons;
+		if(MouseButtons&1)
+			pen+=0x400;
+		if(MouseButtons&2)
+			pen-=0x400;
 		DrawIteration();
 
 //		++counter;

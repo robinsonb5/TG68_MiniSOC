@@ -6,6 +6,7 @@ RANDOMSEED	dc.w	12345
 RANDOMSEED2	dc.w	6789
 pen	dc.w	0
 
+	XDEF pen
 	XDEF DrawIteration
 DrawIteration
 	movem.l	a2-6/d2-d7,-(a7)
@@ -95,7 +96,7 @@ Random
 
 DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 ;	move.w	RANDOMSEED+2,$810006 ; HEX display
-	movem.l	d1-d5,-(a7)
+	movem.l	d1-d6,-(a7)
 	add.l	d1,d1
 	mulu	#FB_WIDTH,d1	; y offset
 	add.l	d1,a0
@@ -108,23 +109,46 @@ DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 	move.w	pen,d4
 	lsr.l	#1,d4
 	and.l	#%0111101111101111,d4	; Remove MSBs
+	move.w	d4,d1
+	swap	d4
+	move.w	d1,d4	; duplicate words
 .yloop
 	move.l	d2,d1
-.xloop
+	and.w	#3,d1
+	beq	.even
+.wordxloop
 	move.w	(a0),d5
 	lsr.l	#1,d5
 	and.l	#%0111101111101111,d5	; Remove MSBs
 	add.w	d4,d5	
 	move.w	d5,(a0)+
 	subq.w	#1,d1
-	bne	.xloop
+	bne	.wordxloop	
+.even
+	move.l	d2,d1
+	lsr.w	#2,d1
+	beq	.nolongs
+.longxloop
+	move.l	(a0),d5
+	move.l	4(a0),d6
+	lsr.l	#1,d5
+	and.l	#$7bef7bef,d5	; Remove MSBs
+	lsr.l	#1,d6
+	and.l	#$7bef7bef,d6	; Remove MSBs
+	add.l	d4,d5	
+	add.l	d4,d6	
+	move.l	d5,(a0)+
+	move.l	d6,(a0)+
+	subq.w	#1,d1
+	bne	.longxloop
 
+.nolongs
 	add.l	d0,a0		; Add modulo
 
 	subq.w	#1,d3
 	bne	.yloop
 
-	movem.l	(a7)+,d1-d5
+	movem.l	(a7)+,d1-d6
 	rts
 
 
