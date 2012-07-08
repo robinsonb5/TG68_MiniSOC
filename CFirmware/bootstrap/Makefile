@@ -14,7 +14,7 @@ clean:
 	rm $(BOOTSTRAP) $(BOOTSTRAPSREC) $(BOOTSTRAPMIF)
 
 $(BOOTSTRAP): $(BOOTSTRAPSRC)
-	$(VASM) -Felf -o $@ $<
+	$(VASM) -showopt -m68000 -Felf -o $@ $<
 
 $(BOOTSTRAPSREC): $(BOOTSTRAP)
 	$(OBJCOPY) -O srec $< $@

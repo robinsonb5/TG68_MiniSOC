@@ -33,13 +33,13 @@
 //applicable agreement for further details.
 
 
-//altsyncram CLOCK_ENABLE_INPUT_A="BYPASS" CLOCK_ENABLE_OUTPUT_A="BYPASS" DEVICE_FAMILY="Cyclone II" ENABLE_RUNTIME_MOD="NO" INIT_FILE="./Firmware/TG68SerialBootstrap.mif" NUMWORDS_A=1024 OPERATION_MODE="ROM" OUTDATA_ACLR_A="NONE" OUTDATA_REG_A="UNREGISTERED" RAM_BLOCK_TYPE="M4K" WIDTH_A=16 WIDTH_BYTEENA_A=1 WIDTHAD_A=10 address_a clock0 q_a
+//altsyncram CLOCK_ENABLE_INPUT_A="BYPASS" CLOCK_ENABLE_OUTPUT_A="BYPASS" DEVICE_FAMILY="Cyclone II" ENABLE_RUNTIME_MOD="NO" INIT_FILE="./CFirmware/bootstrap/bootstrap.mif" NUMWORDS_A=512 OPERATION_MODE="ROM" OUTDATA_ACLR_A="NONE" OUTDATA_REG_A="UNREGISTERED" RAM_BLOCK_TYPE="M4K" WIDTH_A=16 WIDTH_BYTEENA_A=1 WIDTHAD_A=9 address_a clock0 q_a
 //VERSION_BEGIN 11.1SP1 cbx_altsyncram 2011:11:23:21:09:51:SJ cbx_cycloneii 2011:11:23:21:09:51:SJ cbx_lpm_add_sub 2011:11:23:21:09:51:SJ cbx_lpm_compare 2011:11:23:21:09:51:SJ cbx_lpm_decode 2011:11:23:21:09:51:SJ cbx_lpm_mux 2011:11:23:21:09:51:SJ cbx_mgl 2011:11:23:21:11:22:SJ cbx_stratix 2011:11:23:21:09:51:SJ cbx_stratixii 2011:11:23:21:09:51:SJ cbx_stratixiii 2011:11:23:21:09:51:SJ cbx_stratixv 2011:11:23:21:09:51:SJ cbx_util_mgl 2011:11:23:21:09:51:SJ  VERSION_END
 // synthesis VERILOG_INPUT_VERSION VERILOG_2001
 // altera message_off 10463
 
 
-//synthesis_resources = M4K 4 
+//synthesis_resources = M4K 2 
 //synopsys translate_off
 `timescale 1 ps / 1 ps
 //synopsys translate_on
@@ -49,7 +49,7 @@ module  BootRom_altsyncram
 	address_a,
 	clock0,
 	q_a) /* synthesis synthesis_clearbox=1 */;
-	input   [9:0]  address_a;
+	input   [8:0]  address_a;
 	input   clock0;
 	output   [15:0]  q_a;
 `ifndef ALTERA_RESERVED_QIS
@@ -76,12 +76,12 @@ module  BootRom_altsyncram
 	wire  [0:0]   wire_ram_block1a_13portadataout;
 	wire  [0:0]   wire_ram_block1a_14portadataout;
 	wire  [0:0]   wire_ram_block1a_15portadataout;
-	wire  [9:0]  address_a_wire;
+	wire  [8:0]  address_a_wire;
 
 	cycloneii_ram_block   ram_block1a_0
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_0portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -113,12 +113,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_0.connectivity_checking = "OFF",
-		ram_block1a_0.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_0.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_0.init_file_layout = "port_a",
 		ram_block1a_0.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_0.mem_init0 = 1024'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006C68DC646332D8CBD8D48C32EC18E3448F62331C6DB137A698A426830000000000000001,
+		ram_block1a_0.mem_init0 = 512'h000000000000000000000000000000000000000000000000000000000000000001AB4358D4CD1B19AD8D7B34658D761CE346B1EC8DD0E36DE64F652252268231,
 		ram_block1a_0.operation_mode = "rom",
-		ram_block1a_0.port_a_address_width = 10,
+		ram_block1a_0.port_a_address_width = 9,
 		ram_block1a_0.port_a_data_out_clear = "none",
 		ram_block1a_0.port_a_data_out_clock = "none",
 		ram_block1a_0.port_a_data_width = 1,
@@ -126,15 +126,15 @@ module  BootRom_altsyncram
 		ram_block1a_0.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_0.port_a_first_address = 0,
 		ram_block1a_0.port_a_first_bit_number = 0,
-		ram_block1a_0.port_a_last_address = 1023,
-		ram_block1a_0.port_a_logical_ram_depth = 1024,
+		ram_block1a_0.port_a_last_address = 511,
+		ram_block1a_0.port_a_logical_ram_depth = 512,
 		ram_block1a_0.port_a_logical_ram_width = 16,
 		ram_block1a_0.ram_block_type = "M4K",
 		ram_block1a_0.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_1
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_1portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -166,12 +166,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_1.connectivity_checking = "OFF",
-		ram_block1a_1.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_1.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_1.init_file_layout = "port_a",
 		ram_block1a_1.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_1.mem_init0 = 1024'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001AC1C0C04268958611CC09619A11C62C18DA6E32CB6160082AA701860000000000000003,
+		ram_block1a_1.mem_init0 = 512'h000000000000000000000000000000000000000000000000000000000000000000068621CAD81553491AC2724918CC1BC62D2B1A98A9865B0AD9651652018463,
 		ram_block1a_1.operation_mode = "rom",
-		ram_block1a_1.port_a_address_width = 10,
+		ram_block1a_1.port_a_address_width = 9,
 		ram_block1a_1.port_a_data_out_clear = "none",
 		ram_block1a_1.port_a_data_out_clock = "none",
 		ram_block1a_1.port_a_data_width = 1,
@@ -179,15 +179,15 @@ module  BootRom_altsyncram
 		ram_block1a_1.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_1.port_a_first_address = 0,
 		ram_block1a_1.port_a_first_bit_number = 1,
-		ram_block1a_1.port_a_last_address = 1023,
-		ram_block1a_1.port_a_logical_ram_depth = 1024,
+		ram_block1a_1.port_a_last_address = 511,
+		ram_block1a_1.port_a_logical_ram_depth = 512,
 		ram_block1a_1.port_a_logical_ram_width = 16,
 		ram_block1a_1.ram_block_type = "M4K",
 		ram_block1a_1.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_2
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_2portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -219,12 +219,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_2.connectivity_checking = "OFF",
-		ram_block1a_2.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_2.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_2.init_file_layout = "port_a",
 		ram_block1a_2.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_2.mem_init0 = 1024'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000068C1C05252A8908615840A218891860C08C0E630C960E10C1AAA41AEAAAA000000000003,
+		ram_block1a_2.mem_init0 = 512'h000000000000000000000000000000000000000000000000000000000000000001C2B62FCBCA95950908C2625B08C40B862D211838AF864B0B3B7F77F4C1A9E3,
 		ram_block1a_2.operation_mode = "rom",
-		ram_block1a_2.port_a_address_width = 10,
+		ram_block1a_2.port_a_address_width = 9,
 		ram_block1a_2.port_a_data_out_clear = "none",
 		ram_block1a_2.port_a_data_out_clock = "none",
 		ram_block1a_2.port_a_data_width = 1,
@@ -232,15 +232,15 @@ module  BootRom_altsyncram
 		ram_block1a_2.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_2.port_a_first_address = 0,
 		ram_block1a_2.port_a_first_bit_number = 2,
-		ram_block1a_2.port_a_last_address = 1023,
-		ram_block1a_2.port_a_logical_ram_depth = 1024,
+		ram_block1a_2.port_a_last_address = 511,
+		ram_block1a_2.port_a_logical_ram_depth = 512,
 		ram_block1a_2.port_a_logical_ram_width = 16,
 		ram_block1a_2.ram_block_type = "M4K",
 		ram_block1a_2.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_3
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_3portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -272,12 +272,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_3.connectivity_checking = "OFF",
-		ram_block1a_3.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_3.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_3.init_file_layout = "port_a",
 		ram_block1a_3.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_3.mem_init0 = 1024'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000EED9562E6B1F8C379949B38DEB8A74C9AF8F716D920B228A02A22AF0000000000000003,
+		ram_block1a_3.mem_init0 = 512'h0000000000000000000000000000000000000000000000000000000000000000000B3F4F936EB9B59F8E6F66D1CC6E1EB74E3B5F3ECCB6C903AC53453422A8FB,
 		ram_block1a_3.operation_mode = "rom",
-		ram_block1a_3.port_a_address_width = 10,
+		ram_block1a_3.port_a_address_width = 9,
 		ram_block1a_3.port_a_data_out_clear = "none",
 		ram_block1a_3.port_a_data_out_clock = "none",
 		ram_block1a_3.port_a_data_width = 1,
@@ -285,15 +285,15 @@ module  BootRom_altsyncram
 		ram_block1a_3.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_3.port_a_first_address = 0,
 		ram_block1a_3.port_a_first_bit_number = 3,
-		ram_block1a_3.port_a_last_address = 1023,
-		ram_block1a_3.port_a_logical_ram_depth = 1024,
+		ram_block1a_3.port_a_last_address = 511,
+		ram_block1a_3.port_a_logical_ram_depth = 512,
 		ram_block1a_3.port_a_logical_ram_width = 16,
 		ram_block1a_3.ram_block_type = "M4K",
 		ram_block1a_3.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_4
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_4portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -325,12 +325,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_4.connectivity_checking = "OFF",
-		ram_block1a_4.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_4.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_4.init_file_layout = "port_a",
 		ram_block1a_4.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_4.mem_init0 = 1024'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000740C12B220D84D6528188259442D2060802091A61241D31C50AD432F0000000000000003,
+		ram_block1a_4.mem_init0 = 512'h0000000000000000000000000000000000000000000000000000000000000000018D184411148886C494A5041294A21530425804274F30920376176177C328F3,
 		ram_block1a_4.operation_mode = "rom",
-		ram_block1a_4.port_a_address_width = 10,
+		ram_block1a_4.port_a_address_width = 9,
 		ram_block1a_4.port_a_data_out_clear = "none",
 		ram_block1a_4.port_a_data_out_clock = "none",
 		ram_block1a_4.port_a_data_width = 1,
@@ -338,15 +338,15 @@ module  BootRom_altsyncram
 		ram_block1a_4.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_4.port_a_first_address = 0,
 		ram_block1a_4.port_a_first_bit_number = 4,
-		ram_block1a_4.port_a_last_address = 1023,
-		ram_block1a_4.port_a_logical_ram_depth = 1024,
+		ram_block1a_4.port_a_last_address = 511,
+		ram_block1a_4.port_a_logical_ram_depth = 512,
 		ram_block1a_4.port_a_logical_ram_width = 16,
 		ram_block1a_4.ram_block_type = "M4K",
 		ram_block1a_4.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_5
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_5portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -378,12 +378,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_5.connectivity_checking = "OFF",
-		ram_block1a_5.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_5.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_5.init_file_layout = "port_a",
 		ram_block1a_5.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_5.mem_init0 = 1024'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000748914B2A4D16D652D18D3515429246890A0DDA69244D304388F432FAAAA000000000003,
+		ram_block1a_5.mem_init0 = 512'h0000000000000000000000000000000000000000000000000000000000000000018D344F1354A9E6D6D6A5C69296AB15344A5214354F249203B6366367C329F3,
 		ram_block1a_5.operation_mode = "rom",
-		ram_block1a_5.port_a_address_width = 10,
+		ram_block1a_5.port_a_address_width = 9,
 		ram_block1a_5.port_a_data_out_clear = "none",
 		ram_block1a_5.port_a_data_out_clock = "none",
 		ram_block1a_5.port_a_data_width = 1,
@@ -391,15 +391,15 @@ module  BootRom_altsyncram
 		ram_block1a_5.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_5.port_a_first_address = 0,
 		ram_block1a_5.port_a_first_bit_number = 5,
-		ram_block1a_5.port_a_last_address = 1023,
-		ram_block1a_5.port_a_logical_ram_depth = 1024,
+		ram_block1a_5.port_a_last_address = 511,
+		ram_block1a_5.port_a_logical_ram_depth = 512,
 		ram_block1a_5.port_a_logical_ram_width = 16,
 		ram_block1a_5.ram_block_type = "M4K",
 		ram_block1a_5.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_6
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_6portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -431,12 +431,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_6.connectivity_checking = "OFF",
-		ram_block1a_6.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_6.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_6.init_file_layout = "port_a",
 		ram_block1a_6.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_6.mem_init0 = 1024'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000708100A394CB654C2508125332A9342814804524B6D1510D3026412F0000000000000003,
+		ram_block1a_6.mem_init0 = 512'h00000000000000000000000000000000000000000000000000000000000000000184340D0316E1E6765584C09295995524085290114D35B683560120134129F3,
 		ram_block1a_6.operation_mode = "rom",
-		ram_block1a_6.port_a_address_width = 10,
+		ram_block1a_6.port_a_address_width = 9,
 		ram_block1a_6.port_a_data_out_clear = "none",
 		ram_block1a_6.port_a_data_out_clock = "none",
 		ram_block1a_6.port_a_data_width = 1,
@@ -444,15 +444,15 @@ module  BootRom_altsyncram
 		ram_block1a_6.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_6.port_a_first_address = 0,
 		ram_block1a_6.port_a_first_bit_number = 6,
-		ram_block1a_6.port_a_last_address = 1023,
-		ram_block1a_6.port_a_logical_ram_depth = 1024,
+		ram_block1a_6.port_a_last_address = 511,
+		ram_block1a_6.port_a_logical_ram_depth = 512,
 		ram_block1a_6.port_a_logical_ram_width = 16,
 		ram_block1a_6.ram_block_type = "M4K",
 		ram_block1a_6.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_7
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_7portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -484,12 +484,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_7.connectivity_checking = "OFF",
-		ram_block1a_7.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_7.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_7.init_file_layout = "port_a",
 		ram_block1a_7.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_7.mem_init0 = 1024'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014891D8084D12504E118D2511229146897A0CD20B6D0448AA02A452DAAAA00000000000A,
+		ram_block1a_7.mem_init0 = 512'h0000000000000000000000000000000000000000000000000000000000000000002D745D17B023A692509C4696948915144AD2F4335D05B68711015415452AD2,
 		ram_block1a_7.operation_mode = "rom",
-		ram_block1a_7.port_a_address_width = 10,
+		ram_block1a_7.port_a_address_width = 9,
 		ram_block1a_7.port_a_data_out_clear = "none",
 		ram_block1a_7.port_a_data_out_clock = "none",
 		ram_block1a_7.port_a_data_width = 1,
@@ -497,15 +497,15 @@ module  BootRom_altsyncram
 		ram_block1a_7.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_7.port_a_first_address = 0,
 		ram_block1a_7.port_a_first_bit_number = 7,
-		ram_block1a_7.port_a_last_address = 1023,
-		ram_block1a_7.port_a_logical_ram_depth = 1024,
+		ram_block1a_7.port_a_last_address = 511,
+		ram_block1a_7.port_a_logical_ram_depth = 512,
 		ram_block1a_7.port_a_logical_ram_width = 16,
 		ram_block1a_7.ram_block_type = "M4K",
 		ram_block1a_7.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_8
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_8portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -537,12 +537,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_8.connectivity_checking = "OFF",
-		ram_block1a_8.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_8.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_8.init_file_layout = "port_a",
 		ram_block1a_8.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_8.mem_init0 = 1024'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001083058884C36304610813D110E9041856844D22B6D04028A000C1350000000000000002,
+		ram_block1a_8.mem_init0 = 512'h00000000000000000000000000000000000000000000000000000000000000000004340F037221A636308C4092F4887504385AD1134D15B68310400400C131D2,
 		ram_block1a_8.operation_mode = "rom",
-		ram_block1a_8.port_a_address_width = 10,
+		ram_block1a_8.port_a_address_width = 9,
 		ram_block1a_8.port_a_data_out_clear = "none",
 		ram_block1a_8.port_a_data_out_clock = "none",
 		ram_block1a_8.port_a_data_width = 1,
@@ -550,15 +550,15 @@ module  BootRom_altsyncram
 		ram_block1a_8.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_8.port_a_first_address = 0,
 		ram_block1a_8.port_a_first_bit_number = 8,
-		ram_block1a_8.port_a_last_address = 1023,
-		ram_block1a_8.port_a_logical_ram_depth = 1024,
+		ram_block1a_8.port_a_last_address = 511,
+		ram_block1a_8.port_a_logical_ram_depth = 512,
 		ram_block1a_8.port_a_logical_ram_width = 16,
 		ram_block1a_8.ram_block_type = "M4K",
 		ram_block1a_8.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_9
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_9portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -590,12 +590,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_9.connectivity_checking = "OFF",
-		ram_block1a_9.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_9.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_9.init_file_layout = "port_a",
 		ram_block1a_9.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_9.mem_init0 = 1024'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007581028984D76D14EB08134534A30C1817B4D460B6DA51555504413D0000000000000002,
+		ram_block1a_9.mem_init0 = 512'h000000000000000000000000000000000000000000000000000000000000000001853C0D031261A6F6D29DC092D29A530C1A52F7350F05B6B3968820824139D2,
 		ram_block1a_9.operation_mode = "rom",
-		ram_block1a_9.port_a_address_width = 10,
+		ram_block1a_9.port_a_address_width = 9,
 		ram_block1a_9.port_a_data_out_clear = "none",
 		ram_block1a_9.port_a_data_out_clock = "none",
 		ram_block1a_9.port_a_data_width = 1,
@@ -603,15 +603,15 @@ module  BootRom_altsyncram
 		ram_block1a_9.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_9.port_a_first_address = 0,
 		ram_block1a_9.port_a_first_bit_number = 9,
-		ram_block1a_9.port_a_last_address = 1023,
-		ram_block1a_9.port_a_logical_ram_depth = 1024,
+		ram_block1a_9.port_a_last_address = 511,
+		ram_block1a_9.port_a_logical_ram_depth = 512,
 		ram_block1a_9.port_a_logical_ram_width = 16,
 		ram_block1a_9.ram_block_type = "M4K",
 		ram_block1a_9.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_10
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_10portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -643,12 +643,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_10.connectivity_checking = "OFF",
-		ram_block1a_10.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_10.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_10.init_file_layout = "port_a",
 		ram_block1a_10.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_10.mem_init0 = 1024'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000758B11888441251D2318114770A32C5890844464924241041444411D0000000000000002,
+		ram_block1a_10.mem_init0 = 512'h000000000000000000000000000000000000000000000000000000000000000001852C4B123221221253A4C48253B8532C584211110B24926292802802411852,
 		ram_block1a_10.operation_mode = "rom",
-		ram_block1a_10.port_a_address_width = 10,
+		ram_block1a_10.port_a_address_width = 9,
 		ram_block1a_10.port_a_data_out_clear = "none",
 		ram_block1a_10.port_a_data_out_clock = "none",
 		ram_block1a_10.port_a_data_width = 1,
@@ -656,15 +656,15 @@ module  BootRom_altsyncram
 		ram_block1a_10.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_10.port_a_first_address = 0,
 		ram_block1a_10.port_a_first_bit_number = 10,
-		ram_block1a_10.port_a_last_address = 1023,
-		ram_block1a_10.port_a_logical_ram_depth = 1024,
+		ram_block1a_10.port_a_last_address = 511,
+		ram_block1a_10.port_a_logical_ram_depth = 512,
 		ram_block1a_10.port_a_logical_ram_width = 16,
 		ram_block1a_10.ram_block_type = "M4K",
 		ram_block1a_10.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_11
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_11portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -696,12 +696,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_11.connectivity_checking = "OFF",
-		ram_block1a_11.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_11.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_11.init_file_layout = "port_a",
 		ram_block1a_11.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_11.mem_init0 = 1024'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000758B1080844525142318114510A32C489084442492404124910411050000000000000002,
+		ram_block1a_11.mem_init0 = 512'h0000000000000000000000000000000000000000000000000000000000000000018D2C4B12102122525284C4825288532C4A4211110924926212C82C82110052,
 		ram_block1a_11.operation_mode = "rom",
-		ram_block1a_11.port_a_address_width = 10,
+		ram_block1a_11.port_a_address_width = 9,
 		ram_block1a_11.port_a_data_out_clear = "none",
 		ram_block1a_11.port_a_data_out_clock = "none",
 		ram_block1a_11.port_a_data_width = 1,
@@ -709,15 +709,15 @@ module  BootRom_altsyncram
 		ram_block1a_11.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_11.port_a_first_address = 0,
 		ram_block1a_11.port_a_first_bit_number = 11,
-		ram_block1a_11.port_a_last_address = 1023,
-		ram_block1a_11.port_a_logical_ram_depth = 1024,
+		ram_block1a_11.port_a_last_address = 511,
+		ram_block1a_11.port_a_logical_ram_depth = 512,
 		ram_block1a_11.port_a_logical_ram_width = 16,
 		ram_block1a_11.ram_block_type = "M4K",
 		ram_block1a_11.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_12
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_12portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -749,12 +749,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_12.connectivity_checking = "OFF",
-		ram_block1a_12.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_12.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_12.init_file_layout = "port_a",
 		ram_block1a_12.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_12.mem_init0 = 1024'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010810081A4D36D0DA108134370A1040811B0C4209258D290000003240000000000000002,
+		ram_block1a_12.mem_init0 = 512'h00000000000000000000000000000000000000000000000000000000000000000004340D039069A6B6D1B44092D1B85104085236310D049293351201200320C2,
 		ram_block1a_12.operation_mode = "rom",
-		ram_block1a_12.port_a_address_width = 10,
+		ram_block1a_12.port_a_address_width = 9,
 		ram_block1a_12.port_a_data_out_clear = "none",
 		ram_block1a_12.port_a_data_out_clock = "none",
 		ram_block1a_12.port_a_data_width = 1,
@@ -762,15 +762,15 @@ module  BootRom_altsyncram
 		ram_block1a_12.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_12.port_a_first_address = 0,
 		ram_block1a_12.port_a_first_bit_number = 12,
-		ram_block1a_12.port_a_last_address = 1023,
-		ram_block1a_12.port_a_logical_ram_depth = 1024,
+		ram_block1a_12.port_a_last_address = 511,
+		ram_block1a_12.port_a_logical_ram_depth = 512,
 		ram_block1a_12.port_a_logical_ram_width = 16,
 		ram_block1a_12.ram_block_type = "M4K",
 		ram_block1a_12.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_13
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_13portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -802,12 +802,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_13.connectivity_checking = "OFF",
-		ram_block1a_13.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_13.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_13.init_file_layout = "port_a",
 		ram_block1a_13.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_13.mem_init0 = 1024'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015830FA8ACC52F5D6B0A33C755E30C183694DC61B6DAC22AE102C3340000000000000002,
+		ram_block1a_13.mem_init0 = 512'h000000000000000000000000000000000000000000000000000000000000000000053C0F037629E652F7ADC192F3AAF30C1856D3370F0DB6F3B0481481C330C2,
 		ram_block1a_13.operation_mode = "rom",
-		ram_block1a_13.port_a_address_width = 10,
+		ram_block1a_13.port_a_address_width = 9,
 		ram_block1a_13.port_a_data_out_clear = "none",
 		ram_block1a_13.port_a_data_out_clock = "none",
 		ram_block1a_13.port_a_data_width = 1,
@@ -815,15 +815,15 @@ module  BootRom_altsyncram
 		ram_block1a_13.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_13.port_a_first_address = 0,
 		ram_block1a_13.port_a_first_bit_number = 13,
-		ram_block1a_13.port_a_last_address = 1023,
-		ram_block1a_13.port_a_logical_ram_depth = 1024,
+		ram_block1a_13.port_a_last_address = 511,
+		ram_block1a_13.port_a_logical_ram_depth = 512,
 		ram_block1a_13.port_a_logical_ram_width = 16,
 		ram_block1a_13.ram_block_type = "M4K",
 		ram_block1a_13.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_14
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_14portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -855,12 +855,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_14.connectivity_checking = "OFF",
-		ram_block1a_14.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_14.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_14.init_file_layout = "port_a",
 		ram_block1a_14.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_14.mem_init0 = 1024'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007183058B8C576714E30831D531EB0C1833944D61924A512CB10EC10D0000000000000002,
+		ram_block1a_14.mem_init0 = 512'h000000000000000000000000000000000000000000000000000000000000000001842C0B0272E162F6729CC1827698F70C1A4673134B0C921296586587C10852,
 		ram_block1a_14.operation_mode = "rom",
-		ram_block1a_14.port_a_address_width = 10,
+		ram_block1a_14.port_a_address_width = 9,
 		ram_block1a_14.port_a_data_out_clear = "none",
 		ram_block1a_14.port_a_data_out_clock = "none",
 		ram_block1a_14.port_a_data_width = 1,
@@ -868,15 +868,15 @@ module  BootRom_altsyncram
 		ram_block1a_14.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_14.port_a_first_address = 0,
 		ram_block1a_14.port_a_first_bit_number = 14,
-		ram_block1a_14.port_a_last_address = 1023,
-		ram_block1a_14.port_a_logical_ram_depth = 1024,
+		ram_block1a_14.port_a_last_address = 511,
+		ram_block1a_14.port_a_logical_ram_depth = 512,
 		ram_block1a_14.port_a_logical_ram_width = 16,
 		ram_block1a_14.ram_block_type = "M4K",
 		ram_block1a_14.lpm_type = "cycloneii_ram_block";
 	cycloneii_ram_block   ram_block1a_15
 	( 
 	.clk0(clock0),
-	.portaaddr({address_a_wire[9:0]}),
+	.portaaddr({address_a_wire[8:0]}),
 	.portadataout(wire_ram_block1a_15portadataout[0:0]),
 	.portbdataout()
 	`ifndef FORMAL_VERIFICATION
@@ -908,12 +908,12 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_15.connectivity_checking = "OFF",
-		ram_block1a_15.init_file = "./Firmware/TG68SerialBootstrap.mif",
+		ram_block1a_15.init_file = "./CFirmware/bootstrap/bootstrap.mif",
 		ram_block1a_15.init_file_layout = "port_a",
 		ram_block1a_15.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_15.mem_init0 = 1024'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000108105828441250C6108114310A1040812A0C4209240C061800801040000000000000002,
+		ram_block1a_15.mem_init0 = 512'h0000000000000000000000000000000000000000000000000000000000000000000424090270A12212518C408251885104084254310904920230D24D24010042,
 		ram_block1a_15.operation_mode = "rom",
-		ram_block1a_15.port_a_address_width = 10,
+		ram_block1a_15.port_a_address_width = 9,
 		ram_block1a_15.port_a_data_out_clear = "none",
 		ram_block1a_15.port_a_data_out_clock = "none",
 		ram_block1a_15.port_a_data_width = 1,
@@ -921,8 +921,8 @@ module  BootRom_altsyncram
 		ram_block1a_15.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_15.port_a_first_address = 0,
 		ram_block1a_15.port_a_first_bit_number = 15,
-		ram_block1a_15.port_a_last_address = 1023,
-		ram_block1a_15.port_a_logical_ram_depth = 1024,
+		ram_block1a_15.port_a_last_address = 511,
+		ram_block1a_15.port_a_logical_ram_depth = 512,
 		ram_block1a_15.port_a_logical_ram_width = 16,
 		ram_block1a_15.ram_block_type = "M4K",
 		ram_block1a_15.lpm_type = "cycloneii_ram_block";
@@ -931,7 +931,7 @@ module  BootRom_altsyncram
 		q_a = {wire_ram_block1a_15portadataout[0], wire_ram_block1a_14portadataout[0], wire_ram_block1a_13portadataout[0], wire_ram_block1a_12portadataout[0], wire_ram_block1a_11portadataout[0], wire_ram_block1a_10portadataout[0], wire_ram_block1a_9portadataout[0], wire_ram_block1a_8portadataout[0], wire_ram_block1a_7portadataout[0], wire_ram_block1a_6portadataout[0], wire_ram_block1a_5portadataout[0], wire_ram_block1a_4portadataout[0], wire_ram_block1a_3portadataout[0], wire_ram_block1a_2portadataout[0], wire_ram_block1a_1portadataout[0], wire_ram_block1a_0portadataout[0]};
 	initial/*synthesis enable_verilog_initial_construct*/
  	begin
-		$display("Warning: Memory initialization file ./Firmware/TG68SerialBootstrap.mif is not of the dimensions 1024 X 16, the resulting memory design may not produce consistent simulation results.");
+		$display("Warning: Memory initialization file ./CFirmware/bootstrap/bootstrap.mif is not of the dimensions 512 X 16, the resulting memory design may not produce consistent simulation results.");
 	end
 endmodule //BootRom_altsyncram
 //VALID FILE
@@ -945,7 +945,7 @@ module BootRom (
 	clock,
 	q)/* synthesis synthesis_clearbox = 1 */;
 
-	input	[9:0]  address;
+	input	[8:0]  address;
 	input	  clock;
 	output	[15:0]  q;
 `ifndef ALTERA_RESERVED_QIS
@@ -986,36 +986,36 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING "./Firmware/TG68SerialBootstrap.mif"
-// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "1024"
+// Retrieval info: PRIVATE: MIFfilename STRING "./CFirmware/bootstrap/bootstrap.mif"
+// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "512"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "2"
 // Retrieval info: PRIVATE: RegAddr NUMERIC "1"
 // Retrieval info: PRIVATE: RegOutput NUMERIC "0"
 // Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "1"
 // Retrieval info: PRIVATE: SingleClock NUMERIC "1"
 // Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
-// Retrieval info: PRIVATE: WidthAddr NUMERIC "10"
+// Retrieval info: PRIVATE: WidthAddr NUMERIC "9"
 // Retrieval info: PRIVATE: WidthData NUMERIC "16"
 // Retrieval info: PRIVATE: rden NUMERIC "0"
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 // Retrieval info: CONSTANT: CLOCK_ENABLE_INPUT_A STRING "BYPASS"
 // Retrieval info: CONSTANT: CLOCK_ENABLE_OUTPUT_A STRING "BYPASS"
-// Retrieval info: CONSTANT: INIT_FILE STRING "./Firmware/TG68SerialBootstrap.mif"
+// Retrieval info: CONSTANT: INIT_FILE STRING "./CFirmware/bootstrap/bootstrap.mif"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone II"
 // Retrieval info: CONSTANT: LPM_HINT STRING "ENABLE_RUNTIME_MOD=NO"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
-// Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "1024"
+// Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "512"
 // Retrieval info: CONSTANT: OPERATION_MODE STRING "ROM"
 // Retrieval info: CONSTANT: OUTDATA_ACLR_A STRING "NONE"
 // Retrieval info: CONSTANT: OUTDATA_REG_A STRING "UNREGISTERED"
 // Retrieval info: CONSTANT: RAM_BLOCK_TYPE STRING "M4K"
-// Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "10"
+// Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "9"
 // Retrieval info: CONSTANT: WIDTH_A NUMERIC "16"
 // Retrieval info: CONSTANT: WIDTH_BYTEENA_A NUMERIC "1"
-// Retrieval info: USED_PORT: address 0 0 10 0 INPUT NODEFVAL "address[9..0]"
+// Retrieval info: USED_PORT: address 0 0 9 0 INPUT NODEFVAL "address[8..0]"
 // Retrieval info: USED_PORT: clock 0 0 0 0 INPUT VCC "clock"
 // Retrieval info: USED_PORT: q 0 0 16 0 OUTPUT NODEFVAL "q[15..0]"
-// Retrieval info: CONNECT: @address_a 0 0 10 0 address 0 0 10 0
+// Retrieval info: CONNECT: @address_a 0 0 9 0 address 0 0 9 0
 // Retrieval info: CONNECT: @clock0 0 0 0 0 clock 0 0 0 0
 // Retrieval info: CONNECT: q 0 0 16 0 @q_a 0 0 16 0
 // Retrieval info: GEN_FILE: TYPE_NORMAL BootRom.vhd TRUE

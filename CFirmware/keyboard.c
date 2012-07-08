@@ -65,8 +65,12 @@ void HandlePS2RawCodes()
 		{
 			if(keyup==0)
 			{
-				char a=kblookup[qualifiers][key];
-				putchar(a);
+				char a=0;
+				if(key<128)
+				{
+					char a=kblookup[ (leds & 4) ? qualifiers | 1 : qualifiers][key];
+					putchar(a);
+				}
 				extkey=0;
 				if(a==0)
 				{
@@ -77,11 +81,11 @@ void HandlePS2RawCodes()
 							updateleds=1;
 							break;
 						case 0x7e:	// Scroll lock
-							leds^=0x02;
+							leds^=0x01;
 							updateleds=1;
 							break;
 						case 0x77:	// Num lock
-							leds^=0x01;
+							leds^=0x02;
 							updateleds=1;
 							break;
 						case 0x12:

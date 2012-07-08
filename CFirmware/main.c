@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <malloc.h>
 
 #include "minisoc_hardware.h"
@@ -13,6 +14,7 @@ void extern DrawIteration();
 
 static short framecount=0;
 short MouseX=0,MouseY=0;
+short mousetimeout=0;
 
 void vblank_int()
 {
@@ -61,34 +63,66 @@ void vblank_int()
 		HandlePS2RawCodes();
 }
 
+void timer_int()
+{
+	if(HW_PER(PER_TIMER_CONTROL) & (1<<PER_TIMER_TR5))
+		mousetimeout=1;
+	printf("Timer int received\n");
+}
+
+
+void SetTimeout(int delay)
+{
+	HW_PER(PER_TIMER_CONTROL)=(1<<PER_TIMER_EN5);
+	HW_PER(PER_TIMER_DIV5)=delay;
+}
+
+
+void AddMemory()
+{
+	size_t low;
+	size_t size;
+	low=(size_t)&heap_low;
+	low+=15;
+	low&=0xfffffff8; // Align to SDRAM burst boundary
+	size=((char*)&heap_top)-low;
+	printf("Heap_low: %lx, heap_size: %lx\n",low,size);
+	malloc_add((void*)low,size);
+}
+
 
 int c_entry()
 {
 	short counter=0;
 	void *ptr=0;
-
 	ClearTextBuffer();
-	printf("Heap_low: %lx, heap_top: %lx\n",&heap_low,&heap_top);
-	malloc_add(&heap_low, &heap_top-&heap_low);
+
+	AddMemory();
 
 	PS2Init();
 	SetSprite();
 
-	FrameBuffer=malloc(sizeof(short)*640*960);
-
+	FrameBuffer=(short *)malloc(sizeof(short)*640*960);
 	HW_VGA_L(FRAMEBUFFERPTR)=FrameBuffer;
+
+	memset(FrameBuffer,0,sizeof(short)*640*960);
 
 	EnableInterrupts();
 
 	while(PS2MouseRead()>-1)
 		; // Drain the buffer;
 	PS2MouseWrite(0xf4);
-	while(PS2MouseRead()!=0xfa)
+
+	SetIntHandler(PER_INT_TIMER,&timer_int);
+	SetTimeout(10000);
+	while(PS2MouseRead()!=0xfa && mousetimeout==0)
 		; // Read the acknowledge byte
+
+	if(mousetimeout)
+		printf("Mouse timed out\n");
 
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
-
 
 	while((ptr=malloc(262144)))
 	{

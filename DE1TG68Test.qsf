@@ -687,30 +687,6 @@ set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76]
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "TG68Test:myTG68Test|per_reg_datain[8]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "TG68Test:myTG68Test|per_reg_datain[9]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|bootrom_overlay" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[96] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[97] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|ps2_int" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "TG68Test:myTG68Test|reset" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "TG68Test:myTG68Test|TG68KdotC_Kernel:myTG68|addr[0]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "TG68Test:myTG68Test|TG68KdotC_Kernel:myTG68|addr[10]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "TG68Test:myTG68Test|TG68KdotC_Kernel:myTG68|addr[11]" -section_id auto_signaltap_0
@@ -791,36 +767,6 @@ set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -t
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "TG68Test:myTG68Test|per_reg_datain[8]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "TG68Test:myTG68Test|per_reg_datain[9]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|bootrom_overlay" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[96] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[97] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|ps2_int" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "TG68Test:myTG68Test|reset" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=104" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=104" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=335" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=8735" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=1008" -section_id auto_signaltap_0
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[11]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[10]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[9]
@@ -859,4 +805,108 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_LDQM
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_RAS_N
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_UDQM
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_WE_N
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[96] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[97] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[104] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[105] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[106] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[107] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[108] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[109] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[110] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|ps2_int" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[111] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[112] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[113] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[114] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[115] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[116] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[117] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[118] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[119] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[120] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[121] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[122] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[123] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[124] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[125] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[126] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|cascade_timer:mytimer|trigger[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[96] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[97] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mykeyboard|recvByte[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[104] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[105] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[106] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[107] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[108] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[109] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|io_ps2_com:mymouse|recvByte[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[110] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|ps2_int" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[111] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[112] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[113] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[114] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[115] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[116] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[117] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[118] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[119] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[120] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[121] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[122] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[123] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[124] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[125] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[126] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_flags[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[127] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_set" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[128] -to "TG68Test:myTG68Test|reset" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[127] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|timer_set" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[128] -to "TG68Test:myTG68Test|reset" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=129" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=129" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=410" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=62781" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=55445" -section_id auto_signaltap_0
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

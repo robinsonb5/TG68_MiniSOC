@@ -209,7 +209,7 @@ myTG68 : entity work.TG68KdotC_Kernel
 mybootrom : entity work.BootRom
 	port map (
 		clock => clk100,
-		address => cpu_addr(10 downto 1),
+		address => cpu_addr(9 downto 1),
 		q => romdata
 		);
 

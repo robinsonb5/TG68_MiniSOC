@@ -68,25 +68,33 @@ extern char *VGACharBuffer;
 #define PER_TIMER_CONTROL 0xE
 
 /* Control bits */
+#define PER_TIMER_TR5 5
+#define PER_TIMER_TR4 4
 #define PER_TIMER_TR3 3
-#define PER_TIMER_TR2 3
-#define PER_TIMER_TR1 3
+#define PER_TIMER_TR2 2
+#define PER_TIMER_TR1 1
 
-#define PER_TIMER_EN3 7
-#define PER_TIMER_EN2 6
-#define PER_TIMER_EN1 5
+#define PER_TIMER_EN5 13
+#define PER_TIMER_EN4 12
+#define PER_TIMER_EN3 11
+#define PER_TIMER_EN2 10
+#define PER_TIMER_EN1 9
 
 /* Divisor registers */
 #define PER_TIMER_DIV0 0x10
 #define PER_TIMER_DIV1 0x12
 #define PER_TIMER_DIV2 0x14
 #define PER_TIMER_DIV3 0x16
+#define PER_TIMER_DIV4 0x18
+#define PER_TIMER_DIV5 0x1A
+#define PER_TIMER_DIV6 0x1C
+#define PER_TIMER_DIV7 0x1E
 
 
 /* Interrupts */
 
 #define PER_INT_UART 2
-#define PER_TIMER 3
+#define PER_INT_TIMER 3
 #define PER_INT_PS2 4
 
 

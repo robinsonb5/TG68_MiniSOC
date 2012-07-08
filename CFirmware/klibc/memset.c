@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdint.h>
 
+#if defined(__m68k__) // Use ASM implementation
+
 void *memset(void *dst, int c, size_t n)
 {
 	char *q = dst;
@@ -28,3 +30,4 @@ void *memset(void *dst, int c, size_t n)
 
 	return dst;
 }
+#endif
