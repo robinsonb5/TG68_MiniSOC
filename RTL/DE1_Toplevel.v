@@ -133,10 +133,10 @@ output			SRAM_WE_N;				//	SRAM Write Enable
 output			SRAM_CE_N;				//	SRAM Chip Enable
 output			SRAM_OE_N;				//	SRAM Output Enable
 ////////////////////	SD Card Interface	////////////////////////
-inout			SD_DAT;					//	SD Card Data
-inout			SD_DAT3;				//	SD Card Data 3
-inout			SD_CMD;					//	SD Card Command Signal
-output			SD_CLK;					//	SD Card Clock
+input          SD_DAT;     //  SD Card Data            - spi MISO
+output         SD_DAT3;    //  SD Card Data 3          - spi CS
+output         SD_CMD;     //  SD Card Command Signal  - spi MOSI
+output         SD_CLK;     //  SD Card Clock           - spi CLK
 ////////////////////////	I2C		////////////////////////////////
 inout			I2C_SDAT;				//	I2C Data
 output			I2C_SCLK;				//	I2C Clock
@@ -170,7 +170,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 assign	DRAM_DQ		=	16'hzzzz;
 assign	FL_DQ		=	8'hzz;
 assign	SRAM_DQ		=	16'hzzzz;
-assign	SD_DAT		=	1'bz;
+// assign	SD_DAT		=	1'bz;  -- input only in SPI mode
 assign	I2C_SDAT	=	1'bz;
 assign	GPIO_0		=	36'hzzzzzzzzz;
 assign	GPIO_1		=	36'hzzzzzzzzz;
@@ -246,7 +246,12 @@ TG68Test myTG68Test
 	.ps2m_clk_in(PS2M_CLK_IN),
 	.ps2m_dat_in(PS2M_DAT_IN),
 	.ps2m_clk_out(PS2M_CLK_OUT),
-	.ps2m_dat_out(PS2M_DAT_OUT)
+	.ps2m_dat_out(PS2M_DAT_OUT),
+	// SD card
+	.sd_cs(SD_DAT3),
+	.sd_miso(SD_DAT),
+	.sd_mosi(SD_CMD),
+	.sd_clk(SD_CLK)
 );
 
 endmodule

@@ -7,6 +7,7 @@
 #include "ps2.h"
 #include "keyboard.h"
 #include "textbuffer.h"
+#include "spi.h"
 
 short *FrameBuffer;
 
@@ -69,7 +70,7 @@ void timer_int()
 {
 	if(HW_PER(PER_TIMER_CONTROL) & (1<<PER_TIMER_TR5))
 		mousetimeout=1;
-	printf("Timer int received\n");
+	puts("Timer int received\n");
 }
 
 
@@ -121,7 +122,7 @@ int c_entry()
 		; // Read the acknowledge byte
 
 	if(mousetimeout)
-		printf("Mouse timed out\n");
+		puts("Mouse timed out\n");
 
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
@@ -132,6 +133,8 @@ int c_entry()
 		++counter;
 	}
 	printf("malloc() returned zero after %d iterations\n",counter);
+
+	spi_init();
 
 	while(1)
 	{

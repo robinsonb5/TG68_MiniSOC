@@ -34,6 +34,9 @@ void charbuffer_write(const char *msg)
 			char c=*msg++;
 			if(!c)
 				return;
+	// TEMPORARY DEBUG MEASURE
+	HW_PER(PER_UART)=c;
+
 			if(c=='\b' && col>0)
 			{
 				--p;

@@ -44,7 +44,13 @@ entity TG68Test is
 		ps2m_clk_in : in std_logic;
 		ps2m_dat_in : in std_logic;
 		ps2m_clk_out : out std_logic;
-		ps2m_dat_out : out std_logic	
+		ps2m_dat_out : out std_logic;
+		
+		-- SPI interface (SD card)
+		sd_cs : out std_logic;
+		sd_miso : in std_logic;
+		sd_mosi : out std_logic;
+		sd_clk : out std_logic
 	);
 end entity;
 
@@ -113,6 +119,7 @@ signal per_reg_dtack : std_logic;
 signal per_uart_int : std_logic;
 signal per_timer_int : std_logic;
 signal per_ps2_int : std_logic;
+signal per_spi_int : std_logic;
 
 signal int_ack : std_logic;
 signal ints : std_logic_vector(2 downto 0);
@@ -171,7 +178,7 @@ myint : entity work.interrupt_controller
 		int2 => per_uart_int,
 		int3 => per_timer_int,
 		int4 => per_ps2_int,
-		int5 => '0',
+		int5 => per_spi_int,
 		int6 => '0',
 		int_out => ints,
 		ack => int_ack
@@ -418,6 +425,7 @@ mysdram : entity work.sdram
 		uart_int => per_uart_int,
 		timer_int => per_timer_int,
 		ps2_int => per_ps2_int,
+		spi_int => per_spi_int,
 
 		uart_txd => txd,
 		uart_rxd => rxd,
@@ -431,6 +439,11 @@ mysdram : entity work.sdram
 		ps2m_clk_out => ps2m_clk_out,
 		ps2m_dat_out => ps2m_dat_out,
 
+		miso => sd_miso,
+		mosi => sd_mosi,
+		spiclk_out => sd_clk,
+		spi_cs => sd_cs,
+		
 		bootrom_overlay => bootrom_overlay,
 		hex => counter
 	);

@@ -88,7 +88,12 @@ extern char *VGACharBuffer;
 #define PER_TIMER_DIV4 0x18
 #define PER_TIMER_DIV5 0x1A
 #define PER_TIMER_DIV6 0x1C
-#define PER_TIMER_DIV7 0x1E
+#define PER_TIMER_DIV7 0x1E	/* SPI speed */
+
+/* SPI register */
+#define PER_SPI 0x20
+#define PER_SPI_BUSY 15
+#define PER_SPI_IGN 14
 
 
 /* Interrupts */
