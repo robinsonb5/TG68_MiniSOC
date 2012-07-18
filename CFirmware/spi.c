@@ -10,6 +10,8 @@ short SDHCtype=-1;
 
 #define cmd_reset(x) cmd_write(0x950040,0) // Use SPI mode
 #define cmd_init(x) cmd_write(0xff0041,0)
+#define cmd_read(x) cmd_write(0xff0051,x)
+
 #define cmd_CMD8(x) cmd_write(0x870048,0x1AA)
 #define cmd_CMD41(x) cmd_write(0x870069,0x40000000)
 #define cmd_CMD55(x) cmd_write(0xff0077,0)
@@ -47,9 +49,58 @@ short cmd_write(unsigned long cmd, unsigned long lba)
 void spi_spin()
 {
 	int i;
-	for(i=0;i<2000;++i)
+	for(i=0;i<200;++i)
 		SPI(0xff);
 }
+
+short wait_initV2()
+{
+	int i=20000;
+	short r;
+	spi_spin();
+	while(--i)
+	{
+		if((r=cmd_CMD55())==1)
+		{
+			printf("CMD55 %x\n",r);
+			SPI(0xff);
+			if((r=cmd_CMD41())==0)
+			{
+				printf("CMD41 %x\n",r);
+				SPI(0xff);
+				return(1);
+			}
+			else
+				printf("CMD41 %x\n",r);
+			spi_spin();
+		}
+		else
+			printf("CMD55 %x\n",r);
+	}
+	return(0);
+}
+
+
+short wait_init()
+{
+	int i=20000;
+	short r;
+	SPI(0xff);
+	while(--i)
+	{
+		if((r=cmd_CMD41())==0)
+		{
+			printf("CMD41 %x\n  ",r);
+			SPI(0xff);
+			return(1);
+		}
+		else
+			printf("CMD41 %x\n  ",r);
+		spi_spin();
+	}
+	return(0);
+}
+
 
 short is_sdhc()
 {
@@ -60,7 +111,10 @@ short is_sdhc()
 	r=cmd_CMD8();		// test for SDHC capability
 	printf("cmd_CMD8 response: %x\n",r);
 	if(r!=1)
+	{
+		wait_initV2();
 		return(0);
+	}
 
 	SPI(0xff);
 	SPI_WAIT(); r=SPI_READ();
@@ -71,56 +125,49 @@ short is_sdhc()
 	SPI(0xff);
 	SPI_WAIT(); r=SPI_READ();
 	if(r!=1)
+	{
+		wait_init();
 		return(0);
+	}
+
 	printf("CMD8_3 response: %x\n",r);
 	SPI(0xff);
 	SPI_WAIT(); r=SPI_READ();
 	if(r!=0xaa)
+	{
+		wait_init();
 		return(0);
+	}
 	printf("CMD8_4 response: %x\n",r);
 
 	SPI(0xff);
-//	SPI_WAIT(); r=SPI_READ();
-//	printf("CMD8_5 response: %x\n",r);		
-//	SPI(0xff);
-//	SPI_WAIT(); r=SPI_READ();
-//	printf("CMD8_6 response: %x\n",r);
+
+	// If we get this far we have a V2 card, which may or may not be SDHC...
 
 	i=50;
 	while(--i)
 	{
-		spi_spin();
-		if((r=cmd_CMD55())==1)
+		if(wait_initV2())
 		{
-			printf("CMD55 %x\n  ",r);
-			SPI(0xff);
-			if((r=cmd_CMD41())==0)
+			if((r=cmd_CMD58())==0)
 			{
-				printf("CMD41 %x\n  ",r);
+				printf("CMD58 %x\n  ",r);
 				SPI(0xff);
-				if((r=cmd_CMD58())==0)
-				{
-					printf("CMD58 %x\n  ",r);
-					SPI(0xff);
-					SPI_WAIT();
-					r=SPI_READ();
-					printf("CMD58_2 %x\n  ",r);
-					SPI(0xff);
-					SPI(0xff);
-					SPI(0xff);
-					if(r&0x40)
-						return(1);
-					else
-						return(0);
-				}
+				SPI_WAIT();
+				r=SPI_READ();
+				printf("CMD58_2 %x\n  ",r);
+				SPI(0xff);
+				SPI(0xff);
+				SPI(0xff);
+				SPI(0xff);
+				if(r&0x40)
+					return(1);
 				else
-					printf("CMD58 %x\n  ",r);
+					return(0);
 			}
 			else
-				printf("CMD41 %x\n  ",r);
+				printf("CMD58 %x\n  ",r);
 		}
-		else 
-			printf("CMD55 %x\n  ",r);
 		if(i==2)
 		{
 			printf("SDHC Initialization error!\n");
@@ -138,8 +185,7 @@ void spi_init()
 	int r;
 	SDHCtype=-1;
 	SPI_CS(0);	// Disable CS
-	for(i=0;i<100;++i)
-		SPI(0xFF);	// Dummy clock cycles
+	spi_spin();
 	SPI_CS(1);
 	i=50;
 	while(--i)
@@ -152,66 +198,49 @@ void spi_init()
 	SDHCtype=is_sdhc();
 	if(SDHCtype)
 		printf("SDHC card detected\n");
-	else
-	{
-		r=cmd_init();		// and Initialize card
-		printf("cmd_init response: %x\n",r);
-	}
 
 	SPI_CS(0);
 }
 
-/*				
-			move.w	#50,d2
-SDHC_1		subq.w	#1,d2
-			beq		noSDHC	
-			move.w	#2000,d1
-SDHC_4		move.b	#-1,(a1)	;8x clock
-			dbra	d1,SDHC_4		;wait
-			bsr		cmd_CMD55	;timeout einbauen
-			cmp.b	#1,d0
-			bne		SDHC_1
-			bsr		cmd_CMD41
-			bne		SDHC_1
-			bsr		cmd_CMD58
-			bne		SDHC_1
-			move.b	#-1,(a1)	;8x clock
-			move.b		(a1),d0
-			and.b		#$40,d0
-			bne			SDHC_2
-			move.w		#0,SDHCtype
-SDHC_2
-			move.b	#-1,(a1)	;8x clock
-			move.b	#-1,(a1)	;8x clock
-			move.b	#-1,(a1)	;8x clock
-			bra		spi_init_w6
-			
-noSDHC		move.w	#0,SDHCtype
-			move.w	#10,d2
-spi_init_w7	move.w	#2000,d1
-spi_init_w8	move.b	#-1,(a1)	;8x clock
-			dbra	d1,spi_init_w8		;wait
-		bsr		cmd_init
-			beq		spi_init_w6
-			move.w	#3,4(a1)		;sd_cs high
-			dbra	d2,spi_init_w7
-			pea		msg_init_fail
-			bsr		put_msga7
-			lea		4(a7),a7
-			moveq	#-1,d0
-			rts		;init fault
-			
-spi_init_w6
-			move	#$1,8(a1)		;max SPI Speed 108/(2n+2)
-			move.w	#3,4(a1)		;sd_cs high
-			move.b	#-1,(a1)	;8x clock
-			pea		msg_init_done
-			bsr		put_msga7
-			lea		4(a7),a7
-			moveq	#0,d0
-			rts
 
-*/
+short sd_read_sector(unsigned long lba,unsigned char *buf)
+{
+	short result=1;
+	int i;
+	SPI_CS(1);
+	i=cmd_read(lba);
+	if(i)
+	{
+		printf("Read command failed (0x%x)\n",i);
+		return(result);
+	}
+	i=20000;
+	while(--i)
+	{
+		short v;
+		SPI(0xff);
+		SPI_WAIT();
+		v=SPI_READ();
+		printf("0x%x ",v);
+		if(v==0xfe)
+		{
+			int j;
+			for(j=0;j<512;++j)
+			{
+				SPI(0xff);
+				SPI_WAIT();
+				*buf++=v=SPI_READ();
+				if(j<32)
+					printf("0x%x ",v);
+			}
+			SPI(0xff); SPI(0xff); // Fetch CRC
+			i=1; // break out of the loop
+		}
+	}
+	SPI_CS(0);
+	return(result);
+}
+
 
 /*
 ; CSTART.ASM  -  C startup-code for SIM68K

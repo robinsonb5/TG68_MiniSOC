@@ -98,6 +98,7 @@ int c_entry()
 {
 	short counter=0;
 	void *ptr=0;
+	unsigned char *sector;
 	ClearTextBuffer();
 
 	AddMemory();
@@ -134,7 +135,10 @@ int c_entry()
 //	}
 //	printf("malloc() returned zero after %d iterations\n",counter);
 
+	sector=malloc(512);
+
 	spi_init();
+	sd_read_sector(0,sector);
 
 	while(1)
 	{

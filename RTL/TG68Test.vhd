@@ -79,6 +79,7 @@ signal chargen_pixel : std_logic;
 signal chargen_window : std_logic;
 
 --
+signal reset_reg : std_logic;
 signal reset : std_logic := '0';
 signal reset_counter : unsigned(15 downto 0) := X"FFFF";
 signal tg68_ready : std_logic;
@@ -152,14 +153,17 @@ mypll : ENTITY work.PLL
 process(clk100)
 begin
 	ready <= tg68_ready and sdr_ready and reset;
+	if rising_edge(clk100) then
+		reset_reg<=reset_in;
 
-	if reset_in='0' then
-		reset_counter<=X"FFFF";
-		reset<='0';
-	elsif rising_edge(clk100) then
-		reset_counter<=reset_counter-1;
-		if reset_counter=X"0000" then
-			reset<='1' and sdr_ready;
+		if reset_reg='0' then
+			reset_counter<=X"FFFF";
+			reset<='0';
+		else
+			reset_counter<=reset_counter-1;
+			if reset_counter=X"0000" then
+				reset<='1' and sdr_ready;
+			end if;
 		end if;
 	end if;
 end process;
