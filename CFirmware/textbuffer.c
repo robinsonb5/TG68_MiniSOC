@@ -34,7 +34,10 @@ void charbuffer_write(const char *msg)
 			char c=*msg++;
 			if(!c)
 				return;
+
 	// TEMPORARY DEBUG MEASURE
+	while((HW_PER(PER_UART)&0x0100)==0) // Wait for UART
+		;
 	HW_PER(PER_UART)=c;
 
 			if(c=='\b' && col>0)

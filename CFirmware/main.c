@@ -127,12 +127,12 @@ int c_entry()
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
 
-	while((ptr=malloc(262144)))
-	{
+//	while((ptr=malloc(262144)))
+//	{
 //		printf("Allocated %ld\n",(long)ptr);
-		++counter;
-	}
-	printf("malloc() returned zero after %d iterations\n",counter);
+//		++counter;
+//	}
+//	printf("malloc() returned zero after %d iterations\n",counter);
 
 	spi_init();
 

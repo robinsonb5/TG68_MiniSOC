@@ -92,6 +92,7 @@ extern char *VGACharBuffer;
 
 /* SPI register */
 #define PER_SPI 0x20
+#define PER_SPI_CS 0x22
 #define PER_SPI_BUSY 15
 #define PER_SPI_IGN 14
 
