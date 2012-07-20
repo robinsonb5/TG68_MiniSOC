@@ -13,6 +13,7 @@ short SDHCtype=-1;
 #define cmd_read(x) cmd_write(0xff0051,x)
 
 #define cmd_CMD8(x) cmd_write(0x870048,0x1AA)
+#define cmd_CMD16(x) cmd_write(0xFF0050,x)
 #define cmd_CMD41(x) cmd_write(0x870069,0x40000000)
 #define cmd_CMD55(x) cmd_write(0xff0077,0)
 #define cmd_CMD58(x) cmd_write(0xff007A,0)
@@ -26,18 +27,21 @@ short cmd_write(unsigned long cmd, unsigned long lba)
 	SPI(cmd & 255);
 
 	if(!SDHCtype)	// If normal SD then we have to use byte offset rather than LBA offset.
+	{
 		lba<<=9;
+//		printf("lba: %lx\n",lba);
+	}
 	SPI(lba>>24);
 	SPI((lba>>16)&255);
 	SPI((lba>8)&255);
 	SPI(lba&255);
 
 	SPI((cmd>>16)&255); // CRC, if any
-
 	ctr=40000;
+//	SPI(0xff);
 	SPI_WAIT();
 	result=SPI_READ();
-	while(--ctr && (result&255)==0xff)
+	while(--ctr && (result==0xff))
 	{
 		SPI(0xff);
 		SPI_WAIT();
@@ -51,6 +55,7 @@ void spi_spin()
 	int i;
 	for(i=0;i<200;++i)
 		SPI(0xff);
+	SPI_WAIT();
 }
 
 short wait_initV2()
@@ -88,14 +93,14 @@ short wait_init()
 	SPI(0xff);
 	while(--i)
 	{
-		if((r=cmd_CMD41())==0)
+		if((r=cmd_init())==0)
 		{
-			printf("CMD41 %x\n  ",r);
+			printf("init %x\n  ",r);
 			SPI(0xff);
 			return(1);
 		}
 		else
-			printf("CMD41 %x\n  ",r);
+			printf("init %x\n  ",r);
 		spi_spin();
 	}
 	return(0);
@@ -112,7 +117,7 @@ short is_sdhc()
 	printf("cmd_CMD8 response: %x\n",r);
 	if(r!=1)
 	{
-		wait_initV2();
+		wait_init();
 		return(0);
 	}
 
@@ -184,6 +189,7 @@ void spi_init()
 	int i;
 	int r;
 	SDHCtype=-1;
+	HW_PER(PER_TIMER_DIV7)=333;	// About 333KHz
 	SPI_CS(0);	// Disable CS
 	spi_spin();
 	SPI_CS(1);
@@ -199,7 +205,12 @@ void spi_init()
 	if(SDHCtype)
 		printf("SDHC card detected\n");
 
+	cmd_CMD16(1);
+	SPI(0xFF);
 	SPI_CS(0);
+
+	HW_PER(PER_TIMER_DIV7)=20;	// About 5MHz
+
 }
 
 
@@ -207,21 +218,43 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 {
 	short result=1;
 	int i;
+	int r;
+//	if(!SDHCtype)
+//		lba<<=9;
 	SPI_CS(1);
-	i=cmd_read(lba);
-	if(i)
-	{
-		printf("Read command failed (0x%x)\n",i);
-		return(result);
-	}
-	i=20000;
+//	i=20;
+//	while(--i)
+//	{
+#if 0
+		r=cmd_read(lba);
+		printf("%x ",r);
+		if(r==0)
+			break;
+		else
+			spi_spin();
+		if(i==2)
+		{
+			printf("Read command failed (0x%x)\n",r);
+			return(result);
+		}
+#endif
+		r=cmd_read(lba);
+		if(r!=0)
+		{
+			printf("Read command failed (0x%x)\n",r);
+			return(result);
+		}
+
+//	}
+//	puts("Reading data\n");
+	i=50000;
 	while(--i)
 	{
 		short v;
 		SPI(0xff);
 		SPI_WAIT();
 		v=SPI_READ();
-		printf("0x%x ",v);
+//		printf("0x%x ",v);
 		if(v==0xfe)
 		{
 			int j;
@@ -230,10 +263,13 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 				SPI(0xff);
 				SPI_WAIT();
 				*buf++=v=SPI_READ();
-				if(j<32)
-					printf("0x%x ",v);
+//				if(j<32)
+//					printf("0x%x ",v);
 			}
 			SPI(0xff); SPI(0xff); // Fetch CRC
+			SPI(0xff);
+			SPI(0xff);
+//			SPI(0xff); SPI(0xff); // Fetch CRC
 			i=1; // break out of the loop
 		}
 	}

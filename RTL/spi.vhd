@@ -77,14 +77,14 @@ begin
 				IF spiclk_in='1' and sd_busy='1' THEN
 					IF sck='0' THEN
 						if shiftcnt(12 downto 0)="0000000000000" then
-							spi_to_host(13 downto 0)<=sd_in_shift(13 downto 0);
+							spi_to_host(7 downto 0)<=sd_in_shift(7 downto 0);
 							interrupt<='1';
 --							scs<='0';
 						else
 							sck <='1';
 						END IF;
 						shiftcnt <= shiftcnt-1;
-						sd_out <= sd_out(14 downto 0)&'1';
+						sd_out <= sd_out(14 downto 0)&sd_out(0);
 					ELSE	
 						sck <='0';
 						sd_in_shift <= sd_in_shift(14 downto 0)&miso;

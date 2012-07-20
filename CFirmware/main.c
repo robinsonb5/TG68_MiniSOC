@@ -28,7 +28,7 @@ void vblank_int()
 		yoff=959-framecount;
 	else
 		yoff=framecount;
-	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*640]);
+//	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*640]);
 
 	while(PS2MouseBytesReady()>=3)
 	{
@@ -139,6 +139,18 @@ int c_entry()
 
 	spi_init();
 	sd_read_sector(0,sector);
+	free(sector);
+
+
+	counter=0;
+	sector=FrameBuffer;
+//	while(counter<3) // ((640*960*2)/512))
+	while(counter<((640*960*2)/512))
+	{
+		sd_read_sector(counter,sector);
+		++counter;
+		sector+=512;
+	}
 
 	while(1)
 	{
@@ -147,7 +159,7 @@ int c_entry()
 			pen+=0x400;
 		if(MouseButtons&2)
 			pen-=0x400;
-		DrawIteration();
+//		DrawIteration();
 
 //		++counter;
 //		printf("Hello world! Iteration %d\n",counter);
