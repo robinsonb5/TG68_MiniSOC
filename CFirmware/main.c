@@ -28,7 +28,7 @@ void vblank_int()
 		yoff=959-framecount;
 	else
 		yoff=framecount;
-//	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*640]);
+	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*640]);
 
 	while(PS2MouseBytesReady()>=3)
 	{
@@ -159,7 +159,7 @@ int c_entry()
 			pen+=0x400;
 		if(MouseButtons&2)
 			pen-=0x400;
-//		DrawIteration();
+		DrawIteration();
 
 //		++counter;
 //		printf("Hello world! Iteration %d\n",counter);

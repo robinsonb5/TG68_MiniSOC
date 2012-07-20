@@ -1,9 +1,9 @@
 #include "minisoc_hardware.h"
 #include "textbuffer.h"
 
-short SDHCtype=-1;
+short SDHCtype=1;
 
-#define SPI_WAIT(x) while(HW_PER(PER_SPI)&(1<<PER_SPI_BUSY))
+#define SPI_WAIT(x) while(HW_PER(PER_SPI)&(1<<PER_SPI_BUSY));
 #define SPI(x) {while((HW_PER(PER_SPI)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI)=(x);}
 #define SPI_READ(x) (HW_PER(PER_SPI)&255)
 #define SPI_CS(x) {while((HW_PER(PER_SPI)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI_CS)=(x);}
@@ -19,6 +19,9 @@ short SDHCtype=-1;
 #define cmd_CMD58(x) cmd_write(0xff007A,0)
 
 
+unsigned char SPI_R1[6];
+
+
 short cmd_write(unsigned long cmd, unsigned long lba)
 {
 	int ctr;
@@ -31,9 +34,9 @@ short cmd_write(unsigned long cmd, unsigned long lba)
 		lba<<=9;
 //		printf("lba: %lx\n",lba);
 	}
-	SPI(lba>>24);
+	SPI((lba>>24)&255);
 	SPI((lba>>16)&255);
-	SPI((lba>8)&255);
+	SPI((lba>>8)&255);
 	SPI(lba&255);
 
 	SPI((cmd>>16)&255); // CRC, if any
@@ -188,8 +191,8 @@ void spi_init()
 {
 	int i;
 	int r;
-	SDHCtype=-1;
-	HW_PER(PER_TIMER_DIV7)=333;	// About 333KHz
+	SDHCtype=1;
+	HW_PER(PER_TIMER_DIV7)=150;	// About 350KHz
 	SPI_CS(0);	// Disable CS
 	spi_spin();
 	SPI_CS(1);
@@ -209,8 +212,7 @@ void spi_init()
 	SPI(0xFF);
 	SPI_CS(0);
 
-	HW_PER(PER_TIMER_DIV7)=20;	// About 5MHz
-
+	HW_PER(PER_TIMER_DIV7)=2;
 }
 
 
@@ -222,6 +224,7 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 //	if(!SDHCtype)
 //		lba<<=9;
 	SPI_CS(1);
+	SPI(0xff);
 //	i=20;
 //	while(--i)
 //	{
@@ -241,7 +244,7 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 		r=cmd_read(lba);
 		if(r!=0)
 		{
-			printf("Read command failed (0x%x)\n",r);
+			printf("Read command failed at %ld (0x%x)\n",lba,r);
 			return(result);
 		}
 
@@ -273,6 +276,7 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 			i=1; // break out of the loop
 		}
 	}
+	SPI(0xff);
 	SPI_CS(0);
 	return(result);
 }

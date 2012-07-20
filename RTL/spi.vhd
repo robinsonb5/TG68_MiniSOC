@@ -46,7 +46,7 @@ begin
 -- SPI-Interface
 -----------------------------------------------------------------	
 --	cs <= NOT scs;
-	spiclk_out <= NOT sck;
+	spiclk_out <= sck;
 	mosi <= sd_out(15);
 	sd_busy <= shiftcnt(13);
 
@@ -71,22 +71,23 @@ begin
 --					scs<='1';
 					shiftcnt <= "10000000000111";  -- shift out 8 bits, underflow will clear bit 13, mapped to sd_busy
 					sd_out <= host_to_spi(7 downto 0) & X"FF";
-					sck <= '1';
+					sck <= '0';
 				END IF;
 			ELSE
 				IF spiclk_in='1' and sd_busy='1' THEN
-					IF sck='0' THEN
+					IF sck='1' THEN
 						if shiftcnt(12 downto 0)="0000000000000" then
 							spi_to_host(7 downto 0)<=sd_in_shift(7 downto 0);
 							interrupt<='1';
 --							scs<='0';
 						else
-							sck <='1';
+--							sck <='0';
+							sd_out <= sd_out(14 downto 0)&sd_out(0);
 						END IF;
-						shiftcnt <= shiftcnt-1;
-						sd_out <= sd_out(14 downto 0)&sd_out(0);
-					ELSE	
 						sck <='0';
+						shiftcnt <= shiftcnt-1;
+					ELSE	
+						sck <='1';
 						sd_in_shift <= sd_in_shift(14 downto 0)&miso;
 					END IF;
 				END IF;
