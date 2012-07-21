@@ -30,18 +30,16 @@ short cmd_write(unsigned long cmd, unsigned long lba)
 	SPI(cmd & 255);
 
 	if(!SDHCtype)	// If normal SD then we have to use byte offset rather than LBA offset.
-	{
 		lba<<=9;
-//		printf("lba: %lx\n",lba);
-	}
+
 	SPI((lba>>24)&255);
 	SPI((lba>>16)&255);
 	SPI((lba>>8)&255);
 	SPI(lba&255);
 
 	SPI((cmd>>16)&255); // CRC, if any
+
 	ctr=40000;
-//	SPI(0xff);
 	SPI_WAIT();
 	result=SPI_READ();
 	while(--ctr && (result==0xff))
@@ -212,7 +210,7 @@ void spi_init()
 	SPI(0xFF);
 	SPI_CS(0);
 
-	HW_PER(PER_TIMER_DIV7)=2;
+	HW_PER(PER_TIMER_DIV7)=1;
 }
 
 
@@ -221,35 +219,16 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 	short result=1;
 	int i;
 	int r;
-//	if(!SDHCtype)
-//		lba<<=9;
 	SPI_CS(1);
 	SPI(0xff);
-//	i=20;
-//	while(--i)
-//	{
-#if 0
-		r=cmd_read(lba);
-		printf("%x ",r);
-		if(r==0)
-			break;
-		else
-			spi_spin();
-		if(i==2)
-		{
-			printf("Read command failed (0x%x)\n",r);
-			return(result);
-		}
-#endif
-		r=cmd_read(lba);
-		if(r!=0)
-		{
-			printf("Read command failed at %ld (0x%x)\n",lba,r);
-			return(result);
-		}
 
-//	}
-//	puts("Reading data\n");
+	r=cmd_read(lba);
+	if(r!=0)
+	{
+		printf("Read command failed at %ld (0x%x)\n",lba,r);
+		return(result);
+	}
+
 	i=50000;
 	while(--i)
 	{
@@ -257,26 +236,31 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 		SPI(0xff);
 		SPI_WAIT();
 		v=SPI_READ();
-//		printf("0x%x ",v);
 		if(v==0xfe)
 		{
 			int j;
-			for(j=0;j<512;++j)
+			for(j=0;j<256;++j)
 			{
+				int t;
 				SPI(0xff);
 				SPI_WAIT();
-				*buf++=v=SPI_READ();
-//				if(j<32)
-//					printf("0x%x ",v);
+				v=SPI_READ()&255;
+				t=v<<8;
+
+				SPI(0xff);
+				SPI_WAIT();
+				v=SPI_READ()&255;
+				t|=v&255;
+
+				*(short *)buf=t;
+				buf+=2;
 			}
 			SPI(0xff); SPI(0xff); // Fetch CRC
-			SPI(0xff);
-			SPI(0xff);
-//			SPI(0xff); SPI(0xff); // Fetch CRC
+			SPI(0xff); SPI(0xff);
 			i=1; // break out of the loop
 		}
 	}
-	SPI(0xff);
+//	SPI(0xff);
 	SPI_CS(0);
 	return(result);
 }
