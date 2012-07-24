@@ -8,6 +8,7 @@
 #include "keyboard.h"
 #include "textbuffer.h"
 #include "spi.h"
+#include "fat.h"
 
 short *FrameBuffer;
 
@@ -30,7 +31,7 @@ void vblank_int()
 		yoff=framecount;
 	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*640]);
 
-	while(PS2MouseBytesReady()>=3)
+	while(PS2MouseBytesReady()>=3)	// FIXME - institute some kind of timeout here to re-sync if sync lost.
 	{
 		short nx;
 		short w1,w2,w3;
@@ -70,7 +71,7 @@ void timer_int()
 {
 	if(HW_PER(PER_TIMER_CONTROL) & (1<<PER_TIMER_TR5))
 		mousetimeout=1;
-	puts("Timer int received\n");
+//	puts("Timer int received\n");
 }
 
 
@@ -94,11 +95,51 @@ void AddMemory()
 }
 
 
-int c_entry()
+extern DIRENTRY DirEntry[MAXDIRENTRIES];
+extern unsigned char sort_table[MAXDIRENTRIES];
+extern unsigned char nDirEntries;
+extern unsigned char iSelectedEntry;
+extern unsigned long iCurrentDirectory;
+extern char DirEntryLFN[MAXDIRENTRIES][261];
+char DirEntryInfo[MAXDIRENTRIES][5]; // disk number info of dir entries
+char DiskInfo[5]; // disk number info of selected entry
+
+// print directory contents
+void PrintDirectory(void)
 {
-	short counter=0;
-	void *ptr=0;
-	unsigned char *sector;
+	unsigned char i;
+	unsigned char k;
+	unsigned long len;
+	char *lfn;
+	char *info;
+	char *p;
+	unsigned char j;
+
+	for (i = 0; i < 8; i++)
+	{
+		k = sort_table[i]; // ordered index in storage buffer
+		lfn = DirEntryLFN[k]; // long file name pointer
+		if (lfn[0]) // item has long name
+		{
+			puts(lfn);
+		}
+		else  // no LFN
+		{
+			puts(&DirEntry[k].Name);
+		}
+
+		if (DirEntry[k].Attributes & ATTR_DIRECTORY) // mark directory with suffix
+			puts("<DIR>\n");
+		else
+			puts("\n");
+	}
+}
+
+
+void c_entry()
+{
+	fileTYPE file;
+	unsigned char *fbptr;
 	ClearTextBuffer();
 
 	AddMemory();
@@ -128,29 +169,33 @@ int c_entry()
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
 
-//	while((ptr=malloc(262144)))
-//	{
-//		printf("Allocated %ld\n",(long)ptr);
-//		++counter;
-//	}
-//	printf("malloc() returned zero after %d iterations\n",counter);
-
-	sector=malloc(512);
-
 	spi_init();
-	sd_read_sector(0,sector);
-	free(sector);
 
+	FindDrive();
 
-	counter=0;
-	sector=FrameBuffer;
-//	while(counter<3) // ((640*960*2)/512))
-	while(counter<((640*960*2)/512))
+	ChangeDirectory(DIRECTORY_ROOT);
+	ScanDirectory(SCAN_INIT, "*", 0);
+	PrintDirectory();
+
+	fbptr=FrameBuffer;
+	if(FileOpen(&file,"TEST    IMG"))
 	{
-		sd_read_sector(counter,sector);
-		++counter;
-		sector+=512;
+//		printf("Got file...\n");
+		short imgsize=file.size/512;
+		int c=0;
+//		puts("Reading block");
+		while(c<=((640*960*2-1)/512) && c<imgsize)
+		{
+//			putchar('.');
+			FileRead(&file, fbptr);
+			c+=1;
+			FileNextSector(&file);
+			fbptr+=512;
+		}
+//		putchar('\n');
 	}
+	else
+		printf("Couldn't load test.img\n");
 
 	while(1)
 	{
@@ -159,7 +204,7 @@ int c_entry()
 			pen+=0x400;
 		if(MouseButtons&2)
 			pen-=0x400;
-		DrawIteration();
+//		DrawIteration();
 
 //		++counter;
 //		printf("Hello world! Iteration %d\n",counter);

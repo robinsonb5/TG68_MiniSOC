@@ -34,7 +34,7 @@ use IEEE.numeric_std.ALL;
 --    X"01E"   16-bit timer divisor for t7
 
 --    X"020"	SPI register
---    X"020"	SPI CS register
+--    X"022"	SPI CS register
 
 entity peripheral_controller is
   port (

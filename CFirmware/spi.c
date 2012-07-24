@@ -214,9 +214,15 @@ void spi_init()
 }
 
 
+short sd_write_sector(unsigned long lba,unsigned char *buf) // FIXME - Stub
+{
+	return(0);
+}
+
+
 short sd_read_sector(unsigned long lba,unsigned char *buf)
 {
-	short result=1;
+	short result=0;
 	int i;
 	int r;
 	SPI_CS(1);
@@ -258,6 +264,7 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 			SPI(0xff); SPI(0xff); // Fetch CRC
 			SPI(0xff); SPI(0xff);
 			i=1; // break out of the loop
+			result=1;
 		}
 	}
 //	SPI(0xff);

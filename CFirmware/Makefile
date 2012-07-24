@@ -1,5 +1,5 @@
 C_SRC=main.c minisoc_hardware.c textbuffer.c textbuffer.h ints.c ints.h ps2.c ps2.h keyboard.c keyboard.h \
-	spi.c klibc/libc.a
+	spi.c fat.c swap.c klibc/libc.a
 A_SRC=startup.s draw.s
 
 BUILD_DIR=BUILD
