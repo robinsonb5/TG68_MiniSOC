@@ -35,6 +35,7 @@ use IEEE.numeric_std.ALL;
 
 --    X"020"	SPI register
 --    X"022"	SPI CS register
+--    X"024"	Blocking version of the SPI register
 
 entity peripheral_controller is
   port (
@@ -88,6 +89,9 @@ end entity;
 	
 architecture rtl of peripheral_controller is
 
+signal extend_cycle : std_logic :='0'; -- Used for blocking SPI access
+signal extend_rw : std_logic :='1';
+
 signal ser_txdata : std_logic_vector(7 downto 0);
 signal ser_txready : std_logic;
 signal ser_txgo : std_logic :='0';
@@ -129,6 +133,8 @@ signal host_to_spi : std_logic_vector(15 downto 0);
 signal spi_to_host : std_logic_vector(15 downto 0);
 signal spiclk_in : std_logic;
 signal spi_trigger : std_logic;
+signal spi_busy : std_logic;
+signal spi_wide : std_logic;
 
 begin
 
@@ -143,10 +149,11 @@ begin
 
 			-- Host interface
 			spiclk_in => timer_trigger(7),
-			host_to_spi => host_to_spi(7 downto 0),
+			host_to_spi => host_to_spi(15 downto 0),
 			spi_to_host => spi_to_host,
+			wide => spi_wide,
+			busy => spi_busy,
 			trigger => spi_trigger,
-			interrupt => open,
 
 			-- Hardware interface
 			miso => miso,
@@ -227,6 +234,8 @@ begin
 	process(clk,reset)
 	begin
 		if reset='0' then
+			extend_cycle<='0';
+			extend_rw<='1';
 			uart_int<='0';
 			ser_ints<="00";
 			timer_int<='0';
@@ -246,11 +255,16 @@ begin
 			
 			spi_trigger<='0';
 
-			if reg_req='1' then
+			extend_cycle<='0';
+			extend_rw<='1';
+
+			
+			if reg_req='1' or extend_cycle='1' then
 
 				reg_dtack<='0';	-- None of these registers takes more than one cycle to respond.
+										-- (Exception: blocking SPI register)
 
-				if reg_rw='0' then -- write cycle:
+				if reg_rw='0' or extend_rw='0' then -- write cycle:
 					case reg_addr_in is
 
 						-- RS232 writes
@@ -309,53 +323,91 @@ begin
 							
 						-- WRite to SPI register:
 						when X"020" =>
-							host_to_spi<=reg_data_in;
+							spi_wide<='0';
 							spi_trigger<='1';
+							host_to_spi<=reg_data_in;
 
-						-- WRite to SPI CS register:
+						-- Wwite to SPI CS register:
 						when X"022" =>
 							spi_cs<=not reg_data_in(0);
+
+						-- Blocking write to SPI register
+						when X"024" =>
+							if spi_busy='1' then
+								reg_dtack<='1';
+								extend_cycle<='1';
+								extend_rw<='0';
+							else
+								spi_wide<='0';
+								spi_trigger<='1';
+								host_to_spi<=reg_data_in;
+							end if;
 
 						when others =>
 							reg_data_out<=X"0000";
 					end case;
 				else  -- read cycle
-					case reg_addr_in is
+					if reg_addr_in(8)='0' then
+						case reg_addr_in is
 
-						-- Read from RS232
-						when X"000" => -- Serial data
-							reg_data_out<="00000"&ser_ints&ser_txready&ser_rxdata(7 downto 0);
-							ser_ints<="00"; -- Clear int flags (Do this before setting them, or we miss bytes!)
-						when X"002" => -- Baud rate (clock divisor)
-							reg_data_out<=std_logic_vector(ser_clock_divisor);
+							-- Read from RS232
+							when X"000" => -- Serial data
+								reg_data_out<="00000"&ser_ints&ser_txready&ser_rxdata(7 downto 0);
+								ser_ints<="00"; -- Clear int flags (Do this before setting them, or we miss bytes!)
+							when X"002" => -- Baud rate (clock divisor)
+								reg_data_out<=std_logic_vector(ser_clock_divisor);
 
-						-- Read from misc regs
-						when X"004" => -- Flags
-							reg_data_out<=flags;
+							-- Read from misc regs
+							when X"004" => -- Flags
+								reg_data_out<=flags;
+								
+							-- Read from PS/2 regs
+							when X"008" =>
+								reg_data_out<="0000" & kbdrecvreg & not kbdsendbusy & kbdrecvbyte(10 downto 1);
+								kbdrecvreg<='0';
+								
+							when X"00A" =>
+								reg_data_out<="0000" & mouserecvreg & not mousesendbusy & mouserecvbyte(10 downto 1);
+								mouserecvreg<='0';
+
+							-- Read from timer regs
+
+							when X"00E" => -- Timer control register
+								reg_data_out<=timer_flags;
+								timer_flags(7 downto 0)<=X"00";	-- Clear int flags on read.
+
+							-- Read from SD register
+							when X"020" =>
+--								host_to_spi<=X"FFFF";
+								reg_data_out<=spi_to_host;
 							
-						-- Read from PS/2 regs
-						when X"008" =>
-							reg_data_out<="0000" & kbdrecvreg & not kbdsendbusy & kbdrecvbyte(10 downto 1);
-							kbdrecvreg<='0';
-							
-						when X"00A" =>
-							reg_data_out<="0000" & mouserecvreg & not mousesendbusy & mouserecvbyte(10 downto 1);
-							mouserecvreg<='0';
+							-- Read from SD CS register
+							when X"022" =>
+								reg_data_out<=spi_busy & "000" & X"000";
 
-						-- Read from timer regs
+							-- Blocking read from SD register.
+							when X"024" =>
+--								host_to_spi<=X"FFFF";
+								reg_data_out<=spi_to_host;
+								if spi_busy='1' then
+									reg_dtack<='1';
+									extend_cycle<='1';
+								end if;
 
-						when X"00E" => -- Timer control register
-							reg_data_out<=timer_flags;
-							timer_flags(7 downto 0)<=X"00";	-- Clear int flags on read.
-
-						-- Read from SD register
-						when X"020" =>
-							host_to_spi<=X"0000";
-							reg_data_out<=spi_to_host;
-	
-						when others =>
-							reg_data_out<=X"0000";
-					end case;
+							when others =>
+								reg_data_out<=X"0000";
+						end case;
+					else	-- 0x100 onwards, devote to SPI transfers.
+						reg_data_out<=spi_to_host;
+						if spi_busy='1' then	-- Wait for previous transfer to finish
+							extend_cycle<='1';
+							reg_dtack<='1';
+						else
+							host_to_spi<=X"FFFF";	-- Pump new data.
+							spi_wide<='1';
+							spi_trigger<='1';
+						end if;				
+					end if;
 				end if;
 			end if;
 				

@@ -92,9 +92,11 @@ extern char *VGACharBuffer;
 
 /* SPI register */
 #define PER_SPI 0x20
-#define PER_SPI_CS 0x22
+#define PER_SPI_CS 0x22	/* CS bits are write-only, but bit 15 reads as the SPI busy signal */
+#define PER_SPI_BLOCKING 0x24
+#define PER_SPI_PUMP 0x100 /* Pump registers allow speedy throughput with a construct like "movem.l (a0)+,d0-d4" */
+
 #define PER_SPI_BUSY 15
-#define PER_SPI_IGN 14
 
 
 /* Interrupts */

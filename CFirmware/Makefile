@@ -1,6 +1,6 @@
 C_SRC=main.c minisoc_hardware.c textbuffer.c textbuffer.h ints.c ints.h ps2.c ps2.h keyboard.c keyboard.h \
 	spi.c fat.c swap.c klibc/libc.a
-A_SRC=startup.s draw.s
+A_SRC=startup.s draw.s spi_readsector.s
 
 BUILD_DIR=BUILD
 C_OBJ=$(patsubst %.c,$(BUILD_DIR)/%.o,$(C_SRC))

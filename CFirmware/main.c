@@ -169,6 +169,7 @@ void c_entry()
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
 
+	puts("Initialising SD card\n");
 	spi_init();
 
 	FindDrive();

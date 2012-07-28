@@ -3,10 +3,17 @@
 
 short SDHCtype=1;
 
-#define SPI_WAIT(x) while(HW_PER(PER_SPI)&(1<<PER_SPI_BUSY));
-#define SPI(x) {while((HW_PER(PER_SPI)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI)=(x);}
-#define SPI_READ(x) (HW_PER(PER_SPI)&255)
-#define SPI_CS(x) {while((HW_PER(PER_SPI)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI_CS)=(x);}
+// #define SPI_WAIT(x) while(HW_PER(PER_SPI_CS)&(1<<PER_SPI_BUSY));
+// #define SPI(x) {while((HW_PER(PER_SPI_CS)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI)=(x);}
+// #define SPI_READ(x) (HW_PER(PER_SPI)&255)
+
+#define SPI_WAIT(x) ;
+#define SPI(x) HW_PER(PER_SPI_BLOCKING)=(x)
+#define SPI_PUMP(x) HW_PER(PER_SPI_PUMP)
+#define SPI_PUMP_L(x) HW_PER_L(PER_SPI_PUMP)
+#define SPI_READ(x) (HW_PER(PER_SPI_BLOCKING)&255)
+
+#define SPI_CS(x) {while((HW_PER(PER_SPI_CS)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI_CS)=(x);}
 
 #define cmd_reset(x) cmd_write(0x950040,0) // Use SPI mode
 #define cmd_init(x) cmd_write(0xff0041,0)
@@ -53,10 +60,13 @@ short cmd_write(unsigned long cmd, unsigned long lba)
 
 void spi_spin()
 {
+	puts("SPIspin\n");
 	int i;
 	for(i=0;i<200;++i)
 		SPI(0xff);
+	puts("Done - waiting\n");
 	SPI_WAIT();
+	puts("Done\n");
 }
 
 short wait_initV2()
@@ -92,6 +102,7 @@ short wait_init()
 	int i=20000;
 	short r;
 	SPI(0xff);
+	puts("Cmd_init\n");
 	while(--i)
 	{
 		if((r=cmd_init())==0)
@@ -220,6 +231,9 @@ short sd_write_sector(unsigned long lba,unsigned char *buf) // FIXME - Stub
 }
 
 
+extern void spi_readsector(long *buf);
+
+
 short sd_read_sector(unsigned long lba,unsigned char *buf)
 {
 	short result=0;
@@ -244,7 +258,15 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 		v=SPI_READ();
 		if(v==0xfe)
 		{
-			int j;
+			spi_readsector((long *)buf);
+//			int j;
+//			SPI_PUMP();
+//			for(j=0;j<256;++j)
+//			{
+//				*(long *)buf=SPI_PUMP_L();
+//				buf+=4;				
+//			}
+#if 0
 			for(j=0;j<256;++j)
 			{
 				int t;
@@ -263,6 +285,7 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 			}
 			SPI(0xff); SPI(0xff); // Fetch CRC
 			SPI(0xff); SPI(0xff);
+#endif
 			i=1; // break out of the loop
 			result=1;
 		}
