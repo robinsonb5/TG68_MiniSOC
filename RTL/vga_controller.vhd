@@ -418,7 +418,7 @@ begin
 					ored<="000000"; -- need to set black during sync periods.
 					ogreen<="000000";
 					oblue<="000000";
-					if currentY=vsize and currentX=0 then
+					if currentY=vsize and currentX=16 then
 						oddframe<=not oddframe;
 						vga_pointer<=framebuffer_pointer;
 						vga_newframe<='1';
