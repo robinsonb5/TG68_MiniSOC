@@ -6,7 +6,7 @@ entity TG68Test is
 	port (
 		clk50 			: in std_logic;
 --		clk50			: in std_logic;
-		src 			: in std_logic_vector(15 downto 0);
+		switches		: in std_logic_vector(9 downto 0);
 		counter 		: buffer std_logic_vector(15 downto 0);
 		reset_in 	: in std_logic;
 		pausecpu		: in std_logic;
@@ -220,7 +220,7 @@ myTG68 : entity work.TG68KdotC_Kernel
 mybootrom : entity work.BootRom
 	port map (
 		clock => clk100,
-		address => cpu_addr(9 downto 1),
+		address => cpu_addr(11 downto 1),
 		q => romdata
 		);
 
@@ -449,6 +449,7 @@ mysdram : entity work.sdram
 		spi_cs => sd_cs,
 		
 		bootrom_overlay => bootrom_overlay,
+		switches => switches,
 		hex => counter
 	);
 

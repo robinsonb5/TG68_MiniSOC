@@ -83,6 +83,7 @@ entity peripheral_controller is
 		-- Misc
 
 		bootrom_overlay : out std_logic;
+		switches : in std_logic_vector(9 downto 0);
 		hex : out std_logic_vector(15 downto 0)
 	);
 end entity;
@@ -359,7 +360,7 @@ begin
 
 							-- Read from misc regs
 							when X"004" => -- Flags
-								reg_data_out<=flags;
+								reg_data_out<=switches & flags(5 downto 0);
 								
 							-- Read from PS/2 regs
 							when X"008" =>

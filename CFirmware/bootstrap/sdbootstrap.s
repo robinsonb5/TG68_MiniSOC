@@ -3,9 +3,62 @@
 * Written by : Alastair M. Robinson
 * Date       : 2012-06-23
 * Description: Program to bootstrap the TG68 project over RS232.  Receives an S-Record.
+*              SD Card bootstrap code borrowed from the Chameleon Minimig port.
 *-----------------------------------------------------------
 
-STACK equ $7ffffe
+
+SETVBASE	MACRO
+VBASE SET \1
+	ENDM
+
+DECL	MACRO
+\1	EQU	VBASE
+VBASE	SET VBASE+4
+	ENDM
+
+DECW	MACRO
+\1	EQU	VBASE
+VBASE	SET VBASE+2
+	ENDM
+
+DECS	MACRO
+\1	EQU	VBASE
+VBASE	SET VBASE+\2
+	ENDM
+
+
+	SETVBASE $7f0000
+	DECL	STACK
+
+	DECL	SREC_BYTECOUNT
+	DECL	SREC_ADDR
+	DECL	SREC_COLUMN
+	DECL	SREC_TYPE
+	DECL	SREC_ADDRSIZE
+	DECL	SREC_COUNTER ; counts from 7 down to 0 to count the shifts required
+						; for each longword before bumping the 	address.
+	DECL	SREC_ACC2
+	DECL	SREC_ACC1
+
+	DECW	SDHCtype
+	DECW	_drive
+	DECW	_fstype
+	DECL	_rootcluster
+	DECL	_rootsector
+	DECL	_cluster
+	DECW	_sectorcnt
+	DECL	_sectorlba
+	DECW	_attrib
+
+	DECL	_volstart	;start LBA of Volume
+	DECL	_fatstart	;start LBA of first FAT table
+	DECL	_datastart	;start LBA of data field
+	DECL	_clustersize	;size of a cluster in blocks
+	DECL	_rootdirentrys	;number of entry's in directory table
+
+	DECL	textptr
+	DECS	_secbuf,512	; Must be the last declaration, since it's 512 bytes long.
+
 
 PERREGS equ $810000 ; Peripheral registers
 SERPER equ $810002
@@ -14,13 +67,15 @@ HEX equ $810006 ; HEX display
 PER_SPI equ $20
 PER_SPI_BLOCKING equ $24
 PER_SPI_CS equ $22
+PER_SPI_PUMP equ $100
 PER_TIMER_DIV7 equ $1e
 
 CHARBUF equ $800800
 
+	org 0
 
-;	dc.l	STACK		; Initial stack pointer
-;	dc.l	START
+	dc.l	STACK		; Initial stack pointer
+	dc.l	START
 
 START:				; first instruction of program
 	lea	STACK,a7
@@ -32,12 +87,13 @@ START:				; first instruction of program
 .clrloop
 	move.b	#$20,(a0)+
 	dbf	d7,.clrloop
+	move.l	#0,textptr
 
 	lea	.welcome,a0
 	bsr put_msg
 
 	move.w	#0,SREC_COLUMN
-	bsr	sd_start
+	bsr	sd_start	; If SD boot fails we drop through and receive from the serial port instead.
 
 .mainloop
 	move.w	PERREGS,d0
@@ -50,14 +106,7 @@ START:				; first instruction of program
 	dc.b	'Testing..',0
 
 	; FIXME - move these into character RAM for safe keeping?
-SREC_BYTECOUNT	equ $ffff8
-SREC_COLUMN equ $ffff6
-SREC_ADDR equ $ffff2
-SREC_TYPE equ $fffee
-SREC_ADDRSIZE equ $fffea
-SREC_COUNTER equ $fffe8 ; counts from 7 down to 0 to count the shifts required for each longword before bumping the address.
-SREC_ACC2 equ $fffe4
-SREC_ACC1 equ $fffe0
+
 
 	; Stores temporary value in d6 and d7 to avoid having to read from overlaid RAM.
 	
@@ -195,13 +244,10 @@ HandleByte
 
 
 ; SD card code, borrowed from Minimig.
-
-_secbuf		equ			$7f000
        
 sd_start:
 		lea	msg_start_init,a0
 		bsr	put_msg
-       move.w		 #$5555,_cachevalid
        jsr		spi_init
        bne.s     start2
        
@@ -213,9 +259,6 @@ sd_start:
        bne.s     start3
        
 start5
-		lea	msg_init_done,a0
-		bsr	put_msg
-
 			bsr			fat_cdroot
 			;d0 - LBA
 			lea		mmio_name,a1
@@ -226,10 +269,6 @@ start5
 			bsr		put_msg
 			move.l		#$2000,a0
 			bsr		_LoadFile2
-;			beq.s     start4	
-;			jmp		$2000
-;start4     move.w  #$60fe,$2000
-;			jmp		$2000
 			rts
 
 start3			
@@ -264,16 +303,6 @@ mmio_name:	dc.b	'BOOT    SRE',0
 cmd_read_sector:
 	; vor Einsprung A0 setzen
 			lea			_secbuf,a0
-;				cmp 		#$AAAA,_cachevalid
-;				bne.s		read_sd11
-;				cmp.l		_cachelba,d0
-;				bne.s		read_sd11
-;				moveq		#0,d0						;OK
-;				rts
-read_sd11:
-;				move.w		 #$AAAA,_cachevalid
-;				move.l		d0,_cachelba
-cmd_read_block
 			bsr		cmd_read
 			bne		read_error3		;Error
 read1
@@ -287,26 +316,20 @@ read_w1		move.w	PER_SPI_BLOCKING(a1),d0
 			bne		read2			;auf Start warten
 			move.w	#511,d1
 read_w2		move.w	PER_SPI_BLOCKING(a1),d0
-;			bmi		read_w2
 			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
 			move.b	d0,(a0)+
-;	move.b	d0,RS232_base
 			dbra	d1,read_w2
-;read_w3		move	PER_SPI_BLOCKING(a1),d0
-;			bmi		read_w3
-			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen CRC
+			move.w	PER_SPI_PUMP(a1),d0	; Two dummy transfers, guaranteed to have ended when the read finishes
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			lea		-$200(a0),a0
 			moveq	#0,d0
 			rts
 read_error2	
-			move.w	#$5555,_cachevalid
 			lea		msg_timeout_Error,a0
 			bsr		put_msg
 			moveq	#-2,d0
 			rts		
-read_error3	move.w	#$5555,_cachevalid
+read_error3
 			lea		msg_cmdtimeout_Error,a0
 			bsr		put_msg
 			moveq	#-1,d0
@@ -345,14 +368,12 @@ cmd_CMD58:	move.l	#$ff007A,d1
 			moveq	#0,d0
 			bra		cmd_wr
 			
-;cmd_write:	move.l	#$ff0058,d1
-;			bra		cmd_wr
-			
 cmd_read:	move.l	#$ff0051,d1
 
 cmd_wr
 			lea		PERREGS,a1
 			move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
+			move.w	PER_SPI_BLOCKING(a1),-2(a7)
 			move.w	#1,PER_SPI_CS(a1)	;sd_cs low
 			move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			move.w	d1,PER_SPI_BLOCKING(a1)		;cmd
@@ -381,7 +402,7 @@ cmd_wr12
 cmd_wr13	move.w	d0,PER_SPI_BLOCKING(a1)		;7..0
 			move.w	d1,PER_SPI_BLOCKING(a1)		;crc
 ;			;wait for answer
-			move.l	#40000,d1	;Timeout counter
+			move.l	#400,d1	;Timeout counter
 			
 cmd_wr10	subq.l		#1,d1
 			beq		cmd_wr11	;Timeout
@@ -408,7 +429,7 @@ spi_init
 			move.w	#$00,PER_SPI_CS(a1)		;all cs off
 			move.w	#150,PER_TIMER_DIV7(a1) ; About 350KHz
 
-			move.w	#100,d1
+			move.w	#200,d1
 			add.l	#PER_SPI,a1
 spi_init_w1
 			move.w	#255,PER_SPI_BLOCKING(a1)	;8 Takte fÃ¼rs Lesen
@@ -416,9 +437,9 @@ spi_init_w1
 			
 			move.w	#50,d2
 spi_init_w2	bsr		cmd_reset		;use SPI Mode
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			cmp.b	#1,d0
 			beq		spi_init_w3
 			dbra	d2,spi_init_w2
@@ -450,9 +471,9 @@ spi_init_w4	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			cmpi.b		#$AA,d0
 			bne			noSDHC
 			
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			pea		msg_SDHC
 			bsr		put_msga7
 			lea		4(a7),a7
@@ -488,9 +509,9 @@ spi_init_w8	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			dbra	d1,spi_init_w8		;wait
 		bsr		cmd_init
 			beq		spi_init_w6
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			dbra	d2,spi_init_w7
 			pea		msg_init_fail
 			bsr		put_msga7
@@ -499,10 +520,7 @@ spi_init_w8	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			rts		;init fault
 			
 spi_init_w6
-;FIXME			move	#$1,8(a1)		;max SPI Speed 108/(2n+2)
-			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			move.w	#1,PER_TIMER_DIV7(a1)
 			pea		msg_init_done
 			bsr		put_msga7
@@ -533,47 +551,12 @@ put_msg_end
 			movem.l	(a7)+,a0/a1
 			rts
 
-cluster				ds.b	4	;$00		; 32-bit clusters
-part_fat			ds.b	4	;$04		; 32-bit start of fat
-part_rootdir		ds.b	4	;$08		; 32-bit root directory address
-part_cstart			ds.b	4	;$0c		; 32-bit start of clusters
-part_rootdirentrys	ds.b	2	;$10		; entris in root directory
-vol_fstype			ds.b	2	;$12
-vol_secperclus		ds.b	2	;$14
-scount				ds.b	2	;$16		; number of sectors to read
-dir_is_fat16root	ds.b	4	;$18		; marker for rootdir
-sector_ptr			ds.b	4	;$1c
-;dir_is_fat16root	equ	$20
-lba					ds.b	4	;$24
-spipass 			ds.b	2	;$10000
-SDHCtype			ds.b	2	
-
-_cachevalid			ds.w	1
-_cachelba			ds.l	1
-_drive				ds.w	1
-_fstype				ds.w	1
-_rootcluster		ds.l	1
-_rootsector			ds.l	1
-_cluster			ds.l	1
-_sectorcnt			ds.w	1
-_sectorlba			ds.l	1
-_attrib				ds.w	1
-
-_volstart			ds.l	1	;start LBA of Volume
-_fatstart			ds.l	1	;start LBA of first FAT table
-_datastart			ds.l	1	;start LBA of data field
-_clustersize		ds.w	1	;size of a cluster in blocks
-_rootdirentrys		ds.w	1	;number of entry's in directory table
-
-textptr	dc.l	0
-
 
 _LoadFile:
 _LoadFile2:
 			bsr			cluster2lba
 _LoadFile1:	
-			lea _secbuf,a0
-			bsr			cmd_read_block
+			bsr			cmd_read_sector
 			bne.s		lferror
 			
 			move.l	#$1ff,d7
@@ -586,10 +569,6 @@ _LoadFile1:
 			bsr	HandleByte
 			movem.l	(a7)+,d7/a0-1
 			dbf	d7,.loop
-;			move.l	#$ffff,d7
-;.delay
-;			sub.l	#1,d7
-;			bne		.delay
 		
 			move.l 		_sectorlba,d0	
 			addq.l		#1,d0		 
@@ -610,17 +589,13 @@ _FindVolume:
 ;@checktype:
 		moveq		#0,d0	;partitionstable
 		move.l		d0,_volstart
-;		bsr			_read_secbuf
 		bsr			cmd_read_sector
 		bne.s 		_error
-;	move.b		#'*',RS232_base			
-;	move.b		#'*',RS232_base			
 
 		cmpi.b		#$55,$1fe(a0)
 		bne.s		_error
 		cmpi.b		#$AA,$1ff(a0)
 		bne.s		_error
-;	move.b		#'T',RS232_base	
 			
 		move.w		_drive,d0
 		and.w		#$70,d0
@@ -629,55 +604,26 @@ _FindVolume:
 	
 		lea			$1be(a0),a1		; pointer to partition table
 		adda.w		d0,a1
-;
-;		move.b		4(a1),d0
-;		cmpi.b		#01,d0		; fat12 uses $01
-;		beq.s 		_foundfat
-;		cmpi.b		#04,d0		; fat16 uses $04, $06, or $0e 
-;		beq.s 		_foundfat
-;		cmpi.b		#06,d0		; fat16 uses $04, $06, or $0e 
-;		beq.s 		_foundfat
-;		cmpi.b		#$0E,d0		; fat16 uses $04, $06, or $0e 
-;		beq.s 		_foundfat
-;		cmpi.b		#$0b,d0		; fat32 uses $0b or $0c
-;		beq.s 		_foundfat
-;		cmpi.b		#$0c,d0		; fat32 uses $0b or $0c
-;		bne.s 		@next
 		
 ;_foundfat:
 ;read_vol_sector	
-;	move.b		#'F',RS232_base			
 		move.l		8(a1),d0	;LBA
 		ror.w		#8,d0
 		swap		d0
 		ror.w		#8,d0
 		move.l		d0,_volstart
-;		lea			_secbuf,a0
-;		bsr			_read_secbuf
 		bsr			cmd_read_sector	; read sector 
 		bne.s		_error
 		cmpi.b		#$55,$1fe(a0)
 		bne.s		_error
 		cmpi.b		#$AA,$1ff(a0)
 		beq.s		_testfat
-;		bne.s		@error
-;		bsr.s		_testfat
-;		bne.s		@next
-;		rts					;volume is loaded
 _error:
-;		move.b		#'E',RS232_base			
 		moveq		#-1,d0
 		rts
 
-;@next:
-;		move.b		#'X',RS232_base	
-;		adda.w		#$10,a1
-;		cmpa.l		#_secbuf+$1fe,a1
-;		bne		@checktype
-;test floppy format CF	
 
 _testfat:
-;		move.b		#'X',RS232_base	
 		cmpi.l		#$46415431,$36(a0)	;"FAT1"
 		bne.s		_testfat_2
 		move.b		#12,_fstype
@@ -694,20 +640,12 @@ _testfat_2:
 		bne.s		_error
 		move.b		#32,_fstype
 _testfat_ex:
-;		move.b		#'F',RS232_base	
 		move.l		$0a(a0),d0	; make sure sector size is 512
 		and.l		#$FFFF00,d0
 		cmpi.l		#$00200,d0
 		bne		_error
-;		and.l		#$FFFFFF00,d0
-;		ror.l		#8,d0
-;		cmpi.w		#$002,d0
-;		bne.s		@error
-;		swap		d0
-;		move.w		d0,_clustersize	; number of sectors per cluster
 		
 			move.l		_volstart,d1
-;			moveq		#0,d0
 			move.w		$e(a0),d0		;reserved Sectors
 			ror.w		#8,d0
 			add.l		d0,d1
@@ -720,19 +658,16 @@ _testfat_ex:
 		ror.w		#8,d0
 		swap		d0
 		ror.w		#8,d0
-;		move.l		d0,_dirstart	;cluster	
 		move.l		d0,_rootcluster
 ; find start of clusters
 		move.l		$24(a0),d0	;FAT Size
 		ror.w		#8,d0
 		swap		d0
 		ror.w		#8,d0
-;		move.b		#'1',RS232_base	
 _add_start32		
 		add.l		d0,d1
 		subq.b		#1,$10(a0)
 		bne.s		_add_start32
-;		move.b		#'2',RS232_base	
 		bra.s		subcluster
 		
 _fat16
@@ -740,15 +675,11 @@ _fat16
 			move.l		d0,_rootcluster
 			move.w		$16(a0),d0				;Sectors per Fat
 			ror.w		#8,d0
-;		move.b		#'1',RS232_base	
 root_sect	add.l		d0,d1
 			subi.b		#1,$10(a0);d2			;number of FAT Copies
 			bne			root_sect
-;		move.b		#'2',RS232_base	
-;			move.l		d1,_dirstart			;Root sector - LBA
 			move.l		d1,_rootsector
 	move.l	d1,d0		
-;	bsr debug_hex			
 			move.b		$12(a0),d0
 			lsl.w		#8,d0
 			move.b		$11(a0),d0
@@ -764,13 +695,11 @@ subcluster:
 			move.l		d1,_datastart			;start of clusters
 			
 fat_ex:
-;       move.b	#'E',RS232_base
 			moveq		#0,d0
 			rts
 
 
 fat_cdroot:
-;			cmpi.b		#32,_fstype
 			move.l		_rootcluster,d0	; cluster of basic directory
 			move.l		d0,_cluster	
 			bne.s		 cdfat_32
@@ -800,28 +729,19 @@ _fat32_2:
 
 
 		
-;_SearchFile:
-;
-;			move.l 		4(a7),a1	;ptr name
-;			bsr			fat_cdroot
-;			;d0 - LBA
 fat_findfile
-;		bsr			_read_secbuf
-;		a1 - ptr to name
 		movem.l		d2/a2,-(a7)
 		move.l		a1,a2
 fat_findfile_m4
 
 		bsr			cmd_read_sector	; read sector 
 		bne		fat_findfile_m8
-;			move.l		d2,-(a7)
 			moveq		#15,d2
 fat_findfile_m3
 			tst.b	(a0)		;end
 			beq.s		fat_findfile_m8
 			moveq		#10,d0
 fat_findfile_m2			
-;       move.b	(a0,d0),RS232_base
 			move.b		(a2,d0),d1
 			cmp.b		(a0,d0),d1
 			beq			fat_findfile_m1
@@ -851,8 +771,6 @@ fat_findfile_m9
 			adda		#$0020,a0
 			dbra		d2,fat_findfile_m3		
 			
-;fat_read_next_sector:
-;			move.l		(a7)+,d2
 			move.l 		_sectorlba,d0	
 			addq.l		#1,d0		 
 			move.l 		d0,_sectorlba			 
@@ -878,10 +796,8 @@ next_cluster:
 		move.l    	_cluster,D0
 		lsr.l     	#8,D0
 		add.l		_fatstart,D0
-;		bsr			_read_secbuf
 		bsr			cmd_read_sector	; read sector 
 		bne.s		fnc_end
-;		moveq		#0,d0
 		move.b    	_cluster+3,D0
 		add.w		d0,d0
 		move.w		(a0,d0),d0
@@ -895,10 +811,8 @@ fnc_m32:
 		move.l    	_cluster,D0
 		lsr.l     	#7,D0
 		add.l		_fatstart,D0
-;		bsr			_read_secbuf
 		bsr			cmd_read_sector	; read sector 
 		bne.s		fnc_end
-;		moveq		#0,d0
 		move.b    	_cluster+3,D0
 		and.w		#$7f,d0
 		add.w		d0,d0
@@ -920,7 +834,6 @@ fnc_m12:
 ;FAT12
 		move.l		d2,-(a7)
 		move.l    	_cluster,D0	;cluster
-;	bsr	debug_hex
 		move.l		d0,d1
 		add.l		d0,d0
 		add.l		d1,d0		;*3
@@ -929,8 +842,6 @@ fnc_m12:
 		lsr.l     	#2,D0		;cluster*1.5/256
 		add.l		_fatstart,D0
 		move.l		d0,d2
-;	bsr	debug_hex
-;		bsr			_read_secbuf
 		bsr			cmd_read_sector	; read sector 
 		bne.s		fnc_end2
 		move.l		d1,d0
@@ -942,7 +853,6 @@ fnc_m12:
 		move.b		(a0,d0),d0
 		exg.l		d0,d2
 		addq.l		#1,d0
-;		bsr			_read_secbuf
 		bsr			cmd_read_sector	; read sector 
 		bne.s		fnc_end2
 		lsl			#8,d2
@@ -963,8 +873,6 @@ fnc_m13:
 		move.l    	D2,_cluster
 		or.l		#$fffff00f,d2
 		move.l		d2,d0
-;	move.l	d2,d0	
-;	bsr	debug_hex
 		move.l		(a7)+,d2
 		cmp.w		#$ffff,d0
 		rts
@@ -974,4 +882,3 @@ fnc_end2:
 		moveq		#0,d0
 		rts
 		
-
