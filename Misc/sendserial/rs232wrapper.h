@@ -79,7 +79,7 @@ class RS232Wrapper
 		int w=0;
 		while(w<l)
 		{
-			int t=write(fd,c+w,l);
+			int t=write(fd,c+w,l-w);
 			if(t<0)
 				throw "RS232 write error";
 			w+=t;
@@ -142,6 +142,9 @@ class RS232Wrapper
 				break;
 		}
 		newtio.c_cflag |= CREAD | CLOCAL;
+		newtio.c_iflag |= IGNPAR | IGNBRK;
+		newtio.c_oflag |= IGNPAR | IGNBRK;
+		newtio.c_oflag &= ~(OPOST | ONLCR);
 		if(startbit)
 			newtio.c_cflag |= CS8 | CREAD;
 		/* set input mode (non-canonical, no echo,...) */
@@ -149,6 +152,21 @@ class RS232Wrapper
 
 		newtio.c_cc[VTIME]    = 0;   /* inter-character timer unused */
 		newtio.c_cc[VMIN]     = 1;   /* blocking read until 1 char received */
+
+		newtio.c_cc[VINTR]='C'-'@';
+		newtio.c_cc[VQUIT]=CQUIT;
+		newtio.c_cc[VERASE]=CERASE;
+		newtio.c_cc[VEOF]=CEOF;
+		newtio.c_cc[VKILL]=CKILL;
+		newtio.c_cc[VDISCARD]=CDISCARD;
+		newtio.c_cc[VREPRINT]=CREPRINT;
+		newtio.c_cc[VWERASE]=CWERASE;
+		newtio.c_cc[VLNEXT]=CLNEXT;
+		newtio.c_cc[VLNEXT]=CLNEXT;
+		newtio.c_cc[VSTART]=CSTART;
+		newtio.c_cc[VSTOP]=CSTOP;
+		newtio.c_cc[VSUSP]=CSUSP;
+
 
 		Debug[TRACE] << "Applying new port settings" << std::endl;
 		tcflush(fd, TCIFLUSH);

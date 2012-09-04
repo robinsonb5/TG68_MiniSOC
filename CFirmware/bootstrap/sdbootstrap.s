@@ -60,6 +60,8 @@ VBASE	SET VBASE+\2
 	DECS	_secbuf,512	; Must be the last declaration, since it's 512 bytes long.
 
 
+	XDEF SDHCtype
+
 PERREGS equ $810000 ; Peripheral registers
 SERPER equ $810002
 HEX equ $810006 ; HEX display
@@ -242,13 +244,14 @@ HandleByte
 	rts
 
 
+	XDEF	spi_init
 
 ; SD card code, borrowed from Minimig.
        
 sd_start:
 		lea	msg_start_init,a0
 		bsr	put_msg
-       jsr		spi_init
+       jsr		asmspi_init
        bne.s     start2
        
 		move.w		#$40,_drive	;Superfloppy
@@ -307,19 +310,22 @@ cmd_read_sector:
 			bne		read_error3		;Error
 read1
 			move.w	#20000,d1		;Timeout counter
-			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
+;			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
 read2		subq.w	#1,d1
 			beq		read_error2		;Timeout
-read_w1		move.w	PER_SPI_BLOCKING(a1),d0
 			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
+read_w1		move.w	PER_SPI_BLOCKING(a1),d0
 			cmp.b	#$fe,d0
 			bne		read2			;auf Start warten
-			move.w	#511,d1
-read_w2		move.w	PER_SPI_BLOCKING(a1),d0
-			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
-			move.b	d0,(a0)+
+			move.w	PER_SPI_PUMP(a1),d0 ; start the data flowing
+			move.w	#127,d1
+read_w2		move.l	PER_SPI_PUMP(a1),d0
+;			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
+			move.l	d0,(a0)+
 			dbra	d1,read_w2
-			move.w	PER_SPI_PUMP(a1),d0	; Two dummy transfers, guaranteed to have ended when the read finishes
+;			move.w	PER_SPI_PUMP(a1),d0	; Two dummy transfers, guaranteed to have ended when the read finishes
+.wait
+			move.w	PER_SPI_BLOCKING(a1),d0	; wait for transfer to finish before raising CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
 			lea		-$200(a0),a0
 			moveq	#0,d0
@@ -423,7 +429,7 @@ msg_timeout_Error	dc.b	'Timeout_Error'	    ,$d,$a,0
 msg_SDHC			dc.b	'SDHC found '	    ,$d,$a,0
 			
 
-spi_init
+asmspi_init
 		move.w	#-1,SDHCtype
 			lea		PERREGS,a1
 			move.w	#$00,PER_SPI_CS(a1)		;all cs off
@@ -527,7 +533,8 @@ spi_init_w6
 			lea		4(a7),a7
 			moveq	#0,d0
 			rts
-		
+
+			XDEF put_msga7
 
 ;	A0	Stringpointer 
 put_msga7

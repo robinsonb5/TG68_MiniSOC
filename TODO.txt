@@ -1,0 +1,113 @@
+Adjustable memory configuration.  Suggest a hardware register which allows the firmware to read hardware capabilities.
+HWCAP
+	bits 7 downto 0 : Available memory: 2^n meg, so for 3 for an 8-meg board, 5 for a 32-meg board.
+	bit 8 : soft off, 1 for cyclone 3 board, 0 for DE1.
+
+Abstract out some of the hardware into platform-specific modules, so that each platform has an XXXProject and XXXRTL directory,
+so that multiple platforms can be build from one source tree.
+
+
+| CPU cache - both instruction and data.
+| (Discrete cachelines, and just one of each, or use a monolithic cache block?  The latter will be resource-hungry.)
+| DONE:  Just a single 4-word block for each direction, both read and write:
+Extend: separate data read and instruction cache?
+
+| DONE Writeback cache - to allow (a) the CPU to continue working while a write is in progress, and (b) to gang sequential
+| writes into a single burst write.
+| (Need to store the UDS/LDS bits along with the data.)
+
+Sprite controller
+|DONE Just one sprite, can be 2 planes at 32 pixels wide, or 4 planes at 16 pixels wide.
+Need a colourtable of sorts.
+| Alternatively, make the sprite 1-bit or even 2-bit truecolour?  (Implemented 1-bit ARGB for now
+If we make the sprite 16 pixels wide, and devote four bits to each pixel (ARGB, where a signals transparency) then each sprite
+will require a single 4-word burst per scanline.  (Then again, if we're going to devote 4 bits per pixel to the sprite, we might as well
+used indexed colour and have 15-colour sprites.)
+
+A 1-bit truecolour pointer might look like this:
+"CF00000000000000",
+"8CFFF00000000000",
+"08CCFFF000000000",
+"08CCCCFFFF000000",
+"088CCCCCCFFF0000",
+"008CCCCCCCC80000",
+"0088CCCCCC800000",
+"0008CCCCCF000000",
+"0008CCCCCCF00000",
+"00088CC8CCCF0000",
+"00008C808CCCF000",
+"0000880008CCCF00",
+"00000000008CCCF0",
+"000000000008CCC8",
+"0000000000008C80",
+"0000000000000800"};
+
+| DONE Need to enhance the VGA controller with a "Request imminent" signal so the SDRAM controller can allow slot2 access to "nextbank".
+
+| Need a DMA controller to handle sprite, audio, etc.  Will use the same slots as the VGA controller, but operate during the blanking period.
+| Should cache data, possibly using a blockram if there end up being enough channels.  In other respects it'll end up looking very much like
+| the VGA cache.  So perhaps it should be blockram based and subsume the VGA cache?
+
+| DONE Implemented a single DMA channel for the single sprite - not yet blockram based.
+
+Each DMA channel needs an address input and a storage register for the address.  These will be incremented each access.
+
+A single M4K has enough space for 64 cachelines, maybe devote 4 to VGA, 1 to each sprite, 1 to each audio channel...
+16 bit audio would manage 4 samples per burst, meaning a single burst each scanline would allow 120KHz sampling rate, which is way more than
+we need.  Even if the video frequency dropped to 15Khz (which would halve the bandwidth usage anyway), a single burst per scanline would still
+provide 60KHz.  Will definitely need two lines per channel, though.  So 4 lines minimum for audio.
+
+
+
+(Maybe make an Amiga-style copper for the VGA controller?
+
+
+Multiple screenmodes.
+ -> 8bit
+ -> lowres - perhaps separate the pixel clock division from the sync generation; then mutiple horizontal resolutions become easily accessible.
+ -> scandoubled?
+ -> PAL?
+ -> VBlank interrupt?
+
+| DONE Interrupt controller.  Need to handle corner-cases better than currently, where a high-priority int occurs during the acknowledge cycle.
+
+| SD card interface.  Looks reasonably simple - just have to take care of multiple clock rates.
+(DMA makes things a little more complicated)?  
+
+| PS/2 controller
+| Borrow from Chameleon project - do just the hardware transport in FPGA, handle the rest in interrupt code on the TG68.
+
+| UART - will make debugging much easier.  Need to allow upload of program code over RS232.  XMODEM?  SHould at least have ready-made software support.
+| (How to build a suitable binary?  Objdump?)
+| (Done - used s-records in the finish)
+
+Hardware registers for framebuffer address
+| DONE - address
+To do: odd and even modulos,
+Display size and timings
+Needs to wait until the DMA controller works properly.
+
+| Sprite pointer, xpos, ypos and height.  Palette?  15 16-bit words?  Or an M4K?
+
+
+| Sound?
+| Delta-Sigma controller?  R2R ladder output, maybe 2 or 3 bits, with delta-sigma or even PWM to cover the lower bits?
+| R2R doesn't seem to buy much.
+
+Blitter?
+Hardware line drawing?  Triangle fill?
+Rectangle fill?
+Hardware bit packing/filling for the framebuffer would be useful, since creating 5-6-5 RGB pixels
+is actually pretty slow on 68K due to the shifts.
+move.w	#$XXRR,XR		(Actually RRGG, BBXX might be better)
+move.w	#$GGBB,GB
+or even
+move.b	#$RR,R
+move.b	#$GG,G
+move.b	#$BB,B
+where XR, GB, R, G and B are hardware registers.
+Upon write of B or GB, the registers will be bit-packed into a 5-6-5 16-bit word and prepared for write.
+
+Write cache needs a "More to come" signal to prevent it writing out an incompletely filled line.
+
+Explore the possibility of using an SPI Ethernet controller.

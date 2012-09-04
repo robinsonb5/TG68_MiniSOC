@@ -322,13 +322,13 @@ begin
 							timer_divisor<="111";
 							timer_set<='1';
 							
-						-- WRite to SPI register:
+						-- Write to SPI register:
 						when X"020" =>
 							spi_wide<='0';
 							spi_trigger<='1';
 							host_to_spi<=reg_data_in;
 
-						-- Wwite to SPI CS register:
+						-- Write to SPI CS register:
 						when X"022" =>
 							spi_cs<=not reg_data_in(0);
 
