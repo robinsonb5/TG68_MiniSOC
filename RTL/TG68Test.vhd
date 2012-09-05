@@ -83,6 +83,7 @@ signal reset : std_logic := '0';
 signal reset_counter : unsigned(15 downto 0) := X"FFFF";
 signal tg68_ready : std_logic;
 signal sdr_ready : std_logic;
+signal ready : std_logic;
 signal write_address : std_logic_vector(23 downto 0);
 signal req_pending : std_logic :='0';
 --signal write_pending : std_logic :='0';
@@ -135,6 +136,13 @@ signal prgstate : prgstates :=wait2;
 begin
 
 sdr_cke <='1';
+process(clk)
+begin
+	if rising_edge(clk) then
+		reset <= tg68_ready and sdr_ready and reset_in;
+	end if;
+end process;
+
 --sdr_clk <=clk;
 
 --mypll : ENTITY work.PLL
@@ -148,7 +156,6 @@ sdr_cke <='1';
 --
 
 sdr_cke<='1';
-reset <= tg68_ready and sdr_ready and reset_in;
 
 --vga_red<=wred(7 downto 4);
 --vga_green<=wgreen(7 downto 4);

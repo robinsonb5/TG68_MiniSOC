@@ -1,0 +1,339 @@
+# Copyright (C) 1991-2007 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+
+
+# The default values for assignments are stored in the file
+#		hello_led_assignment_defaults.qdf
+# If this file doesn't exist, and for assignments not listed, see file
+#		assignment_defaults.qdf
+
+# Altera recommends that you do not modify this file. This
+# file is updated automatically by the Quartus II software
+# and any changes you make may be lost or overwritten.
+
+
+set_global_assignment -name FAMILY "Cyclone III"
+set_global_assignment -name DEVICE EP3C25Q240C8
+set_global_assignment -name TOP_LEVEL_ENTITY C3BoardToplevel
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 7.2
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:11:54  NOVEMBER 29, 2007"
+set_global_assignment -name LAST_QUARTUS_VERSION "12.0 SP1"
+set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_palace
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
+set_global_assignment -name GENERATE_SVF_FILE OFF
+set_global_assignment -name RESERVE_ASDO_AFTER_CONFIGURATION "AS INPUT TRI-STATED"
+set_global_assignment -name STRATIX_CONFIGURATION_DEVICE EPCS4
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name MISC_FILE "E:/works/≈‰Ã◊π‚≈Ã/CIII_REVA/samples/3C25/hello_led/hello_led.dpf"
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CYCLONEIII_CONFIGURATION_DEVICE EPCS64
+set_global_assignment -name FORCE_CONFIGURATION_VCCIO ON
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name ENABLE_SIGNALTAP ON
+set_global_assignment -name USE_SIGNALTAP_FILE stp1.stp
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_blue[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_blue[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_blue[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_blue[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_blue[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_green[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_green[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_green[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_green[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_green[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_green[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_red[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_red[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_red[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_red[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_red[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_hsync
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_red[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_vsync
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vga_blue[5]
+set_global_assignment -name RESERVE_DATA1_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_FLASH_NCE_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_COLOR 2147039 -section_id Top
+set_global_assignment -name LL_ROOT_REGION ON -section_id "Root Region"
+set_global_assignment -name LL_MEMBER_STATE LOCKED -section_id "Root Region"
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_blue[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_blue[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_blue[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_blue[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_blue[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_green[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_green[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_green[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_green[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_green[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_green[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_red[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_red[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_red[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_red[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_red[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_red[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to vga_hsync
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_ras
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "PLL:mypll|altpll:altpll_component|clk[0]" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=128" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=128" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "TG68Test:mytestbed|peripheral_controller:myperipheral|simple_uart:myuart|txready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "TG68Test:mytestbed|peripheral_controller:myperipheral|simple_uart:myuart|txready~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "TG68Test:mytestbed|reset" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "TG68Test:mytestbed|reset_in" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[18]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[19]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[20]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[21]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[22]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[23]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "TG68Test:mytestbed|sdram:mysdram|ba[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "TG68Test:mytestbed|sdram:mysdram|ba[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "TG68Test:mytestbed|sdram:mysdram|dqm[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "TG68Test:mytestbed|sdram:mysdram|dqm[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "TG68Test:mytestbed|sdram:mysdram|sd_cas" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "TG68Test:mytestbed|sdram:mysdram|sd_cs" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "TG68Test:mytestbed|sdram:mysdram|sd_ras" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "TG68Test:mytestbed|sdram:mysdram|sd_we" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "TG68Test:mytestbed|sdram:mysdram|sdata[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "TG68Test:mytestbed|sdram:mysdram|sdata[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "TG68Test:mytestbed|sdram:mysdram|sdata[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "TG68Test:mytestbed|sdram:mysdram|sdata[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "TG68Test:mytestbed|sdram:mysdram|sdata[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "TG68Test:mytestbed|sdram:mysdram|sdata[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "TG68Test:mytestbed|sdram:mysdram|sdata[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "TG68Test:mytestbed|sdram:mysdram|sdata[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "TG68Test:mytestbed|sdram:mysdram|sdata[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "TG68Test:mytestbed|sdram:mysdram|sdata[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "TG68Test:mytestbed|sdram:mysdram|sdata[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "TG68Test:mytestbed|sdram:mysdram|sdata[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "TG68Test:mytestbed|sdram:mysdram|sdata[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "TG68Test:mytestbed|sdram:mysdram|sdata[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "TG68Test:mytestbed|sdram:mysdram|sdata[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "TG68Test:mytestbed|sdram:mysdram|sdata[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to reset_n -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "TG68Test:mytestbed|peripheral_controller:myperipheral|simple_uart:myuart|txready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "TG68Test:mytestbed|peripheral_controller:myperipheral|simple_uart:myuart|txready~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "TG68Test:mytestbed|reset" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "TG68Test:mytestbed|reset_in" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[18]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[19]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[20]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[21]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[22]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[23]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "TG68Test:mytestbed|sdram:mysdram|Addr1[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "TG68Test:mytestbed|sdram:mysdram|ba[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "TG68Test:mytestbed|sdram:mysdram|ba[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "TG68Test:mytestbed|sdram:mysdram|dqm[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "TG68Test:mytestbed|sdram:mysdram|dqm[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "TG68Test:mytestbed|sdram:mysdram|sd_cas" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "TG68Test:mytestbed|sdram:mysdram|sd_cs" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "TG68Test:mytestbed|sdram:mysdram|sd_ras" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "TG68Test:mytestbed|sdram:mysdram|sd_we" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "TG68Test:mytestbed|sdram:mysdram|sdaddr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "TG68Test:mytestbed|sdram:mysdram|sdata[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "TG68Test:mytestbed|sdram:mysdram|sdata[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "TG68Test:mytestbed|sdram:mysdram|sdata[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "TG68Test:mytestbed|sdram:mysdram|sdata[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "TG68Test:mytestbed|sdram:mysdram|sdata[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "TG68Test:mytestbed|sdram:mysdram|sdata[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "TG68Test:mytestbed|sdram:mysdram|sdata[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "TG68Test:mytestbed|sdram:mysdram|sdata[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "TG68Test:mytestbed|sdram:mysdram|sdata[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "TG68Test:mytestbed|sdram:mysdram|sdata[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "TG68Test:mytestbed|sdram:mysdram|sdata[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "TG68Test:mytestbed|sdram:mysdram|sdata[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "TG68Test:mytestbed|sdram:mysdram|sdata[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "TG68Test:mytestbed|sdram:mysdram|sdata[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "TG68Test:mytestbed|sdram:mysdram|sdata[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "TG68Test:mytestbed|sdram:mysdram|sdata[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to reset_n -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=65" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=65" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=216" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=40804" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=10482" -section_id auto_signaltap_0
+set_global_assignment -name SMART_RECOMPILE ON
+set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[11]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[10]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[9]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[8]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_ba[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_ba[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_cas
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_cke
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sd1_clk
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_cs
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_dqm
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_we
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[11]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[10]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[9]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[8]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_addr[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_ba[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_ba[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_cas
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_cke
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sd2_clk
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_cs
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_dqm
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_ras
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_we
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/poweronreset.vhd
+set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
+set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
+set_global_assignment -name SDC_FILE constraints.sdc
+set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
+set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/statusleds_pwm.vhd
+set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/reset.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/C3BoardToplevel.vhd
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/BootRom.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRom.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRAM.qip
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

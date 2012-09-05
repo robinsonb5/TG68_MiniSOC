@@ -81,7 +81,10 @@ ARCHITECTURE SYN OF charram IS
 		outdata_reg_a		: STRING;
 		outdata_reg_b		: STRING;
 		power_up_uninitialized		: STRING;
+		ram_block_type		: STRING;
 		read_during_write_mode_mixed_ports		: STRING;
+		read_during_write_mode_port_a		: STRING;
+		read_during_write_mode_port_b		: STRING;
 		widthad_a		: NATURAL;
 		widthad_b		: NATURAL;
 		width_a		: NATURAL;
@@ -116,7 +119,7 @@ BEGIN
 		clock_enable_output_b => "BYPASS",
 		indata_reg_b => "CLOCK0",
 		init_file => "../Firmware/Message.mif",
-		intended_device_family => "Cyclone II",
+		intended_device_family => "Cyclone III",
 		lpm_type => "altsyncram",
 		numwords_a => 2048,
 		numwords_b => 2048,
@@ -126,7 +129,10 @@ BEGIN
 		outdata_reg_a => "UNREGISTERED",
 		outdata_reg_b => "UNREGISTERED",
 		power_up_uninitialized => "FALSE",
+		ram_block_type => "M9K",
 		read_during_write_mode_mixed_ports => "DONT_CARE",
+		read_during_write_mode_port_a => "NEW_DATA_NO_NBE_READ",
+		read_during_write_mode_port_b => "NEW_DATA_NO_NBE_READ",
 		widthad_a => 11,
 		widthad_b => 11,
 		width_a => 8,
@@ -180,7 +186,7 @@ END SYN;
 -- Retrieval info: PRIVATE: INDATA_REG_B NUMERIC "1"
 -- Retrieval info: PRIVATE: INIT_FILE_LAYOUT STRING "PORT_A"
 -- Retrieval info: PRIVATE: INIT_TO_SIM_X NUMERIC "0"
--- Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone II"
+-- Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone III"
 -- Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 -- Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 -- Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
@@ -190,7 +196,7 @@ END SYN;
 -- Retrieval info: PRIVATE: OPERATION_MODE NUMERIC "3"
 -- Retrieval info: PRIVATE: OUTDATA_ACLR_B NUMERIC "0"
 -- Retrieval info: PRIVATE: OUTDATA_REG_B NUMERIC "0"
--- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
+-- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "2"
 -- Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_MIXED_PORTS NUMERIC "2"
 -- Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_PORT_A NUMERIC "3"
 -- Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_PORT_B NUMERIC "3"
@@ -221,7 +227,7 @@ END SYN;
 -- Retrieval info: CONSTANT: CLOCK_ENABLE_OUTPUT_B STRING "BYPASS"
 -- Retrieval info: CONSTANT: INDATA_REG_B STRING "CLOCK0"
 -- Retrieval info: CONSTANT: INIT_FILE STRING "../Firmware/Message.mif"
--- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone II"
+-- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone III"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
 -- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "2048"
 -- Retrieval info: CONSTANT: NUMWORDS_B NUMERIC "2048"
@@ -231,7 +237,10 @@ END SYN;
 -- Retrieval info: CONSTANT: OUTDATA_REG_A STRING "UNREGISTERED"
 -- Retrieval info: CONSTANT: OUTDATA_REG_B STRING "UNREGISTERED"
 -- Retrieval info: CONSTANT: POWER_UP_UNINITIALIZED STRING "FALSE"
+-- Retrieval info: CONSTANT: RAM_BLOCK_TYPE STRING "M9K"
 -- Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_MIXED_PORTS STRING "DONT_CARE"
+-- Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_PORT_A STRING "NEW_DATA_NO_NBE_READ"
+-- Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_PORT_B STRING "NEW_DATA_NO_NBE_READ"
 -- Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "11"
 -- Retrieval info: CONSTANT: WIDTHAD_B NUMERIC "11"
 -- Retrieval info: CONSTANT: WIDTH_A NUMERIC "8"
@@ -261,5 +270,5 @@ END SYN;
 -- Retrieval info: GEN_FILE: TYPE_NORMAL CharRAM.inc FALSE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL CharRAM.cmp TRUE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL CharRAM.bsf FALSE
--- Retrieval info: GEN_FILE: TYPE_NORMAL CharRAM_inst.vhd TRUE
+-- Retrieval info: GEN_FILE: TYPE_NORMAL CharRAM_inst.vhd FALSE
 -- Retrieval info: LIB_FILE: altera_mf
