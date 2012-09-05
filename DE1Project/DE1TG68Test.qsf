@@ -581,31 +581,6 @@ set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "NO HEAT SINK WITH STI
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
 set_global_assignment -name AUTO_RAM_RECOGNITION ON
-set_global_assignment -name VHDL_FILE RTL/cascade_timer.vhd
-set_global_assignment -name VHDL_FILE RTL/simple_uart.vhd
-set_global_assignment -name VHDL_FILE RTL/vga_controller.vhd
-set_global_assignment -name VHDL_FILE RTL/vgacache.vhd
-set_global_assignment -name VHDL_FILE RTL/video_vga_master.vhd
-set_global_assignment -name VHDL_FILE RTL/sdram.vhd
-set_global_assignment -name SOURCE_FILE RTL/PLL.cmp
-set_global_assignment -name SDC_FILE DE1TG68Test.sdc
-set_global_assignment -name VERILOG_FILE RTL/DE1_Toplevel.v
-set_global_assignment -name VHDL_FILE RTL/TG68K_Pack.vhd
-set_global_assignment -name VHDL_FILE RTL/TG68K_ALU.vhd
-set_global_assignment -name VHDL_FILE RTL/TG68KdotC_Kernel.vhd
-set_global_assignment -name VERILOG_FILE RTL/SEG7_LUT.v
-set_global_assignment -name VERILOG_FILE RTL/SEG7_LUT_4.v
-set_global_assignment -name VHDL_FILE RTL/TG68Test.vhd
-set_global_assignment -name QIP_FILE RTL/PLL.qip
-set_global_assignment -name VHDL_FILE RTL/video_vga_dither.vhd
-set_global_assignment -name QIP_FILE RTL/DualPortM4K.qip
-set_global_assignment -name VHDL_FILE RTL/chargen.vhd
-set_global_assignment -name QIP_FILE Generated/CharRAM.qip
-set_global_assignment -name QIP_FILE Generated/CharRom.qip
-set_global_assignment -name QIP_FILE Generated/BootRom.qip
-set_global_assignment -name VHDL_FILE RTL/interrupt_controller.vhd
-set_global_assignment -name VHDL_FILE RTL/peripheral_controller.vhd
-set_global_assignment -name VHDL_FILE RTL/io_ps2_com.vhd
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[11]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[10]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[9]
@@ -644,7 +619,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_LDQM
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_RAS_N
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_UDQM
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_WE_N
-set_global_assignment -name VHDL_FILE RTL/spi.vhd
 set_location_assignment PIN_V20 -to SD_CLK
 set_location_assignment PIN_Y20 -to SD_CMD
 set_location_assignment PIN_W20 -to SD_DAT
@@ -838,4 +812,30 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=293" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=60926" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=717" -section_id auto_signaltap_0
+set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
+set_global_assignment -name VHDL_FILE ../DE1RTL/poweronreset.vhd
+set_global_assignment -name VHDL_FILE ../DE1RTL/statusleds_pwm.vhd
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/PLL.qip
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRom.qip
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRAM.qip
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/BootRom.qip
+set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT_4.v
+set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT.v
+set_global_assignment -name VERILOG_FILE ../DE1RTL/DE1_Toplevel.v
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
+set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
+set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
+set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

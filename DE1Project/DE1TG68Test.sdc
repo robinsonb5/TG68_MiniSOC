@@ -63,21 +63,21 @@ derive_clock_uncertainty
 #**************************************************************
 # Set Input Delay
 #**************************************************************
-set_input_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[1] } 2 [get_ports DRAM_DQ*]
+set_input_delay -clock { mypll|altpll_component|pll|clk[1] } 2 [get_ports DRAM_DQ*]
 
 
 
 #**************************************************************
 # Set Output Delay
 #**************************************************************
-set_output_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_DQ*]
-set_output_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_ADDR*]
-set_output_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_BA*]
-set_output_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_LDQM]
-set_output_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_UDQM]
-set_output_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_*_N]
+set_output_delay -clock { mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_DQ*]
+set_output_delay -clock { mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_ADDR*]
+set_output_delay -clock { mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_BA*]
+set_output_delay -clock { mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_LDQM]
+set_output_delay -clock { mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_UDQM]
+set_output_delay -clock { mypll|altpll_component|pll|clk[1] } 4 [get_ports DRAM_*_N]
 
-set_output_delay -clock { myTG68Test|mypll|altpll_component|pll|clk[0] } 4 [get_ports DRAM_CLK]
+set_output_delay -clock { mypll|altpll_component|pll|clk[0] } 4 [get_ports DRAM_CLK]
 
 
 

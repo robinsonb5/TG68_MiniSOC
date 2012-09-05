@@ -1,32 +1,25 @@
--- Toplevel file for Altera DE1 board
+// Toplevel port definitions taken from the DE1 default example code 
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.numeric_std.ALL;
-
--- -----------------------------------------------------------------------
-
-
-entity chameleon_pong_top is
-port
+module DE1_Toplevel
 	(
-		-- clock inputs
-		CLOCK_24 : in std_logic_vector(1 downto 0),	-- 24 Mhz
-		CLOCK_27 : in std_logic_vector(1 downto 0),	-- 27 MHz
-		CLOCK_50 : in std_logic,	-- 50 MHz
-		EXT_CLOCK : in std_logic,	-- External Clock
-
-		KEY : in std_logic(3 downto 0), -- Push-buttons
-		SW : in std_logic(9 downto 0), -- Toggle switches
-
-		HEX0 : out std_logic_vector(6 downto 0), -- 7seg digit 0
-		HEX1 : out std_logic_vector(6 downto 0), -- 7seg digit 1
-		HEX2 : out std_logic_vector(6 downto 0), -- 7seg digit 2
-		HEX3 : out std_logic_vector(6 downto 0), -- 7seg digit 3
-
-		LEDG : out std_logic_vector(7 downto 0), -- Green LEDs
-		LEDG : out std_logic_vector(7 downto 0), -- Red LEDs
-
+		////////////////////	Clock Input	 	////////////////////	 
+		CLOCK_24,						//	24 MHz
+		CLOCK_27,						//	27 MHz
+		CLOCK_50,						//	50 MHz
+		EXT_CLOCK,						//	External Clock
+		////////////////////	Push Button		////////////////////
+		KEY,							//	Pushbutton[3:0]
+		////////////////////	DPDT Switch		////////////////////
+		SW,								//	Toggle Switch[9:0]
+		////////////////////	7-SEG Dispaly	////////////////////
+		HEX0,							//	Seven Segment Digit 0
+		HEX1,							//	Seven Segment Digit 1
+		HEX2,							//	Seven Segment Digit 2
+		HEX3,							//	Seven Segment Digit 3
+		////////////////////////	LED		////////////////////////
+		LEDG,							//	LED Green[7:0]
+		LEDR,							//	LED Red[9:0]
+		////////////////////////	UART	////////////////////////
 		UART_TXD,						//	UART Transmitter
 		UART_RXD,						//	UART Receiver
 		/////////////////////	SDRAM Interface		////////////////
@@ -91,6 +84,24 @@ port
 		GPIO_1							//	GPIO Connection 1
 	);
 
+////////////////////////	Clock Input	 	////////////////////////
+input	[1:0]	CLOCK_24;				//	24 MHz
+input	[1:0]	CLOCK_27;				//	27 MHz
+input			CLOCK_50;				//	50 MHz
+input			EXT_CLOCK;				//	External Clock
+////////////////////////	Push Button		////////////////////////
+input	[3:0]	KEY;					//	Pushbutton[3:0]
+////////////////////////	DPDT Switch		////////////////////////
+input	[9:0]	SW;						//	Toggle Switch[9:0]
+////////////////////////	7-SEG Dispaly	////////////////////////
+output	[6:0]	HEX0;					//	Seven Segment Digit 0
+output	[6:0]	HEX1;					//	Seven Segment Digit 1
+output	[6:0]	HEX2;					//	Seven Segment Digit 2
+output	[6:0]	HEX3;					//	Seven Segment Digit 3
+////////////////////////////	LED		////////////////////////////
+output	[7:0]	LEDG;					//	LED Green[7:0]
+output	[9:0]	LEDR;					//	LED Red[9:0]
+////////////////////////////	UART	////////////////////////////
 output			UART_TXD;				//	UART Transmitter
 input			UART_RXD;				//	UART Receiver
 ///////////////////////		SDRAM Interface	////////////////////////
@@ -122,16 +133,16 @@ output			SRAM_WE_N;				//	SRAM Write Enable
 output			SRAM_CE_N;				//	SRAM Chip Enable
 output			SRAM_OE_N;				//	SRAM Output Enable
 ////////////////////	SD Card Interface	////////////////////////
-inout			SD_DAT;					//	SD Card Data
-inout			SD_DAT3;				//	SD Card Data 3
-inout			SD_CMD;					//	SD Card Command Signal
-output			SD_CLK;					//	SD Card Clock
+input          SD_DAT;     //  SD Card Data            - spi MISO
+output         SD_DAT3;    //  SD Card Data 3          - spi CS
+output         SD_CMD;     //  SD Card Command Signal  - spi MOSI
+output         SD_CLK;     //  SD Card Clock           - spi CLK
 ////////////////////////	I2C		////////////////////////////////
 inout			I2C_SDAT;				//	I2C Data
 output			I2C_SCLK;				//	I2C Clock
 ////////////////////////	PS2		////////////////////////////////
-input		 	PS2_DAT;				//	PS2 Data
-input			PS2_CLK;				//	PS2 Clock
+inout		 	PS2_DAT;				//	PS2 Data
+inout			PS2_CLK;				//	PS2 Clock
 ////////////////////	USB JTAG link	////////////////////////////
 input  			TDI;					// CPLD -> FPGA (data in)
 input  			TCK;					// CPLD -> FPGA (clk)
@@ -159,7 +170,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 assign	DRAM_DQ		=	16'hzzzz;
 assign	FL_DQ		=	8'hzz;
 assign	SRAM_DQ		=	16'hzzzz;
-assign	SD_DAT		=	1'bz;
+// assign	SD_DAT		=	1'bz;  -- input only in SPI mode
 assign	I2C_SDAT	=	1'bz;
 assign	GPIO_0		=	36'hzzzzzzzzz;
 assign	GPIO_1		=	36'hzzzzzzzzz;
@@ -170,26 +181,85 @@ reg		[27:0]	Cont;
 reg		[9:0]	mLEDR;
 reg				ST;
 
-always@(posedge CLOCK_50)		Cont	<=	Cont+1'b1;
 
-// assign	mSEG7_DIG	=	{	Cont[27:24],Cont[27:24],Cont[27:24],Cont[27:24]	};
+// PS/2 keyboard
+wire PS2K_DAT_IN=PS2_DAT;
+wire PS2K_DAT_OUT;
+assign PS2_DAT = (PS2K_DAT_OUT == 1'b0) ? 1'b0 : 1'bz;
+wire PS2K_CLK_IN=PS2_CLK;
+wire PS2K_CLK_OUT;
+assign PS2_CLK = (PS2K_CLK_OUT == 1'b0) ? 1'b0 : 1'bz;
+
+// PS/2 Mouse
+wire PS2M_DAT_IN=GPIO_1[19];
+wire PS2M_DAT_OUT;
+assign GPIO_1[19] = (PS2M_DAT_OUT == 1'b0) ? 1'b0 : 1'bz;
+wire PS2M_CLK_IN=GPIO_1[18];
+wire PS2M_CLK_OUT;
+assign GPIO_1[18] = (PS2M_CLK_OUT == 1'b0) ? 1'b0 : 1'bz;
+
+wire clk100;
+wire reset;
+
+wire [5:0] power_led;
+wire [5:0] disk_led;
+wire [5:0] net_led;
+wire [5:0] odd_led;
+
+wire [5:0] red;
+wire [5:0] green;
+wire [5:0] blue;
+
+assign VGA_R = red[5:2];
+assign VGA_G = green[5:2];
+assign VGA_B = blue[5:2];
 
 SEG7_LUT_4 			u0	(	HEX0,HEX1,HEX2,HEX3,mSEG7_DIG );
 
+
+PLL mypll
+(
+	.inclk0(CLOCK_50),
+	.c0(DRAM_CLK),
+	.c1(clk100)
+);
+
+
+poweronreset myreset
+(
+	.clk(clk100),
+	.reset_button(KEY[0]),
+	.reset_out(reset),
+	.reset_aux(reset_aux)
+);
+
+statusleds_pwm myleds
+(
+	.clk(clk100),
+	.power_led(power_led),
+	.disk_led(disk_led),
+	.net_led(net_led),
+	.odd_led(odd_led),
+	.leds_out({LEDG[3],LEDG[2],LEDG[1],LEDG[0]})
+);
+
+
 TG68Test myTG68Test
 (	
-	.clk(CLOCK_50),
-//	.clk50(CLOCK_50),
-	.src({SW[9:5],SW[5],SW[5],SW[4],SW[4],SW[4],SW[3],SW[3],SW[3:0]}),
-	.reset_in(KEY[0]),
+	.clk(clk100),
+	.switches(SW),
+	.reset_in(!SW[0]^KEY[0]),
+	.pausecpu(SW[1]),
+	.pausevga(SW[2]),
+	.buttons(KEY[3:1]),
 	.counter(mSEG7_DIG),
 	
 	// video
 	.vga_hsync(VGA_HS),
 	.vga_vsync(VGA_VS),
-	.vga_red(VGA_R),
-	.vga_green(VGA_G),
-	.vga_blue(VGA_B),
+	.vga_red(red),
+	.vga_green(green),
+	.vga_blue(blue),
 	
 	// sdram
 	.sdr_data(DRAM_DQ),
@@ -200,8 +270,27 @@ TG68Test myTG68Test
 	.sdr_ras(DRAM_RAS_N),
 	.sdr_cs(DRAM_CS_N),
 	.sdr_ba({DRAM_BA_1,DRAM_BA_0}),
-	.sdr_clk(DRAM_CLK),
-	.sdr_clkena(DRAM_CKE)
+//	.sdr_clk(DRAM_CLK),
+	.sdr_cke(DRAM_CKE),
+
+	// uart
+	.rxd(UART_RXD),
+	.txd(UART_TXD),
+	
+	// PS/2
+	.ps2k_clk_in(PS2K_CLK_IN),
+	.ps2k_dat_in(PS2K_DAT_IN),
+	.ps2k_clk_out(PS2K_CLK_OUT),
+	.ps2k_dat_out(PS2K_DAT_OUT),
+	.ps2m_clk_in(PS2M_CLK_IN),
+	.ps2m_dat_in(PS2M_DAT_IN),
+	.ps2m_clk_out(PS2M_CLK_OUT),
+	.ps2m_dat_out(PS2M_DAT_OUT),
+	// SD card
+	.sd_cs(SD_DAT3),
+	.sd_miso(SD_DAT),
+	.sd_mosi(SD_CMD),
+	.sd_clk(SD_CLK)
 );
 
 endmodule

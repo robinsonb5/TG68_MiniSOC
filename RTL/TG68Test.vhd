@@ -4,19 +4,18 @@ use IEEE.numeric_std.ALL;
 
 entity TG68Test is
 	port (
-		clk50 			: in std_logic;
---		clk50			: in std_logic;
+		clk 			: in std_logic;
+		reset_in 	: in std_logic;
 		switches		: in std_logic_vector(9 downto 0);
 		counter 		: buffer std_logic_vector(15 downto 0);
-		reset_in 	: in std_logic;
 		pausecpu		: in std_logic;
 		pausevga		: in std_logic;
 		buttons		: in std_logic_vector(2 downto 0);
 		
 		-- VGA
-		vga_red 		: out unsigned(3 downto 0);
-		vga_green 	: out unsigned(3 downto 0);
-		vga_blue 	: out unsigned(3 downto 0);
+		vga_red 		: out unsigned(5 downto 0);
+		vga_green 	: out unsigned(5 downto 0);
+		vga_blue 	: out unsigned(5 downto 0);
 		vga_hsync 	: out std_logic;
 		vga_vsync 	: buffer std_logic;
 		
@@ -29,8 +28,8 @@ entity TG68Test is
 		sdr_ras 		: out std_logic;
 		sdr_cs		: out std_logic;
 		sdr_ba		: out std_logic_vector(1 downto 0);
-		sdr_clk		: out std_logic;
-		sdr_clkena	: out std_logic;
+--		sdr_clk		: out std_logic; -- Board specific, from the PLL
+		sdr_cke	: out std_logic;
 		
 		-- UART
 		rxd	: in std_logic;
@@ -84,12 +83,10 @@ signal reset : std_logic := '0';
 signal reset_counter : unsigned(15 downto 0) := X"FFFF";
 signal tg68_ready : std_logic;
 signal sdr_ready : std_logic;
-signal ready : std_logic;
 signal write_address : std_logic_vector(23 downto 0);
 signal req_pending : std_logic :='0';
 --signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
-signal clk100 : std_logic;
 
 signal vga_addr : std_logic_vector(23 downto 0);
 signal vga_req : std_logic;
@@ -137,37 +134,21 @@ type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga,vga,periph
 signal prgstate : prgstates :=wait2;
 begin
 
-sdr_clkena <='1';
---sdr_clk <=clk100;
+sdr_cke <='1';
+--sdr_clk <=clk;
 
-mypll : ENTITY work.PLL
-	port map
-	(
-		inclk0 => clk50,
-		c0 => sdr_clk,
-		c1 => clk100,
-		locked => open
-	);
+--mypll : ENTITY work.PLL
+--	port map
+--	(
+--		inclk0 => clk50,
+--		c0 => sdr_clk,
+--		c1 => clk,
+--		locked => open
+--	);
+--
 
-
-process(clk100)
-begin
-	ready <= tg68_ready and sdr_ready and reset;
-	if rising_edge(clk100) then
-		reset_reg<=reset_in;
-
-		if reset_reg='0' then
-			reset_counter<=X"FFFF";
-			reset<='0';
-		else
-			reset_counter<=reset_counter-1;
-			if reset_counter=X"0000" then
-				reset<='1' and sdr_ready;
-			end if;
-		end if;
-	end if;
-end process;
-
+sdr_cke<='1';
+reset <= tg68_ready and sdr_ready and reset_in;
 
 --vga_red<=wred(7 downto 4);
 --vga_green<=wgreen(7 downto 4);
@@ -175,7 +156,7 @@ end process;
 
 myint : entity work.interrupt_controller
 	port map(
-		clk => clk100,
+		clk => clk,
 		reset => reset,
 		int7 => not buttons(2),
 		int1 => vblank_int,
@@ -196,8 +177,8 @@ myTG68 : entity work.TG68KdotC_Kernel
 	)
    port map
 	(
-		clk => clk100,
-      nReset => reset,
+		clk => clk,
+      nReset => reset_in and sdr_ready,  -- Contributes to reset, so have to use reset_in here.
       clkena_in => cpu_clkena and pausecpu,
       data_in => cpu_datain,
 		IPL => ints,
@@ -219,20 +200,20 @@ myTG68 : entity work.TG68KdotC_Kernel
 
 mybootrom : entity work.BootRom
 	port map (
-		clock => clk100,
+		clock => clk,
 		address => cpu_addr(11 downto 1),
 		q => romdata
 		);
 
 
 -- Make use of boot rom
-process(clk100,cpu_addr)
+process(clk,cpu_addr)
 begin
 	if reset_in='0' then
 		prgstate<=wait2;
 		req_pending<='0';
 		vga_reg_datain<=X"0000";
-	elsif rising_edge(clk100) then
+	elsif rising_edge(clk) then
 		int_ack<='0';
 		vga_reg_rw<='1';
 		vga_reg_req<='0';
@@ -357,8 +338,8 @@ mysdram : entity work.sdram
 		ba	=> sdr_ba,
 
 	-- Housekeeping
-		sysclk => clk100,
-		reset => reset_in,
+		sysclk => clk,
+		reset => reset_in,  -- Contributes to reset, so have to use reset_in here.
 		reset_out => sdr_ready,
 
 		vga_addr => vga_addr,
@@ -384,7 +365,7 @@ mysdram : entity work.sdram
 
 	myvga : entity work.vga_controller
 		port map (
-		clk => clk100,
+		clk => clk,
 		reset => reset,
 
 		reg_addr_in => vga_reg_addr,
@@ -407,14 +388,14 @@ mysdram : entity work.sdram
 		hsync => vga_hsync,
 		vsync => vga_vsync,
 		vblank_int => vblank_int,
-		red => vga_red,
-		green => vga_green,
-		blue => vga_blue
+		red => vga_red(5 downto 2),
+		green => vga_green(5 downto 2),
+		blue => vga_blue(5 downto 2)
 	);
 	
 	myperipheral : entity work.peripheral_controller
 		port map (
-		clk => clk100,
+		clk => clk,
 		reset => reset,
 		
 		reg_addr_in => per_reg_addr,

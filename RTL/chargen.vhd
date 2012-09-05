@@ -48,8 +48,7 @@ begin
 
   	mymessagerom : entity work.CharRAM
 	port map (
-		clock_a => clk,
-		clock_b => clk,
+		clock => clk,
 		address_a => std_logic_vector(rowaddr),
 		address_b => addrin,	-- Port b is used to write new data to the char ram.
 		data_a => X"00",
