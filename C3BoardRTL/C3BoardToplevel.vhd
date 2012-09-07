@@ -166,6 +166,8 @@ signal clk : std_logic;
 signal reset : std_logic;  -- active low
 signal counter : unsigned(34 downto 0);
 
+signal debugvalue : std_logic_vector(15 downto 0);
+
 signal currentX : unsigned(11 downto 0);
 signal currentY : unsigned(11 downto 0);
 signal end_of_pixel : std_logic;
@@ -180,7 +182,7 @@ signal sdr_cas : std_logic;
 signal sdr_ras : std_logic;
 signal sdr_cs : std_logic;
 signal sdr_ba : std_logic_vector(1 downto 0);
-signal sdr_clk : std_logic;
+-- signal sdr_clk : std_logic;
 signal sdr_cke : std_logic;
 
 signal ps2m_clk_in : std_logic;
@@ -199,6 +201,12 @@ signal net_led : unsigned(5 downto 0);
 signal odd_led : unsigned(5 downto 0);
 
 begin
+
+	power_led(5 downto 2)<=unsigned(debugvalue(15 downto 12));
+	disk_led(5 downto 2)<=unsigned(debugvalue(11 downto 8));
+	net_led(5 downto 2)<=unsigned(debugvalue(7 downto 4));
+	odd_led(5 downto 2)<=unsigned(debugvalue(3 downto 0));
+
 	ps2m_dat_in<=ps2m_dat;
 	ps2m_dat <= '0' when ps2m_dat_out='0' else 'Z';
 	ps2m_clk_in<=ps2m_clk;
@@ -210,8 +218,8 @@ begin
 	ps2k_clk <= '0' when ps2k_clk_out='0' else 'Z';
 
 	sd1_addr <= sdr_addr;
-	sd1_dqm <= sdr_dqm(1);
-	sd1_clk <= sdr_clk;
+	sd1_dqm <= sdr_dqm(0);
+--	sd1_clk <= sdr_clk;
 	sd1_we <= sdr_we;
 	sd1_cas <= sdr_cas;
 	sd1_ras <= sdr_ras;
@@ -220,8 +228,8 @@ begin
 	sd1_cke <= sdr_cke;
 
 	sd2_addr <= sdr_addr;
-	sd2_dqm <= sdr_dqm(0);
-	sd2_clk <= sdr_clk;
+	sd2_dqm <= sdr_dqm(1);
+--	sd2_clk <= sdr_clk;
 	sd2_we <= sdr_we;
 	sd2_cas <= sdr_cas;
 	sd2_ras <= sdr_ras;
@@ -233,7 +241,8 @@ begin
 		port map (
 			inclk0 => clk_50,
 			c0 => clk,
-			c1 => sdr_clk
+			c1 => sd1_clk,
+			c2 => sd2_clk
 		);
 
 	myleds : entity work.statusleds_pwm
@@ -305,13 +314,14 @@ begin
 			sd_cs => sd_cs,
 			sd_miso => sd_miso,
 			sd_mosi => sd_mosi,
-			sd_clk => sd_clk
+			sd_clk => sd_clk,
 			
 			-- Audio - FIXME abstract this out, too.
 --			aud_l => aud_l,
 --			aud_r => aud_r,
 			
 			-- LEDs
+			counter => debugvalue
 --			led_out => led_out,
 --			power_led => power_led,
 --			disk_led => disk_led,

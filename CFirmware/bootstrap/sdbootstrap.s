@@ -64,7 +64,8 @@ VBASE	SET VBASE+\2
 
 PERREGS equ $810000 ; Peripheral registers
 SERPER equ $810002
-HEX equ $810006 ; HEX display
+HEX equ $810006 ; HEX display - DISABLE
+HEX2 equ $710006 ; HEX display
 
 PER_SPI equ $20
 PER_SPI_BLOCKING equ $24
@@ -84,8 +85,12 @@ START:				; first instruction of program
 	move.w	#$364,SERPER
 	move.w	#$2700,SR	; Disable all interrupts
 
+	move.w	#$f000,HEX
+
 	lea	.welcome,a0
 	bsr	Writeserial
+
+	move.w	#$0f00,HEX
 
 	move.l	#$7ff,d7
 	lea	CHARBUF,a0
@@ -97,9 +102,11 @@ START:				; first instruction of program
 	lea	.welcome,a0
 	bsr put_msg
 
-	move.w	#0,SREC_COLUMN
 	bsr	sd_start	; If SD boot fails we drop through and receive from the serial port instead.
 
+	move.w	#0,SREC_COLUMN
+	move.w	#$00f0,HEX
+	move.w	#$000f,HEX
 .mainloop
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
@@ -139,7 +146,10 @@ DoDecodeByte	; Takes address of longword in A0, rotates 4 bits left and ors in t
 	rts
 
 HandleByte
-	addq.w	#1,SREC_COLUMN
+	add.w	#1,SREC_COLUMN
+
+	move.w	d0,HEX2
+	move.w	d0,PERREGS
 
 	cmp.b	#'S',d0		; First byte of a record is S - reset column counter.
 	bne.b	.nots
@@ -158,7 +168,7 @@ HandleByte
 	move.l	SREC_ACC2,d7
 	cmp.w	#1,SREC_COLUMN	; record type, high nybble
 	bne.b	.nottype
-	move.w	#$FFFE,HEX	; Debug
+	move.w	#$F000,HEX	; Debug
 	lea	SREC_TYPE+3,a0
 	bsr.s	DoDecodeByte	; Called once, should result in type being in the lowest nybble bye of SREC_TYPE
 	move.l	SREC_TYPE,d1
@@ -182,6 +192,7 @@ HandleByte
 
 	cmp.w	#3,SREC_COLUMN	; Byte count
 	bgt.b	.notbc
+	move.w	#$0F00,HEX	; Debug
 	lea	SREC_BYTECOUNT+3,a0
 	bsr.w	DoDecodeByte	; Called twice, should result in bytecount being in the low byte of SREC_BYTECOUNT
 	bra.w	.end
@@ -202,6 +213,8 @@ HandleByte
 	cmp.l	#3,SREC_TYPE	; Only types 1, 2 and 3 have data...
 	bgt.b	.nottype1
 
+	move.w	#$000F,HEX	; Debug
+
 	move.l	SREC_BYTECOUNT,d1
 	lsl.l	#1,d1	; Two characters for each output byte
 	addq.l	#1,d1
@@ -220,7 +233,7 @@ HandleByte
 	bra.b	.end	
 
 .finishtype1
-	move.w	#$FFEF,HEX	; Debug
+	move.w	#$FF00,HEX	; Debug
 	move.w	SREC_COUNTER,d0
 	addq.w	#1,d0
 	and.w	#1,d0
@@ -231,13 +244,13 @@ HandleByte
 	move.B	d7,(a0)
 	
 .nottype1
-	move.w	#$FFEE,HEX	; Debug
+	move.w	#$F0F0,HEX	; Debug
 	cmp.l	#7,SREC_TYPE
 	blt.b	.end
-	move.w	#$FFED,HEX	; Debug
+	move.w	#$F00F,HEX	; Debug
 	cmp.l	#9,SREC_TYPE
 	bgt.b	.end
-	move.w	#$FFEC,HEX	; Debug
+	move.w	#$FFF0,HEX	; Debug
 	lea	.endmessage,a0
 	bsr	Writeserial
 	move.l	SREC_ADDR,(a7)	; Jump to the newly downloaded address...
@@ -253,6 +266,17 @@ HandleByte
 	dc.b	"Firmware received - launching",13,10,0
 	cnop 0,2
 
+_Putcserial
+	swap	d0
+.wait
+	move.w	PERREGS,d0
+	btst	#8,d0
+	beq	.wait
+	swap	d0
+	move.w	d0,PERREGS
+	rts
+
+	btst	#9,PERREGS
 Writeserial	; A0 - string to be written
 	move.l	d0,-(a7)
 	moveq	#0,d0
@@ -310,7 +334,6 @@ start2
 	rts
 .failed
 	dc.b	'SD init failed',0
-     bra.s     start2
 
 notfound   dc.b 'not ' 
 found_MM   dc.b	'found '
@@ -452,7 +475,7 @@ msg_cmdtimeout_Error	dc.b	'Command Timeout_Error'	    ,$d,$a,0
 msg_timeout_Error	dc.b	'Timeout_Error'	    ,$d,$a,0
 msg_SDHC			dc.b	'SDHC found '	    ,$d,$a,0
 			
-
+			CNOP 0,2
 asmspi_init
 		move.w	#-1,SDHCtype
 			lea		PERREGS,a1
@@ -502,10 +525,8 @@ spi_init_w4	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			cmpi.b		#$AA,d0
 			bne			noSDHC
 			
-;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			move.w	PER_SPI_BLOCKING(a1),-2(a7)
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			pea		msg_SDHC
 			bsr		put_msga7
 			lea		4(a7),a7
