@@ -80,9 +80,12 @@ CHARBUF equ $800800
 	dc.l	START
 
 START:				; first instruction of program
-	lea	STACK,a7
+	move.l #STACK,a7
 	move.w	#$364,SERPER
 	move.w	#$2700,SR	; Disable all interrupts
+
+	lea	.welcome,a0
+	bsr	Writeserial
 
 	move.l	#$7ff,d7
 	lea	CHARBUF,a0
@@ -105,7 +108,8 @@ START:				; first instruction of program
 	bra.b	.mainloop
 
 .welcome
-	dc.b	'Testing..',0
+	dc.b	'Testing serial output...',13,10,0
+	cnop	0,2
 
 	; FIXME - move these into character RAM for safe keeping?
 
@@ -234,6 +238,8 @@ HandleByte
 	cmp.l	#9,SREC_TYPE
 	bgt.b	.end
 	move.w	#$FFEC,HEX	; Debug
+	lea	.endmessage,a0
+	bsr	Writeserial
 	move.l	SREC_ADDR,(a7)	; Jump to the newly downloaded address...
 	bclr	#0,PERREGS+4	; Disable ROM overlay
 	rts			; Should be in prefetch, so will be executed even though the ROM's vanished.
@@ -243,6 +249,24 @@ HandleByte
 	move.l	d7,SREC_ACC2
 	rts
 
+.endmessage
+	dc.b	"Firmware received - launching",13,10,0
+	cnop 0,2
+
+Writeserial	; A0 - string to be written
+	move.l	d0,-(a7)
+	moveq	#0,d0
+.wsloop
+	move.w	PERREGS,d0
+	btst	#8,d0
+	beq		.wsloop
+	move.b	(a0)+,d0
+	beq .done
+	move.w	d0,PERREGS
+	bra	.wsloop
+.done
+	move.l (a7)+,d0
+	rts
 
 	XDEF	spi_init
 
@@ -444,6 +468,7 @@ spi_init_w1
 			move.w	#50,d2
 spi_init_w2	bsr		cmd_reset		;use SPI Mode
 ;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+			move.w	PER_SPI_BLOCKING(a1),-2(a7)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
 ;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			cmp.b	#1,d0
@@ -478,6 +503,7 @@ spi_init_w4	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			bne			noSDHC
 			
 ;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+			move.w	PER_SPI_BLOCKING(a1),-2(a7)
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
 ;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			pea		msg_SDHC
@@ -516,6 +542,7 @@ spi_init_w8	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 		bsr		cmd_init
 			beq		spi_init_w6
 ;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
+			move.w	PER_SPI_BLOCKING(a1),-2(a7)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
 ;			move.w	#255,PER_SPI_BLOCKING(a1)	; Wait for last clocks before deasserting CS
 			dbra	d2,spi_init_w7
@@ -526,8 +553,9 @@ spi_init_w8	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 			rts		;init fault
 			
 spi_init_w6
+			move.w	PER_SPI_BLOCKING(a1),-2(a7)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#1,PER_TIMER_DIV7(a1)
+			move.w	#2,PER_TIMER_DIV7(a1)
 			pea		msg_init_done
 			bsr		put_msga7
 			lea		4(a7),a7
@@ -560,6 +588,22 @@ put_msg_end
 
 
 _LoadFile:
+			tst.w	SDHCtype
+			beq		.notsdhc
+			lea	.sdhcmessage,a0
+			pea	_LoadFile2
+			bra put_msg
+.sdhcmessage
+			dc.b	"SDHC flag still set",0
+			cnop 0,2
+.notsdhc
+			lea	.sdhcmessage2,a0
+			pea	_LoadFile2
+			bra put_msg
+.sdhcmessage2
+			dc.b	"SDHC flag cleared",0
+			cnop 0,2
+
 _LoadFile2:
 			bsr			cluster2lba
 _LoadFile1:	
@@ -888,4 +932,4 @@ fnc_end2:
 		move.l		(a7)+,d2
 		moveq		#0,d0
 		rts
-		
+

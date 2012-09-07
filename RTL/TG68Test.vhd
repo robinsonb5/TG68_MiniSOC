@@ -83,7 +83,6 @@ signal reset : std_logic := '0';
 signal reset_counter : unsigned(15 downto 0) := X"FFFF";
 signal tg68_ready : std_logic;
 signal sdr_ready : std_logic;
-signal ready : std_logic;
 signal write_address : std_logic_vector(23 downto 0);
 signal req_pending : std_logic :='0';
 --signal write_pending : std_logic :='0';
@@ -315,7 +314,7 @@ begin
 			when wait1 =>
 				prgstate<=wait2;
 			when wait2 =>
-				if (ready or not tg68_ready)='1' then
+				if (reset or not tg68_ready)='1' then
 					cpu_clkena<='1';
 					prgstate<=run;
 				end if;

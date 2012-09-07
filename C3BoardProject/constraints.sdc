@@ -64,15 +64,15 @@ derive_clock_uncertainty;
 # Set Input Delay
 #**************************************************************
 
-set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 2 [get_ports *sd1_data*]
-set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 2 [get_ports *sd2_data*]
+set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[1] } 2 [get_ports *sd1_data*]
+set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[1] } 2 [get_ports *sd2_data*]
 
 #**************************************************************
 # Set Output Delay
 #**************************************************************
 
-set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd1*]
-set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd2*]
+set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[1] } 4 [get_ports *sd1*]
+set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[1] } 4 [get_ports *sd2*]
 
 #**************************************************************
 # Set Clock Groups

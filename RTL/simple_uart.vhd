@@ -190,11 +190,13 @@ begin
 					if txclock='1' then
 						txd<=txbuffer(0);
 						txbuffer<='0' & txbuffer(17 downto 1);
-					end if;
-					if txbuffer(8)='0' then	-- Marker bit has reached bit 8
-						txstate<=idle;
-						txready<='1';
-						txint<='1';
+
+						if txbuffer(8)='0' then	-- Marker bit has reached bit 8
+							txstate<=idle;
+							txready<='1';
+							txint<='1';
+						end if;
+
 					end if;
 				when others =>
 					txstate<=idle;
