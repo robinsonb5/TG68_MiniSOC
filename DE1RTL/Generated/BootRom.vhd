@@ -90,7 +90,7 @@ BEGIN
 		intended_device_family => "Cyclone II",
 		lpm_hint => "ENABLE_RUNTIME_MOD=NO",
 		lpm_type => "altsyncram",
-		numwords_a => 1280,
+		numwords_a => 2048,
 		operation_mode => "ROM",
 		outdata_aclr_a => "NONE",
 		outdata_reg_a => "UNREGISTERED",
@@ -130,7 +130,7 @@ END SYN;
 -- Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 -- Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
 -- Retrieval info: PRIVATE: MIFfilename STRING "../CFirmware/bootstrap/sdbootstrap.mif"
--- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "1280"
+-- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "2048"
 -- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "2"
 -- Retrieval info: PRIVATE: RegAddr NUMERIC "1"
 -- Retrieval info: PRIVATE: RegOutput NUMERIC "0"
@@ -147,7 +147,7 @@ END SYN;
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone II"
 -- Retrieval info: CONSTANT: LPM_HINT STRING "ENABLE_RUNTIME_MOD=NO"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
--- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "1280"
+-- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "2048"
 -- Retrieval info: CONSTANT: OPERATION_MODE STRING "ROM"
 -- Retrieval info: CONSTANT: OUTDATA_ACLR_A STRING "NONE"
 -- Retrieval info: CONSTANT: OUTDATA_REG_A STRING "UNREGISTERED"

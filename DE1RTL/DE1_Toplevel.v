@@ -206,13 +206,18 @@ wire [5:0] disk_led;
 wire [5:0] net_led;
 wire [5:0] odd_led;
 
-wire [5:0] red;
-wire [5:0] green;
-wire [5:0] blue;
+wire [7:0] red;
+wire [7:0] green;
+wire [7:0] blue;
+wire [3:0] ored;
+wire [3:0] ogreen;
+wire [3:0] oblue;
 
-assign VGA_R = red[5:2];
-assign VGA_G = green[5:2];
-assign VGA_B = blue[5:2];
+wire vga_window;
+
+assign VGA_R = ored;
+assign VGA_G = ogreen;
+assign VGA_B = oblue;
 
 SEG7_LUT_4 			u0	(	HEX0,HEX1,HEX2,HEX3,mSEG7_DIG );
 
@@ -244,6 +249,23 @@ statusleds_pwm myleds
 );
 
 
+video_vga_dither
+# (
+	.outbits(4) )
+mydither (
+	.clk(clk100),
+	.hsync(VGA_HS),
+	.vsync(VGA_VS),
+	.vid_ena(vga_window),
+	.iRed(red),
+	.iGreen(green),
+	.iBlue(blue),
+	.oRed(ored),
+	.oGreen(ogreen),
+	.oBlue(oblue)
+);
+
+
 TG68Test myTG68Test
 (	
 	.clk(clk100),
@@ -260,6 +282,7 @@ TG68Test myTG68Test
 	.vga_red(red),
 	.vga_green(green),
 	.vga_blue(blue),
+	.vga_window(vga_window),
 	
 	// sdram
 	.sdr_data(DRAM_DQ),

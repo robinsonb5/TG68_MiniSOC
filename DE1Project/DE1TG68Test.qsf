@@ -812,6 +812,7 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=293" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=60926" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=717" -section_id auto_signaltap_0
+set_global_assignment -name SMART_RECOMPILE ON
 set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
 set_global_assignment -name VHDL_FILE ../DE1RTL/poweronreset.vhd
 set_global_assignment -name VHDL_FILE ../DE1RTL/statusleds_pwm.vhd
@@ -838,5 +839,4 @@ set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
 set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
 set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
 set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
-set_global_assignment -name SMART_RECOMPILE ON
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

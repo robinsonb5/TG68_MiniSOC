@@ -3,9 +3,13 @@ HWCAP
 	bits 7 downto 0 : Available memory: 2^n meg, so for 3 for an 8-meg board, 5 for a 32-meg board.
 	bit 8 : soft off, 1 for cyclone 3 board, 0 for DE1.
 
-Abstract out some of the hardware into platform-specific modules, so that each platform has an XXXProject and XXXRTL directory,
-so that multiple platforms can be build from one source tree.
+| Abstract out some of the hardware into platform-specific modules, so that each platform has an XXXProject and XXXRTL directory,
+| so that multiple platforms can be build from one source tree.
 
+Adjust video output and move dithering into the board-specific section.
+8-bits per gun, and a vid_ena flag which we can delay to match the dither circuit.
+
+Try a sigma-delta variant of the video dither.
 
 | CPU cache - both instruction and data.
 | (Discrete cachelines, and just one of each, or use a monolithic cache block?  The latter will be resource-hungry.)

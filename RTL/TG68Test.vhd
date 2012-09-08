@@ -13,11 +13,12 @@ entity TG68Test is
 		buttons		: in std_logic_vector(2 downto 0);
 		
 		-- VGA
-		vga_red 		: out unsigned(5 downto 0);
-		vga_green 	: out unsigned(5 downto 0);
-		vga_blue 	: out unsigned(5 downto 0);
+		vga_red 		: out unsigned(7 downto 0);
+		vga_green 	: out unsigned(7 downto 0);
+		vga_blue 	: out unsigned(7 downto 0);
 		vga_hsync 	: out std_logic;
-		vga_vsync 	: buffer std_logic;
+		vga_vsync 	: out std_logic;
+		vga_window	: out std_logic;
 		
 		-- SDRAM
 		sdr_data		: inout std_logic_vector(15 downto 0);
@@ -394,9 +395,10 @@ mysdram : entity work.sdram
 		hsync => vga_hsync,
 		vsync => vga_vsync,
 		vblank_int => vblank_int,
-		red => vga_red(5 downto 2),
-		green => vga_green(5 downto 2),
-		blue => vga_blue(5 downto 2)
+		red => vga_red,
+		green => vga_green,
+		blue => vga_blue,
+		vga_window => vga_window
 	);
 	
 	myperipheral : entity work.peripheral_controller

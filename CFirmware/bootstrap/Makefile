@@ -25,10 +25,10 @@ clean:
 	rm $(BOOTSTRAP) $(BOOTSTRAPSREC) $(SDBOOTSTRAPSREC) $(SDBOOTSTRAPOBJ) $(SDBOOTSTRAP) $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF)
 
 $(BOOTSTRAP): $(BOOTSTRAPSRC)
-	$(VASM) -no-opt -m68000 -Felf -o $@ $<
+	$(VASM) -m68000 -Felf -o $@ $<
 
 %.o: %.s
-	$(VASM) -no-opt -m68000 -Felf -o $@ $<
+	$(VASM) -m68000 -Felf -o $@ $<
 
 %.o: %.c
 	$(CC) -O1 -c -o $@ $<

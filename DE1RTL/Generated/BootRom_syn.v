@@ -33,7 +33,7 @@
 //applicable agreement for further details.
 
 
-//altsyncram CLOCK_ENABLE_INPUT_A="BYPASS" CLOCK_ENABLE_OUTPUT_A="BYPASS" DEVICE_FAMILY="Cyclone II" ENABLE_RUNTIME_MOD="NO" INIT_FILE="./CFirmware/bootstrap/sdbootstrap.mif" NUMWORDS_A=1280 OPERATION_MODE="ROM" OUTDATA_ACLR_A="NONE" OUTDATA_REG_A="UNREGISTERED" RAM_BLOCK_TYPE="M4K" WIDTH_A=16 WIDTH_BYTEENA_A=1 WIDTHAD_A=11 address_a clock0 q_a
+//altsyncram CLOCK_ENABLE_INPUT_A="BYPASS" CLOCK_ENABLE_OUTPUT_A="BYPASS" DEVICE_FAMILY="Cyclone II" ENABLE_RUNTIME_MOD="NO" INIT_FILE="../CFirmware/bootstrap/sdbootstrap.mif" NUMWORDS_A=2048 OPERATION_MODE="ROM" OUTDATA_ACLR_A="NONE" OUTDATA_REG_A="UNREGISTERED" RAM_BLOCK_TYPE="M4K" WIDTH_A=16 WIDTH_BYTEENA_A=1 WIDTHAD_A=11 address_a clock0 q_a
 //VERSION_BEGIN 12.0SP1 cbx_altsyncram 2012:07:05:20:06:30:SJ cbx_cycloneii 2012:07:05:20:06:30:SJ cbx_lpm_add_sub 2012:07:05:20:06:30:SJ cbx_lpm_compare 2012:07:05:20:06:30:SJ cbx_lpm_decode 2012:07:05:20:06:30:SJ cbx_lpm_mux 2012:07:05:20:06:30:SJ cbx_mgl 2012:07:05:20:07:18:SJ cbx_stratix 2012:07:05:20:06:30:SJ cbx_stratixii 2012:07:05:20:06:30:SJ cbx_stratixiii 2012:07:05:20:06:30:SJ cbx_stratixv 2012:07:05:20:06:30:SJ cbx_util_mgl 2012:07:05:20:06:30:SJ  VERSION_END
 // synthesis VERILOG_INPUT_VERSION VERILOG_2001
 // altera message_off 10463
@@ -113,10 +113,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_0.connectivity_checking = "OFF",
-		ram_block1a_0.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_0.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_0.init_file_layout = "port_a",
 		ram_block1a_0.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_0.mem_init0 = 1280'h000000000000000000BACA120002906235D100B867B20E1994B203461A8015400011698B6E9A364E62828580400100AC1821006402010DA1041006841281A3510B80A940B72A90E80140849205008501001494910A1C04014803654DEDE69696D8125210000001D48A78460C08C2C2080A64290304A16842000030802D55A1AC6A668D8CD6C6BD9A32C6BB0E71A358F646E876C6DBCC9ECA44A044C404218231,
+		ram_block1a_0.mem_init0 = 2048'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000BACA120002906235D100B867B20E1994B203461A8015400011698B6E9A364E662828580400100AC1821006402010C9B210416006848191A81A3510B8065010A01D4A05B94D401E80428109240A010A02008512922143808105200D9537B79A5A5B604948400000075229E11830230B06812182990A4460D1920B4124D0210C184400D9018F40C89DF6AAC21AC6A668D0CD6C6BDB1A32C6BB0E871A358F646E876C6DBCC93D948940AC44D004218808231,
 		ram_block1a_0.operation_mode = "rom",
 		ram_block1a_0.port_a_address_width = 11,
 		ram_block1a_0.port_a_data_out_clear = "none",
@@ -126,8 +126,8 @@ module  BootRom_altsyncram
 		ram_block1a_0.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_0.port_a_first_address = 0,
 		ram_block1a_0.port_a_first_bit_number = 0,
-		ram_block1a_0.port_a_last_address = 1279,
-		ram_block1a_0.port_a_logical_ram_depth = 1280,
+		ram_block1a_0.port_a_last_address = 2047,
+		ram_block1a_0.port_a_logical_ram_depth = 2048,
 		ram_block1a_0.port_a_logical_ram_width = 16,
 		ram_block1a_0.ram_block_type = "M4K",
 		ram_block1a_0.lpm_type = "cycloneii_ram_block";
@@ -166,10 +166,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_1.connectivity_checking = "OFF",
-		ram_block1a_1.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_1.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_1.init_file_layout = "port_a",
 		ram_block1a_1.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_1.mem_init0 = 1280'h0000000000000000002BDE64962288C068D30092CCB604B31282AE458B90114A11984B06D8B66CD8C6061302C8030098B02930C4426110B22C040CC8B01722D1069A38006523647590449492010C210D98840494120E792841A060C7070A40414542100000000505220AC6848A4065908021080645A000A407B8618A4D81411065640AA8A48521192584220D6112B48544D44484921592CA2CA30024BC608421,
+		ram_block1a_1.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002BDE64962288C068D30092CCB604B31282AE458B90114A11984B06D8B66CD88C6061302C8030098B02930C44261110C322C0A40CC94A3201722D9069A033406AD1C0032915FA4679108909240250021B726100928A41DB24A10681831C1C2901051508400000001414882B1A1229011A4682A00842A081A099400693483994B2CA1708000000050606C0BC51564650A0884A52151825A422AD16102B08545D044A492158259459472110103C609130421,
 		ram_block1a_1.operation_mode = "rom",
 		ram_block1a_1.port_a_address_width = 11,
 		ram_block1a_1.port_a_data_out_clear = "none",
@@ -179,8 +179,8 @@ module  BootRom_altsyncram
 		ram_block1a_1.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_1.port_a_first_address = 0,
 		ram_block1a_1.port_a_first_bit_number = 1,
-		ram_block1a_1.port_a_last_address = 1279,
-		ram_block1a_1.port_a_logical_ram_depth = 1280,
+		ram_block1a_1.port_a_last_address = 2047,
+		ram_block1a_1.port_a_logical_ram_depth = 2048,
 		ram_block1a_1.port_a_logical_ram_width = 16,
 		ram_block1a_1.ram_block_type = "M4K",
 		ram_block1a_1.lpm_type = "cycloneii_ram_block";
@@ -219,10 +219,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_2.connectivity_checking = "OFF",
-		ram_block1a_2.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_2.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_2.init_file_layout = "port_a",
 		ram_block1a_2.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_2.mem_init0 = 1280'h000000000000000000BEEA880207C44025F500F645FA0C111A96A6441E81130220546B164AB6644AC286030240090A88B031510582C1F1E32C045D9D32A722D106B0AC8027AB29FA38EBBFFE9B8D63A3022E2FFC973EA264E3C8F7ADCDCEA6A0C337B8692209272E770E67162E63CB883033DE560DB6184A308969B0BDE1591765E54ACA84A463112CA4662DC11291841557CCA5961676FEEFEBD80D84A8A9A1,
+		ram_block1a_2.mem_init0 = 2048'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000BEEA880307C04025F500F445FA0C911A96A6441E81130220506B164AB6644ABC286030240090A88B031510582C1F17CE30C0945D9D3A726A722D106B852E16547564013D57D4EF23B1D77FFD37128747074B85FF92E7904E938F23DEB7373A9A830CDEE1A488249CB9DC399C58B98FA9C2624C0CF79995A517F0C26131A112B4D981381001080D115EF0A4D1664E44A4A84A4635912CA466AD3C11291841553CC85961646DFDDFD3F5D83484A8B2129A1,
 		ram_block1a_2.operation_mode = "rom",
 		ram_block1a_2.port_a_address_width = 11,
 		ram_block1a_2.port_a_data_out_clear = "none",
@@ -232,8 +232,8 @@ module  BootRom_altsyncram
 		ram_block1a_2.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_2.port_a_first_address = 0,
 		ram_block1a_2.port_a_first_bit_number = 2,
-		ram_block1a_2.port_a_last_address = 1279,
-		ram_block1a_2.port_a_logical_ram_depth = 1280,
+		ram_block1a_2.port_a_last_address = 2047,
+		ram_block1a_2.port_a_logical_ram_depth = 2048,
 		ram_block1a_2.port_a_logical_ram_width = 16,
 		ram_block1a_2.ram_block_type = "M4K",
 		ram_block1a_2.lpm_type = "cycloneii_ram_block";
@@ -272,10 +272,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_3.connectivity_checking = "OFF",
-		ram_block1a_3.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_3.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_3.init_file_layout = "port_a",
 		ram_block1a_3.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_3.mem_init0 = 1280'h0000000000000000002EEACC9403E47830E550DE76FA861DFFA20BCFAABAF76C309D19EAEDBAF75C46CE6B55C5575DA9FC3F431D4EA7C2BE8D7657EB3045E7D04BA82D0CB172E97D236EA6DAD5CC4DA3939716D8C32C72476F49740D2D2EA0A75D075840483249866B2CE39BB4616D112E77AC7305A261A436B838A0D9079DA749BF5CDBCFCF759369EE7307D9A31CA79766DEC4B60778A68A6B144D14E9A8B9,
+		ram_block1a_3.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002EEACC9403E07830E550DC76FA861DFFA20BCFAABAF76C309919EAEDBAF75C146CE6B55C5575DA9FC3F431D4EA7C228FE8D71656FA3870455E7D84BA2101C403D968658B87F4D7F366DD6DB5AB90DB4726E582DB90659E4D1DBD25D034B4BA829D741D610120C92619ACB38E6ED185B14C444B9D6B1118C410530C462194C39E51862C6886044F086C83E8DA648BE5C7BEFEF759D369EE73862D9B318A79662DEE4B6074714D14D739147694E9A3228B9,
 		ram_block1a_3.operation_mode = "rom",
 		ram_block1a_3.port_a_address_width = 11,
 		ram_block1a_3.port_a_data_out_clear = "none",
@@ -285,8 +285,8 @@ module  BootRom_altsyncram
 		ram_block1a_3.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_3.port_a_first_address = 0,
 		ram_block1a_3.port_a_first_bit_number = 3,
-		ram_block1a_3.port_a_last_address = 1279,
-		ram_block1a_3.port_a_logical_ram_depth = 1280,
+		ram_block1a_3.port_a_last_address = 2047,
+		ram_block1a_3.port_a_logical_ram_depth = 2048,
 		ram_block1a_3.port_a_logical_ram_width = 16,
 		ram_block1a_3.ram_block_type = "M4K",
 		ram_block1a_3.lpm_type = "cycloneii_ram_block";
@@ -325,10 +325,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_4.connectivity_checking = "OFF",
-		ram_block1a_4.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_4.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_4.init_file_layout = "port_a",
 		ram_block1a_4.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_4.mem_init0 = 1280'h000000000000000000BE7A8D2B0FC86075E754FA6FDEAE9BD6B297CE1BB31702A56C39C67F9E3ECE420291664E5150A93C3171C543E159A34D45778C32A7E7184FAAB984F308E9DC3A7AB6DA91EC69F6320706DCD338CA6E63C971038380404002731D4048324D86633CF7922663E73824318E57480008C6371930AA79458F22C8865C5AEFE631B268E637265B273D8E1EE75ECC9206DC2EC2E8B8659CC9A8B1,
+		ram_block1a_4.mem_init0 = 2048'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000BE7A8D2A0FC86075E754FA6FDEAE1BD6B297CE1BB31702A56C39C67F9E3ECE1420291664E5150A9383150C543E15838A36D414768C38F06B7E7184FA00034206DDCC27984674CC6324F56DB5239893ED260180DB9A67094CB98F25C40E0E01010009CC750120C936198CF3DE48998F91EC60490C631111C4828064623199C29851863830830840021CA2E9F23C9875C5AEFE6318B368C63706353373D8E1EE35EEC9206C385D85D0C0A8549CC9A3628B1,
 		ram_block1a_4.operation_mode = "rom",
 		ram_block1a_4.port_a_address_width = 11,
 		ram_block1a_4.port_a_data_out_clear = "none",
@@ -338,8 +338,8 @@ module  BootRom_altsyncram
 		ram_block1a_4.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_4.port_a_first_address = 0,
 		ram_block1a_4.port_a_first_bit_number = 4,
-		ram_block1a_4.port_a_last_address = 1279,
-		ram_block1a_4.port_a_logical_ram_depth = 1280,
+		ram_block1a_4.port_a_last_address = 2047,
+		ram_block1a_4.port_a_logical_ram_depth = 2048,
 		ram_block1a_4.port_a_logical_ram_width = 16,
 		ram_block1a_4.ram_block_type = "M4K",
 		ram_block1a_4.lpm_type = "cycloneii_ram_block";
@@ -378,10 +378,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_5.connectivity_checking = "OFF",
-		ram_block1a_5.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_5.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_5.init_file_layout = "port_a",
 		ram_block1a_5.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_5.mem_init0 = 1280'h0000000000000000009C7A89220BC46075E704FE6FDE2F9BF7F007CF7988BF2AE548F9C67FBE3FDE42424B51CD0F0FE87837EF5DFEFF7BBA8C177FEA32A7E7810BA08980B6284DCEAAEBBFFE9FA16BA69BBF3FF8D738E34EFA69F386E6FE7E7CF3F7F869220923AF7F2CE71BA661C7B9BC77FEC333F7ECEF369275A2EB45992749A64CEAE6C731D328E733A659231886166757E492075C6CC6CBF865B4D9A9B1,
+		ram_block1a_5.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009C7A89220BC46075E704FE6FDE2F9BF7F007CF7988BF2AE548F9C67FBE3FDE142424B51CD0F0FE87837EF5DFEFF7A38BA8C1167EEA20706B7E7810BA07E55FC6BC4C05B14666FDCBD5D77FFD3F42D74D37EF87FF1AE75C6F3BE9A7CE1B9BF9F9F3CFDFE1A488248EBDFCB39C6E998791CC646F1DFF1318C467FF64663110C3B8D1563410830847FFF5A2D992349A64C6AE6E7318D328E733A6251231C86166357E49207438D98D93FFE854B4D9A2229B1,
 		ram_block1a_5.operation_mode = "rom",
 		ram_block1a_5.port_a_address_width = 11,
 		ram_block1a_5.port_a_data_out_clear = "none",
@@ -391,8 +391,8 @@ module  BootRom_altsyncram
 		ram_block1a_5.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_5.port_a_first_address = 0,
 		ram_block1a_5.port_a_first_bit_number = 5,
-		ram_block1a_5.port_a_last_address = 1279,
-		ram_block1a_5.port_a_logical_ram_depth = 1280,
+		ram_block1a_5.port_a_last_address = 2047,
+		ram_block1a_5.port_a_logical_ram_depth = 2048,
 		ram_block1a_5.port_a_logical_ram_width = 16,
 		ram_block1a_5.ram_block_type = "M4K",
 		ram_block1a_5.lpm_type = "cycloneii_ram_block";
@@ -431,10 +431,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_6.connectivity_checking = "OFF",
-		ram_block1a_6.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_6.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_6.init_file_layout = "port_a",
 		ram_block1a_6.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_6.mem_init0 = 1280'h0000000000000000009C4E4C8423C8C025C1F3D2C5D3953150928364BAE6118C004D6F4BCAD3E46AE70F21C46471F09D102150A5028145A327CAF49D1A91B2D38F9ABCC0EF28C9CF2370A6DAA1C90DD8330706D85318F0436C4973E7E7EE7676DB761814DD8491D66B38C60810D4C71927230D274DB778C722B134F26DC11906418768EAB6A6A15028E6AA86510218C4046654A6DB069C024021E8259CE989B1,
+		ram_block1a_6.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009C4E4C8523CCC025C1F3D0C5D395B150928364BAE6118C00496F4BCAD3E46A1E70F21C46471F09D102150A502814438A307C1BF59C3858691B2DB8F9877956FA9DE607794624DCF346E14DB543921BB066C180DB0A631E0D0DB125CF9F9FB9D9DB6DD8605376124759ACE31820435311E46449C8C31C1DC59FFBE4623135C29871D634900138279FF6E0A99024187686AB686A10D028E6AA862590218C4046254A6DB068B8048040FDF8149CE982629B1,
 		ram_block1a_6.operation_mode = "rom",
 		ram_block1a_6.port_a_address_width = 11,
 		ram_block1a_6.port_a_data_out_clear = "none",
@@ -444,8 +444,8 @@ module  BootRom_altsyncram
 		ram_block1a_6.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_6.port_a_first_address = 0,
 		ram_block1a_6.port_a_first_bit_number = 6,
-		ram_block1a_6.port_a_last_address = 1279,
-		ram_block1a_6.port_a_logical_ram_depth = 1280,
+		ram_block1a_6.port_a_last_address = 2047,
+		ram_block1a_6.port_a_logical_ram_depth = 2048,
 		ram_block1a_6.port_a_logical_ram_width = 16,
 		ram_block1a_6.ram_block_type = "M4K",
 		ram_block1a_6.lpm_type = "cycloneii_ram_block";
@@ -484,10 +484,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_7.connectivity_checking = "OFF",
-		ram_block1a_7.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_7.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_7.init_file_layout = "port_a",
 		ram_block1a_7.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_7.mem_init0 = 1280'h0000000000000000000866800142A43B00E480023099000C00030831AA40008C000444E100410220391100C82480800604B06311088442B2020E00C8882418FB998A21918C0200630B50249081490D41808404941A0C30234C8330000000000000061300005248042268420488426591070308110010008402110420C494B82E0BD001C240200C030A62008208214872112E0002490E0202A82828A110EB8A90,
+		ram_block1a_7.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000866800142A43B00E480003099000C00030831AA40008C000044E1004102205391100C82480800604B06311088442AAB22205E00C8A94942418F399800044008810C8C600F00463116A0492102921A8302214092834186048D320CC0000000000000184C000149201089A10812210995654541C0C250545400000552A090CA021516A59108688000024A4B82A0BD0014240200C2830A620082A08214872112A0002490E18405505000288610EB8B2AA90,
 		ram_block1a_7.operation_mode = "rom",
 		ram_block1a_7.port_a_address_width = 11,
 		ram_block1a_7.port_a_data_out_clear = "none",
@@ -497,8 +497,8 @@ module  BootRom_altsyncram
 		ram_block1a_7.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_7.port_a_first_address = 0,
 		ram_block1a_7.port_a_first_bit_number = 7,
-		ram_block1a_7.port_a_last_address = 1279,
-		ram_block1a_7.port_a_logical_ram_depth = 1280,
+		ram_block1a_7.port_a_last_address = 2047,
+		ram_block1a_7.port_a_logical_ram_depth = 2048,
 		ram_block1a_7.port_a_logical_ram_width = 16,
 		ram_block1a_7.ram_block_type = "M4K",
 		ram_block1a_7.lpm_type = "cycloneii_ram_block";
@@ -537,10 +537,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_8.connectivity_checking = "OFF",
-		ram_block1a_8.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_8.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_8.init_file_layout = "port_a",
 		ram_block1a_8.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_8.mem_init0 = 1280'h00000000000000000008462485A2860008C08003009100404200F121A040008C104204310041002021012090210080040040400180C0406212060088480890E609874018809109133F30224880921CD8620202482903B85328493122C2CEE4E107640F14D916DC126920000080001C7126880709C90616B59BDD8E27C480180701B100C2121004000852003200180C60812600224906008008039831D0E19190,
+		ram_block1a_8.mem_init0 = 2048'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008462484A2820008C08003009100C04200F121A040008C1042043100410020121012090210080040040400180C04020E23201600882C4840890EE09853885710C200C4048684D1337E604491012439B0C68080490520770D4CA124C48B0B3B93841D903C53645B7049A48000020000731CC4C9A2013C324C12B0B45A24DAE245113E20D020280F4C82402980300B100C212100408008520032600180C6081220022490608100100457980550E186A3190,
 		ram_block1a_8.operation_mode = "rom",
 		ram_block1a_8.port_a_address_width = 11,
 		ram_block1a_8.port_a_data_out_clear = "none",
@@ -550,8 +550,8 @@ module  BootRom_altsyncram
 		ram_block1a_8.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_8.port_a_first_address = 0,
 		ram_block1a_8.port_a_first_bit_number = 8,
-		ram_block1a_8.port_a_last_address = 1279,
-		ram_block1a_8.port_a_logical_ram_depth = 1280,
+		ram_block1a_8.port_a_last_address = 2047,
+		ram_block1a_8.port_a_logical_ram_depth = 2048,
 		ram_block1a_8.port_a_logical_ram_width = 16,
 		ram_block1a_8.ram_block_type = "M4K",
 		ram_block1a_8.lpm_type = "cycloneii_ram_block";
@@ -590,10 +590,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_9.connectivity_checking = "OFF",
-		ram_block1a_9.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_9.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_9.init_file_layout = "port_a",
 		ram_block1a_9.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_9.mem_init0 = 1280'h000000000000000000984628024428048DC08004119101804210A9311040408AB56C242922410322391100D8258082060E40652190C86544420A01110AB498A88830C1589218898A32382248C0ED28F82303024A5930A8622A493B3C9C83171490340E5491049492692421020421A28A241207E04CA15C6311131C3A24C09C06018120C272610CC008610921040908739207020249670D104106880100C0B990,
+		ram_block1a_9.mem_init0 = 2048'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000984628024428048DC08004119101004210A9311040408AB56C2429224103223391100D8258082060E40652190C86471C46203A011078C8EB498A0883258813104E0AC490C644D8A36470449181DA51F046C0A0494B26150D88A924ECF2720C5C5240D0395244125249A4908408108681A0684904811F1805168AE070308C830C11D030D021281A11F26041C02008120C272610C8C00861092070409087392030202496709A2082020E880680C0A703990,
 		ram_block1a_9.operation_mode = "rom",
 		ram_block1a_9.port_a_address_width = 11,
 		ram_block1a_9.port_a_data_out_clear = "none",
@@ -603,8 +603,8 @@ module  BootRom_altsyncram
 		ram_block1a_9.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_9.port_a_first_address = 0,
 		ram_block1a_9.port_a_first_bit_number = 9,
-		ram_block1a_9.port_a_last_address = 1279,
-		ram_block1a_9.port_a_logical_ram_depth = 1280,
+		ram_block1a_9.port_a_last_address = 2047,
+		ram_block1a_9.port_a_logical_ram_depth = 2048,
 		ram_block1a_9.port_a_logical_ram_width = 16,
 		ram_block1a_9.ram_block_type = "M4K",
 		ram_block1a_9.lpm_type = "cycloneii_ram_block";
@@ -643,10 +643,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_10.connectivity_checking = "OFF",
-		ram_block1a_10.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_10.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_10.init_file_layout = "port_a",
 		ram_block1a_10.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_10.mem_init0 = 1280'h000000000000000000BA62A12A0409100DC00004119001004636A8011600440A1059201002000102000000400400022004C0237098442F4CE001013382A400900038A1080218808A1A120000406D2852214140025010A82600002303E3F4D8DDF494040000000400280000000000820A040202A08BE5C842018A081020409425091100800021904200219821142800008005124000C50500500648008040B810,
+		ram_block1a_10.mem_init0 = 2048'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000BA62A12A0409100DC00004119001004636A8011600440A10592010020001020000000400400022004C0237098442E104CC0001013210002A400900038AC0298045084010C44058A17424000080DA50A442D028004A0215059800008C0F8FD36377D250100000001000A000000000020080280100800A080036AE4020180C418600801050210809FCB0204142108110080002190042002198205142800008001124000C500A00A0074248008040A401810,
 		ram_block1a_10.operation_mode = "rom",
 		ram_block1a_10.port_a_address_width = 11,
 		ram_block1a_10.port_a_data_out_clear = "none",
@@ -656,8 +656,8 @@ module  BootRom_altsyncram
 		ram_block1a_10.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_10.port_a_first_address = 0,
 		ram_block1a_10.port_a_first_bit_number = 10,
-		ram_block1a_10.port_a_last_address = 1279,
-		ram_block1a_10.port_a_logical_ram_depth = 1280,
+		ram_block1a_10.port_a_last_address = 2047,
+		ram_block1a_10.port_a_logical_ram_depth = 2048,
 		ram_block1a_10.port_a_logical_ram_width = 16,
 		ram_block1a_10.ram_block_type = "M4K",
 		ram_block1a_10.lpm_type = "cycloneii_ram_block";
@@ -696,10 +696,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_11.connectivity_checking = "OFF",
-		ram_block1a_11.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_11.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_11.init_file_layout = "port_a",
 		ram_block1a_11.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_11.mem_init0 = 1280'h000000000000000000984240010004000DC020021190008004328001120404080024600002008002000800000020202000C0021008040308A0800022828000992028A002061AC0AE0A00000000242801304040004014E02200002B50D0C5212597100000048000C0280000000000820A04000080082248420000000020449425090000802021004200210021142100008004124000C405905905020000442010,
+		ram_block1a_11.mem_init0 = 2048'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000984240010004000DC0200211900080043280011204040800246000020080020000800000020202000C002100804021008A080000220800280009920280510CA20D001030C5605AE154000000004850026290080008029C05880000AD43431484965C40000012000300A00000000002008028010000020000169240201000000000001004231234C010224142108000080202100042002100205142100008000124000C400B20B20601020000442400010,
 		ram_block1a_11.operation_mode = "rom",
 		ram_block1a_11.port_a_address_width = 11,
 		ram_block1a_11.port_a_data_out_clear = "none",
@@ -709,8 +709,8 @@ module  BootRom_altsyncram
 		ram_block1a_11.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_11.port_a_first_address = 0,
 		ram_block1a_11.port_a_first_bit_number = 11,
-		ram_block1a_11.port_a_last_address = 1279,
-		ram_block1a_11.port_a_logical_ram_depth = 1280,
+		ram_block1a_11.port_a_last_address = 2047,
+		ram_block1a_11.port_a_logical_ram_depth = 2048,
 		ram_block1a_11.port_a_logical_ram_width = 16,
 		ram_block1a_11.ram_block_type = "M4K",
 		ram_block1a_11.lpm_type = "cycloneii_ram_block";
@@ -749,10 +749,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_12.connectivity_checking = "OFF",
-		ram_block1a_12.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_12.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_12.init_file_layout = "port_a",
 		ram_block1a_12.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_12.mem_init0 = 1280'h0000000000000000004CC0012949042302E8030A20D0328800088111880880BCA5940081200110011971481911800002404044411088488020084200850088C8C00800740006896B2B2A224884A46CAB22121248C90CB2672248302D2D204E4820A14A169144901269010800010841062E14A54041409000200000200000180601C024C25260980008609820000008131006000001264A240240C04100680080,
+		ram_block1a_12.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004CC0012949042302E8030A20D0328800088111880880BCA59400812001100111971481911800002404044411088482980200184200284450088C8C00840832100003A0002744D6B3565444910948D956468482491921964D9C8920C0B4B48139208285285A45124049A404200004210340D84B8529151005200480C061000200110020A0C0204111C0000180601C024C252609808008609820200000813100600000126494480481CCC04400680206080,
 		ram_block1a_12.operation_mode = "rom",
 		ram_block1a_12.port_a_address_width = 11,
 		ram_block1a_12.port_a_data_out_clear = "none",
@@ -762,8 +762,8 @@ module  BootRom_altsyncram
 		ram_block1a_12.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_12.port_a_first_address = 0,
 		ram_block1a_12.port_a_first_bit_number = 12,
-		ram_block1a_12.port_a_last_address = 1279,
-		ram_block1a_12.port_a_logical_ram_depth = 1280,
+		ram_block1a_12.port_a_last_address = 2047,
+		ram_block1a_12.port_a_logical_ram_depth = 2048,
 		ram_block1a_12.port_a_logical_ram_width = 16,
 		ram_block1a_12.ram_block_type = "M4K",
 		ram_block1a_12.lpm_type = "cycloneii_ram_block";
@@ -802,10 +802,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_13.connectivity_checking = "OFF",
-		ram_block1a_13.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_13.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_13.init_file_layout = "port_a",
 		ram_block1a_13.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_13.mem_init0 = 1280'h0000000000000000006FC46497853F1C9AE8D40712D1A1C4C209F823086AC09A94DF847924499125212924C53C54D6054C442D00B05820C473514311CD6C118C003D008811B5895A3E2A3248C4FF78B26313124AF1A9AA762248378DCDDCFCFCF2C54C56D936DC1269073993273951462D56A66833F7E210E9468A3504809C0701B304E2207394C08871917104080A619307025249E740902907B85140C03080,
+		ram_block1a_13.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006FC46497853F1C9AE8D40712D1A1C4C209F823086AC09A94DF8479244991251212924C53C54D6054C442D00B0582029C47351143103C4C56C118C003DFE43FC84004408DA6C4D5A37C54649189FEF164C6C4A2495E35354DD88920DE373773F3F3CB15315B64DB7049A41CE64C9CE54350D84B55A9191A04CFBF10C8674A234511A82CD0E0284FFFC24061C0701B304E22073948C088719170304080A619307025249E7481205203FFB84540C02287080,
 		ram_block1a_13.operation_mode = "rom",
 		ram_block1a_13.port_a_address_width = 11,
 		ram_block1a_13.port_a_data_out_clear = "none",
@@ -815,8 +815,8 @@ module  BootRom_altsyncram
 		ram_block1a_13.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_13.port_a_first_address = 0,
 		ram_block1a_13.port_a_first_bit_number = 13,
-		ram_block1a_13.port_a_last_address = 1279,
-		ram_block1a_13.port_a_logical_ram_depth = 1280,
+		ram_block1a_13.port_a_last_address = 2047,
+		ram_block1a_13.port_a_logical_ram_depth = 2048,
 		ram_block1a_13.port_a_logical_ram_width = 16,
 		ram_block1a_13.ram_block_type = "M4K",
 		ram_block1a_13.lpm_type = "cycloneii_ram_block";
@@ -855,10 +855,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_14.connectivity_checking = "OFF",
-		ram_block1a_14.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_14.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_14.init_file_layout = "port_a",
 		ram_block1a_14.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_14.mem_init0 = 1280'h000000000000000000D8C0EC97E46E3B07C87347319091CC421BF911BA26401E30FE60F8020083030038205C1DF072030450216080402DC471CB1111C7AC88DD091DA0C8868FC0FF1F001000507F3C1971010002781DF8330801236FEFFEFEFCF3F406024CF24CC0202318A10318D75F060203A9CFF7DAD68B569A1560401405013160A072310C4080330873040902318125001000250CB0CB0BF81050610810,
+		ram_block1a_14.mem_init0 = 2048'h000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000D8C0EC97E46E3B07C87347319091CC421BF911BA26401E30FE60F80200830300038205C1DF072030450216080402C194471C0B11101C043AC88DD091DFDD7FBACD06443465E04FF13E002000A0FE7832E24020004F03BF04CC20048DBFBFFBFBF3CFD0180933C93300808C62840C6352D4BC0180800E0A4136BED4AA545AA14D00AA145041182FBDF02029405013160A072310C04080330872104090231812500100025019619611DFF801506100A4810,
 		ram_block1a_14.operation_mode = "rom",
 		ram_block1a_14.port_a_address_width = 11,
 		ram_block1a_14.port_a_data_out_clear = "none",
@@ -868,8 +868,8 @@ module  BootRom_altsyncram
 		ram_block1a_14.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_14.port_a_first_address = 0,
 		ram_block1a_14.port_a_first_bit_number = 14,
-		ram_block1a_14.port_a_last_address = 1279,
-		ram_block1a_14.port_a_logical_ram_depth = 1280,
+		ram_block1a_14.port_a_last_address = 2047,
+		ram_block1a_14.port_a_logical_ram_depth = 2048,
 		ram_block1a_14.port_a_logical_ram_width = 16,
 		ram_block1a_14.ram_block_type = "M4K",
 		ram_block1a_14.lpm_type = "cycloneii_ram_block";
@@ -908,10 +908,10 @@ module  BootRom_altsyncram
 	);
 	defparam
 		ram_block1a_15.connectivity_checking = "OFF",
-		ram_block1a_15.init_file = "./CFirmware/bootstrap/sdbootstrap.mif",
+		ram_block1a_15.init_file = "../CFirmware/bootstrap/sdbootstrap.mif",
 		ram_block1a_15.init_file_layout = "port_a",
 		ram_block1a_15.logical_ram_name = "ALTSYNCRAM",
-		ram_block1a_15.mem_init0 = 1280'h0000000000000000000CE0CC8521643B00EC534230D8908C0000800100220008A40400A8000080001818200C00D0500300500000000000002148500080000088000800000000800A0A0000001024680020000000C000A222000020000000000000090000485248002000000000000002040080000000000000000000000010040130408000208400002080200000002210040000000441A49A48000000400000,
+		ram_block1a_15.mem_init0 = 2048'h0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CE0CC8521643B00EC534230D8908C0000800100220008A40400A80000800001818200C00D05003005000000000000100214085000080000000880008000000000000000044040A1140000002048D0004200000018001444880000800000000000002400012149200080000000000002008801002000000000000080400000000000000000000000000001004013040800020840000020802000000002210040000000440349349000000000400004000,
 		ram_block1a_15.operation_mode = "rom",
 		ram_block1a_15.port_a_address_width = 11,
 		ram_block1a_15.port_a_data_out_clear = "none",
@@ -921,8 +921,8 @@ module  BootRom_altsyncram
 		ram_block1a_15.port_a_disable_ce_on_output_registers = "on",
 		ram_block1a_15.port_a_first_address = 0,
 		ram_block1a_15.port_a_first_bit_number = 15,
-		ram_block1a_15.port_a_last_address = 1279,
-		ram_block1a_15.port_a_logical_ram_depth = 1280,
+		ram_block1a_15.port_a_last_address = 2047,
+		ram_block1a_15.port_a_logical_ram_depth = 2048,
 		ram_block1a_15.port_a_logical_ram_width = 16,
 		ram_block1a_15.ram_block_type = "M4K",
 		ram_block1a_15.lpm_type = "cycloneii_ram_block";
@@ -931,7 +931,7 @@ module  BootRom_altsyncram
 		q_a = {wire_ram_block1a_15portadataout[0], wire_ram_block1a_14portadataout[0], wire_ram_block1a_13portadataout[0], wire_ram_block1a_12portadataout[0], wire_ram_block1a_11portadataout[0], wire_ram_block1a_10portadataout[0], wire_ram_block1a_9portadataout[0], wire_ram_block1a_8portadataout[0], wire_ram_block1a_7portadataout[0], wire_ram_block1a_6portadataout[0], wire_ram_block1a_5portadataout[0], wire_ram_block1a_4portadataout[0], wire_ram_block1a_3portadataout[0], wire_ram_block1a_2portadataout[0], wire_ram_block1a_1portadataout[0], wire_ram_block1a_0portadataout[0]};
 	initial/*synthesis enable_verilog_initial_construct*/
  	begin
-		$display("Warning: Memory initialization file ./CFirmware/bootstrap/sdbootstrap.mif is not of the dimensions 1280 X 16, the resulting memory design may not produce consistent simulation results.");
+		$display("Warning: Memory initialization file ../CFirmware/bootstrap/sdbootstrap.mif is not of the dimensions 2048 X 16, the resulting memory design may not produce consistent simulation results.");
 	end
 endmodule //BootRom_altsyncram
 //VALID FILE
@@ -986,8 +986,8 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING "./CFirmware/bootstrap/sdbootstrap.mif"
-// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "1280"
+// Retrieval info: PRIVATE: MIFfilename STRING "../CFirmware/bootstrap/sdbootstrap.mif"
+// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "2048"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "2"
 // Retrieval info: PRIVATE: RegAddr NUMERIC "1"
 // Retrieval info: PRIVATE: RegOutput NUMERIC "0"
@@ -1000,11 +1000,11 @@ endmodule
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 // Retrieval info: CONSTANT: CLOCK_ENABLE_INPUT_A STRING "BYPASS"
 // Retrieval info: CONSTANT: CLOCK_ENABLE_OUTPUT_A STRING "BYPASS"
-// Retrieval info: CONSTANT: INIT_FILE STRING "./CFirmware/bootstrap/sdbootstrap.mif"
+// Retrieval info: CONSTANT: INIT_FILE STRING "../CFirmware/bootstrap/sdbootstrap.mif"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone II"
 // Retrieval info: CONSTANT: LPM_HINT STRING "ENABLE_RUNTIME_MOD=NO"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
-// Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "1280"
+// Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "2048"
 // Retrieval info: CONSTANT: OPERATION_MODE STRING "ROM"
 // Retrieval info: CONSTANT: OUTDATA_ACLR_A STRING "NONE"
 // Retrieval info: CONSTANT: OUTDATA_REG_A STRING "UNREGISTERED"

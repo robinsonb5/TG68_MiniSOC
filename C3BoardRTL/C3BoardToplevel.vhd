@@ -42,7 +42,7 @@ port(
 		vga_green 	: out unsigned(5 downto 0);
 		vga_blue 	: out unsigned(5 downto 0);
 		
-		vga_hsync 	: out std_logic;
+		vga_hsync 	: buffer std_logic;
 		vga_vsync 	: buffer std_logic;
 
 		-- PS/2
@@ -200,6 +200,11 @@ signal disk_led : unsigned(5 downto 0);
 signal net_led : unsigned(5 downto 0);
 signal odd_led : unsigned(5 downto 0);
 
+signal vga_r : unsigned(7 downto 0);
+signal vga_g : unsigned(7 downto 0);
+signal vga_b : unsigned(7 downto 0);
+signal vga_window : std_logic;
+
 begin
 
 	power_led(5 downto 2)<=unsigned(debugvalue(15 downto 12));
@@ -263,6 +268,23 @@ begin
 			power_button => power_button,
 			power_hold => power_hold		
 		);
+
+	mydither : entity work.video_vga_dither
+		generic map(
+			outbits => 6
+		)
+		port map(
+			clk=>clk,
+			hsync=>vga_hsync,
+			vsync=>vga_vsync,
+			vid_ena=>vga_window,
+			iRed => vga_r,
+			iGreen => vga_g,
+			iBlue => vga_b,
+			oRed => vga_red,
+			oGreen => vga_green,
+			oBlue => vga_blue
+		);
 	
 	mytg68test : entity work.TG68Test
 		port map(
@@ -284,12 +306,14 @@ begin
 			sdr_ras => sdr_ras,
 			
 			-- VGA
-			vga_red => vga_red,
-			vga_green => vga_green,
-			vga_blue => vga_blue,
+			vga_red => vga_r,
+			vga_green => vga_g,
+			vga_blue => vga_b,
 			
 			vga_hsync => vga_hsync,
 			vga_vsync => vga_vsync,
+			
+			vga_window => vga_window,
 
 			-- UART
 			rxd => rs232_rxd,
@@ -328,6 +352,7 @@ begin
 --			net_led => net_led,
 --			odd_led => odd_led
 		);
+		
 end RTL;
 
 	

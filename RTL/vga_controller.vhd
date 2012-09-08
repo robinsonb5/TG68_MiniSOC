@@ -83,9 +83,10 @@ entity vga_controller is
 		vblank_int : out std_logic;
 		hsync : out std_logic; -- to monitor
 		vsync : buffer std_logic; -- to monitor
-		red : out unsigned(3 downto 0);		-- 16-bit 5-6-5 output
-		green : out unsigned(3 downto 0);
-		blue : out unsigned(3 downto 0)
+		red : out unsigned(7 downto 0);		-- Allow for 8bpp even if we
+		green : out unsigned(7 downto 0);	-- only currently support 16-bit
+		blue : out unsigned(7 downto 0);		-- 5-6-5 output
+		vga_window : out std_logic	-- '1' during the display window
 	);
 end entity;
 	
@@ -117,10 +118,6 @@ architecture rtl of vga_controller is
 	signal vgadata : std_logic_vector(15 downto 0);
 	signal oddframe : std_logic;	-- Toggled each frame, used for dithering
 
-	signal ored : unsigned(5 downto 0);
-	signal ogreen : unsigned(5 downto 0);
-	signal oblue : unsigned(5 downto 0);
-	signal dither : unsigned(5 downto 0);
 	signal sprite_col : unsigned(3 downto 0);
 
 	signal chargen_addr : std_logic_vector(10 downto 0);
@@ -129,15 +126,12 @@ architecture rtl of vga_controller is
 	signal chargen_window : std_logic := '0';
 	signal chargen_pixel : std_logic := '0';
 	signal chargen_rw : std_logic :='1';
+	signal chargen_overlay : std_logic :='1';
 
 	type charramstates is (writeupperbyte,readupperbyte1,readupperbyte2,writelowerbyte,readlowerbyte1,readlowerbyte2);
 	signal charramstate : charramstates;			
 
 begin
-
-	red <= ored(5 downto 2);
-	green <= ogreen(5 downto 2);
-	blue <= oblue(5 downto 2);
 
 	myVgaMaster : entity work.video_vga_master
 		generic map (
@@ -231,6 +225,7 @@ begin
 			sprite0_xpos<=X"000";
 			sprite0_ypos<=X"000";
 			chargen_addr<="00000000000";
+			chargen_overlay<='1';
 		elsif rising_edge(clk) then
 			reg_dtack<='1';
 			chargen_rw<='1';
@@ -279,9 +274,14 @@ begin
 						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
 							framebuffer_pointer(15 downto 0) <= reg_data_in;
 						end if;
+					when X"018" => -- Control register
+	--					reg_data_out<=framebuffer_pointer(15 downto 0);
+						if reg_rw='0' then
+							chargen_overlay<=reg_data_in(7);
+						end if;
 					when X"100" =>
 	--					reg_data_out<=X"00"&sprite0_pointer(23 downto 16);
-						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+						if reg_rw='0' then
 							sprite0_pointer(23 downto 16) <= reg_data_in(7 downto 0);
 						end if;
 					when X"102" =>
@@ -371,55 +371,47 @@ begin
 			set_sprite0<='0';
 			if end_of_pixel='1' then
 				sdr_reservebank<='1';
-			-- Dither: bit 1: temporal dithering, alternate lines swapped each frame
-				--         bit 0: spatial dithering, alternate pixels
-				dither<="0000" & (currentY(0) xor oddframe) & (currentX(0) xor currentY(0));
 
 				if currentX<640 and currentY<480 then
+					vga_window<='1';
 					-- Request next pixel from VGA cache
 					vgacache_req<='1';
 
 					-- Now dither the pixel.  If we're drawing a pixel from the character
 					-- generator or sprites, or the pixel is already at max, we don't dither. (Avoids overflow)
 					if sprite_col(3)='1' then
-						ored <= sprite_col(2) & sprite_col(2) & sprite_col(2) & 
-							sprite_col(2) & sprite_col(2) & sprite_col(2);
-					elsif chargen_pixel='1' or (chargen_window='0' and vgadata(15 downto 12)="1111") then
-						ored <= "111111";
+						red <= (others => sprite_col(2));
+					elsif chargen_pixel='1' then
+						red <= "11111111";
 					elsif chargen_window='1' then
-						ored <= unsigned('0'&vgadata(15 downto 11)) + dither;
+						red <= unsigned('0'&vgadata(15 downto 11)&"00");
 					else
-						ored <= unsigned(vgadata(15 downto 11)&'0') + dither;
+						red <= unsigned(vgadata(15 downto 11)&"000");
 					end if;
 
 					if sprite_col(3)='1' then
-						ogreen <= sprite_col(1) & sprite_col(1) & sprite_col(1) & 
-							sprite_col(1) & sprite_col(1) & sprite_col(1);
-					elsif chargen_pixel='1' or (chargen_window='0' and vgadata(10 downto 7)="1111") then
-						ogreen <= "111111";
+						green <= (others=>sprite_col(1));
+					elsif chargen_pixel='1' then
+						green <= "11111111";
 					elsif chargen_window='1' then
-						ogreen <= unsigned('0'&vgadata(10 downto 6)) + dither;
+						green <= unsigned('0'&vgadata(10 downto 6)&"00");
 					else
-						ogreen <= unsigned(vgadata(10 downto 5)) + dither;
+						green <= unsigned(vgadata(10 downto 5)&"00");
 					end if;
 
 					if sprite_col(3)='1' then
-						oblue <= sprite_col(0) & sprite_col(0) & sprite_col(0) & 
-							sprite_col(0) & sprite_col(0) & sprite_col(0);
-					elsif chargen_pixel='1' or (chargen_window='0' and vgadata(4 downto 1)="1111") then
-						oblue <= "111111";
+						blue <= (others=>sprite_col(0));
+					elsif chargen_pixel='1' then
+						blue <= "11111111";
 					elsif chargen_window='1' then
-						oblue <= unsigned('0'&vgadata(4 downto 0)) + dither;
+						blue <= unsigned('0'&vgadata(4 downto 0)&"00");
 					else
-						oblue <= unsigned(vgadata(4 downto 0)&'0') + dither;
+						blue <= unsigned(vgadata(4 downto 0)&"000");
 					end if;
 
 				else
-					ored<="000000"; -- need to set black during sync periods.
-					ogreen<="000000";
-					oblue<="000000";
+					vga_window<='0';
 					if currentY=vsize and currentX=16 then
-						oddframe<=not oddframe;
 						vga_pointer<=framebuffer_pointer;
 						vga_newframe<='1';
 						vblank_int<='1';
