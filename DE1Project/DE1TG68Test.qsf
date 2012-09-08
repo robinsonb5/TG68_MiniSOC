@@ -531,7 +531,7 @@ set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DRAM_LDQM -section_id SDRAM_
 set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DRAM_RAS_N -section_id SDRAM_OTHERS
 set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DRAM_UDQM -section_id SDRAM_OTHERS
 set_global_assignment -name ASSIGNMENT_GROUP_MEMBER DRAM_WE_N -section_id SDRAM_OTHERS
-set_global_assignment -name ENABLE_DRC_SETTINGS ON
+set_global_assignment -name ENABLE_DRC_SETTINGS OFF
 set_global_assignment -name CYCLONEII_OPTIMIZATION_TECHNIQUE SPEED
 set_global_assignment -name ROUTER_TIMING_OPTIMIZATION_LEVEL MAXIMUM
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"

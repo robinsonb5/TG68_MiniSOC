@@ -65,7 +65,6 @@ VBASE	SET VBASE+\2
 PERREGS equ $810000 ; Peripheral registers
 SERPER equ $810002
 HEX equ $810006 ; HEX display - DISABLE
-HEX2 equ $710006 ; HEX display
 
 PER_SPI equ $20
 PER_SPI_BLOCKING equ $24
@@ -75,13 +74,13 @@ PER_TIMER_DIV7 equ $1e
 
 CHARBUF equ $800800
 
-	org 0
+;	org $0
 
 	dc.l	STACK		; Initial stack pointer
 	dc.l	START
 
 START:				; first instruction of program
-	move.l #STACK,a7
+	lea 	STACK,a7
 	move.w	#$364,SERPER
 	move.w	#$2700,SR	; Disable all interrupts
 
@@ -105,8 +104,6 @@ START:				; first instruction of program
 	bsr	sd_start	; If SD boot fails we drop through and receive from the serial port instead.
 
 	move.w	#0,SREC_COLUMN
-	move.w	#$00f0,HEX
-	move.w	#$000f,HEX
 .mainloop
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
@@ -148,7 +145,6 @@ DoDecodeByte	; Takes address of longword in A0, rotates 4 bits left and ors in t
 HandleByte
 	add.w	#1,SREC_COLUMN
 
-	move.w	d0,HEX2
 	move.w	d0,PERREGS
 
 	cmp.b	#'S',d0		; First byte of a record is S - reset column counter.
@@ -170,10 +166,10 @@ HandleByte
 	bne.b	.nottype
 	move.w	#$F000,HEX	; Debug
 	lea	SREC_TYPE+3,a0
-	bsr.s	DoDecodeByte	; Called once, should result in type being in the lowest nybble bye of SREC_TYPE
+	bsr	DoDecodeByte	; Called once, should result in type being in the lowest nybble bye of SREC_TYPE
 	move.l	SREC_TYPE,d1
 	cmp.l	#3,d1
-	ble.s	.dontinvert
+	ble	.dontinvert
 	moveq.l	#10,d1
 	sub.l	SREC_TYPE,d1 ; Just to be awkward, S7 has 32-bit addr, S8 has 24 and S9 has 16!
 .dontinvert
@@ -297,24 +293,28 @@ Writeserial	; A0 - string to be written
 ; SD card code, borrowed from Minimig.
        
 sd_start:
+		move.w	#$0001,HEX
 		lea	msg_start_init,a0
 		bsr	put_msg
        jsr		asmspi_init
-       bne.s     start2
+       bne     start2
        
+		move.w	#$0002,HEX
+
 		move.w		#$40,_drive	;Superfloppy
 		bsr			_FindVolume		
-       beq.s     start5
+       beq     start5
 		clr.w		_drive		;1.Partition
-		bsr			_FindVolume		
-       bne.s     start3
+		bsr			_FindVolume
+       bne     start3
        
 start5
+			move.w	#$0003,HEX
 			bsr			fat_cdroot
 			;d0 - LBA
 			lea		mmio_name,a1
 			bsr		fat_findfile
-			beq.s     start3	
+			beq     start3	
 				
 			lea		found_MM,a0
 			bsr		put_msg
@@ -323,11 +323,13 @@ start5
 			rts
 
 start3			
+		move.w	#$F003,HEX
 			lea		notfound,a0
 			bsr		put_msg
 			rts
 			
 start2
+		move.w	#$F002,HEX
 	lea	.failed,a0
 	bsr	put_msg
 
@@ -339,7 +341,7 @@ notfound   dc.b 'not '
 found_MM   dc.b	'found '
 
 mmio_name:	dc.b	'BOOT    SRE',0
-
+			CNOP 0,2
 
 ;***************************************************
 ; SPI Commands
@@ -351,15 +353,18 @@ mmio_name:	dc.b	'BOOT    SRE',0
 ;         
 ;***************************************************
 cmd_read_sector:
+			move.w	#$100,HEX
 	; vor Einsprung A0 setzen
 			lea			_secbuf,a0
 			bsr		cmd_read
 			bne		read_error3		;Error
+			move.w	#$101,HEX
 read1
 			move.w	#20000,d1		;Timeout counter
 ;			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
 read2		subq.w	#1,d1
 			beq		read_error2		;Timeout
+			move.w	#$102,HEX
 			move.w	#255,PER_SPI_BLOCKING(a1)		;8 Takte fÃ¼rs Lesen
 read_w1		move.w	PER_SPI_BLOCKING(a1),d0
 			cmp.b	#$fe,d0
@@ -374,15 +379,18 @@ read_w2		move.l	PER_SPI_PUMP(a1),d0
 .wait
 			move.w	PER_SPI_BLOCKING(a1),d0	; wait for transfer to finish before raising CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
+			move.w	#$103,HEX
 			lea		-$200(a0),a0
 			moveq	#0,d0
 			rts
 read_error2	
+			move.w	#$F102,HEX
 			lea		msg_timeout_Error,a0
 			bsr		put_msg
 			moveq	#-2,d0
 			rts		
 read_error3
+			move.w	#$F103,HEX
 			lea		msg_cmdtimeout_Error,a0
 			bsr		put_msg
 			moveq	#-1,d0
@@ -580,6 +588,7 @@ spi_init_w6
 			pea		msg_init_done
 			bsr		put_msga7
 			lea		4(a7),a7
+			move.w	#$FFFF,HEX
 			moveq	#0,d0
 			rts
 
@@ -629,7 +638,7 @@ _LoadFile2:
 			bsr			cluster2lba
 _LoadFile1:	
 			bsr			cmd_read_sector
-			bne.s		lferror
+			bne		lferror
 			
 			move.l	#$1ff,d7
 			lea	_secbuf,a0
@@ -659,57 +668,64 @@ lferror:	moveq		#0,d0
 _FindVolume:
 
 ;@checktype:
+		move.w	#$0201,HEX
 		moveq		#0,d0	;partitionstable
 		move.l		d0,_volstart
+		move.w	#$0211,HEX
 		bsr			cmd_read_sector
-		bne.s 		_error
+		bne 		_error
+
+		move.w	#$0202,HEX
 
 		cmpi.b		#$55,$1fe(a0)
-		bne.s		_error
+		bne		_error
 		cmpi.b		#$AA,$1ff(a0)
-		bne.s		_error
+		bne		_error
 			
 		move.w		_drive,d0
 		and.w		#$70,d0
 		cmp.w		#$40,d0
-		bcc.s		_testfat	;Superfloppy
+		bcc		_testfat	;Superfloppy
 	
 		lea			$1be(a0),a1		; pointer to partition table
 		adda.w		d0,a1
 		
 ;_foundfat:
 ;read_vol_sector	
+		move.w	#$0203,HEX
 		move.l		8(a1),d0	;LBA
 		ror.w		#8,d0
 		swap		d0
 		ror.w		#8,d0
 		move.l		d0,_volstart
 		bsr			cmd_read_sector	; read sector 
-		bne.s		_error
+		bne		_error
 		cmpi.b		#$55,$1fe(a0)
-		bne.s		_error
+		bne		_error
 		cmpi.b		#$AA,$1ff(a0)
-		beq.s		_testfat
+		beq		_testfat
 _error:
+		move.w	#$f201,HEX
 		moveq		#-1,d0
 		rts
 
 
 _testfat:
+		move.w	#$0204,HEX
 		cmpi.l		#$46415431,$36(a0)	;"FAT1"
-		bne.s		_testfat_2
+		bne		_testfat_2
 		move.b		#12,_fstype
 		cmpi.l		#$32202020,$3A(a0)	;"2   "
-		beq.s		_testfat_ex
+		beq		_testfat_ex
 		move.b		#16,_fstype
 		cmpi.l		#$36202020,$3A(a0)	;"6   "
-		beq.s		_testfat_ex
+		beq		_testfat_ex
 _testfat_2:
 		move.b		#$00,_fstype
 		cmpi.l		#$46415433,$52(a0)	;"FAT3"
-		bne.s		_error
+		bne		_error
 		cmpi.l		#$32202020,$56(a0)	;"2   "
-		bne.s		_error
+		bne		_error
 		move.b		#32,_fstype
 _testfat_ex:
 		move.l		$0a(a0),d0	; make sure sector size is 512
@@ -723,7 +739,7 @@ _testfat_ex:
 			add.l		d0,d1
 			move.l		d1,_fatstart			;Fat Table
 		cmpi.b		#32,_fstype
-		bne.s		 _fat16
+		bne		 _fat16
 		
 ;@fat32:
 		move.l		$2c(a0),d0	; cluster of root directory
@@ -739,8 +755,8 @@ _testfat_ex:
 _add_start32		
 		add.l		d0,d1
 		subq.b		#1,$10(a0)
-		bne.s		_add_start32
-		bra.s		subcluster
+		bne		_add_start32
+		bra		subcluster
 		
 _fat16
 			moveq		#0,d0
@@ -767,6 +783,7 @@ subcluster:
 			move.l		d1,_datastart			;start of clusters
 			
 fat_ex:
+			move.w	#$0205,HEX
 			moveq		#0,d0
 			rts
 
@@ -774,7 +791,7 @@ fat_ex:
 fat_cdroot:
 			move.l		_rootcluster,d0	; cluster of basic directory
 			move.l		d0,_cluster	
-			bne.s		 cdfat_32
+			bne		 cdfat_32
 		
 			clr.l		_cluster
 			move.w		_rootdirentrys,d0
@@ -791,9 +808,9 @@ cdfat_32:
 			move.w		d1,_sectorcnt
 _fat32_1:		
 			lsr.w			#1,d1
-			bcs.s		_fat32_2
+			bcs		_fat32_2
 			lsl.l		#1,d0
-			bra.s		_fat32_1
+			bra		_fat32_1
 _fat32_2:
 			add.l		_datastart,d0
 			move.l		d0,_sectorlba	
@@ -811,7 +828,7 @@ fat_findfile_m4
 			moveq		#15,d2
 fat_findfile_m3
 			tst.b	(a0)		;end
-			beq.s		fat_findfile_m8
+			beq		fat_findfile_m8
 			moveq		#10,d0
 fat_findfile_m2			
 			move.b		(a2,d0),d1
@@ -827,7 +844,7 @@ fat_findfile_m1
 			move.b	11(a0),d0
 			move.w	d0,_attrib
 			cmpi.b		#32,_fstype
-			bne.s		 sfs_m3
+			bne		 sfs_m3
 			move.w	20(a0),d0		;high cluster
 			ror.w	#8,d0
 			swap	d0
@@ -850,7 +867,7 @@ fat_findfile_m9
 			subi.w		#1,_sectorcnt
 			bne 		fat_findfile_m4
 			bsr			next_cluster
-			beq.s		fat_findfile_m8
+			beq		fat_findfile_m8
 			bsr			cluster2lba		
 			bra			fat_findfile_m4
 fat_findfile_m8			
@@ -860,16 +877,16 @@ fat_findfile_m8
 			
 next_cluster:
 		cmpi.b		#32,_fstype
-		beq.s		 fnc_m32
+		beq		 fnc_m32
 		cmpi.b		#12,_fstype
-		beq.s		 fnc_m12
+		beq		 fnc_m12
 
 ;FAT16
 		move.l    	_cluster,D0
 		lsr.l     	#8,D0
 		add.l		_fatstart,D0
 		bsr			cmd_read_sector	; read sector 
-		bne.s		fnc_end
+		bne		fnc_end
 		move.b    	_cluster+3,D0
 		add.w		d0,d0
 		move.w		(a0,d0),d0
@@ -884,7 +901,7 @@ fnc_m32:
 		lsr.l     	#7,D0
 		add.l		_fatstart,D0
 		bsr			cmd_read_sector	; read sector 
-		bne.s		fnc_end
+		bne		fnc_end
 		move.b    	_cluster+3,D0
 		and.w		#$7f,d0
 		add.w		d0,d0
@@ -915,7 +932,7 @@ fnc_m12:
 		add.l		_fatstart,D0
 		move.l		d0,d2
 		bsr			cmd_read_sector	; read sector 
-		bne.s		fnc_end2
+		bne		fnc_end2
 		move.l		d1,d0
 		lsr.l		#1,d0
 		and.w		#$1ff,d0
@@ -926,10 +943,10 @@ fnc_m12:
 		exg.l		d0,d2
 		addq.l		#1,d0
 		bsr			cmd_read_sector	; read sector 
-		bne.s		fnc_end2
+		bne		fnc_end2
 		lsl			#8,d2
 		move.b		(a0),d2
-		bra.s		fnc_m15
+		bra		fnc_m15
 		
 fnc_m14:		
 		move.b		(a0,d0),d2
@@ -938,7 +955,7 @@ fnc_m14:
 fnc_m15:
 		rol.w		#8,d2
 		and.w			#1,d1
-		beq.s		fnc_m13
+		beq		fnc_m13
 		lsr			#4,d2
 fnc_m13:
 		and.l		#$FFF,d2
