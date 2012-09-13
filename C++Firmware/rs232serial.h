@@ -5,18 +5,19 @@
 #include <hardware/uart.h>
 #include <hardware/ints.h>
 
-#include "ringbuffer.h"
+#include "chardevice.h"
 
 // TODO -
 // Get system clock speed from hardware (needs hardware support)
-// Use a ring buffer and interrupt routine for reading/writing
 
-class RS232Serial
+class RS232Serial : public CharDevice
 {
 	public:
 	RS232Serial(volatile unsigned short *base=(volatile unsigned short *)PERIPHERALBASE)
-		: base(base), intpending(false), outgoing(8), incoming(8)
+		: CharDevice(8), base(base), intpending(false)
 	{
+		while(!((HW_PER(PER_UART)&(1<<PER_UART_TXREADY))))
+			;
 		SetIntHandler(PER_INT_UART,IntHandler);
 	}
 
@@ -34,37 +35,28 @@ class RS232Serial
 		
 	}
 
-	// FIXME - make this a stream superclass
-	void PutC(char c)
+	virtual int Write(const char *buf,int len)
 	{
+		int result=0;
 		DisableInterrupts();
-		if(intpending)
+		if(!intpending)
 		{
-			// If we know an interrupt is pending, we just tack in the incoming character onto the end of the ringbuffer
-			outgoing.Write(c);
-		}
-		else
-		{
-			// If there's no interrupt pending, we write immediately
 			while(!((HW_PER(PER_UART)&(1<<PER_UART_TXREADY))))
 				;
-			HW_PER(PER_UART)=c;
+			HW_PER(PER_UART)=*buf++;
+			--len;
+			result=1;
 			intpending=true;
-		}
+		}			
+		result+=CharDevice::Write(buf,len);
 		EnableInterrupts();
+		return(result);
 	}
-	void PutS(const char *s)
-	{
-		char c;
-		while((c=*s++))
-			PutC(c);
-	}
+
 	static void IntHandler();
 	protected:
 	volatile unsigned short *base;
 	bool intpending;
-	RingBuffer outgoing;
-	RingBuffer incoming;
 };
 
 extern RS232Serial RS232;

@@ -25,7 +25,11 @@ class RingBuffer
 	{
 		return(*(buf+idx));
 	}
-	virtual void Write(unsigned char c)
+	inline bool WriteReady()
+	{
+		return(out!=((in+1)&size));
+	}
+	virtual void PutC(unsigned char c)
 	{
 		while(!WriteReady())
 		{
@@ -34,15 +38,11 @@ class RingBuffer
 		buf[in]=c;
 		in=(in+1) & size;
 	}
-	inline bool WriteReady()
-	{
-		return(out!=((in+1)&size));
-	}
 	inline bool ReadReady()
 	{
 		return(out!=in);
 	}
-	virtual char Read()
+	virtual char GetC()
 	{
 		while(!ReadReady())
 		{
