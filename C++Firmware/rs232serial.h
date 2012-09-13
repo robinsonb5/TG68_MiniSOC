@@ -41,14 +41,23 @@ class RS232Serial : public CharDevice
 		DisableInterrupts();
 		if(!intpending)
 		{
-			while(!((HW_PER(PER_UART)&(1<<PER_UART_TXREADY))))
-				;
+;			while(!((HW_PER(PER_UART)&(1<<PER_UART_TXREADY))))
+;				;
 			HW_PER(PER_UART)=*buf++;
 			--len;
 			result=1;
 			intpending=true;
 		}			
 		result+=CharDevice::Write(buf,len);
+		EnableInterrupts();
+		return(result);
+	}
+
+	virtual int Read(char *buf,int len)
+	{
+		int result;
+		DisableInterrupts();
+		result=CharDevice::Read(buf,len);
 		EnableInterrupts();
 		return(result);
 	}

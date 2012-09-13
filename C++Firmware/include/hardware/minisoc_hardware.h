@@ -53,12 +53,6 @@ extern char *VGACharBuffer;
 #define PER_FLAGS 4  /* Currently only contains ROM overlay */
 #define PER_HEX 6
 
-#define PER_PS2_KEYBOARD 8
-#define PER_PS2_MOUSE 0xA
-
-#define PER_PS2_RECV 11
-#define PER_PS2_CTS 10
-
 /* Timers */
 
 #define PER_TIMER_CONTROL 0xE

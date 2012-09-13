@@ -9,8 +9,6 @@ void RS232Serial::IntHandler()
 //	{
 		if(RS232.outbuffer.ReadReady())
 		{
-//			while(!(HW_PER(PER_UART)&(1<<PER_UART_TXREADY)))
-//				;
 			if (HW_PER(PER_UART)&(1<<PER_UART_TXREADY))
 			{
 				HW_PER(PER_UART)=RS232.outbuffer.GetC();
@@ -20,5 +18,11 @@ void RS232Serial::IntHandler()
 		else
 			RS232.intpending=false;
 //	}
+	// FIXME - losing characters?  Probably due to reading register in userspace code?
+	if(v&(1<<PER_UART_RXINT))
+	{
+		if(RS232.inbuffer.WriteReady())
+			RS232.inbuffer.PutC(v&255);
+	}
 }
 

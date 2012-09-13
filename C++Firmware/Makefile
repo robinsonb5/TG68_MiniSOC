@@ -1,6 +1,6 @@
 C_SRC=
-HEADERS=rs232serial.h ringbuffer.h chardevice.h
-CXX_SRC=main.cpp rs232serial.cpp ps2.cpp ps2.h ints.cpp minisoc_hardware.cpp textbuffer.cpp
+HEADERS=rs232serial.h ringbuffer.h chardevice.h ps2.h
+CXX_SRC=main.cpp rs232serial.cpp ps2.cpp ints.cpp minisoc_hardware.cpp textbuffer.cpp
 A_SRC=startup.s
 
 BUILD_DIR=BUILD

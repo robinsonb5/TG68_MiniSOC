@@ -1,34 +1,57 @@
 #ifndef PS2_H
 #define PS2_H
 
-// Private
-#define PS2_RINGBUFFER_SIZE 32   // 32 bytes 
-struct ps2_ringbuffer
+#include <hardware/minisoc_hardware.h>
+#include <hardware/ps2regs.h>
+#include <hardware/ints.h>
+
+#include "chardevice.h"
+
+class PS2Device : public CharDevice
 {
-	volatile int in_hw;
-	volatile int in_cpu;
-	volatile int out_hw;
-	volatile int out_cpu;
-	unsigned char buf[PS2_RINGBUFFER_SIZE];
+	public:
+	PS2Device(int device=PER_PS2_KEYBOARD) : CharDevice(8), device(device), intpending(false)
+	{
+		while(!((HW_PER(device)&(1<<PER_PS2_CTS))))
+			;
+		SetIntHandler(PER_INT_PS2,IntHandler);
+	}
+	virtual ~PS2Device()
+	{
+		SetIntHandler(PER_INT_UART,0);
+	}
+	virtual int Write(const char *buf,int len)
+	{
+		int result=0;
+		DisableInterrupts();
+		if(!intpending)
+		{
+			HW_PER(device)=*buf++;
+			--len;
+			result=1;
+			intpending=true;
+		}			
+		result+=CharDevice::Write(buf,len);
+		EnableInterrupts();
+		return(result);
+	}
+
+	virtual int Read(char *buf,int len)
+	{
+		int result;
+		DisableInterrupts();
+		result=CharDevice::Read(buf,len);
+		EnableInterrupts();
+		return(result);
+	}
+
+	static void IntHandler();
+	protected:
+	int device;
+	bool intpending;
 };
-void ps2_ringbuffer_init(struct ps2_ringbuffer *r);
-void ps2_ringbuffer_write(struct ps2_ringbuffer *r,unsigned char in);
-short ps2_ringbuffer_read(struct ps2_ringbuffer *r);
-short ps2_ringbuffer_count(struct ps2_ringbuffer *r);
-extern struct ps2_ringbuffer kbbuffer;
-extern struct ps2_ringbuffer mousebuffer;
-void PS2Handler();
 
-// Public interface
-
-void PS2Init();
-
-#define PS2KeyboardRead(x) ps2_ringbuffer_read(&kbbuffer)
-#define PS2KeyboardBytesReady(x) ps2_ringbuffer_count(&kbbuffer)
-#define PS2KeyboardWrite(x) ps2_ringbuffer_write(&kbbuffer,x);
-
-#define PS2MouseRead(x) ps2_ringbuffer_read(&mousebuffer)
-#define PS2MouseBytesReady(x) ps2_ringbuffer_count(&mousebuffer)
-#define PS2MouseWrite(x) ps2_ringbuffer_write(&mousebuffer,x);
+extern PS2Device PS2_Keyboard;
+extern PS2Device PS2_Mouse;
 
 #endif
