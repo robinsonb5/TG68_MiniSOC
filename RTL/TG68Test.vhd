@@ -11,7 +11,12 @@ entity TG68Test is
 		pausecpu		: in std_logic;
 		pausevga		: in std_logic;
 		buttons		: in std_logic_vector(2 downto 0);
-		
+
+		-- Timing configuration
+		pll_phasedir : out std_logic;
+		pll_phasestep : out std_logic_vector(1 downto 0); -- We have two chips and hence two PLLs to configure
+		pll_phasedone : in std_logic;
+
 		-- VGA
 		vga_red 		: out unsigned(7 downto 0);
 		vga_green 	: out unsigned(7 downto 0);
@@ -439,7 +444,12 @@ mysdram : entity work.sdram
 		
 		bootrom_overlay => bootrom_overlay,
 		switches => switches,
-		hex => counter
+		hex => counter,
+
+		-- Timing configuration
+		pll_phasedir => pll_phasedir,
+		pll_phasestep => pll_phasestep, -- We have two chips and hence two PLLs to configure
+		pll_phasedone => pll_phasedone
 	);
 
 	

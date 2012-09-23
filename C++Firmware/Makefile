@@ -8,7 +8,7 @@ C_OBJ=$(patsubst %.c,$(BUILD_DIR)/%.o,$(C_SRC))
 CXX_OBJ=$(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CXX_SRC))
 A_OBJ=$(patsubst %.s,$(BUILD_DIR)/%.o,$(A_SRC))
 OBJ= $(A_OBJ) $(CXX_OBJ)
-LIBSTDC=-L uClibc++ -luclibc++ -L /opt/m68k/m68k-elf/lib/m68000/ -lsupc++ klibc/libc.a -lgcc
+LIBSTDC=-L uClibc++ -luclibc++ -lsupc++ -Lklibc -lc -lgcc
 
 ARCH=68000
 CC=m68k-elf-gcc

@@ -45,8 +45,7 @@ create_clock -name {clk_50} -period 20.000 -waveform { 0.000 0.500 } [get_ports 
 # Create Generated Clock
 #**************************************************************
 
-derive_pll_clocks
-
+derive_pll_clocks 
 
 #**************************************************************
 # Set Clock Latency
@@ -60,19 +59,53 @@ derive_pll_clocks
 derive_clock_uncertainty;
 
 
+set sdr1_clk mypll|altpll_component|auto_generated|pll1|clk[0]
+set sdr2_clk mypll|altpll_component|auto_generated|pll1|clk[0]
+create_generated_clock -name sdr1_clk_pin -source $sdr1_clk -offset 0.5 [get_ports {sdram1_clk}]
+create_generated_clock -name sdr2_clk_pin -source $sdr2_clk -offset 0.5 [get_ports {sdram2_clk}]
+
 #**************************************************************
 # Set Input Delay
 #**************************************************************
 
-set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 2 [get_ports *sd1_data*]
-set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 2 [get_ports *sd2_data*]
+#set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd1_data*]
+#set_input_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd2_data*]
+
+#set_input_delay -clock sd1_clk_pin -max [expr 5.4 + 0.6] [get_ports *sd1_data*]
+#set_input_delay -clock sd1_clk_pin -min [expr 2.7 + 0.4] [get_ports *sd1_data*]
+#set_input_delay -clock sd2_clk_pin -max [expr 5.4 + 0.6] [get_ports *sd2_data*]
+#set_input_delay -clock sd2_clk_pin -min [expr 2.7 + 0.4] [get_ports *sd2_data*]
+set_input_delay -clock sdr1_clk_pin -max 6.0 [get_ports *sd1_data*]
+set_input_delay -clock sdr1_clk_pin -min 3.1 [get_ports *sd1_data*]
+set_input_delay -clock sdr2_clk_pin -max 6.0 [get_ports *sd2_data*]
+set_input_delay -clock sdr2_clk_pin -min 3.1 [get_ports *sd2_data*]
 
 #**************************************************************
 # Set Output Delay
 #**************************************************************
 
-set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd1*]
-set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd2*]
+#set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd1*]
+#set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[0] } 4 [get_ports *sd2*]
+
+#set_output_delay -clock sd1_clk_pin -max [expr 1.5 + 0.6] [get_ports *sd1*]
+#set_output_delay -clock sd1_clk_pin -min [expr -0.8 + 0.4)] [get_ports *sd1*]
+#set_output_delay -clock sd1_clk_pin -max [expr 1.5 + 0.6] [get_ports *sd2*]
+#set_output_delay -clock sd1_clk_pin -min [expr -0.8 + 0.4)] [get_ports *sd2*]
+
+#set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[2] } -max 1.5 [get_ports *sd1*]
+#set_output_delay -clock { mypll|altpll_component|auto_generated|pll1|clk[2] } -min -0.8 [get_ports *sd1*]
+#set_output_delay -clock { mypll2|altpll_component|auto_generated|pll1|clk[2] } -max 1.5 [get_ports *sd2*]
+#set_output_delay -clock { mypll2|altpll_component|auto_generated|pll1|clk[2] } -min -0.8 [get_ports *sd2*]
+
+set_output_delay -clock sdr1_clk_pin -max 2.1 [get_ports *sd1*]
+set_output_delay -clock sdr1_clk_pin -min -0.4 [get_ports *sd1*]
+set_output_delay -clock sdr2_clk_pin -max 2.1 [get_ports *sd2*]
+set_output_delay -clock sdr2_clk_pin -min -0.4 [get_ports *sd2*]
+
+# set_output_delay -clock sdr1_clk_pin -max 0.6 [get_ports *sdram1_clk*]
+# set_output_delay -clock sdr1_clk_pin -min 0.4 [get_ports *sdram1_clk*]
+# set_output_delay -clock sdr2_clk_pin -max 0.6 [get_ports *sdram2_clk*]
+# set_output_delay -clock sdr2_clk_pin -min 0.4 [get_ports *sdram2_clk*]
 
 #**************************************************************
 # Set Clock Groups

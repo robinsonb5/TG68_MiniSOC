@@ -84,7 +84,12 @@ entity peripheral_controller is
 
 		bootrom_overlay : out std_logic;
 		switches : in std_logic_vector(9 downto 0);
-		hex : out std_logic_vector(15 downto 0)
+		hex : out std_logic_vector(15 downto 0);
+
+		-- Timing configuration
+		pll_phasedir : out std_logic;
+		pll_phasestep : out std_logic_vector(1 downto 0); -- We have two chips and hence two PLLs to configure
+		pll_phasedone : in std_logic
 	);
 end entity;
 	
@@ -137,7 +142,18 @@ signal spi_trigger : std_logic;
 signal spi_busy : std_logic;
 signal spi_wide : std_logic;
 
+signal pll_phasedone_r : std_logic;
+type pllphaseadj_state is (init,waitdonelow,waitdonehigh);
+signal phaseadj_state : pllphaseadj_state := init;
+
 begin
+
+	process(clk,pll_phasedone)	-- Register the phasedone signal since it comes from a different clock
+	begin
+		if rising_edge(clk) then
+			pll_phasedone_r<=pll_phasedone;
+		end if;
+	end process;
 
 	bootrom_overlay <= flags(0);
 
@@ -259,6 +275,7 @@ begin
 			extend_cycle<='0';
 			extend_rw<='1';
 
+			pll_phasestep<="00";
 			
 			if reg_req='1' or extend_cycle='1' then
 
@@ -344,6 +361,36 @@ begin
 								host_to_spi<=reg_data_in;
 							end if;
 
+						-- Write to Phase Shift register
+						when X"026" =>
+							-- bit 15: direction
+							-- bit 1: nudge pll 2, bit 0: nudge pll 0
+							reg_dtack<='1';	-- This blocks until the PLL has reconfigured.
+							extend_cycle<='1';
+							extend_rw<='0';
+							case phaseadj_state is
+								when init =>
+									pll_phasestep<=reg_data_in(1 downto 0);
+									pll_phasedir<=reg_data_in(15);
+									phaseadj_state<=waitdonelow;
+								when waitdonelow =>
+									pll_phasestep<=reg_data_in(1 downto 0);
+									pll_phasedir<=reg_data_in(15);
+									if pll_phasedone='0' then
+										phaseadj_state<=waitdonehigh;
+									else
+										phaseadj_state<=waitdonelow;
+									end if;
+								when waitdonehigh =>
+									if pll_phasedone='1' then
+										reg_dtack<='0';
+										extend_cycle<='0';
+										extend_rw<='1';
+										phaseadj_state<=init;
+									end if;
+								when others =>
+									null;
+							end case;
 						when others =>
 							reg_data_out<=X"0000";
 					end case;

@@ -13,14 +13,18 @@
 #include <unistd.h>
 
 // AMR
-typedef int _Bool;
+// typedef int _Bool;
+typedef int _IOBool;
 typedef long off_t;
 #define __NO_STDIO_INLINES
 
 struct _IO_file {
 	int _IO_fileno;		/* Underlying file descriptor */
-	_Bool _IO_eof;		/* End of file flag */
-	_Bool _IO_error;	/* Error flag */
+//AMR
+	_IOBool _IO_eof;		/* End of file flag */
+	_IOBool _IO_error;	/* Error flag */
+//	_Bool _IO_eof;		/* End of file flag */
+//	_Bool _IO_error;	/* Error flag */
 };
 typedef struct _IO_file FILE;
 

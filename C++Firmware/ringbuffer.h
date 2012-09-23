@@ -38,9 +38,9 @@ class RingBuffer
 		buf[in]=c;
 		in=(in+1) & size;
 	}
-	inline bool ReadReady()
+	inline int ReadReady()
 	{
-		return(out!=in);
+		return((in-out) & size);	// Return the number of bytes in the buffer
 	}
 	virtual char GetC()
 	{

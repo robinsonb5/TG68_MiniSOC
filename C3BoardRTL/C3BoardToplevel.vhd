@@ -14,10 +14,10 @@ port(
 		led_out : out 	std_logic;
 
 		-- SDRAM - chip 1
+		sdram1_clk : out std_logic; -- Different name format to escape wildcard in SDC file
 		sd1_addr : out std_logic_vector(11 downto 0);
 		sd1_data : inout std_logic_vector(7 downto 0);
 		sd1_ba : out std_logic_vector(1 downto 0);
-		sd1_clk : out std_logic;
 		sd1_cke : out std_logic;
 		sd1_dqm : out std_logic;
 		sd1_cs : out std_logic;
@@ -26,10 +26,10 @@ port(
 		sd1_ras : out std_logic;
 
 		-- SDRAM - chip 2
+		sdram2_clk : out std_logic; -- Different name format to escape wildcard in SDC file
 		sd2_addr : out std_logic_vector(11 downto 0);
 		sd2_data : inout std_logic_vector(7 downto 0);
 		sd2_ba : out std_logic_vector(1 downto 0);
-		sd2_clk : out std_logic;
 		sd2_cke : out std_logic;
 		sd2_dqm : out std_logic;
 		sd2_cs : out std_logic;
@@ -95,7 +95,7 @@ attribute chip_pin of led_out : signal is "233";
 attribute chip_pin of sd1_addr : signal is "83,69,82,81,80,78,99,110,63,64,65,68";
 attribute chip_pin of sd1_data : signal is "109,103,111,93,100,106,107,108";
 attribute chip_pin of sd1_ba : signal is "70,71";
-attribute chip_pin of sd1_clk : signal is "117";
+attribute chip_pin of sdram1_clk : signal is "117";
 attribute chip_pin of sd1_cke : signal is "84";
 attribute chip_pin of sd1_dqm : signal is "87";
 attribute chip_pin of sd1_cs : signal is "72";
@@ -106,7 +106,7 @@ attribute chip_pin of sd1_ras : signal is "73";
 attribute chip_pin of sd2_addr : signal is "142,114,144,139,137,134,148,161,120,119,118,113";
 attribute chip_pin of sd2_data : signal is "166,164,162,160,146,147,159,168";
 attribute chip_pin of sd2_ba : signal is "126,127";
-attribute chip_pin of sd2_clk : signal is "186";
+attribute chip_pin of sdram2_clk : signal is "186";
 attribute chip_pin of sd2_cke : signal is "143";
 attribute chip_pin of sd2_dqm : signal is "145";
 attribute chip_pin of sd2_cs : signal is "128";
@@ -205,6 +205,11 @@ signal vga_g : unsigned(7 downto 0);
 signal vga_b : unsigned(7 downto 0);
 signal vga_window : std_logic;
 
+signal pll_phasedir : std_logic;
+signal pll_phasestep : std_logic_vector(1 downto 0); -- We have two chips and hence two PLLs to configure
+signal pll_phasedone : std_logic;
+signal pll_phasedone2 : std_logic;
+
 begin
 
 	power_led(5 downto 2)<=unsigned(debugvalue(15 downto 12));
@@ -242,12 +247,30 @@ begin
 	sd2_ba <= sdr_ba;
 	sd2_cke <= sdr_cke;
 		
-	mypll : entity work.PLL
+	mypll : entity work.PLL2_adjustablephase
 		port map (
+			areset => not reset_n,
 			inclk0 => clk_50,
 			c0 => clk,
-			c1 => sd1_clk,
-			c2 => sd2_clk
+			c1 => sdram1_clk,
+--			c2 => sd2_clk
+			scanclk => clk,
+			phasecounterselect => "011", -- Make sure phase adjustment only affects C1
+			phaseupdown => pll_phasedir,
+			phasestep => pll_phasestep(0), -- First PLL
+			phasedone => pll_phasedone
+		);
+		
+	mypll2 : entity work.PLL2_adjustablephase
+		port map (
+			areset => not reset_n,
+			inclk0 => clk_50,
+			c1 => sdram2_clk,
+			scanclk => clk,
+			phasecounterselect => "011", -- Make sure phase adjustment only affects C1
+			phaseupdown => pll_phasedir,
+			phasestep => pll_phasestep(1), -- Second PLL
+			phasedone => pll_phasedone2
 		);
 
 	myleds : entity work.statusleds_pwm
@@ -293,6 +316,11 @@ begin
 			
 			switches => (others =>'0'),
 
+			-- Timing configuration
+			pll_phasedir => pll_phasedir,
+			pll_phasestep => pll_phasestep,
+			pll_phasedone => pll_phasedone and pll_phasedone2,
+			
 			-- SDRAM - presenting a single interface to both chips.
 			sdr_addr => sdr_addr,
 			sdr_data(15 downto 8) => sd2_data,

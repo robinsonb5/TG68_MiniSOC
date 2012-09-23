@@ -4,7 +4,7 @@
 #include "ps2.h"
 
 PS2Device PS2_Keyboard(PER_PS2_KEYBOARD);
-PS2Device PS2_Mouse(PER_PS2_MOUSE);
+PS2Mouse PS2_Mouse;
 
 void PS2Device::IntHandler()
 {
@@ -43,6 +43,25 @@ void PS2Device::IntHandler()
 	{
 		if(PS2_Mouse.inbuffer.WriteReady())
 			PS2_Mouse.inbuffer.PutC(v2&255);
+	}
+
+	if(PS2_Mouse.inbuffer.ReadReady()>=3)
+	{
+		unsigned char buf[4];
+		short w1,w2,w3;
+		PS2_Mouse.Read((char *)buf,3);
+		w1=buf[0];
+		w2=buf[1];
+		w3=buf[2];
+		PS2_Mouse.buttons=w1;
+
+		if(w1 & (1<<5))
+			w3|=0xff00;
+		if(w1 & (1<<4))
+			w2|=0xff00;
+
+		PS2_Mouse.dx+=w2;
+		PS2_Mouse.dy-=w3;	
 	}
 }
 
