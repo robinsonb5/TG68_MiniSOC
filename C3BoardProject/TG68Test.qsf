@@ -131,7 +131,6 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_addr[0]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_ba[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_ba[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_cas
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_cke
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_cs
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[7]
@@ -140,7 +139,6 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[5]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[4]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[3]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[2]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_data[0]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_dqm
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd1_we
@@ -167,39 +165,12 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[3]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[2]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_data[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sd2_dqm
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sd2_ras
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_dqm
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to sd2_ras
 set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sd2_we
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=512" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=512" -section_id auto_signaltap_0
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to power_button
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
-set_global_assignment -name VHDL_FILE ../C3BoardRTL/poweronreset.vhd
-set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
-set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
-set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
-set_global_assignment -name SDC_FILE constraints.sdc
-set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
-set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
-set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
-set_global_assignment -name VHDL_FILE ../C3BoardRTL/statusleds_pwm.vhd
-set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
-set_global_assignment -name VHDL_FILE ../C3BoardRTL/C3BoardToplevel.vhd
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/BootRom.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRom.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRAM.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL2_SourceSync.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL2_AdjustablePhase.qip
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "PLL2_AdjustablePhase:mypll|phasedone" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "PLL2_AdjustablePhase:mypll|phasestep" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "PLL2_AdjustablePhase:mypll|phaseupdown" -section_id auto_signaltap_0
@@ -302,7 +273,6 @@ set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98]
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "TG68Test:mytg68test|pll_phasedone" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "TG68Test:mytg68test|pll_phasestep[0]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "TG68Test:mytg68test|pll_phasestep[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "poweronreset:myreset|reset_out" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "PLL2_AdjustablePhase:mypll|phasedone" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "PLL2_AdjustablePhase:mypll|phasestep" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "PLL2_AdjustablePhase:mypll|phaseupdown" -section_id auto_signaltap_0
@@ -405,11 +375,47 @@ set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -t
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "TG68Test:mytg68test|pll_phasedone" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "TG68Test:mytg68test|pll_phasestep[0]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "TG68Test:mytg68test|pll_phasestep[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "poweronreset:myreset|reset_out" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=103" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=103" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=332" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=3314" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=45383" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "TG68Test:mytg68test|sdram:mysdram|init_done" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "TG68Test:mytg68test|sdram:mysdram|reinit" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[104] -to "poweronreset:myreset|reset_out" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "TG68Test:mytg68test|sdram:mysdram|init_done" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "TG68Test:mytg68test|sdram:mysdram|reinit" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[104] -to "poweronreset:myreset|reset_out" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=105" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=105" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=338" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=5916" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=16033" -section_id auto_signaltap_0
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to btn1
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to btn2
+set_instance_assignment -name FAST_INPUT_REGISTER ON -to sd*data*
+set_global_assignment -name SDC_FILE constraints.sdc
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/poweronreset.vhd
+set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
+set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
+set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
+set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/statusleds_pwm.vhd
+set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/C3BoardToplevel.vhd
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/BootRom.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRom.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRAM.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL2_SourceSync.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL2_AdjustablePhase.qip
+set_global_assignment -name QIP_FILE PLL3_AdjustablePhase.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

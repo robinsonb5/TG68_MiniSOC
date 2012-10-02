@@ -14,7 +14,7 @@ entity TG68Test is
 
 		-- Timing configuration
 		pll_phasedir : out std_logic;
-		pll_phasestep : out std_logic_vector(1 downto 0); -- We have two chips and hence two PLLs to configure
+		pll_phasestep : buffer std_logic_vector(1 downto 0); -- We have two chips and hence two PLLs to configure
 		pll_phasedone : in std_logic;
 
 		-- VGA
@@ -353,6 +353,7 @@ mysdram : entity work.sdram
 		sysclk => clk,
 		reset => reset_in,  -- Contributes to reset, so have to use reset_in here.
 		reset_out => sdr_ready,
+		reinit => pll_phasestep(0) or pll_phasestep(1),
 
 		vga_addr => vga_addr,
 		vga_data => vga_data,

@@ -81,7 +81,8 @@ CHARBUF equ $800800
 
 START:				; first instruction of program
 	lea 	STACK,a7
-	move.w	#$364,SERPER
+;	move.w	#$364,SERPER  ; 115,200 @ 100MHz
+	move.w	#$3d9,SERPER  ; 115,200 @ 113.5MHz
 	move.w	#$2700,SR	; Disable all interrupts
 
 	move.w	#$f000,HEX

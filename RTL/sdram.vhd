@@ -66,6 +66,7 @@ port
 	sysclk		: in std_logic;
 	reset		: in std_logic;
 	reset_out	: out std_logic;
+	reinit : in std_logic :='0';
 
 -- Port 0 - VGA
 	vga_addr : in std_logic_vector(23 downto 0);
@@ -81,7 +82,7 @@ port
 	datawr1		: in std_logic_vector(15 downto 0);	-- Data in from minimig
 	Addr1		: in std_logic_vector(23 downto 0);	-- Address in from Minimig - FIXME case
 	req1		: in std_logic;
-	cachesel	: in std_logic; -- 1 => data cache, 0 => instruction cache
+	cachesel	: in std_logic :='0'; -- 1 => data cache, 0 => instruction cache
 	wr1			: in std_logic;	-- Read/write from Minimig
 	wrL1		: in std_logic;	-- Minimig write lower byte
 	wrU1		: in std_logic;	-- Minimig write upper byte
@@ -287,33 +288,33 @@ end process;
 				-- FIXME - can we respond as soon as the required word comes in?
 				when fill1 =>
 					if readcache_fill='1' then
-						readcache_word0<=sdata;
+						readcache_word0<=sdata_reg;
 						readcache_state<=fill2;
 					end if;
 				when fill2 =>
-					readcache_word1<=sdata;
+					readcache_word1<=sdata_reg;
 					readcache_state<=fill3;
 				when fill3 =>
-					readcache_word2<=sdata;
+					readcache_word2<=sdata_reg;
 					readcache_state<=fill4;
 				when fill4 =>
-					readcache_word3<=sdata;
+					readcache_word3<=sdata_reg;
 					readcache_dirty<='0';
 					readcache_req<='0';
 					readcache_state<=waitread;
 				when fill2_1 =>
 					if readcache_fill='1' then
-						instcache_word0<=sdata;
+						instcache_word0<=sdata_reg;
 						readcache_state<=fill2_2;
 					end if;
 				when fill2_2 =>
-					instcache_word1<=sdata;
+					instcache_word1<=sdata_reg;
 					readcache_state<=fill2_3;
 				when fill2_3 =>
-					instcache_word2<=sdata;
+					instcache_word2<=sdata_reg;
 					readcache_state<=fill2_4;
 				when fill2_4 =>
-					instcache_word3<=sdata;
+					instcache_word3<=sdata_reg;
 					instcache_dirty<='0';
 					readcache_req<='0';
 					readcache_state<=waitread;
@@ -368,11 +369,10 @@ end process;
 			sdata <= "ZZZZZZZZZZZZZZZZ";
 		END IF;
 
-		vga_data <= sdata;
-
 		--   sample SDRAM data
 		if rising_edge(sysclk) then
 			sdata_reg <= sdata;
+			vga_data <= sdata;
 		END IF;	
 		
 		if reset = '0' then
@@ -382,6 +382,11 @@ end process;
 			sdwrite <= '0';
 		ELSIF rising_edge(sysclk) THEN
 			sdwrite <= '0';
+
+			if reinit='1' then
+				init_done<='0';
+				initstate<="1111";
+			end if;			
 			
 
 --                          (sync)
@@ -395,13 +400,14 @@ end process;
 
 			case sdram_state is	--LATENCY=3
 				when ph0 =>	
-					if sdram_slot2=port0 then
-						vga_fill<='1';
-					elsif sdram_slot2=writecache then -- port1 and sdram_slot2_readwrite='0' then
+					if sdram_slot2=writecache then -- port1 and sdram_slot2_readwrite='0' then
 						sdwrite<='1';
 					end if;
 					sdram_state <= ph1;
 				when ph1 =>	
+					if sdram_slot2=port0 then
+						vga_fill<='1';
+					end if;
 					sdram_state <= ph2;
 				when ph2 =>
 					sdram_state <= ph3;
@@ -409,9 +415,9 @@ end process;
 				when ph3 =>
 					sdram_state <= ph4;
 				when ph4 =>	sdram_state <= ph5;
-					vga_fill<='0';
 					sdwrite <= '1';
 				when ph5 => sdram_state <= ph6;
+					vga_fill<='0';
 					sdwrite <= '1';
 				when ph6 =>	sdram_state <= ph7;
 					sdwrite <= '1';
@@ -420,13 +426,14 @@ end process;
 				when ph7 =>	sdram_state <= ph8;
 					sdwrite <= '1';
 				when ph8 =>	sdram_state <= ph9;
-					if sdram_slot1=port0 then
-						vga_fill<='1';
-					elsif sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
+					if sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
 						sdwrite<='1';
 					end if;
 					
 				when ph9 =>	sdram_state <= ph10;
+					if sdram_slot1=port0 then
+						vga_fill<='1';
+					end if;
 				when ph10 => sdram_state <= ph11;
 --					cachefill<='1';
 --							enaRDreg <= '1';
@@ -434,9 +441,9 @@ end process;
 --					cachefill<='1';
 				when ph12 => sdram_state <= ph13;
 --					cachefill<='1';
-					vga_fill<='0';
 					sdwrite<='1';
 				when ph13 => sdram_state <= ph14;
+					vga_fill<='0';
 					sdwrite<='1';
 				when ph14 =>
 						sdwrite<='1';
@@ -447,7 +454,7 @@ end process;
 							sdram_state <= ph15;
 						elsif vga_refresh='1' then -- Delay here to establish phase relationship between SDRAM and VGA
 							init_done <='1';
-							sdram_state <= ph15;
+							sdram_state <= ph0;
 						end if;
 --							enaWRreg <= '1';
 --							ena7WRreg <= '1';
@@ -665,7 +672,9 @@ end process;
 						end if;
 
 					when ph4 =>
-						null;
+						if sdram_slot2=port1 then
+							readcache_fill<='1';
+						end if;
 						
 					when ph5 => -- Read or Write command			
 						sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
@@ -702,9 +711,6 @@ end process;
 							datain <= writecache_word3;
 							dqm <= writecache_dqm(7 downto 6);
 							writecache_burst<='0';
-						end if;
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
 						end if;
 
 					when ph9 =>
@@ -782,6 +788,9 @@ end process;
 						end if;
 
 					when ph12 =>
+						if sdram_slot1=port1 then
+							readcache_fill<='1';
+						end if;
 						
 					-- Phase 13 - CAS for second window...
 					when ph13 =>
@@ -819,9 +828,9 @@ end process;
 							dqm <= writecache_dqm(7 downto 6);
 							writecache_burst<='0';
 						end if;
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
+--						if sdram_slot2=port1 then
+--							readcache_fill<='1';
+--						end if;
 
 					when ph1 =>
 						if sdram_slot2=port1 then

@@ -423,7 +423,7 @@ begin
 					end if;
 					
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
-					if currentX<(htotal - 6) then	-- Signal to SDRAM controller that we're
+					if currentX<(htotal - 7) then	-- Signal to SDRAM controller that we're
 						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
 					end if;
 				end if;

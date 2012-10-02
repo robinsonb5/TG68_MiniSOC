@@ -12,6 +12,8 @@ port(
 		clk_50 	: in 	std_logic;
 		reset_n : in 	std_logic;
 		led_out : out 	std_logic;
+		btn1 : in std_logic;
+		btn2 : in std_logic;
 
 		-- SDRAM - chip 1
 		sdram1_clk : out std_logic; -- Different name format to escape wildcard in SDC file
@@ -72,7 +74,7 @@ port(
 		
 		-- Any remaining IOs yet to be assigned
 		misc_ios_1 : out std_logic_vector(5 downto 0);
-		misc_ios_21 : out std_logic_vector(13 downto 0);
+		misc_ios_21 : out std_logic_vector(11 downto 0);
 		misc_ios_22 : out std_logic_vector(9 downto 0);
 		misc_ios_3 : out std_logic_vector(1 downto 0)
 	);
@@ -152,11 +154,15 @@ attribute chip_pin of power_button : signal is "94";
 
 attribute chip_pin of leds : signal is "173, 169, 167, 135";
 
+attribute chip_pin of btn1 : signal is "226";
+attribute chip_pin of btn2 : signal is "231";
+
+
 -- Free pins, not yet assigned
 
 attribute chip_pin of misc_ios_1 : signal is "12,14,56,234,21,57";
 
-attribute chip_pin of misc_ios_21 : signal is "184,187,189,195,197,201,203,214,217,219,221,223,226,231";
+attribute chip_pin of misc_ios_21 : signal is "184,187,189,195,197,201,203,214,217,219,221,223";
 attribute chip_pin of misc_ios_22 : signal is "176,196,200,202,207,216,218,224,230,232";
 attribute chip_pin of misc_ios_3 : signal is "95,177";
 
@@ -167,6 +173,9 @@ signal reset : std_logic;  -- active low
 signal counter : unsigned(34 downto 0);
 
 signal debugvalue : std_logic_vector(15 downto 0);
+
+signal btn1_d : std_logic;
+signal btn2_d : std_logic;
 
 signal currentX : unsigned(11 downto 0);
 signal currentY : unsigned(11 downto 0);
@@ -212,6 +221,20 @@ signal pll_phasedone2 : std_logic;
 
 begin
 
+	mybtn1: entity work.Debounce
+		port map(
+		clk => clk,
+		signal_in => btn1,
+		signal_out => btn1_d
+	);
+
+	mybtn2: entity work.Debounce
+		port map(
+		clk => clk,
+		signal_in => btn2,
+		signal_out => btn2_d
+	);
+
 	power_led(5 downto 2)<=unsigned(debugvalue(15 downto 12));
 	disk_led(5 downto 2)<=unsigned(debugvalue(11 downto 8));
 	net_led(5 downto 2)<=unsigned(debugvalue(7 downto 4));
@@ -249,27 +272,27 @@ begin
 		
 	mypll : entity work.PLL2_adjustablephase
 		port map (
-			areset => not reset_n,
+--			areset => not reset_n,
 			inclk0 => clk_50,
 			c0 => clk,
 			c1 => sdram1_clk,
 --			c2 => sd2_clk
 			scanclk => clk,
 			phasecounterselect => "011", -- Make sure phase adjustment only affects C1
-			phaseupdown => pll_phasedir,
-			phasestep => pll_phasestep(0), -- First PLL
+			phaseupdown => '0', -- pll_phasedir
+			phasestep => not btn1_d, -- pll_phasestep(0), -- First PLL
 			phasedone => pll_phasedone
 		);
 		
-	mypll2 : entity work.PLL2_adjustablephase
+	mypll2 : entity work.PLL3_adjustablephase
 		port map (
-			areset => not reset_n,
+--			areset => not reset_n,
 			inclk0 => clk_50,
 			c1 => sdram2_clk,
 			scanclk => clk,
 			phasecounterselect => "011", -- Make sure phase adjustment only affects C1
-			phaseupdown => pll_phasedir,
-			phasestep => pll_phasestep(1), -- Second PLL
+			phaseupdown => '0', -- pll_phasedir,
+			phasestep => not btn1_d, --pll_phasestep(1), -- Second PLL
 			phasedone => pll_phasedone2
 		);
 
