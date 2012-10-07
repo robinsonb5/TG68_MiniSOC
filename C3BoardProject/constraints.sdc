@@ -94,9 +94,7 @@ set_output_delay -clock sd2clk_pin -min -0.8 [get_ports sd2*]
 # Set Multicycle Path
 #**************************************************************
 
-#set_multicycle_path -from [get_clocks {mypll|altpll_component|auto_generated|pll1|clk[0]}] -to [get_clocks {sd1clk_pin}] -setup -end 2
-#set_multicycle_path -from [get_clocks {mypll2|altpll_component|auto_generated|pll1|clk[0]}] -to [get_clocks {sd2clk_pin}] -setup -end 2
-#set_multicycle_path -from [get_clocks {sd2clk_pin}] -to [get_clocks {mypll|altpll_component|auto_generated|pll1|clk[0]}] -setup -end 2
+set_multicycle_path -from [get_clocks {mypll|altpll_component|auto_generated|pll1|clk[0]}] -to [get_clocks {sd2clk_pin}] -setup -end 2
 
 #**************************************************************
 # Set Maximum Delay

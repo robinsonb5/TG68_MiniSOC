@@ -585,7 +585,7 @@ spi_init_w8	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 spi_init_w6
 			move.w	PER_SPI_BLOCKING(a1),-2(a7)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#2,PER_TIMER_DIV7(a1)
+			move.w	#8,PER_TIMER_DIV7(a1)
 			pea		msg_init_done
 			bsr		put_msga7
 			lea		4(a7),a7

@@ -79,6 +79,7 @@ entity vga_controller is
 		sdr_reservebank : buffer std_logic; -- Indicate to SDR controller when requests are not critical timewise
 		sdr_reserveaddr : buffer std_logic_vector(23 downto 0); -- Indicate to SDR controller when requests are not critical timewise
 		sdr_refresh : out std_logic;
+		sdr_ack : in std_logic;
 
 		vblank_int : out std_logic;
 		hsync : out std_logic; -- to monitor
@@ -182,6 +183,7 @@ begin
 			data_in => sdr_datain,
 			fill => sdr_fill,
 			req => sdr_req,
+			vga_ack => sdr_ack,
 --			reservebank => sdr_reservebank,
 --			reservebank => open,
 			reserveaddr => sdr_reserveaddr
@@ -423,7 +425,7 @@ begin
 					end if;
 					
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
-					if currentX<(htotal - 7) then	-- Signal to SDRAM controller that we're
+					if currentX<(htotal - 8) then	-- Signal to SDRAM controller that we're
 						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
 					end if;
 				end if;

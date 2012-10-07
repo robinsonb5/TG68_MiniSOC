@@ -221,7 +221,7 @@ void spi_init()
 	SPI(0xFF);
 	SPI_CS(0);
 
-	HW_PER(PER_TIMER_DIV7)=2;
+	HW_PER(PER_TIMER_DIV7)=8;
 }
 
 

@@ -1,0 +1,332 @@
+<session jtag_chain="USB-Blaster [1-1]" jtag_device="@2: EP3C25/EP4CE22 (0x020F30DD)" sof_file="TG68MiniSOC.sof">
+  <display_tree gui_logging_enabled="0">
+    <display_branch instance="auto_signaltap_0" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
+  </display_tree>
+  <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
+    <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
+    <position_info>
+      <single attribute="active tab" value="0"/>
+      <single attribute="data horizontal scroll position" value="15"/>
+      <single attribute="data vertical scroll position" value="3"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="8"/>
+      <single attribute="zoom offset denominator" value="1"/>
+      <single attribute="zoom offset numerator" value="16368"/>
+    </position_info>
+    <signal_set global_temp="1" name="signal_set: 2012/10/07 22:33:36  #0">
+      <clock name="PLL:pllInstance|c0" polarity="posedge" tap_mode="classic"/>
+      <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="128" trigger_in_enable="no" trigger_out_enable="no"/>
+      <top_entity/>
+      <signal_vec>
+        <trigger_input_vec>
+          <wire name="TG68Test:mytg68test|sd_clk" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_cs" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_miso" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_mosi" tap_mode="classic" type="combinatorial"/>
+          <wire name="freeze_n" tap_mode="classic" type="input pin"/>
+          <wire name="mux[0]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[1]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[2]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[3]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_clk" tap_mode="classic" type="output pin"/>
+          <wire name="mux_clk_reg" tap_mode="classic" type="register"/>
+          <wire name="mux_d[0]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[1]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[2]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[3]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="mux_q[0]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[1]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[2]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[3]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[0]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[10]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[11]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[12]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[13]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[14]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[15]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[1]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[2]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[3]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[4]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[5]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[6]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[7]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[8]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[9]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|reset_out" tap_mode="classic" type="combinatorial"/>
+          <wire name="reset_button_n" tap_mode="classic" type="register"/>
+        </trigger_input_vec>
+        <data_input_vec>
+          <wire name="TG68Test:mytg68test|sd_clk" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_cs" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_miso" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_mosi" tap_mode="classic" type="combinatorial"/>
+          <wire name="freeze_n" tap_mode="classic" type="input pin"/>
+          <wire name="mux[0]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[1]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[2]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[3]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_clk" tap_mode="classic" type="output pin"/>
+          <wire name="mux_clk_reg" tap_mode="classic" type="register"/>
+          <wire name="mux_d[0]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[1]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[2]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[3]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="mux_q[0]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[1]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[2]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[3]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[0]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[10]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[11]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[12]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[13]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[14]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[15]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[1]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[2]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[3]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[4]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[5]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[6]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[7]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[8]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[9]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|reset_out" tap_mode="classic" type="combinatorial"/>
+          <wire name="reset_button_n" tap_mode="classic" type="register"/>
+        </data_input_vec>
+        <storage_qualifier_input_vec>
+          <wire name="TG68Test:mytg68test|sd_clk" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_cs" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_miso" tap_mode="classic" type="combinatorial"/>
+          <wire name="TG68Test:mytg68test|sd_mosi" tap_mode="classic" type="combinatorial"/>
+          <wire name="freeze_n" tap_mode="classic" type="input pin"/>
+          <wire name="mux[0]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[1]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[2]" tap_mode="classic" type="output pin"/>
+          <wire name="mux[3]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_clk" tap_mode="classic" type="output pin"/>
+          <wire name="mux_clk_reg" tap_mode="classic" type="register"/>
+          <wire name="mux_d[0]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[1]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[2]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d[3]" tap_mode="classic" type="output pin"/>
+          <wire name="mux_d_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mux_d_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="mux_q[0]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[1]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[2]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_q[3]" tap_mode="classic" type="input pin"/>
+          <wire name="mux_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mux_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[0]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[10]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[11]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[12]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[13]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[14]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[15]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[1]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[2]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[3]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[4]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[5]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[6]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[7]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[8]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|counter[9]" tap_mode="classic" type="register"/>
+          <wire name="poweronreset:myreset|reset_out" tap_mode="classic" type="combinatorial"/>
+          <wire name="reset_button_n" tap_mode="classic" type="register"/>
+        </storage_qualifier_input_vec>
+      </signal_vec>
+      <presentation>
+        <data_view>
+          <net is_signal_inverted="no" name="reset_button_n"/>
+          <bus is_signal_inverted="no" link="all" name="poweronreset:myreset|counter" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[15]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[14]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[13]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[12]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[11]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[10]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[9]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[8]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[7]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[6]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[5]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[4]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[3]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[2]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[1]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="poweronreset:myreset|reset_out"/>
+          <bus is_signal_inverted="no" link="all" name="mux" order="msb_to_lsb" radix="hex" state="collapse" type="output pin">
+            <net is_signal_inverted="no" name="mux[3]"/>
+            <net is_signal_inverted="no" name="mux[2]"/>
+            <net is_signal_inverted="no" name="mux[1]"/>
+            <net is_signal_inverted="no" name="mux[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="mux_clk"/>
+          <net is_signal_inverted="no" name="mux_clk_reg"/>
+          <bus is_signal_inverted="no" link="all" name="mux_d" order="msb_to_lsb" radix="hex" state="expand" type="output pin">
+            <net is_signal_inverted="no" name="mux_d[3]"/>
+            <net is_signal_inverted="no" name="mux_d[2]"/>
+            <net is_signal_inverted="no" name="mux_d[1]"/>
+            <net is_signal_inverted="no" name="mux_d[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mux_d_reg" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="mux_d_reg[3]"/>
+            <net is_signal_inverted="no" name="mux_d_reg[2]"/>
+            <net is_signal_inverted="no" name="mux_d_reg[1]"/>
+            <net is_signal_inverted="no" name="mux_d_reg[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mux_q" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
+            <net is_signal_inverted="no" name="mux_q[3]"/>
+            <net is_signal_inverted="no" name="mux_q[2]"/>
+            <net is_signal_inverted="no" name="mux_q[1]"/>
+            <net is_signal_inverted="no" name="mux_q[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mux_reg" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="mux_reg[3]"/>
+            <net is_signal_inverted="no" name="mux_reg[2]"/>
+            <net is_signal_inverted="no" name="mux_reg[1]"/>
+            <net is_signal_inverted="no" name="mux_reg[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="freeze_n"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_clk"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_cs"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_miso"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_mosi"/>
+        </data_view>
+        <setup_view>
+          <net is_signal_inverted="no" name="reset_button_n"/>
+          <bus is_signal_inverted="no" link="all" name="poweronreset:myreset|counter" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[15]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[14]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[13]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[12]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[11]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[10]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[9]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[8]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[7]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[6]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[5]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[4]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[3]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[2]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[1]"/>
+            <net is_signal_inverted="no" name="poweronreset:myreset|counter[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="poweronreset:myreset|reset_out"/>
+          <bus is_signal_inverted="no" link="all" name="mux" order="msb_to_lsb" radix="hex" state="collapse" type="output pin">
+            <net is_signal_inverted="no" name="mux[3]"/>
+            <net is_signal_inverted="no" name="mux[2]"/>
+            <net is_signal_inverted="no" name="mux[1]"/>
+            <net is_signal_inverted="no" name="mux[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="mux_clk"/>
+          <net is_signal_inverted="no" name="mux_clk_reg"/>
+          <bus is_signal_inverted="no" link="all" name="mux_d" order="msb_to_lsb" radix="hex" state="collapse" type="output pin">
+            <net is_signal_inverted="no" name="mux_d[3]"/>
+            <net is_signal_inverted="no" name="mux_d[2]"/>
+            <net is_signal_inverted="no" name="mux_d[1]"/>
+            <net is_signal_inverted="no" name="mux_d[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mux_d_reg" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="mux_d_reg[3]"/>
+            <net is_signal_inverted="no" name="mux_d_reg[2]"/>
+            <net is_signal_inverted="no" name="mux_d_reg[1]"/>
+            <net is_signal_inverted="no" name="mux_d_reg[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mux_q" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
+            <net is_signal_inverted="no" name="mux_q[3]"/>
+            <net is_signal_inverted="no" name="mux_q[2]"/>
+            <net is_signal_inverted="no" name="mux_q[1]"/>
+            <net is_signal_inverted="no" name="mux_q[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mux_reg" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="mux_reg[3]"/>
+            <net is_signal_inverted="no" name="mux_reg[2]"/>
+            <net is_signal_inverted="no" name="mux_reg[1]"/>
+            <net is_signal_inverted="no" name="mux_reg[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="freeze_n"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_clk"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_cs"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_miso"/>
+          <net is_signal_inverted="no" name="TG68Test:mytg68test|sd_mosi"/>
+        </setup_view>
+      </presentation>
+      <trigger CRC="8A504ADC" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2012/10/08 00:18:14  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
+        <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
+        <events use_custom_flow_control="no">
+          <level enabled="yes" name="condition1" type="basic">'TG68Test:mytg68test|sd_miso' == either edge
+            <power_up enabled="yes">
+            </power_up>
+            <op_node/>
+          </level>
+        </events>
+        <storage_qualifier_events>
+          <transitional>000000000000000000000000000000000000000000000
+            <pwr_up_transitional>000000000000000000000000000000000000000000000</pwr_up_transitional>
+          </transitional>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+        </storage_qualifier_events>
+        <log>
+          <data global_temp="1" name="log: 2012/10/08 00:18:14  #1" power_up_mode="false" sample_depth="127" trigger_position="-1">011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110111001111111111110111000000000000000010011110111111111111111110111000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111110001111111111111110000000000000000010011111110111111111111111110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110110001111111101110110000000000000000010011110110111111111101110110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110001001111111111110001000000000000000010011110001111111111111110001000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110101001111111101110101000000000000000010011110101111111111101110101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111101001101110101111101000000000000000010011111101111101110101111101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111011001111111111111011000000000000000010011111011111111111111111011000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110111001111111111110111000000000000000010011110111111111111111110111000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111110001111111111111110000000000000000010011111110111111111111111110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110110001111111101110110000000000000000010011110110111111111101110110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110001001111111111110001000000000000000010011110001111111111111110001000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110101001111111101110101000000000000000010011110101111111111101110101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111101001101110101111101000000000000000010011111101111101110101111101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111011001111111111111011000000000000000010011111011111111111111111011000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110111001111111111110111000000000000000010011110111111111111111110111000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111110001111111111111110000000000000000010011111110111111111111111110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110110001111111101110110000000000000000010011110110111111111101110110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110001001111111111110001000000000000000010011110001111111111111110001000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110101001111111101110101000000000000000010011110101111111111101110101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111101001101110101111101000000000000000010011111101111101110101111101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111011001111111111111011000000000000000010011111011111111111111111011000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110111001111111111110111000000000000000010011110111111111111111110111000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111110001111111111111110000000000000000010011111110111111111111111110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110110001111111101110110000000000000000010011110110111111111101110110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110001001111111111110001000000000000000010011110001111111111111110001000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110101001111111101110101000000000000000010011110101111111111101110101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111101001101110101111101000000000000000010011111101111101110101111101000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111011001111111111111011000000000000000010011111011111111111111111011000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110111001111111111110111000000000000000010011110111111111111111110111000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011111110001111111111111110000000000000000010011111110111111111111111110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110110001111111101110110000000000000000010011110110111111111101110110000000000000000010011110011001101110111110011000000000000000010011110011111101110111110011000000000000000010011110001001111111111110001000000000000000010</data>
+          <extradata>1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
+        </log>
+      </trigger>
+    </signal_set>
+  </instance>
+  <mnemonics/>
+  <static_plugin_mnemonics/>
+  <global_info>
+    <single attribute="active instance" value="0"/>
+    <single attribute="config widget visible" value="1"/>
+    <single attribute="data log widget visible" value="0"/>
+    <single attribute="hierarchy widget visible" value="0"/>
+    <single attribute="instance widget visible" value="1"/>
+    <single attribute="jtag widget visible" value="1"/>
+    <multi attribute="frame size" size="2" value="1236,795"/>
+    <multi attribute="jtag widget size" size="2" value="384,133"/>
+    <multi attribute="column width" size="23" value="34,34,159,74,10,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
+  </global_info>
+</session>

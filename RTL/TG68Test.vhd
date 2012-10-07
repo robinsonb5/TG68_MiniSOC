@@ -3,6 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.ALL;
 
 entity TG68Test is
+	generic (
+		sdram_rows : integer := 12;
+		sdram_cols : integer := 8
+	);
 	port (
 		clk 			: in std_logic;
 		reset_in 	: in std_logic;
@@ -110,6 +114,7 @@ signal vga_reg_datain : std_logic_vector(15 downto 0);
 signal vga_reg_rw : std_logic;
 signal vga_reg_req : std_logic;
 signal vga_reg_dtack : std_logic;
+signal vga_ack : std_logic;
 signal vblank_int : std_logic;
 
 -- Peripheral register block signals
@@ -337,6 +342,11 @@ end process;
 	
 -- SDRAM
 mysdram : entity work.sdram 
+	generic map
+	(
+		rows => sdram_rows,
+		cols => sdram_cols
+	)
 	port map
 	(
 	-- Physical connections to the SDRAM
@@ -359,6 +369,7 @@ mysdram : entity work.sdram
 		vga_data => vga_data,
 		vga_fill => vga_fill,
 		vga_req => vga_req,
+		vga_ack => vga_ack,
 		vga_refresh => vga_refresh,
 		vga_reservebank => vga_reservebank,
 		vga_reserveaddr => vga_reserveaddr,
@@ -394,6 +405,7 @@ mysdram : entity work.sdram
 		sdr_datain => vga_data, 
 		sdr_fill => vga_fill,
 		sdr_req => vga_req,
+		sdr_ack => vga_ack,
 		sdr_reservebank => vga_reservebank,
 		sdr_reserveaddr => vga_reserveaddr,
 		sdr_refresh => vga_refresh,

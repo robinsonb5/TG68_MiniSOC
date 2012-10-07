@@ -228,8 +228,8 @@ begin
 
 	mymouse : entity work.io_ps2_com
 		generic map (
-			clockFilter => 21,
-			ticksPerUsec => 120
+			clockFilter => 15,
+			ticksPerUsec => 90
 		)
 		port map (
 			clk => clk,

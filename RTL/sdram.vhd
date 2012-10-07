@@ -50,11 +50,16 @@ use ieee.std_logic_1164.all;
 use IEEE.numeric_std.ALL;
 
 entity sdram is
+generic
+	(
+		rows : integer := 12;	-- FIXME - change access sizes according to number of rows
+		cols : integer := 8
+	);
 port
 	(
 -- Physical connections to the SDRAM
 	sdata		: inout std_logic_vector(15 downto 0);
-	sdaddr		: out std_logic_vector(11 downto 0);
+	sdaddr		: out std_logic_vector((rows-1) downto 0);
 	sd_we		: out std_logic;	-- Write enable, active low
 	sd_ras		: out std_logic;	-- Row Address Strobe, active low
 	sd_cas		: out std_logic;	-- Column Address Strobe, active low
@@ -73,6 +78,7 @@ port
 	vga_data	: out std_logic_vector(15 downto 0);
 	vga_req : in std_logic;
 	vga_fill : out std_logic;
+	vga_ack : out std_logic;
 	vga_newframe : in std_logic;
 	vga_refresh : in std_logic; -- SDRAM won't come out of reset without this.
 	vga_reservebank : in std_logic; -- Keep a bank clear for instant access in slot 1
@@ -454,7 +460,7 @@ end process;
 							sdram_state <= ph15;
 						elsif vga_refresh='1' then -- Delay here to establish phase relationship between SDRAM and VGA
 							init_done <='1';
-							sdram_state <= ph0;
+							sdram_state <= ph15;
 						end if;
 --							enaWRreg <= '1';
 --							ena7WRreg <= '1';
@@ -579,7 +585,7 @@ end process;
 -- Time slot control			
 
 				readcache_fill<='0';
-
+				vga_ack<='0';
 				case sdram_state is
 
 					when ph2 => -- ACTIVE for first access slot
@@ -611,6 +617,7 @@ end process;
 								cas_sd_we <= '1';
 								sd_cs <= '0'; --ACTIVE
 								sd_ras <= '0';
+								vga_ack<='1'; -- Signal to VGA controller that it can bump bankreserve
 --							else
 --								vga_nextbank <= unsigned(vga_addr(4 downto 3)); -- reserve bank for next access
 							end if;

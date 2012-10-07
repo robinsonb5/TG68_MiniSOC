@@ -48,6 +48,7 @@ entity vgacache is
 		-- VGA interface
 		setvga : in std_logic;	-- Set current address as VGA pointer
 		vga_req : in std_logic;
+		vga_ack : in std_logic;
 		data_out : out std_logic_vector(15 downto 0);
 
 		-- Sprite interface
@@ -161,6 +162,10 @@ begin
 					null;
 			end case;
 
+			if vga_ack='1' then
+				reserveaddr<=std_logic_vector(unsigned(framebufferaddr)+8);
+			end if;
+
 			if fill='1' then
 				if sprite0fill='1' then -- Are we currently receiving data from SDRAM?	
 					case incounter is
@@ -181,7 +186,6 @@ begin
 					case incounter is
 						when "00" =>
 							framebufferaddr<=std_logic_vector(unsigned(framebufferaddr)+8);
-							reserveaddr<=std_logic_vector(unsigned(framebufferaddr)+8);
 							req<='0';
 							buf3(63 downto 48)<=data_in;
 						when "01" =>
