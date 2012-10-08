@@ -249,7 +249,7 @@ short sd_read_sector(unsigned long lba,unsigned char *buf)
 		return(result);
 	}
 
-	i=50000;
+	i=500000;
 	while(--i)
 	{
 		short v;

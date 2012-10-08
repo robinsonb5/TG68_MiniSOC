@@ -5,7 +5,9 @@ use IEEE.numeric_std.ALL;
 entity TG68Test is
 	generic (
 		sdram_rows : integer := 12;
-		sdram_cols : integer := 8
+		sdram_cols : integer := 8;
+		sysclk_frequency : integer := 1000; -- Sysclk frequency * 10
+		spi_maxspeed : integer := 4	-- lowest acceptable timer DIV7 value
 	);
 	port (
 		clk 			: in std_logic;

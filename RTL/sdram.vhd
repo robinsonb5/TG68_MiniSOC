@@ -460,7 +460,7 @@ end process;
 							sdram_state <= ph15;
 						elsif vga_refresh='1' then -- Delay here to establish phase relationship between SDRAM and VGA
 							init_done <='1';
-							sdram_state <= ph15;
+							sdram_state <= ph0;
 						end if;
 --							enaWRreg <= '1';
 --							ena7WRreg <= '1';

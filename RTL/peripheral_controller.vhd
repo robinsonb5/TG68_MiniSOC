@@ -38,6 +38,12 @@ use IEEE.numeric_std.ALL;
 --    X"024"	Blocking version of the SPI register
 
 entity peripheral_controller is
+	generic (
+		sdram_rows : integer := 12;
+		sdram_cols : integer := 8;
+		sysclk_frequency : integer := 1000; -- Sysclk frequency * 10
+		spi_maxspeed : integer := 4	-- lowest acceptable timer DIV7 value
+	);
   port (
 		clk : in std_logic;
 		reset : in std_logic;
@@ -441,6 +447,17 @@ begin
 									reg_dtack<='1';
 									extend_cycle<='1';
 								end if;
+							
+--							-- Memory size register
+							when X"028" =>
+								reg_data_out<=std_logic_vector(to_unsigned(2*(sdram_rows+sdram_cols+2),16));
+
+--							-- System clock frequency
+							when X"02A" =>
+								reg_data_out<=std_logic_vector(to_unsigned(sysclk_frequency,16));
+
+--							when X"02C" =>
+								reg_data_out<=std_logic_vector(to_unsigned(spi_maxspeed,16));
 
 							when others =>
 								reg_data_out<=X"0000";

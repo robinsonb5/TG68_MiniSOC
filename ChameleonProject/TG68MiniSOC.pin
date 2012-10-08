@@ -111,7 +111,7 @@ VCCIO3                       : 40        : power  :                   : 3.3V    
 GND                          : 41        : gnd    :                   :         :           :                
 sd_addr[12]                  : 42        : output : 3.3-V LVTTL       :         : 3         : Y              
 sd_ras_n                     : 43        : output : 3.3-V LVTTL       :         : 3         : Y              
-sdram_clk                    : 44        : output : 3.3-V LVTTL       :         : 3         : N              
+sdram_clk                    : 44        : output : 3.3-V LVTTL       :         : 3         : Y              
 VCCINT                       : 45        : power  :                   : 1.2V    :           :                
 sd_cas_n                     : 46        : output : 3.3-V LVTTL       :         : 3         : Y              
 VCCIO3                       : 47        : power  :                   : 3.3V    : 3         :                

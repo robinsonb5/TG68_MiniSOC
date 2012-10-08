@@ -115,3 +115,88 @@ Upon write of B or GB, the registers will be bit-packed into a 5-6-5 16-bit word
 Write cache needs a "More to come" signal to prevent it writing out an incompletely filled line.
 
 Explore the possibility of using an SPI Ethernet controller.
+
+
+Blockram-based DMA cache:
+
+Read DMA channels are needed for:
+VGA
+Sprites
+Audio
+Disk writes
+???
+
+Write DMA channels are needed for:
+Blitter
+Disk Reads
+
+
+
+entity dmacache is
+	port(
+		clk : in std_logic;
+		reset_n : in std_logic;
+		-- DMA channel address strobes
+		addr_in : in std_logic_vector(31 downto 0);
+		req_length : unsigned(11 downto 0);
+		setaddr_vga : in std_logic;
+		setaddr_sprite0 : in std_logic;
+		setaddr_audio0 : in std_logic;
+		setaddr_audio1 : in std_logic;
+
+		-- Read requests
+		req_vga : in std_logic;
+		req_sprite0 : in std_logic;
+		req_audio0 : in std_logic;
+		req_audio1 : in std_logic;
+
+		-- DMA channel output and valid flags.
+		data_out : out std_logic_vector(15 downto 0);
+		valid_vga : out std_logic;
+		valid_sprite0 : out std_logic;
+		valid_audio0 : out std_logic;
+		valid_audio1 : out std_logic
+	);
+end entity;
+
+-- Need to partition up the 512 words we have available.
+-- Each channel needs to have a read and write pointer; neither pointer may cross the other.
+-- 32 words per channel to start with?
+-- While data's being displayed the VGA channel will have absolute priority and it's entirely possible the others
+-- won't get a look-in.
+
+-- Use a state machine for output:
+-- case outputstate is
+--	when vga =>
+--		valid_vga<=1;
+--	when sprite0 =>
+--		valid_sprite0<=1;
+-- etc...
+
+--if req_vga='1' and not vga_rdptr = vga_wrptr then
+--	outputstate<=vga;
+--	rdaddress<=vga_base+vga_rdptr;
+--
+--  
+
+
+architecture rtl of dmacache is
+	signal cache_readaddr : std_logic_vector(8 downto 0);
+	signal cache_writeaddr : std_logic_vector(8 downto 0);
+
+begin
+
+myDMACacheRAM : entity DMACacheRAM
+	port map
+	(
+		clock		: IN STD_LOGIC  := '1';
+		data		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		rdaddress		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+		wraddress		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+		wren		: IN STD_LOGIC  := '0';
+		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
+	);
+END DMACache;
+
+
+end architecture

@@ -379,8 +379,6 @@ begin
 					-- Request next pixel from VGA cache
 					vgacache_req<='1';
 
-					-- Now dither the pixel.  If we're drawing a pixel from the character
-					-- generator or sprites, or the pixel is already at max, we don't dither. (Avoids overflow)
 					if sprite_col(3)='1' then
 						red <= (others => sprite_col(2));
 					elsif chargen_pixel='1' then
@@ -425,7 +423,7 @@ begin
 					end if;
 					
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
-					if currentX<(htotal - 8) then	-- Signal to SDRAM controller that we're
+					if currentX<(htotal - 10) then	-- Signal to SDRAM controller that we're
 						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
 					end if;
 				end if;

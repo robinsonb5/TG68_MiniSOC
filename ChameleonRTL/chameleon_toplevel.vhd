@@ -260,6 +260,10 @@ begin
 		);
 	
 	mytg68test : entity work.TG68Test
+		generic map(
+			sysclk_frequency => 1135,
+			spi_maxspeed => 8
+		)
 		port map(
 			clk => clk,
 			reset_in => reset,
