@@ -130,32 +130,9 @@ set_location_assignment PIN_53 -to usart_clk
 set_location_assignment PIN_54 -to usart_rts
 set_location_assignment PIN_55 -to usart_cts
 set_location_assignment PIN_23 -to freeze_n
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
-set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
-set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
-set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
-set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
-set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
-set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
-set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
-set_global_assignment -name VHDL_FILE ../ChameleonRTL/chameleon_toplevel.vhd
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/PLL.qip
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/BootRom.qip
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRom.qip
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRAM.qip
-set_global_assignment -name VHDL_FILE ../ChameleonRTL/poweronreset.vhd
 set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
 set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
 set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
@@ -169,7 +146,6 @@ set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
 set_global_assignment -name ENABLE_SIGNALTAP ON
 set_global_assignment -name USE_SIGNALTAP_FILE stp2.stp
-set_global_assignment -name SIGNALTAP_FILE stp2.stp
 set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "PLL:pllInstance|c0" -section_id auto_signaltap_0
@@ -285,6 +261,31 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LE
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=19164" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=35408" -section_id auto_signaltap_0
 set_location_assignment PIN_44 -to sdram_clk
-set_global_assignment -name SDC_FILE SDC1.sdc
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VHDL_FILE ../RTL/DMACache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
+set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
+set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
+set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
+set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
+set_global_assignment -name VHDL_FILE ../ChameleonRTL/chameleon_toplevel.vhd
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/PLL.qip
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/BootRom.qip
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRom.qip
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRAM.qip
+set_global_assignment -name VHDL_FILE ../ChameleonRTL/poweronreset.vhd
+set_global_assignment -name SIGNALTAP_FILE stp2.stp
+set_global_assignment -name SDC_FILE SDC1.sdc
 set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/DMACacheRAM.qip
