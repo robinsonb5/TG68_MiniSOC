@@ -56,7 +56,7 @@ use IEEE.numeric_std.ALL;
 --		blue : std_logic_vector(4 downto 0);
 
 
-
+-- FIXME - make address bus 32 bits wide.
 
 entity vga_controller is
   port (
@@ -94,7 +94,19 @@ end entity;
 architecture rtl of vga_controller is
 	signal vga_pointer : std_logic_vector(23 downto 0);
 
-	signal framebuffer_pointer : std_logic_vector(23 downto 0) := X"100000";
+	signal dma_addr : std_logic_vector(31 downto 0);
+	signal setaddr_vga : std_logic;
+	signal setaddr_spr0 : std_logic;
+	signal dma_len : unsigned(11 downto 0);
+	signal setlen_vga : std_logic;
+	signal setlen_spr0 : std_logic;
+	signal req_vga : std_logic;
+	signal req_spr0 : std_logic;
+	signal data_from_dma : std_logic_vector(15 downto 0);
+	signal valid_vga : std_logic;
+	signal valid_spr0 : std_logic;
+	
+	signal framebuffer_pointer : std_logic_vector(31 downto 0) := X"00100000";
 	signal hsize : unsigned(11 downto 0) := TO_UNSIGNED(640,12);
 	signal htotal : unsigned(11 downto 0) := TO_UNSIGNED(800,12);
 	signal hbstart : unsigned(11 downto 0) := TO_UNSIGNED(656,12);
@@ -104,22 +116,20 @@ architecture rtl of vga_controller is
 	signal vbstart : unsigned(11 downto 0) := TO_UNSIGNED(500,12);
 	signal vbstop : unsigned(11 downto 0) := TO_UNSIGNED(502,12);
 
-	signal sprite0_pointer : std_logic_vector(23 downto 0) := X"000000";
+	signal sprite0_pointer : std_logic_vector(31 downto 0) := X"00000000";
 	signal sprite0_xpos : unsigned(11 downto 0);
 	signal sprite0_ypos : unsigned(11 downto 0);
-	signal sprite0_data : std_logic_vector(3 downto 0);
-	signal set_sprite0 : std_logic;
-	signal sprite0_req : std_logic;
+	signal sprite0_data : std_logic_vector(15 downto 0);
+	signal sprite0_counter : unsigned(1 downto 0);
+
+	signal sprite_col : std_logic_vector(3 downto 0);
 	
 	signal currentX : unsigned(11 downto 0);
 	signal currentY : unsigned(11 downto 0);
 	signal end_of_pixel : std_logic;
 	signal vga_newframe : std_logic;
-	signal vgacache_req : std_logic;
 	signal vgadata : std_logic_vector(15 downto 0);
-	signal oddframe : std_logic;	-- Toggled each frame, used for dithering
 
-	signal sprite_col : unsigned(3 downto 0);
 
 	signal chargen_addr : std_logic_vector(10 downto 0);
 	signal chargen_datain : std_logic_vector(7 downto 0);
@@ -128,7 +138,7 @@ architecture rtl of vga_controller is
 	signal chargen_pixel : std_logic := '0';
 	signal chargen_rw : std_logic :='1';
 	signal chargen_overlay : std_logic :='1';
-
+	
 	type charramstates is (writeupperbyte,readupperbyte1,readupperbyte2,writelowerbyte,readlowerbyte1,readlowerbyte2);
 	signal charramstate : charramstates;			
 
@@ -163,30 +173,48 @@ begin
 			ySyncTo => vbstop
 		);		
 
-	myvgacache : entity work.vgacache
+	mydmacache : entity work.DMACache
 		port map(
 			clk => clk,
-			reset => reset,
+			reset_n => reset,
 
-			addrin => vga_pointer,
---			idle => sdr_reservebank,
+			-- DMA addressing
+			addr_in => dma_addr,
+			setaddr_vga => setaddr_vga,
+			setaddr_sprite0 => setaddr_spr0,
+			setaddr_audio0 => '0',
+			setaddr_audio1 => '0',
 
-			vga_req => vgacache_req,
-			data_out => vgadata,
-			setvga => vga_newframe,
+			-- DMA request lengths
+			req_length => dma_len,
+			setreqlen_vga => setlen_vga,
+			setreqlen_sprite0 => setlen_spr0,
+			setreqlen_audio0 => '0',
+			setreqlen_audio1 => '0',
 
-			sprite0_out => sprite0_data,
-			setsprite0 => set_sprite0,
-			sprite0_req => sprite0_req,
+			-- Read requests
+			req_vga => req_vga,
+			req_sprite0 => req_spr0,
+			req_audio0 => '0',
+			req_audio1 => '0',
 
-			addrout => sdr_addrout,
-			data_in => sdr_datain,
-			fill => sdr_fill,
-			req => sdr_req,
-			vga_ack => sdr_ack,
---			reservebank => sdr_reservebank,
---			reservebank => open,
-			reserveaddr => sdr_reserveaddr
+			-- DMA channel output and valid flags.
+			data_out => data_from_dma,
+			valid_vga => valid_vga,
+			valid_sprite0 => valid_spr0,
+			valid_audio0 => open,
+			valid_audio1 => open,
+			
+			-- SDRAM interface
+			sdram_addr(23 downto 0) => sdr_addrout,
+			sdram_addr(31 downto 24) => open,
+			sdram_reserveaddr(23 downto 0) => sdr_reserveaddr,
+			sdram_reserveaddr(31 downto 24) => open,
+			sdram_reserve => sdr_reservebank,
+			sdram_req => sdr_req,
+			sdram_ack => sdr_ack,
+			sdram_fill => sdr_fill,
+			sdram_data => sdr_datain
 		);
 
 	mychargen : entity work.charactergenerator
@@ -269,7 +297,7 @@ begin
 					when X"000" =>
 	--					reg_data_out<=X"00"&framebuffer_pointer(23 downto 16);
 						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
-							framebuffer_pointer(23 downto 16) <= reg_data_in(7 downto 0);
+							framebuffer_pointer(31 downto 16) <= reg_data_in;
 						end if;
 					when X"002" =>
 	--					reg_data_out<=framebuffer_pointer(15 downto 0);
@@ -284,7 +312,7 @@ begin
 					when X"100" =>
 	--					reg_data_out<=X"00"&sprite0_pointer(23 downto 16);
 						if reg_rw='0' then
-							sprite0_pointer(23 downto 16) <= reg_data_in(7 downto 0);
+							sprite0_pointer(31 downto 16) <= reg_data_in;
 						end if;
 					when X"102" =>
 	--					reg_data_out<=sprite0_pointer(15 downto 0);
@@ -339,16 +367,41 @@ begin
 	process(clk, reset, currentX, currentY)
 	begin
 		if rising_edge(clk) then
-			sprite0_req<='0';
+			req_spr0<='0';
 			if currentX>=sprite0_xpos and currentX-sprite0_xpos<16
 						and currentY>=sprite0_ypos and currentY-sprite0_ypos<16 then	
 				if end_of_pixel='1' then
-					sprite_col<=unsigned(sprite0_data);
-					sprite0_req<='1';
+					case sprite0_counter is
+						when "11" =>
+							sprite_col<=sprite0_data(15 downto 12);
+							sprite0_counter<="10";
+						when "10" =>
+							sprite_col<=sprite0_data(11 downto 8);
+							sprite0_counter<="01";
+						when "01" =>
+							sprite_col<=sprite0_data(7 downto 4);
+							req_spr0<='1';
+							sprite0_counter<="00";
+						when "00" =>
+							sprite_col<=sprite0_data(3 downto 0);
+							sprite0_counter<="11";
+					end case;
 				end if;
 			else
 				sprite_col<="0000";
+--				sprite0_counter<="11";
 			end if;
+
+--			Prefetch first word.
+			if setaddr_spr0='1' then
+				req_spr0<='1';
+				sprite0_counter<="11";
+			end if;
+			
+			if valid_spr0='1' then
+				sprite0_data<=data_from_dma;
+			end if;
+
 		end if;
 	end process;
 	
@@ -362,22 +415,26 @@ begin
 			end if;
 		end if;
 		
-		if reset='0' then
-			vgacache_req <='0';
-			sdr_reservebank<='1';
-		elsif rising_edge(clk) then
+		if rising_edge(clk) then
 			vblank_int<='0';
-			vgacache_req<='0';
+			req_vga<='0';
 			vga_newframe<='0';
-			vgacache_req<='0';
-			set_sprite0<='0';
+			setaddr_vga<='0';
+			setaddr_spr0<='0';
+			setlen_vga<='0';
+			setlen_spr0<='0';	
+
+			if(valid_vga='1') then
+				vgadata<=data_from_dma;
+			end if;
+
 			if end_of_pixel='1' then
-				sdr_reservebank<='1';
+--				sdr_reservebank<='1';
 
 				if currentX<640 and currentY<480 then
 					vga_window<='1';
 					-- Request next pixel from VGA cache
-					vgacache_req<='1';
+					req_vga<='1';
 
 					if sprite_col(3)='1' then
 						red <= (others => sprite_col(2));
@@ -411,20 +468,31 @@ begin
 
 				else
 					vga_window<='0';
-					if currentY=vsize and currentX=16 then
-						vga_pointer<=framebuffer_pointer;
-						vga_newframe<='1';
+					
+					-- New frame...
+					if currentY=vsize and currentX=0 then
 						vblank_int<='1';
 					end if;
 
-					if currentY=vtotal and currentX=0 then
-						vga_pointer<=sprite0_pointer;
-						set_sprite0<='1';
+					-- Last line of VBLANK - update DMA pointers
+					if currentY=vtotal then
+							if currentX=0 then
+								dma_addr<=framebuffer_pointer;
+								setaddr_vga<='1';
+							elsif currentX=1 then
+								dma_addr<=sprite0_pointer;
+								setaddr_spr0<='1';
+							end if;
 					end if;
 					
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
-					if currentX<(htotal - 10) then	-- Signal to SDRAM controller that we're
-						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
+					if currentX=(htotal - 20) then	-- Signal to SDRAM controller that we're
+						dma_len<=TO_UNSIGNED(640,12);
+						setlen_vga<='1';
+--						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
+					elsif currentX=(htotal - 19) then
+						dma_len<=TO_UNSIGNED(4,12);
+						setlen_spr0<='1';
 					end if;
 				end if;
 			end if;
