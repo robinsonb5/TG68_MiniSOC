@@ -269,13 +269,8 @@ begin
 			reset_in => reset,
 			
 			switches => (others =>'0'),
-
-			-- Timing configuration
---			pll_phasedir => pll_phasedir,
---			pll_phasestep => pll_phasestep,
-			pll_phasedone => '1', -- pll_phasedone and pll_phasedone2,
 			
-			-- SDRAM - presenting a single interface to both chips.
+			-- SDRAM
 			sdr_addr => sd_addr(11 downto 0),
 			sdr_data(15 downto 0) => sd_data,
 			sdr_ba(1) => sd_ba_1,

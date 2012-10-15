@@ -46,15 +46,15 @@ derive_clock_uncertainty;
 # Set Input Delay
 #**************************************************************
 
-set_input_delay -clock sdram_clk_pin -max [expr 5.5 + 0.8] [get_ports *sd_data*]
-set_input_delay -clock sdram_clk_pin -min [expr 3 + 0.4] [get_ports *sd_data*]
+set_input_delay -clock sdram_clk_pin -max [expr 5.5 + 1.0] [get_ports *sd_data*]
+set_input_delay -clock sdram_clk_pin -min [expr 2.5 + 0.1] [get_ports *sd_data*]
 
 #**************************************************************
 # Set Output Delay
 #**************************************************************
 
-set_output_delay -clock sdram_clk_pin -max [expr 1.2] [get_ports *sd_*]
-set_output_delay -clock sdram_clk_pin -min [expr -0.8] [get_ports *sd_*]
+set_output_delay -clock sdram_clk_pin -max [expr 1.8 ] [get_ports *sd_*]
+set_output_delay -clock sdram_clk_pin -min [expr -1.2 ] [get_ports *sd_*]
 
 
 # Multicycles

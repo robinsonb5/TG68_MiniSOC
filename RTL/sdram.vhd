@@ -74,7 +74,7 @@ port
 	reinit : in std_logic :='0';
 
 -- Port 0 - VGA
-	vga_addr : in std_logic_vector(23 downto 0);
+	vga_addr : in std_logic_vector(31 downto 0);
 	vga_data	: out std_logic_vector(15 downto 0);
 	vga_req : in std_logic;
 	vga_fill : out std_logic;
@@ -82,11 +82,11 @@ port
 	vga_newframe : in std_logic;
 	vga_refresh : in std_logic; -- SDRAM won't come out of reset without this.
 	vga_reservebank : in std_logic; -- Keep a bank clear for instant access in slot 1
-	vga_reserveaddr : in std_logic_vector(23 downto 0);
+	vga_reserveaddr : in std_logic_vector(31 downto 0);
 
 	-- Port 1
 	datawr1		: in std_logic_vector(15 downto 0);	-- Data in from minimig
-	Addr1		: in std_logic_vector(23 downto 0);	-- Address in from Minimig - FIXME case
+	Addr1		: in std_logic_vector(31 downto 0);	-- Address in from Minimig - FIXME case
 	req1		: in std_logic;
 	cachesel	: in std_logic :='0'; -- 1 => data cache, 0 => instruction cache
 	wr1			: in std_logic;	-- Read/write from Minimig
@@ -108,7 +108,7 @@ signal cas_sd_we 	:std_logic;
 signal cas_dqm		:std_logic_vector(1 downto 0);	-- ...mask register for entire burst
 signal init_done	:std_logic;
 signal datain		:std_logic_vector(15 downto 0);
-signal casaddr		:std_logic_vector(23 downto 0);
+signal casaddr		:std_logic_vector(31 downto 0);
 signal sdwrite 		:std_logic;
 signal sdata_reg	:std_logic_vector(15 downto 0);
 
@@ -148,7 +148,7 @@ signal port1_dtack : std_logic;
 type writecache_states is (waitwrite,fill,finish);
 signal writecache_state : writecache_states;
 
-signal writecache_addr : std_logic_vector(23 downto 3);
+signal writecache_addr : std_logic_vector(31 downto 3);
 signal writecache_word0 : std_logic_vector(15 downto 0);
 signal writecache_word1 : std_logic_vector(15 downto 0);
 signal writecache_word2 : std_logic_vector(15 downto 0);
@@ -162,7 +162,7 @@ signal writecache_burst : std_logic;
 type readcache_states is (waitread,req,fill1,fill2,fill3,fill4,fill2_1,fill2_2,fill2_3,fill2_4,finish);
 signal readcache_state : readcache_states;
 
-signal readcache_addr : std_logic_vector(23 downto 3);
+signal readcache_addr : std_logic_vector(31 downto 3);
 signal readcache_word0 : std_logic_vector(15 downto 0);
 signal readcache_word1 : std_logic_vector(15 downto 0);
 signal readcache_word2 : std_logic_vector(15 downto 0);
@@ -172,7 +172,7 @@ signal readcache_req : std_logic;
 signal readcache_dtack : std_logic;
 signal readcache_fill : std_logic;
 
-signal instcache_addr : std_logic_vector(23 downto 3);
+signal instcache_addr : std_logic_vector(31 downto 3);
 signal instcache_word0 : std_logic_vector(15 downto 0);
 signal instcache_word1 : std_logic_vector(15 downto 0);
 signal instcache_word2 : std_logic_vector(15 downto 0);
@@ -198,8 +198,8 @@ begin
 		case writecache_state is
 			when waitwrite =>
 				if req1='1' and wr1='0' then -- write request
-					if writecache_dirty='0' or addr1(23 downto 3)=writecache_addr(23 downto 3) then
-						writecache_addr(23 downto 3)<=addr1(23 downto 3);
+					if writecache_dirty='0' or addr1(31 downto 3)=writecache_addr(31 downto 3) then
+						writecache_addr(31 downto 3)<=addr1(31 downto 3);
 						case addr1(2 downto 1) is
 							when "00" =>
 								writecache_word0<=datawr1;
@@ -254,7 +254,7 @@ end process;
 			case readcache_state is
 				when waitread =>
 					if req1='1' and wr1='1' then -- read cycle
-						if Addr1(23 downto 3)=readcache_addr and readcache_dirty='0' then -- cache hit
+						if Addr1(31 downto 3)=readcache_addr and readcache_dirty='0' then -- cache hit
 							case addr1(2 downto 1) is
 								when "00" =>
 									dataout1<=readcache_word0;
@@ -266,7 +266,7 @@ end process;
 									dataout1<=readcache_word3;
 							end case;
 							readcache_dtack<='0';
-						elsif Addr1(23 downto 3)=instcache_addr and instcache_dirty='0' then -- cache hit
+						elsif Addr1(31 downto 3)=instcache_addr and instcache_dirty='0' then -- cache hit
 							case addr1(2 downto 1) is
 								when "00" =>
 									dataout1<=instcache_word0;
@@ -280,11 +280,11 @@ end process;
 							readcache_dtack<='0';
 						else	-- cache miss
 							if cachesel='0' then
-								instcache_addr<=addr1(23 downto 3);
+								instcache_addr<=addr1(31 downto 3);
 								instcache_dirty<='1';
 								readcache_state<=fill2_1;
 							else
-								readcache_addr<=addr1(23 downto 3);
+								readcache_addr<=addr1(31 downto 3);
 								readcache_dirty<='1';
 								readcache_state<=fill1;
 							end if;
@@ -331,7 +331,7 @@ end process;
 			-- Invalidate cacheline if the write cache is writing to the same address.
 			-- Better yet, replace the cached word with the newly-written data.
 			-- FIXME - need to take into account byte masking.
-			if req1='1' and wr1='0' and addr1(23 downto 3) = readcache_addr(23 downto 3) then
+			if req1='1' and wr1='0' and addr1(31 downto 3) = readcache_addr(31 downto 3) then
 				case addr1(2 downto 1) is
 					when "00" =>
 						readcache_word0<=datawr1;
@@ -611,7 +611,7 @@ end process;
 --								if vga_idle='0' then
 --									vga_nextbank <= unsigned(vga_addr(4 downto 3))+"01";
 --								end if;
-								casaddr <= vga_addr(23 downto 3) & "000"; -- read whole cache line in burst mode.
+								casaddr <= vga_addr(31 downto 3) & "000"; -- read whole cache line in burst mode.
 	--							datain <= X"0000";
 								cas_sd_cas <= '0';
 								cas_sd_we <= '1';
@@ -644,7 +644,7 @@ end process;
 							ba <= Addr1(4 downto 3);
 							slot1_bank <= Addr1(4 downto 3); -- slot1 bank
 							cas_dqm <= "00";
-							casaddr <= Addr1(23 downto 3) & "000";
+							casaddr <= Addr1(31 downto 3) & "000";
 --							datain <= datawr1;
 							cas_sd_cas <= '0';
 							cas_sd_we <= '1';
@@ -762,7 +762,7 @@ end process;
 							ba <= Addr1(4 downto 3);
 							slot2_bank <= Addr1(4 downto 3);
 							cas_dqm <= "00";
-							casaddr <= Addr1(23 downto 3) & "000"; -- Mask off LSBs for burst read
+							casaddr <= Addr1(31 downto 3) & "000"; -- Mask off LSBs for burst read
 --							datain <= datawr1;
 							cas_sd_cas <= '0';
 							cas_sd_we <= '1';

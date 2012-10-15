@@ -72,12 +72,12 @@ entity vga_controller is
 		reg_dtack : out std_logic;	-- Needed for char ram access.
 		reg_req : in std_logic;
 
-		sdr_addrout : buffer std_logic_vector(23 downto 0); -- to SDRAM
+		sdr_addrout : buffer std_logic_vector(31 downto 0); -- to SDRAM
 		sdr_datain : in std_logic_vector(15 downto 0);	-- from SDRAM
 		sdr_fill : in std_logic; -- High when data is being written from SDRAM controller
 		sdr_req : buffer std_logic; -- Request service from SDRAM controller
 		sdr_reservebank : buffer std_logic; -- Indicate to SDR controller when requests are not critical timewise
-		sdr_reserveaddr : buffer std_logic_vector(23 downto 0); -- Indicate to SDR controller when requests are not critical timewise
+		sdr_reserveaddr : buffer std_logic_vector(31 downto 0); -- Indicate to SDR controller when requests are not critical timewise
 		sdr_refresh : out std_logic;
 		sdr_ack : in std_logic;
 
@@ -92,7 +92,7 @@ entity vga_controller is
 end entity;
 	
 architecture rtl of vga_controller is
-	signal vga_pointer : std_logic_vector(23 downto 0);
+	signal vga_pointer : std_logic_vector(31 downto 0);
 
 	signal dma_addr : std_logic_vector(31 downto 0);
 	signal setaddr_vga : std_logic;
@@ -206,10 +206,8 @@ begin
 			valid_audio1 => open,
 			
 			-- SDRAM interface
-			sdram_addr(23 downto 0) => sdr_addrout,
-			sdram_addr(31 downto 24) => open,
-			sdram_reserveaddr(23 downto 0) => sdr_reserveaddr,
-			sdram_reserveaddr(31 downto 24) => open,
+			sdram_addr=> sdr_addrout,
+			sdram_reserveaddr(31 downto 0) => sdr_reserveaddr,
 			sdram_reserve => sdr_reservebank,
 			sdram_req => sdr_req,
 			sdram_ack => sdr_ack,

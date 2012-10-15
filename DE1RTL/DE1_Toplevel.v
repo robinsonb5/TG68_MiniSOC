@@ -265,6 +265,10 @@ mydither (
 	.oBlue(oblue)
 );
 
+defparam myTG68Test.sdram_rows = 12;
+defparam myTG68Test.sdram_cols = 8;
+defparam myTG68Test.sysclk_frequency = 1000;
+defparam myTG68Test.spi_maxspeed = 2;
 
 TG68Test myTG68Test
 (	

@@ -18,11 +18,6 @@ entity TG68Test is
 		pausevga		: in std_logic;
 		buttons		: in std_logic_vector(2 downto 0);
 
-		-- Timing configuration
-		pll_phasedir : out std_logic;
-		pll_phasestep : buffer std_logic_vector(1 downto 0); -- We have two chips and hence two PLLs to configure
-		pll_phasedone : in std_logic;
-
 		-- VGA
 		vga_red 		: out unsigned(7 downto 0);
 		vga_green 	: out unsigned(7 downto 0);
@@ -95,18 +90,18 @@ signal reset : std_logic := '0';
 signal reset_counter : unsigned(15 downto 0) := X"FFFF";
 signal tg68_ready : std_logic;
 signal sdr_ready : std_logic;
-signal write_address : std_logic_vector(23 downto 0);
+signal write_address : std_logic_vector(31 downto 0);
 signal req_pending : std_logic :='0';
 --signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
 
-signal vga_addr : std_logic_vector(23 downto 0);
+signal vga_addr : std_logic_vector(31 downto 0);
 signal vga_req : std_logic;
 signal vga_fill : std_logic;
 signal vga_refresh : std_logic;
 signal vga_newframe : std_logic;
 signal vga_reservebank : std_logic; -- Keep bank clear for instant access.
-signal vga_reserveaddr : std_logic_vector(23 downto 0); -- to SDRAM
+signal vga_reserveaddr : std_logic_vector(31 downto 0); -- to SDRAM
 
 -- VGA register block signals
 
@@ -155,23 +150,8 @@ begin
 	end if;
 end process;
 
---sdr_clk <=clk;
-
---mypll : ENTITY work.PLL
---	port map
---	(
---		inclk0 => clk50,
---		c0 => sdr_clk,
---		c1 => clk,
---		locked => open
---	);
---
-
 sdr_cke<='1';
 
---vga_red<=wred(7 downto 4);
---vga_green<=wgreen(7 downto 4);
---vga_blue<=wblue(7 downto 4);
 
 myint : entity work.interrupt_controller
 	port map(
@@ -280,7 +260,7 @@ begin
 						when others =>
 --							datatoram<=cpu_dataout;
 --							counter<=unsigned(cpu_dataout); -- Remove this...
---							write_address<=cpu_addr(23 downto 0);
+--							write_address<=cpu_addr( downto 0);
 							req_pending<='1';
 							if cpu_r_w='0' then
 								prgstate<=waitwrite;
@@ -365,7 +345,7 @@ mysdram : entity work.sdram
 		sysclk => clk,
 		reset => reset_in,  -- Contributes to reset, so have to use reset_in here.
 		reset_out => sdr_ready,
-		reinit => pll_phasestep(0) or pll_phasestep(1),
+		reinit => '0',
 
 		vga_addr => vga_addr,
 		vga_data => vga_data,
@@ -379,7 +359,7 @@ mysdram : entity work.sdram
 		vga_newframe => vga_newframe,
 
 		datawr1 => cpu_dataout,
-		Addr1 => cpu_addr(23 downto 0),
+		Addr1 => cpu_addr,
 		req1 => req_pending,
 		wr1 => cpu_r_w,
 		wrL1 => cpu_lds,
@@ -459,12 +439,7 @@ mysdram : entity work.sdram
 		
 		bootrom_overlay => bootrom_overlay,
 		switches => switches,
-		hex => counter,
-
-		-- Timing configuration
-		pll_phasedir => pll_phasedir,
-		pll_phasestep => pll_phasestep, -- We have two chips and hence two PLLs to configure
-		pll_phasedone => pll_phasedone
+		hex => counter
 	);
 
 	

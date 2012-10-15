@@ -12,9 +12,6 @@
 
 short *FrameBuffer;
 
-extern short pen;
-extern void DrawIteration();
-
 static short framecount=0;
 short MouseX=0,MouseY=0,MouseButtons=0;
 short mousetimeout=0;
@@ -59,9 +56,19 @@ void vblank_int()
 		if(nx>479)
 			nx=479;
 		MouseY=nx;
+		mousetimeout=0;
 	}
 	HW_VGA(SP0XPOS)=MouseX;
 	HW_VGA(SP0YPOS)=MouseY;
+
+	// Clear any incomplete packets, to resync the mouse if comms break down.
+	if(PS2MouseBytesReady())
+	{
+		++mousetimeout;
+		if(mousetimeout==20)
+			while(PS2MouseBytesReady())
+				PS2MouseRead();
+	}
 
 	if(PS2KeyboardBytesReady())
 		HandlePS2RawCodes();
@@ -200,11 +207,6 @@ void c_entry()
 
 	while(1)
 	{
-		HW_PER(PER_HEX)=MouseButtons;
-		if(MouseButtons&1)
-			pen+=0x400;
-		if(MouseButtons&2)
-			pen-=0x400;
 //		DrawIteration();
 
 //		++counter;

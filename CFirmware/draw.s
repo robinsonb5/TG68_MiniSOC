@@ -118,10 +118,10 @@ DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 	beq	.even
 .wordxloop
 	move.w	(a0),d5
-	add.l	#$00a000a0,d5
-;	lsr.l	#1,d5
-;	and.l	#%0111101111101111,d5	; Remove MSBs
-;	add.w	d4,d5	
+;	add.l	#$00a000a0,d5
+	lsr.l	#1,d5
+	and.l	#%0111101111101111,d5	; Remove MSBs
+	add.w	d4,d5	
 	move.w	d5,(a0)+
 	subq.w	#1,d1
 	bne	.wordxloop	
@@ -132,14 +132,14 @@ DrawRectangle	; d0: x, d1: y, d2: w, d3: h, a0: framebuffer
 .longxloop
 	move.l	(a0),d5
 	move.l	4(a0),d6
-	add.l	#$00a000a0,d5
-	add.l	#$00a000a0,d6
-;	lsr.l	#1,d5
-;	and.l	#$7bef7bef,d5	; Remove MSBs
-;	lsr.l	#1,d6
-;	and.l	#$7bef7bef,d6	; Remove MSBs
-;	add.l	d4,d5	
-;	add.l	d4,d6	
+;	add.l	#$00a000a0,d5
+;	add.l	#$00a000a0,d6
+	lsr.l	#1,d5
+	and.l	#$7bef7bef,d5	; Remove MSBs
+	lsr.l	#1,d6
+	and.l	#$7bef7bef,d6	; Remove MSBs
+	add.l	d4,d5	
+	add.l	d4,d6	
 	move.l	d5,(a0)+
 	move.l	d6,(a0)+
 	subq.w	#1,d1
