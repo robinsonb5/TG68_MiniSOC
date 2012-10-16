@@ -400,15 +400,16 @@ begin
 									extend_cycle<='1';
 								end if;
 							
---							-- Memory size register
+							-- Memory size register
 							when X"028" =>
-								reg_data_out<=std_logic_vector(to_unsigned(2*(sdram_rows+sdram_cols+2),16));
+								reg_data_out<=std_logic_vector(to_unsigned(sdram_rows+sdram_cols+3,16));
 
---							-- System clock frequency
+							-- System clock frequency
 							when X"02A" =>
 								reg_data_out<=std_logic_vector(to_unsigned(sysclk_frequency,16));
 
---							when X"02C" =>
+							--	SPI Speed
+							when X"02C" =>
 								reg_data_out<=std_logic_vector(to_unsigned(spi_maxspeed,16));
 
 							when others =>

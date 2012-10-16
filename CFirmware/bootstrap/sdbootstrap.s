@@ -69,6 +69,7 @@ HEX equ $810006 ; HEX display - DISABLE
 PER_SPI equ $20
 PER_SPI_BLOCKING equ $24
 PER_SPI_CS equ $22
+PER_CAP_SPISPEED equ $2C
 PER_SPI_PUMP equ $100
 PER_TIMER_DIV7 equ $1e
 
@@ -585,7 +586,7 @@ spi_init_w8	move.w	#255,PER_SPI_BLOCKING(a1)	;8x clock
 spi_init_w6
 			move.w	PER_SPI_BLOCKING(a1),-2(a7)	; Wait for last clocks before deasserting CS
 			move.w	#0,PER_SPI_CS(a1)		;sd_cs high
-			move.w	#8,PER_TIMER_DIV7(a1)
+			move.w	PER_CAP_SPISPEED(a1),PER_TIMER_DIV7(a1)
 			pea		msg_init_done
 			bsr		put_msga7
 			lea		4(a7),a7

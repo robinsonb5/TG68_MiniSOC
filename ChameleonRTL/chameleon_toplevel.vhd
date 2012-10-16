@@ -261,6 +261,8 @@ begin
 	
 	mytg68test : entity work.TG68Test
 		generic map(
+			sdram_rows => 12,
+			sdram_cols => 9,
 			sysclk_frequency => 1135,
 			spi_maxspeed => 8
 		)

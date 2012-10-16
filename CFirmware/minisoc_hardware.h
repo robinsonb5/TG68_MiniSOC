@@ -98,6 +98,11 @@ extern char *VGACharBuffer;
 
 #define PER_SPI_BUSY 15
 
+/* Capability registers */
+
+#define PER_CAP_RAMSIZE 0x28
+#define PER_CAP_CLOCKSPEED 0x2A
+#define PER_CAP_SPISPEED 0x2C
 
 /* Interrupts */
 

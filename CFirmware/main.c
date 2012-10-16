@@ -96,7 +96,8 @@ void AddMemory()
 	low=(size_t)&heap_low;
 	low+=7;
 	low&=0xfffffff8; // Align to SDRAM burst boundary
-	size=((char*)&heap_top)-low;
+	size=1<<HW_PER(PER_CAP_RAMSIZE);
+	size-=low;
 	printf("Heap_low: %lx, heap_size: %lx\n",low,size);
 	malloc_add((void*)low,size);
 }

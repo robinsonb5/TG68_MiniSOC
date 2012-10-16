@@ -402,6 +402,12 @@ mysdram : entity work.sdram
 	);
 	
 	myperipheral : entity work.peripheral_controller
+		generic map(
+			sdram_rows => sdram_rows,
+			sdram_cols => sdram_cols,
+			sysclk_frequency => 1135,
+			spi_maxspeed => 8
+		)
 		port map (
 		clk => clk,
 		reset => reset,
