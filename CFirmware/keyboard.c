@@ -44,32 +44,45 @@ unsigned char kblookup[2][128] =
 	},
 };
 
+unsigned char keytable[256]={0};
+
 #define QUAL_SHIFT 0
 
 static short qualifiers=0;
 static short leds=0;
+static short fkeys=0;
 
-void HandlePS2RawCodes()
+char HandlePS2RawCodes()
 {
+	char result=0;
 	static short keyup=0;
 	static short extkey=0;
 	short updateleds=0;
 	short key;
 	while((key=PS2KeyboardRead())>-1)
 	{
-		if(key==0xf0)
+		if(key==KEY_KEYUP)
 			keyup=1;
-		else if(key==0xe0)
+		else if(key==KEY_EXT)
 			extkey=1;
 		else
 		{
+			if(key<128)
+			{
+				short keyidx=extkey ? 128+key : key;
+				if(keyup)
+					keytable[keyidx]&=0xfe;  // Mask off the "currently pressed" bit.
+				else
+					keytable[keyidx]=3;	// Currently pressed and pressed since last test.
+			}
 			if(keyup==0)
 			{
 				char a=0;
 				if(key<128)
 				{
-					char a=kblookup[ (leds & 4) ? qualifiers | 1 : qualifiers][key];
-					putchar(a);
+					a=kblookup[ (leds & 4) ? qualifiers | 1 : qualifiers][key];
+					if(a)
+						result=a;
 				}
 				extkey=0;
 				if(a==0)
@@ -113,4 +126,21 @@ void HandlePS2RawCodes()
 		PS2KeyboardWrite(0xed);
 		PS2KeyboardWrite(leds);
 	}
+	return(result);
 }
+
+
+void ClearKeyboard()
+{
+	int i;
+	for(i=0;i<256;++i)
+		keytable[i]=0;
+}
+
+short TestKey(short rawcode)
+{
+	short result=keytable[rawcode];
+	keytable[rawcode]&=0xfd;	// Mask off the "pressed since last test" bit.
+	return(result);
+}
+

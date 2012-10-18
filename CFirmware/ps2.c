@@ -3,6 +3,7 @@
 #include "ps2.h"
 #include "minisoc_hardware.h"
 #include "ints.h"
+#include "keyboard.h"
 
 void ps2_ringbuffer_init(struct ps2_ringbuffer *r)
 {
@@ -95,4 +96,5 @@ void PS2Init()
 	ps2_ringbuffer_init(&kbbuffer);
 	ps2_ringbuffer_init(&mousebuffer);
 	SetIntHandler(PER_INT_PS2,&PS2Handler);
+	ClearKeyboard();
 }

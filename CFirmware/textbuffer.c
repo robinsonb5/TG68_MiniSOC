@@ -20,6 +20,8 @@ static void scroll()
 	unsigned short *d=(unsigned short *)toaddr(0,0);
 	for(i=0;i<(text_rows*text_cols/2);++i)
 		*d++=*s++;
+	for(i=0;i<(text_cols/2);++i)
+		*d++=0;
 	col=0;
 	row=text_rows-1;
 }
@@ -50,6 +52,7 @@ void charbuffer_write(const char *msg)
 			{
 				++row;
 				col=0;
+				p=toaddr(row,col);
 			}
 			else
 			{

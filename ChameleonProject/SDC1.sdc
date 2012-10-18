@@ -33,7 +33,7 @@ derive_pll_clocks -create_base_clocks
 
 set sdram_genclk {pllInstance|altpll_component|auto_generated|wire_pll1_clk[1]}
 
-create_generated_clock -name sdram_clk_pin -offset 1.5 -source $sdram_genclk [get_ports {sdram_clk}]
+create_generated_clock -name sdram_clk_pin -offset 2.0 -source $sdram_genclk [get_ports {sdram_clk}]
 
 
 #**************************************************************

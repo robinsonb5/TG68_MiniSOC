@@ -149,7 +149,7 @@ unsigned char FindDrive(void)
 		switch(mbr->Signature)
 		{
 			case 0x55aa:	// Little-endian MBR on a big-endian system
-				BootPrint("Swapping byte order of partition entries");
+				BootPrint("Swapping byte order of partition entries\n");
 				SwapPartitionBytes(0);
 				SwapPartitionBytes(1);
 				SwapPartitionBytes(2);

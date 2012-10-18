@@ -11,13 +11,17 @@
 #include "fat.h"
 
 short *FrameBuffer;
+extern short pen;
+extern void DrawIteration();
 
 static short framecount=0;
-short MouseX=0,MouseY=0,MouseButtons=0;
+short MouseX=0,MouseY=0,MouseZ=0,MouseButtons=0;
 short mousetimeout=0;
 
 void vblank_int()
 {
+	static short mousemode=0;
+	char a=0;
 	int yoff;
 	framecount++;
 	if(framecount==959)
@@ -28,13 +32,21 @@ void vblank_int()
 		yoff=framecount;
 	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*640]);
 
-	while(PS2MouseBytesReady()>=3)	// FIXME - institute some kind of timeout here to re-sync if sync lost.
+	while(PS2MouseBytesReady()>=(3+mousemode))	// FIXME - institute some kind of timeout here to re-sync if sync lost.
 	{
 		short nx;
-		short w1,w2,w3;
+		short w1,w2,w3,w4;
 		w1=PS2MouseRead();
 		w2=PS2MouseRead();
 		w3=PS2MouseRead();
+		if(mousemode)	// We're in 4-byte packet mode...
+		{
+			w4=PS2MouseRead();
+			if(w4&8)	// Negative
+				MouseZ-=(w4^15)&15;
+			else
+				MouseZ+=w4&15;
+		}
 		MouseButtons=w1;
 //		printf("%02x %02x %02x\n",w1,w2,w3);
 		if(w1 & (1<<5))
@@ -56,6 +68,7 @@ void vblank_int()
 		if(nx>479)
 			nx=479;
 		MouseY=nx;
+
 		mousetimeout=0;
 	}
 	HW_VGA(SP0XPOS)=MouseX;
@@ -66,12 +79,19 @@ void vblank_int()
 	{
 		++mousetimeout;
 		if(mousetimeout==20)
+		{
 			while(PS2MouseBytesReady())
 				PS2MouseRead();
+			mousetimeout=0;
+			mousemode^=1;	// Toggle 3/4 byte packets
+		}
 	}
 
+	// Receive any keystrokes
 	if(PS2KeyboardBytesReady())
-		HandlePS2RawCodes();
+		a=HandlePS2RawCodes();
+	if(a)
+		putchar(a);
 }
 
 void timer_int()
@@ -144,8 +164,49 @@ void PrintDirectory(void)
 }
 
 
+#define CYCLE_LFSR {lfsr<<=1; if(lfsr&0x400000) lfsr|=1; if(lfsr&0x200000) lfsr^=1;}
+void DoMemcheckCycle(unsigned int *p)
+{
+	int i;
+	static int lfsr=1234;
+	unsigned int lfsrtemp=lfsr;
+	for(i=0;i<65536;++i)
+	{
+		unsigned int w=lfsr&0xfffff;
+		unsigned int j=lfsr&0xfffff;
+		CYCLE_LFSR;
+		unsigned int x=lfsr&0xfffff;
+		unsigned int k=lfsr&0xfffff;
+		p[j]=w;
+		p[k]=x;
+		CYCLE_LFSR;
+	}
+	lfsr=lfsrtemp;
+	for(i=0;i<65536;++i)
+	{
+		unsigned int w=lfsr&0xfffff;
+		unsigned int j=lfsr&0xfffff;
+		CYCLE_LFSR;
+		unsigned int x=lfsr&0xfffff;
+		unsigned int k=lfsr&0xfffff;
+		if(p[j]!=w)
+		{
+			printf("Error at %x\n",w);
+			printf("expected %x, got %x\n",w,p[j]);
+		}
+		if(p[k]!=x)
+		{
+			printf("Error at %x\n",w);
+			printf("expected %x, got %x\n",w,p[j]);
+		}
+		CYCLE_LFSR;
+	}
+}
+
+
 void c_entry()
 {
+	enum mainstate_t {MAIN_IDLE,MAIN_LOAD,MAIN_MEMCHECK,MAIN_RECTANGLES};
 	fileTYPE file;
 	unsigned char *fbptr;
 	ClearTextBuffer();
@@ -181,37 +242,71 @@ void c_entry()
 	spi_init();
 
 	FindDrive();
+	puts("FindDrive() returned\n");
 
 	ChangeDirectory(DIRECTORY_ROOT);
-	ScanDirectory(SCAN_INIT, "*", 0);
-	PrintDirectory();
+	puts("Changed directory\n");
 
-	fbptr=FrameBuffer;
-	if(FileOpen(&file,"TEST    IMG"))
-	{
-//		printf("Got file...\n");
-		short imgsize=file.size/512;
-		int c=0;
-//		puts("Reading block");
-		while(c<=((640*960*2-1)/512) && c<imgsize)
-		{
-//			putchar('.');
-			FileRead(&file, fbptr);
-			c+=1;
-			FileNextSector(&file);
-			fbptr+=512;
-		}
-//		putchar('\n');
-	}
-	else
-		printf("Couldn't load test.img\n");
+	ScanDirectory(SCAN_INIT, "*", 0);
+	puts("Scanned directory\n");
+//	PrintDirectory();
+
+	enum mainstate_t mainstate=MAIN_LOAD;
 
 	while(1)
 	{
-//		DrawIteration();
+		if(TestKey(KEY_F1))
+		{
+			mainstate=MAIN_LOAD;
+			puts("Switching to image mode\n");
+		}
+		if(TestKey(KEY_F2))
+		{
+			mainstate=MAIN_MEMCHECK;
+			puts("Switching to Memcheck mode\n");
+		}
+		if(TestKey(KEY_F3))
+		{
+			mainstate=MAIN_RECTANGLES;
+			puts("Switching to Rectangles mode\n");
+		}
 
-//		++counter;
-//		printf("Hello world! Iteration %d\n",counter);
+		// Main loop iteration.
+		switch(mainstate)
+		{
+			case MAIN_IDLE:
+				break;
+			case MAIN_LOAD:
+				if(FileOpen(&file,"TEST    IMG"))
+				{
+					fbptr=FrameBuffer;
+					short imgsize=file.size/512;
+					int c=0;
+					while(c<=((640*960*2-1)/512) && c<imgsize)
+					{
+						FileRead(&file, fbptr);
+						c+=1;
+						FileNextSector(&file);
+						fbptr+=512;
+					}
+					puts("\r\nWelcome to TG68MiniSOC, a minimal System-on-Chip,\r\nbuilt around Tobias Gubener's TG68k soft core processor.\r\n");
+					puts("Press F1, F2 or F3 to change test mode.\r\n");
+				}
+				else
+					printf("Couldn't load test.img\n");
+				mainstate=MAIN_IDLE;
+				break;
+			case MAIN_MEMCHECK:
+				DoMemcheckCycle((unsigned int *)FrameBuffer);
+				break;
+			case MAIN_RECTANGLES:
+				if(MouseButtons&1)
+					pen+=0x400;
+				if(MouseButtons&2)
+					pen-=0x400;
+				DrawIteration();
+				break;
+		}
 	}
 }
 
