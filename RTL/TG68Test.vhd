@@ -405,8 +405,8 @@ mysdram : entity work.sdram
 		generic map(
 			sdram_rows => sdram_rows,
 			sdram_cols => sdram_cols,
-			sysclk_frequency => 1135,
-			spi_maxspeed => 8
+			sysclk_frequency => sysclk_frequency,
+			spi_maxspeed => spi_maxspeed
 		)
 		port map (
 		clk => clk,

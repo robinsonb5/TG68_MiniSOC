@@ -33,7 +33,7 @@ derive_pll_clocks -create_base_clocks
 
 set sdram_genclk {pllInstance|altpll_component|auto_generated|wire_pll1_clk[1]}
 
-create_generated_clock -name sdram_clk_pin -offset 2.0 -source $sdram_genclk [get_ports {sdram_clk}]
+create_generated_clock -name sdram_clk_pin -source $sdram_genclk [get_ports {sdram_clk}]
 
 
 #**************************************************************
@@ -53,11 +53,11 @@ set_input_delay -clock sdram_clk_pin -min [expr 2.5 + 0.2] [get_ports *sd_data*]
 # Set Output Delay
 #**************************************************************
 
-set_output_delay -clock sdram_clk_pin -max [expr 1.5 + 0.4 ] [get_ports *sd_*]
-set_output_delay -clock sdram_clk_pin -min [expr -1.0 + 0.2] [get_ports *sd_*]
+set_output_delay -clock sdram_clk_pin -max [expr 1.5 ] [get_ports *sd_*]
+set_output_delay -clock sdram_clk_pin -min [expr -1.0 ] [get_ports *sd_*]
 
 
 # Multicycles
 
-set_multicycle_path -from {sd_data[*]} -to {TG68Test:mytg68test|sdram:mysdram|vga_data[*]} -setup -end 2
-set_multicycle_path -from {sd_data[*]} -to {TG68Test:mytg68test|sdram:mysdram|sdata_reg[*]} -setup -end 2
+#set_multicycle_path -from {sd_data[*]} -to {TG68Test:mytg68test|sdram:mysdram|vga_data[*]} -setup -end 2
+#set_multicycle_path -from {sd_data[*]} -to {TG68Test:mytg68test|sdram:mysdram|sdata_reg[*]} -setup -end 2
