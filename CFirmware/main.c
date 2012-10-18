@@ -89,9 +89,10 @@ void vblank_int()
 
 	// Receive any keystrokes
 	if(PS2KeyboardBytesReady())
-		a=HandlePS2RawCodes();
-	if(a)
-		putchar(a);
+	{
+		while((a=HandlePS2RawCodes()))
+			putchar(a);
+	}
 }
 
 void timer_int()
@@ -289,7 +290,7 @@ void c_entry()
 						FileNextSector(&file);
 						fbptr+=512;
 					}
-					puts("\r\nWelcome to TG68MiniSOC, a minimal System-on-Chip,\r\nbuilt around Tobias Gubener's TG68k soft core processor.\r\n");
+					puts("\r\nWelcome to TG68MiniSOC, a minimal System-on-Chip,\r\nbuilt around Tobias Gubener's TG68k processor core.\r\n");
 					puts("Press F1, F2 or F3 to change test mode.\r\n");
 				}
 				else

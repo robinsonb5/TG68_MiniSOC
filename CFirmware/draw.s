@@ -9,7 +9,7 @@ pen	dc.w	0
 	XDEF pen
 	XDEF DrawIteration
 DrawIteration
-	movem.l	a2-6/d2-d7,-(a7)
+	movem.l	a0-6/d0-d7,-(a7)
 	add.w	#1,pen
 	bsr	Random
 	move.l	d0,d3
@@ -43,7 +43,7 @@ DrawIteration
 	addq	#1,d3
 	move.l	FrameBuffer,a0
 	bsr	DrawRectangle
-	movem.l	(a7)+,a2-a6/d2-d7
+	movem.l	(a7)+,a0-a6/d0-d7
 	rts
 
 

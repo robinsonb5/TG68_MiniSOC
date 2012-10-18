@@ -33,51 +33,45 @@ l2
 
 .int1:
 	movem.l	d0-7/a0-6,-(a7)	; Preserve scratch registers
-;	movem.l	d0-1/a0-1,-(a7)	; Preserve scratch registers
 	pea	.intend1	; A stub to restore the scratch registers
 	move.l	IntHandler1,-(a7)	; equivalent to move.l IntHandler1,reg; jmp reg - without using registers
 	rts
 
 .int2:
-	movem.l	d0-d1/a0-a1,-(a7)
-	pea	.intend
+	movem.l	d0-7/a0-6,-(a7)	; Preserve scratch registers
+	pea	.intend1
 	move.l	IntHandler2,-(a7)
 	rts
 
 .int3:
-	movem.l	d0-d1/a0-a1,-(a7)
-	pea	.intend
+	movem.l	d0-7/a0-6,-(a7)	; Preserve scratch registers
+	pea	.intend1
 	move.l	IntHandler3,-(a7)
 	rts
 
 .int4:
 	movem.l	d0-7/a0-6,-(a7)	; Preserve scratch registers
-;	movem.l	d0-d1/a0-a1,-(a7)
 	pea	.intend1
 	move.l	IntHandler4,-(a7)
 	rts
 
 .int5
-	movem.l	d0-d1/a0-a1,-(a7)
-	pea	.intend
+	movem.l	d0-7/a0-6,-(a7)	; Preserve scratch registers
+	pea	.intend1
 	move.l	IntHandler5,-(a7)
 	rts
 
 .int6
-	movem.l	d0-d1/a0-a1,-(a7)
-	pea	.intend
+	movem.l	d0-7/a0-6,-(a7)	; Preserve scratch registers
+	pea	.intend1
 	move.l	IntHandler6,-(a7)
 	rts
 
 .int7
-	movem.l	d0-d1/a0-a1,-(a7)
-	pea	.intend
+	movem.l	d0-7/a0-6,-(a7)	; Preserve scratch registers
+	pea	.intend1
 	move.l	IntHandler7,-(a7)
 	rts
-
-.intend
-	movem.l	(a7)+,d0-d1/a0-a1
-	rte
 
 .intend1
 	movem.l	(a7)+,d0-d7/a0-a6

@@ -63,8 +63,12 @@ void charbuffer_write(const char *msg)
 					++row;
 				}
 			}
-			if(row==text_rows)
+			if(row>=text_rows)
+			{
 				scroll();
+				row=text_rows-1;
+				p=toaddr(row,col);
+			}
 		}
 	}
 }

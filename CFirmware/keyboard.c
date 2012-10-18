@@ -82,30 +82,27 @@ char HandlePS2RawCodes()
 				{
 					a=kblookup[ (leds & 4) ? qualifiers | 1 : qualifiers][key];
 					if(a)
-						result=a;
+						return(a);
 				}
 				extkey=0;
-				if(a==0)
+				switch(key)
 				{
-					switch(key)
-					{
-						case 0x58:	// Caps lock
-							leds^=0x04;
-							updateleds=1;
-							break;
-						case 0x7e:	// Scroll lock
-							leds^=0x01;
-							updateleds=1;
-							break;
-						case 0x77:	// Num lock
-							leds^=0x02;
-							updateleds=1;
-							break;
-						case 0x12:
-						case 0x59:
-							qualifiers|=(1<<QUAL_SHIFT);
-							break;
-					}
+					case 0x58:	// Caps lock
+						leds^=0x04;
+						updateleds=1;
+						break;
+					case 0x7e:	// Scroll lock
+						leds^=0x01;
+						updateleds=1;
+						break;
+					case 0x77:	// Num lock
+						leds^=0x02;
+						updateleds=1;
+						break;
+					case 0x12:
+					case 0x59:
+						qualifiers|=(1<<QUAL_SHIFT);
+						break;
 				}
 			}
 			else

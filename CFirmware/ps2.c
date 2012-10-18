@@ -4,6 +4,7 @@
 #include "minisoc_hardware.h"
 #include "ints.h"
 #include "keyboard.h"
+#include "textbuffer.h"
 
 void ps2_ringbuffer_init(struct ps2_ringbuffer *r)
 {
@@ -16,9 +17,9 @@ void ps2_ringbuffer_init(struct ps2_ringbuffer *r)
 void ps2_ringbuffer_write(struct ps2_ringbuffer *r,unsigned char in)
 {
 	DisableInterrupts();
-	while(r->out_hw==((r->out_cpu+1)&7))
+	while(r->out_hw==((r->out_cpu+1)&(PS2_RINGBUFFER_SIZE-1)))
 		;
-	r->buf[r->out_cpu]=in;
+	r->outbuf[r->out_cpu]=in;
 	r->out_cpu=(r->out_cpu+1) & (PS2_RINGBUFFER_SIZE-1);
 	PS2Handler();
 	EnableInterrupts();
@@ -30,7 +31,7 @@ short ps2_ringbuffer_read(struct ps2_ringbuffer *r)
 	unsigned char result;
 	if(r->in_hw==r->in_cpu)
 		return(-1);	// No characters ready
-	result=r->buf[r->in_cpu];
+	result=r->inbuf[r->in_cpu];
 	r->in_cpu=(r->in_cpu+1) & (PS2_RINGBUFFER_SIZE-1);
 	return(result);
 }
@@ -45,11 +46,6 @@ short ps2_ringbuffer_count(struct ps2_ringbuffer *r)
 struct ps2_ringbuffer kbbuffer;
 struct ps2_ringbuffer mousebuffer;
 
-void PS2Handler2()
-{
-	printf("PS/2 int: ");
-	PS2Handler();
-}
 
 void PS2Handler()
 {
@@ -59,8 +55,9 @@ void PS2Handler()
 
 	if(kbd & (1<<PER_PS2_RECV))
 	{
+		putchar('k');
 //		printf("KRCV, %d\n",kbbuffer.in_hw);
-		kbbuffer.buf[kbbuffer.in_hw]=(unsigned char)kbd;
+		kbbuffer.inbuf[kbbuffer.in_hw]=(unsigned char)kbd;
 		kbbuffer.in_hw=(kbbuffer.in_hw+1) & (PS2_RINGBUFFER_SIZE-1);
 	}
 	if(kbd & (1<<PER_PS2_CTS))
@@ -69,14 +66,15 @@ void PS2Handler()
 		if(kbbuffer.out_hw!=kbbuffer.out_cpu)
 		{
 //			printf("Send kb %02x\n",kbbuffer.buf[kbbuffer.out_hw]);
-			HW_PER(PER_PS2_KEYBOARD)=kbbuffer.buf[kbbuffer.out_hw];
+			HW_PER(PER_PS2_KEYBOARD)=kbbuffer.outbuf[kbbuffer.out_hw];
 			kbbuffer.out_hw=(kbbuffer.out_hw+1) & (PS2_RINGBUFFER_SIZE-1);
 		}
 	}
 	if(mouse & (1<<PER_PS2_RECV))
 	{
+		putchar('m');
 //		printf("MRCV, %d\n",kbbuffer.in_hw);
-		mousebuffer.buf[mousebuffer.in_hw]=(unsigned char)mouse;
+		mousebuffer.inbuf[mousebuffer.in_hw]=(unsigned char)mouse;
 		mousebuffer.in_hw=(mousebuffer.in_hw+1) & (PS2_RINGBUFFER_SIZE-1);
 	}
 	if(mouse & (1<<PER_PS2_CTS))
@@ -85,7 +83,7 @@ void PS2Handler()
 		if(mousebuffer.out_hw!=mousebuffer.out_cpu)
 		{
 //			printf("Send ms %02x\n",kbbuffer.buf[kbbuffer.out_hw]);
-			HW_PER(PER_PS2_MOUSE)=mousebuffer.buf[mousebuffer.out_hw];
+			HW_PER(PER_PS2_MOUSE)=mousebuffer.outbuf[mousebuffer.out_hw];
 			mousebuffer.out_hw=(mousebuffer.out_hw+1) & (PS2_RINGBUFFER_SIZE-1);
 		}
 	}
@@ -98,3 +96,4 @@ void PS2Init()
 	SetIntHandler(PER_INT_PS2,&PS2Handler);
 	ClearKeyboard();
 }
+

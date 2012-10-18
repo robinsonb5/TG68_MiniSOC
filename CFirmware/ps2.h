@@ -9,7 +9,8 @@ struct ps2_ringbuffer
 	volatile int in_cpu;
 	volatile int out_hw;
 	volatile int out_cpu;
-	unsigned char buf[PS2_RINGBUFFER_SIZE];
+	unsigned char inbuf[PS2_RINGBUFFER_SIZE];
+	unsigned char outbuf[PS2_RINGBUFFER_SIZE];
 };
 void ps2_ringbuffer_init(struct ps2_ringbuffer *r);
 void ps2_ringbuffer_write(struct ps2_ringbuffer *r,unsigned char in);
