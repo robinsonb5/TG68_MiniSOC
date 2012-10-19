@@ -163,33 +163,6 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
 set_location_assignment PIN_44 -to sdram_clk
-set_global_assignment -name VHDL_FILE ../RTL/DMACache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
-set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
-set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
-set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
-set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
-set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
-set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
-set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
-set_global_assignment -name VHDL_FILE ../ChameleonRTL/chameleon_toplevel.vhd
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/PLL.qip
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/BootRom.qip
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRom.qip
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRAM.qip
-set_global_assignment -name VHDL_FILE ../ChameleonRTL/poweronreset.vhd
-set_global_assignment -name SIGNALTAP_FILE stp2.stp
-set_global_assignment -name SDC_FILE SDC1.sdc
-set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/DMACacheRAM.qip
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=512" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=512" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "TG68Test:mytg68test|sdram:mysdram|vga_addr[0]" -section_id auto_signaltap_0
@@ -776,4 +749,31 @@ set_instance_assignment -name FAST_INPUT_REGISTER ON -to sd_data[12]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to sd_data[13]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to sd_data[14]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to sd_data[15]
+set_global_assignment -name VHDL_FILE ../ChameleonRTL/chameleon_toplevel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/DMACache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
+set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
+set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
+set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
+set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
+set_global_assignment -name QIP_FILE ../CycloneIII_GeneratedRTL/DMACacheRAM.qip
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/PLL.qip
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/BootRom.qip
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRom.qip
+set_global_assignment -name QIP_FILE ../ChameleonRTL/Generated/CharRAM.qip
+set_global_assignment -name VHDL_FILE ../ChameleonRTL/poweronreset.vhd
+set_global_assignment -name SIGNALTAP_FILE stp2.stp
+set_global_assignment -name GENERATE_RBF_FILE ON
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

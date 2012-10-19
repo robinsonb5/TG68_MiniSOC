@@ -1,6 +1,7 @@
 <sld_project_info>
   <file_info>
-    <file checksum="0x0078D950" device="EP3C25E144C8" path="TG68MiniSOC.sof" usercode="0xFFFFFFFF"/>
+    <file checksum="0x0078AFF0" device="EP3C25E144C8" path="TG68MiniSOC.sof" usercode="0xFFFFFFFF"/>
+    <file path="TG68MiniSOC.rbf"/>
   </file_info>
   <hub_info ir_width="8" node_count="1"/>
   <node_info>

@@ -270,30 +270,17 @@ begin
 	sd2_ba <= sdr_ba;
 	sd2_cke <= sdr_cke;
 		
-	mypll : entity work.PLL2_adjustablephase
+	mypll : entity work.PLL
 		port map (
---			areset => not reset_n,
 			inclk0 => clk_50,
 			c0 => clk,
-			c1 => sdram1_clk,
---			c2 => sd2_clk
-			scanclk => clk,
-			phasecounterselect => "011", -- Make sure phase adjustment only affects C1
-			phaseupdown => '0', -- pll_phasedir
-			phasestep => not btn1_d, -- pll_phasestep(0), -- First PLL
-			phasedone => pll_phasedone
+			c1 => sdram1_clk
 		);
 		
-	mypll2 : entity work.PLL3_adjustablephase
+	mypll2 : entity work.PLL
 		port map (
---			areset => not reset_n,
 			inclk0 => clk_50,
-			c1 => sdram2_clk,
-			scanclk => clk,
-			phasecounterselect => "011", -- Make sure phase adjustment only affects C1
-			phaseupdown => '0', -- pll_phasedir,
-			phasestep => not btn1_d, --pll_phasestep(1), -- Second PLL
-			phasedone => pll_phasedone2
+			c1 => sdram2_clk
 		);
 
 	myleds : entity work.statusleds_pwm
@@ -333,16 +320,22 @@ begin
 		);
 	
 	mytg68test : entity work.TG68Test
+		generic map(
+			sdram_rows => 12,
+			sdram_cols => 10,
+			sysclk_frequency => 1000,
+			spi_maxspeed => 4
+		)
 		port map(
 			clk => clk,
 			reset_in => reset,
 			
 			switches => (others =>'0'),
 
-			-- Timing configuration
-			pll_phasedir => pll_phasedir,
-			pll_phasestep => pll_phasestep,
-			pll_phasedone => pll_phasedone and pll_phasedone2,
+--			-- Timing configuration
+--			pll_phasedir => pll_phasedir,
+--			pll_phasestep => pll_phasestep,
+--			pll_phasedone => pll_phasedone and pll_phasedone2,
 			
 			-- SDRAM - presenting a single interface to both chips.
 			sdr_addr => sdr_addr,
