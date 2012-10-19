@@ -99,7 +99,7 @@ short wait_initV2()
 
 short wait_init()
 {
-	int i=20000;
+	int i=20;
 	short r;
 	SPI(0xff);
 	puts("Cmd_init\n");
@@ -196,7 +196,7 @@ short is_sdhc()
 }
 
 
-void spi_init()
+short spi_init()
 {
 	int i;
 	int r;
@@ -205,13 +205,16 @@ void spi_init()
 	SPI_CS(0);	// Disable CS
 	spi_spin();
 	SPI_CS(1);
-	i=50;
+	i=8;
 	while(--i)
 	{
 		if(cmd_reset()==1) // Enable SPI mode
 			i=1;
 		if(i==2)
+		{
 			printf("SD card initialization error!\n");
+			return(0);
+		}
 	}
 	SDHCtype=is_sdhc();
 	if(SDHCtype)
@@ -222,6 +225,7 @@ void spi_init()
 	SPI_CS(0);
 
 	HW_PER(PER_TIMER_DIV7)=HW_PER(PER_CAP_SPISPEED);
+	return(1);
 }
 
 

@@ -69,6 +69,7 @@ HEX equ $810006 ; HEX display - DISABLE
 PER_SPI equ $20
 PER_SPI_BLOCKING equ $24
 PER_SPI_CS equ $22
+PER_CAP_FREQ equ $2A
 PER_CAP_SPISPEED equ $2C
 PER_SPI_PUMP equ $100
 PER_TIMER_DIV7 equ $1e
@@ -82,8 +83,11 @@ CHARBUF equ $800800
 
 START:				; first instruction of program
 	lea 	STACK,a7
-;	move.w	#$364,SERPER  ; 115,200 @ 100MHz
-	move.w	#$3d9,SERPER  ; 115,200 @ 113.5MHz
+	moveq	#0,d0
+	move.w	PERREGS+PER_CAP_FREQ,d0	; Calculate serial speed from system clock frequency
+	mulu	#1000,d0	; Freq is in Mhz/10, cancel out 100 from baud rate.
+	divu	#1152,d0	; 115,200 baud.
+	move.w	d0,SERPER
 	move.w	#$2700,SR	; Disable all interrupts
 
 	move.w	#$f000,HEX

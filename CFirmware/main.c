@@ -91,9 +91,15 @@ void vblank_int()
 	if(PS2KeyboardBytesReady())
 	{
 		while((a=HandlePS2RawCodes()))
-			putchar(a);
+		{
+			char buf[2]={0,0};
+			HW_PER(PER_UART)=a;
+			buf[0]=a;
+			puts(buf);
+		}
 	}
 }
+
 
 void timer_int()
 {
@@ -117,7 +123,7 @@ void AddMemory()
 	low=(size_t)&heap_low;
 	low+=7;
 	low&=0xfffffff8; // Align to SDRAM burst boundary
-	size=1<<HW_PER(PER_CAP_RAMSIZE);
+	size=1L<<HW_PER(PER_CAP_RAMSIZE);
 	size-=low;
 	printf("Heap_low: %lx, heap_size: %lx\n",low,size);
 	malloc_add((void*)low,size);
@@ -205,6 +211,24 @@ void DoMemcheckCycle(unsigned int *p)
 }
 
 
+short SDCardInit()
+{
+	puts("Initialising SD card\n");
+	if(spi_init())
+	{
+		FindDrive();
+		puts("FindDrive() returned\n");
+
+		ChangeDirectory(DIRECTORY_ROOT);
+		puts("Changed directory\n");
+
+		ScanDirectory(SCAN_INIT, "*", 0);
+		return(1);
+	}
+	return(0);
+}
+
+
 void c_entry()
 {
 	enum mainstate_t {MAIN_IDLE,MAIN_LOAD,MAIN_MEMCHECK,MAIN_RECTANGLES};
@@ -239,18 +263,7 @@ void c_entry()
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
 
-	puts("Initialising SD card\n");
-	spi_init();
-
-	FindDrive();
-	puts("FindDrive() returned\n");
-
-	ChangeDirectory(DIRECTORY_ROOT);
-	puts("Changed directory\n");
-
-	ScanDirectory(SCAN_INIT, "*", 0);
-	puts("Scanned directory\n");
-//	PrintDirectory();
+	SDCardInit();
 
 	enum mainstate_t mainstate=MAIN_LOAD;
 
@@ -280,15 +293,31 @@ void c_entry()
 			case MAIN_LOAD:
 				if(FileOpen(&file,"TEST    IMG"))
 				{
+					int errorcount=6;
 					fbptr=FrameBuffer;
 					short imgsize=file.size/512;
 					int c=0;
 					while(c<=((640*960*2-1)/512) && c<imgsize)
 					{
-						FileRead(&file, fbptr);
-						c+=1;
-						FileNextSector(&file);
-						fbptr+=512;
+						if(FileRead(&file, fbptr))
+						{
+							c+=1;
+							FileNextSector(&file);
+							fbptr+=512;
+						}
+						else	// Read failed, retry, and if it still failed re-init the card.
+						{
+							--errorcount;
+							if(!errorcount)
+								break;
+							if(errorcount==3)
+							{
+								if(!SDCardInit())
+									break;
+								if(!FileOpen(&file,"TEST    IMG"))
+									break;
+							}
+						}
 					}
 					puts("\r\nWelcome to TG68MiniSOC, a minimal System-on-Chip,\r\nbuilt around Tobias Gubener's TG68k processor core.\r\n");
 					puts("Press F1, F2 or F3 to change test mode.\r\n");
