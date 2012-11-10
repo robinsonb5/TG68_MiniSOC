@@ -62,9 +62,9 @@ VBASE	SET VBASE+\2
 
 	XDEF SDHCtype
 
-PERREGS equ $810000 ; Peripheral registers
-SERPER equ $810002
-HEX equ $810006 ; HEX display - DISABLE
+PERREGS equ $81000000 ; Peripheral registers
+SERPER equ $81000002
+HEX equ $81000006 ; HEX display - DISABLE
 
 PER_SPI equ $20
 PER_SPI_BLOCKING equ $24
@@ -74,7 +74,7 @@ PER_CAP_SPISPEED equ $2C
 PER_SPI_PUMP equ $100
 PER_TIMER_DIV7 equ $1e
 
-CHARBUF equ $800800
+CHARBUF equ $80000800
 
 ;	org $0
 

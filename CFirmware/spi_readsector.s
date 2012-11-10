@@ -1,4 +1,4 @@
-SPI_PUMP	equ	$810100
+SPI_PUMP	equ	$81000100
 
 	XDEF spi_readsector
 spi_readsector

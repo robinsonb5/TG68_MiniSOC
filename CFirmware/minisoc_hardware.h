@@ -1,7 +1,7 @@
 #ifndef MINISOC_HARDWARE_H
 #define MINISOC_HARDWARE_H
 
-#define VGABASE 0x800000
+#define VGABASE 0x80000000
 
 #define FRAMEBUFFERPTR 0
 
@@ -40,12 +40,12 @@ E	Word	HBStop – end of the horizontal blanking period. (Not yet implemented)
 		bit 0	visible.  (not yet implemented)
 */
 
-#define VGACHARBUFFERBASE 0x800800
+#define VGACHARBUFFERBASE 0x80000800
 extern char *VGACharBuffer;
 
 
 
-#define PERIPHERALBASE 0x810000
+#define PERIPHERALBASE 0x81000000
 #define HW_PER(x) *(volatile unsigned short *)(PERIPHERALBASE+x)
 #define HW_PER_L(x) *(volatile unsigned long *)(PERIPHERALBASE+x)
 

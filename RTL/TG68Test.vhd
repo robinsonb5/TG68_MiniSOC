@@ -254,13 +254,13 @@ begin
 							cpu_datain <= "0000000000000" & cpu_addr(3 downto 1);
 							int_ack<='1';
 							prgstate<=wait0;
-						when X"0080" => -- hardware registers - VGA controller
+						when X"8000" => -- hardware registers - VGA controller
 							vga_reg_addr<=cpu_addr(11 downto 1)&'0';
 							vga_reg_rw<=cpu_r_w;
 							vga_reg_req<='1';
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=vga;
-						when X"0081" => -- more hardware registers - peripherals
+						when X"8100" => -- more hardware registers - peripherals
 --							per_reg_addr<=cpu_addr(11 downto 1)&'0';
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';

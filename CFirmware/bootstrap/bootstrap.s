@@ -7,9 +7,9 @@
 
 STACK equ $7ffffe
 
-PERREGS equ $810000 ; Peripheral registers
-SERPER equ $810002
-HEX equ $810006 ; HEX display
+PERREGS equ $81000000 ; Peripheral registers
+SERPER equ $81000002
+HEX equ $81000006 ; HEX display
 
 	ORG	$0
 	dc.l	STACK		; Initial stack pointer

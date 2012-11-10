@@ -214,7 +214,7 @@ begin
 		
 	mykeyboard : entity work.io_ps2_com
 		generic map (
---			clockFilter => 31,
+			clockFilter => 15,
 			ticksPerUsec => sysclk_frequency/10
 		)
 		port map (
@@ -254,7 +254,7 @@ begin
 
 	mymouse : entity work.io_ps2_com
 		generic map (
---			clockFilter => 31,
+			clockFilter => 15,
 			ticksPerUsec => sysclk_frequency/10
 		)
 		port map (
