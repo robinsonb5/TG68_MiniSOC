@@ -143,6 +143,24 @@ signal spi_trigger : std_logic;
 signal spi_busy : std_logic;
 signal spi_wide : std_logic;
 
+COMPONENT ps2_io
+	PORT
+	(
+		clk		:	 IN STD_LOGIC;
+		reset		:	 IN STD_LOGIC;
+		ps2_dat		:	 IN STD_LOGIC;
+		ps2_clk		:	 IN STD_LOGIC;
+		ps2_dato		:	 OUT STD_LOGIC;
+		ps2_clko		:	 OUT STD_LOGIC;
+		senddata		:	 IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+		sendtrigger		:	 IN STD_LOGIC;
+		sendready		:	 OUT STD_LOGIC;
+		recvdata		:	 OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+		recvtrigger		:	 OUT STD_LOGIC;
+		recvack		:	 IN STD_LOGIC
+	);
+END COMPONENT;
+
 begin
 
 	bootrom_overlay <= flags(0);
@@ -196,8 +214,8 @@ begin
 		
 	mykeyboard : entity work.io_ps2_com
 		generic map (
-			clockFilter => 15,
-			ticksPerUsec => 100
+			clockFilter => 31,
+			ticksPerUsec => sysclk_frequency/20
 		)
 		port map (
 			clk => clk,
@@ -216,10 +234,28 @@ begin
 			recvByte => kbdrecvbyte
 		);
 
+--	mymouse : component ps2_io
+--        port map (
+--                clk => clk,
+--                reset => not reset,
+-- 
+--                recvdata => mouserecvbyte(7 downto 0),
+--                senddata => mousesendbyte(7 downto 0),
+--                recvack => mouserecvack,
+--                sendtrigger => mousesendtrigger,
+--                recvtrigger => mouserecv,
+--                sendready => mousesendbusy,
+--
+--                ps2_clk => ps2m_clk_in,
+--                ps2_dat => ps2m_dat_in,
+--                ps2_clko => ps2m_clk_out,
+--                ps2_dato => ps2m_dat_out
+--					);
+
 	mymouse : entity work.io_ps2_com
 		generic map (
-			clockFilter => 15,
-			ticksPerUsec => 90
+			clockFilter => 31,
+			ticksPerUsec => sysclk_frequency/20
 		)
 		port map (
 			clk => clk,
@@ -258,6 +294,7 @@ begin
 			
 			timer_set<='0';
 			kbdsendtrigger<='0';
+
 			mousesendtrigger<='0';
 			
 			spi_trigger<='0';
@@ -451,8 +488,9 @@ begin
 				or	(timer_trigger(1) and timer_flags(9));	-- We don't trigger interrupts for the base timer.
 
 			-- PS2 interrupt
-			ps2_int <= kbdrecv or mouserecv
-				or kbdsenddone or mousesenddone ; -- Momentary high pulses to indicate retrieved data.
+			ps2_int <= kbdrecv or kbdsenddone
+				or mouserecv or mousesenddone;
+				-- mouserecv or kbdsenddone or mousesenddone ; -- Momentary high pulses to indicate retrieved data.
 			if kbdrecv='1' then
 				kbdrecvreg <= '1'; -- remains high until cleared by a read
 			end if;

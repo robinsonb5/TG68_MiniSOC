@@ -175,38 +175,80 @@ void PrintDirectory(void)
 void DoMemcheckCycle(unsigned int *p)
 {
 	int i;
-	static int lfsr=1234;
+	static int lfsr=1;
+	static int inv=1;
 	unsigned int lfsrtemp=lfsr;
-	for(i=0;i<65536;++i)
+	if((lfsr&0xfffff)==1)
+		inv=1-inv;
+
+	if(inv)
 	{
-		unsigned int w=lfsr&0xfffff;
-		unsigned int j=lfsr&0xfffff;
-		CYCLE_LFSR;
-		unsigned int x=lfsr&0xfffff;
-		unsigned int k=lfsr&0xfffff;
-		p[j]=w;
-		p[k]=x;
-		CYCLE_LFSR;
+		for(i=0;i<65536;++i)
+		{
+			unsigned int w=lfsr&0xfffff;
+			unsigned int j=lfsr&0xfffff;
+			CYCLE_LFSR;
+			unsigned int x=lfsr&0xfffff;
+			unsigned int k=lfsr&0xfffff;
+			p[j]=w;
+			p[k]=x;
+			CYCLE_LFSR;
+		}
+		lfsr=lfsrtemp;
+		for(i=0;i<65536;++i)
+		{
+			unsigned int w=lfsr&0xfffff;
+			unsigned int j=lfsr&0xfffff;
+			CYCLE_LFSR;
+			unsigned int x=lfsr&0xfffff;
+			unsigned int k=lfsr&0xfffff;
+			if(p[j]!=w)
+			{
+				printf("Error at %x\n",w);
+				printf("expected %x, got %x\n",w,p[j]);
+			}
+			if(p[k]!=x)
+			{
+				printf("Error at %x\n",w);
+				printf("expected %x, got %x\n",w,p[j]);
+			}
+			CYCLE_LFSR;
+		}
 	}
-	lfsr=lfsrtemp;
-	for(i=0;i<65536;++i)
+	else
 	{
-		unsigned int w=lfsr&0xfffff;
-		unsigned int j=lfsr&0xfffff;
-		CYCLE_LFSR;
-		unsigned int x=lfsr&0xfffff;
-		unsigned int k=lfsr&0xfffff;
-		if(p[j]!=w)
+		for(i=0;i<65536;++i)
 		{
-			printf("Error at %x\n",w);
-			printf("expected %x, got %x\n",w,p[j]);
+			unsigned int w=lfsr&0xfffff;
+			unsigned int j=lfsr&0xfffff;
+			CYCLE_LFSR;
+			unsigned int x=lfsr&0xfffff;
+			unsigned int k=lfsr&0xfffff;
+			p[j]=w^0xfffff;
+			p[k]=x^0xfffff;
+
+			CYCLE_LFSR;
 		}
-		if(p[k]!=x)
+		lfsr=lfsrtemp;
+		for(i=0;i<65536;++i)
 		{
-			printf("Error at %x\n",w);
-			printf("expected %x, got %x\n",w,p[j]);
+			unsigned int w=lfsr&0xfffff;
+			unsigned int j=lfsr&0xfffff;
+			CYCLE_LFSR;
+			unsigned int x=lfsr&0xfffff;
+			unsigned int k=lfsr&0xfffff;
+			if(p[j]!=(w^0xfffff))
+			{
+				printf("Error at %x\n",w);
+				printf("expected %x, got %x\n",w,p[j]);
+			}
+			if(p[k]!=(x^0xfffff))
+			{
+				printf("Error at %x\n",w);
+				printf("expected %x, got %x\n",w,p[j]);
+			}
+			CYCLE_LFSR;
 		}
-		CYCLE_LFSR;
 	}
 }
 

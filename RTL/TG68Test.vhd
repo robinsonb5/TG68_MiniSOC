@@ -138,7 +138,10 @@ signal resetctr : std_logic;
 
 signal bootrom_overlay : std_logic;
 
-type prgstates is (run,mem,rom,waitread,waitwrite,wait1,wait2,waitvga,vga,peripheral);
+signal ps2m_clk_db : std_logic;
+signal ps2k_clk_db : std_logic;
+
+type prgstates is (run,pause,mem,rom,waitread,waitwrite,wait0,wait1,wait2,wait3,waitvga,vga,peripheral);
 signal prgstate : prgstates :=wait2;
 begin
 
@@ -151,6 +154,22 @@ begin
 end process;
 
 sdr_cke<='1';
+
+
+ps2m_db: entity work.Debounce
+	port map(
+	clk => clk,
+	signal_in => ps2m_clk_in,
+	signal_out => ps2m_clk_db
+);
+
+ps2k_db: entity work.Debounce
+	port map(
+	clk => clk,
+	signal_in => ps2k_clk_in,
+	signal_out => ps2k_clk_db
+);
+
 
 
 myint : entity work.interrupt_controller
@@ -221,10 +240,12 @@ begin
 		case prgstate is
 			when run =>
 				cpu_clkena<='0';
+				prgstate<=pause;
+			when pause =>
 				prgstate<=mem;
 			when mem =>
 				if busstate="01" then
-					prgstate<=wait1;
+					prgstate<=wait0;
 				else
 					case cpu_addr(31 downto 16) is
 						when X"FFFF" => -- Interrupt acknowledge cycle
@@ -232,7 +253,7 @@ begin
 							-- we respond with that number.  (Could just use autovectoring, of course.)
 							cpu_datain <= "0000000000000" & cpu_addr(3 downto 1);
 							int_ack<='1';
-							prgstate<=wait1;
+							prgstate<=wait0;
 						when X"0080" => -- hardware registers - VGA controller
 							vga_reg_addr<=cpu_addr(11 downto 1)&'0';
 							vga_reg_rw<=cpu_r_w;
@@ -240,10 +261,10 @@ begin
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=vga;
 						when X"0081" => -- more hardware registers - peripherals
-							per_reg_addr<=cpu_addr(11 downto 1)&'0';
+--							per_reg_addr<=cpu_addr(11 downto 1)&'0';
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';
-							per_reg_datain<=cpu_dataout;
+--							per_reg_datain<=cpu_dataout;
 							prgstate<=peripheral;
 						when X"0000" => -- ROM access
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
@@ -270,43 +291,50 @@ begin
 					end case;
 				end if;
 			when waitread =>
+				req_pending<='1';
 				if dtack1='0' then
 					cpu_datain<=ramdata;
 					req_pending<='0';
-					prgstate<=wait1;
+					prgstate<=wait0;
 --					cpu_clkena<='1';
 --					prgstate<=run;
 				end if;
 			when waitwrite =>
+				req_pending<='1';
 				if dtack1='0' then
 					req_pending<='0';
-					prgstate<=wait1;
+					prgstate<=wait0;
 --					cpu_clkena<='1';
 --					prgstate<=run;
 				end if;
 			when rom =>
 				cpu_datain<=romdata;
 --				prgstate<=wait2;
-				prgstate<=wait1;
+				prgstate<=wait0;
 			when vga =>
 				cpu_datain<=vga_reg_dataout;
 				vga_reg_rw<=cpu_r_w;
 				if vga_reg_dtack='0' then
 --					cpu_clkena<='1';
 --					prgstate<=run;
-					prgstate<=wait1;
+					prgstate<=wait0;
 				end if;
 			when peripheral =>
+				per_reg_req<='1';
 				cpu_datain<=per_reg_dataout;
 				per_reg_rw<=cpu_r_w;
 				if per_reg_dtack='0' then
 --					cpu_clkena<='1';
 --					prgstate<=run;
-					prgstate<=wait1;
+					prgstate<=wait0;
 				end if;
+			when wait0 =>
+				prgstate<=wait3;
 			when wait1 =>
-				prgstate<=wait2;
+				prgstate<=wait3;
 			when wait2 =>
+				prgstate<=wait3;
+			when wait3 =>
 				if (reset or not tg68_ready)='1' then
 					cpu_clkena<='1';
 					prgstate<=run;
@@ -412,8 +440,10 @@ mysdram : entity work.sdram
 		clk => clk,
 		reset => reset,
 		
-		reg_addr_in => per_reg_addr,
-		reg_data_in => per_reg_datain,
+--		reg_addr_in => per_reg_addr,
+		reg_addr_in => cpu_addr(11 downto 1)&'0',
+--		reg_data_in => per_reg_datain,
+		reg_data_in => cpu_dataout,
 		reg_data_out => per_reg_dataout,
 		reg_rw => per_reg_rw,
 		reg_uds => cpu_uds,
@@ -429,11 +459,11 @@ mysdram : entity work.sdram
 		uart_txd => txd,
 		uart_rxd => rxd,
 
-		ps2k_clk_in => ps2k_clk_in,
+		ps2k_clk_in => ps2k_clk_db,
 		ps2k_dat_in => ps2k_dat_in,
 		ps2k_clk_out => ps2k_clk_out,
 		ps2k_dat_out => ps2k_dat_out,
-		ps2m_clk_in => ps2m_clk_in,
+		ps2m_clk_in => ps2m_clk_db,
 		ps2m_dat_in => ps2m_dat_in,
 		ps2m_clk_out => ps2m_clk_out,
 		ps2m_dat_out => ps2m_dat_out,

@@ -16,9 +16,14 @@ void ps2_ringbuffer_init(struct ps2_ringbuffer *r)
 
 void ps2_ringbuffer_write(struct ps2_ringbuffer *r,unsigned char in)
 {
-	DisableInterrupts();
+//	DisableInterrupts();
 	while(r->out_hw==((r->out_cpu+1)&(PS2_RINGBUFFER_SIZE-1)))
 		;
+//	{
+//		EnableInterrupts();
+//		DisableInterrupts();
+//	}
+	DisableInterrupts();
 	r->outbuf[r->out_cpu]=in;
 	r->out_cpu=(r->out_cpu+1) & (PS2_RINGBUFFER_SIZE-1);
 	PS2Handler();

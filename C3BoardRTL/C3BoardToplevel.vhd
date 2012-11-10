@@ -74,8 +74,8 @@ port(
 		
 		-- Any remaining IOs yet to be assigned
 		misc_ios_1 : out std_logic_vector(5 downto 0);
-		misc_ios_21 : out std_logic_vector(11 downto 0);
-		misc_ios_22 : out std_logic_vector(9 downto 0);
+		misc_ios_21 : out std_logic_vector(13 downto 0);
+		misc_ios_22 : out std_logic_vector(8 downto 0);
 		misc_ios_3 : out std_logic_vector(1 downto 0)
 	);
 end entity;
@@ -142,10 +142,10 @@ attribute chip_pin of rs232_rxd : signal is "98";
 attribute chip_pin of rs232_txd : signal is "112";
 
 -- SD card interface
-attribute chip_pin of sd_cs : signal is "183";
-attribute chip_pin of sd_miso : signal is "194";
-attribute chip_pin of sd_mosi : signal is "185";
-attribute chip_pin of sd_clk : signal is "188";
+attribute chip_pin of sd_cs : signal is "185";
+attribute chip_pin of sd_miso : signal is "196";
+attribute chip_pin of sd_mosi : signal is "188";
+attribute chip_pin of sd_clk : signal is "194";
 
 
 -- Power and LEDs
@@ -157,13 +157,12 @@ attribute chip_pin of leds : signal is "173, 169, 167, 135";
 attribute chip_pin of btn1 : signal is "226";
 attribute chip_pin of btn2 : signal is "231";
 
-
 -- Free pins, not yet assigned
 
 attribute chip_pin of misc_ios_1 : signal is "12,14,56,234,21,57";
 
-attribute chip_pin of misc_ios_21 : signal is "184,187,189,195,197,201,203,214,217,219,221,223";
-attribute chip_pin of misc_ios_22 : signal is "176,196,200,202,207,216,218,224,230,232";
+attribute chip_pin of misc_ios_21 : signal is "184,187,189,195,197,201,203,214,217,219,221,223,232";
+attribute chip_pin of misc_ios_22 : signal is "176,183,200,202,207,216,218,224,230";
 attribute chip_pin of misc_ios_3 : signal is "95,177";
 
 -- Signals internal to the project
@@ -277,7 +276,7 @@ begin
 			c1 => sdram1_clk
 		);
 		
-	mypll2 : entity work.PLL
+	mypll2 : entity work.PLL2
 		port map (
 			inclk0 => clk_50,
 			c1 => sdram2_clk
@@ -323,7 +322,7 @@ begin
 		generic map(
 			sdram_rows => 12,
 			sdram_cols => 10,
-			sysclk_frequency => 1000,
+			sysclk_frequency => 1330,
 			spi_maxspeed => 4
 		)
 		port map(

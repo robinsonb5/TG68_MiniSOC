@@ -139,7 +139,8 @@ architecture rtl of vga_controller is
 	signal chargen_rw : std_logic :='1';
 	signal chargen_overlay : std_logic :='1';
 	
-	type charramstates is (writeupperbyte,readupperbyte1,readupperbyte2,writelowerbyte,readlowerbyte1,readlowerbyte2);
+	type charramstates is (writeupperbyte,writeupperbyte1,readupperbyte1,readupperbyte2,
+									writelowerbyte,writelowerbyte1,readlowerbyte1,readlowerbyte2);
 	signal charramstate : charramstates;			
 
 begin
@@ -150,8 +151,8 @@ begin
 		)
 		port map (
 			clk => clk,
-			clkDiv => X"3",	-- 100 Mhz / (3+1) = 25 Mhz
---			clkDiv => X"4",	-- 125 Mhz / (4+1) = 25 Mhz
+--			clkDiv => X"3",	-- 100 Mhz / (3+1) = 25 Mhz
+			clkDiv => X"4",	-- 125 Mhz / (4+1) = 25 Mhz
 
 			hSync => hsync,
 			vSync => vsync,
@@ -270,8 +271,10 @@ begin
 							if reg_rw='0' and reg_uds='0' then
 								chargen_rw<='0';
 							end if;
-							charramstate<=readupperbyte1;
+							charramstate<=writeupperbyte1;
 						end if;
+					when writeupperbyte1 =>
+						charramstate<=readupperbyte1;
 					when readupperbyte1 =>
 						charramstate<=readupperbyte2;	-- delay for data
 					when readupperbyte2 =>			
@@ -283,6 +286,8 @@ begin
 						if reg_rw='0' and reg_lds='0' then
 							chargen_rw<='0';
 						end if;
+						charramstate<=writelowerbyte1;
+					when writelowerbyte1 =>
 						charramstate<=readlowerbyte1;
 					when readlowerbyte1 =>
 						charramstate<=readlowerbyte2;	-- delay for data
@@ -378,10 +383,10 @@ begin
 							sprite0_counter<="01";
 						when "01" =>
 							sprite_col<=sprite0_data(7 downto 4);
-							req_spr0<='1';
 							sprite0_counter<="00";
 						when "00" =>
 							sprite_col<=sprite0_data(3 downto 0);
+							req_spr0<='1';
 							sprite0_counter<="11";
 					end case;
 				end if;
