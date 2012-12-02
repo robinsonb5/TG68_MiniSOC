@@ -73,10 +73,10 @@ port(
 		leds : out std_logic_vector(3 downto 0);
 		
 		-- Any remaining IOs yet to be assigned
-		misc_ios_1 : out std_logic_vector(5 downto 0);
-		misc_ios_21 : out std_logic_vector(13 downto 0);
-		misc_ios_22 : out std_logic_vector(8 downto 0);
-		misc_ios_3 : out std_logic_vector(1 downto 0)
+		misc_ios_1 : in std_logic_vector(5 downto 0);
+		misc_ios_21 : in std_logic_vector(13 downto 0);
+		misc_ios_22 : in std_logic_vector(8 downto 0);
+		misc_ios_3 : in std_logic_vector(1 downto 0)
 	);
 end entity;
 

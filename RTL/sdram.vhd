@@ -179,12 +179,35 @@ signal instcache_word2 : std_logic_vector(15 downto 0);
 signal instcache_word3 : std_logic_vector(15 downto 0);
 signal instcache_dirty : std_logic;
 
+COMPONENT TwoWayCache
+	GENERIC ( WAITING : INTEGER := 0; WAITRD : INTEGER := 1; WAITFILL : INTEGER := 2; FILL2 : INTEGER := 3;
+		 FILL3 : INTEGER := 4; FILL4 : INTEGER := 5; FILL5 : INTEGER := 6; PAUSE1 : INTEGER := 7 );
+		
+	PORT
+	(
+		clk		:	 IN STD_LOGIC;
+		cpu_addr		:	 IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		cpu_req		:	 IN STD_LOGIC;
+		cpu_ack		:	 OUT STD_LOGIC;
+		cpu_rw		:	 IN STD_LOGIC;
+		data_from_cpu		:	 IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		data_to_cpu		:	 OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		sdram_addr		:	 OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		data_from_sdram		:	 IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		data_to_sdram		:	 OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		sdram_req		:	 OUT STD_LOGIC;
+		sdram_fill		:	 IN STD_LOGIC;
+		sdram_rw		:	 OUT STD_LOGIC
+	);
+END COMPONENT;
+
+
 begin
 
 	process(sysclk)
 	begin
 	
-	dtack1 <= port1_dtack and writecache_dtack and readcache_dtack;
+	dtack1 <= port1_dtack and writecache_dtack and not readcache_dtack;
 	
 	if reset='0' then
 		writecache_req<='0';
@@ -238,128 +261,148 @@ begin
 end process;
 
 
--- read cache
+mytwc : component TwoWayCache
+	PORT map
+	(
+		clk => sysclk,
+		cpu_addr => addr1,
+		cpu_req => req1,
+		cpu_ack => readcache_dtack,
+		cpu_rw => wr1,
+		data_from_cpu => X"0000",
+		data_to_cpu => dataout1,
+		sdram_addr(31 downto 3) => readcache_addr(31 downto 3),
+		sdram_addr(2 downto 0) => open,
+		data_from_sdram => sdata,
+		data_to_sdram => open,
+		sdram_req => readcache_req,
+		sdram_fill => readcache_fill,
+		sdram_rw => open
+	);
 
-	process(reset,sysclk)
-	begin
-		if reset='0' then
-			readcache_dirty<='1';
-			readcache_dtack<='1';
-			readcache_req<='0';
-			readcache_state<=waitread;
-			instcache_dirty<='1';
-		elsif rising_edge(sysclk) then
-			readcache_dtack<='1';
-
-			case readcache_state is
-				when waitread =>
-					if req1='1' and wr1='1' then -- read cycle
-						if Addr1(31 downto 3)=readcache_addr and readcache_dirty='0' then -- cache hit
-							case addr1(2 downto 1) is
-								when "00" =>
-									dataout1<=readcache_word0;
-								when "01" =>
-									dataout1<=readcache_word1;
-								when "10" =>
-									dataout1<=readcache_word2;
-								when "11" =>
-									dataout1<=readcache_word3;
-							end case;
-							readcache_dtack<='0';
-						elsif Addr1(31 downto 3)=instcache_addr and instcache_dirty='0' then -- cache hit
-							case addr1(2 downto 1) is
-								when "00" =>
-									dataout1<=instcache_word0;
-								when "01" =>
-									dataout1<=instcache_word1;
-								when "10" =>
-									dataout1<=instcache_word2;
-								when "11" =>
-									dataout1<=instcache_word3;
-							end case;
-							readcache_dtack<='0';
-						else	-- cache miss
-							if cachesel='0' then
-								instcache_addr<=addr1(31 downto 3);
-								instcache_dirty<='1';
-								readcache_state<=fill2_1;
-							else
-								readcache_addr<=addr1(31 downto 3);
-								readcache_dirty<='1';
-								readcache_state<=fill1;
-							end if;
-							readcache_req<='1';
-						end if;
-					end if;
-				-- FIXME - can we respond as soon as the required word comes in?
-				when fill1 =>
-					if readcache_fill='1' then
-						readcache_word0<=sdata_reg;
-						readcache_state<=fill2;
-					end if;
-				when fill2 =>
-					readcache_word1<=sdata_reg;
-					readcache_state<=fill3;
-				when fill3 =>
-					readcache_word2<=sdata_reg;
-					readcache_state<=fill4;
-				when fill4 =>
-					readcache_word3<=sdata_reg;
-					readcache_dirty<='0';
-					readcache_req<='0';
-					readcache_state<=waitread;
-				when fill2_1 =>
-					if readcache_fill='1' then
-						instcache_word0<=sdata_reg;
-						readcache_state<=fill2_2;
-					end if;
-				when fill2_2 =>
-					instcache_word1<=sdata_reg;
-					readcache_state<=fill2_3;
-				when fill2_3 =>
-					instcache_word2<=sdata_reg;
-					readcache_state<=fill2_4;
-				when fill2_4 =>
-					instcache_word3<=sdata_reg;
-					instcache_dirty<='0';
-					readcache_req<='0';
-					readcache_state<=waitread;
-				when others =>
-					null;
-			end case;
-
-			-- Invalidate cacheline if the write cache is writing to the same address.
-			-- Better yet, replace the cached word with the newly-written data.
-			-- FIXME - need to take into account byte masking.
-			if req1='1' and wr1='0' and addr1(31 downto 3) = readcache_addr(31 downto 3) then
-				case addr1(2 downto 1) is
-					when "00" =>
-						readcache_word0<=datawr1;
-					when "01" =>
-						readcache_word1<=datawr1;
-					when "10" =>
-						readcache_word2<=datawr1;
-					when "11" =>
-						readcache_word3<=datawr1;
-				end case;
---				readcache_dirty<='1';
-				-- Also cancel any read from the cache, and force a wait state.
---				readcache_req<='0';
---				readcache_state<=waitread;
---				readcache_dtack<='1';
-			end if;
-
-			-- In most cases there'll be no need to bus-snoop on the instruction cache.
---			if writecache_dirty='1' and instcache_addr(23 downto 3) = writecache_addr(23 downto 3) then
---				instcache_dirty<='1';
+--
+---- read cache
+--
+--	process(reset,sysclk)
+--	begin
+--		if reset='0' then
+--			readcache_dirty<='1';
+--			readcache_dtack<='1';
+--			readcache_req<='0';
+--			readcache_state<=waitread;
+--			instcache_dirty<='1';
+--		elsif rising_edge(sysclk) then
+--			readcache_dtack<='1';
+--
+--			case readcache_state is
+--				when waitread =>
+--					if req1='1' and wr1='1' then -- read cycle
+--						if Addr1(31 downto 3)=readcache_addr and readcache_dirty='0' then -- cache hit
+--							case addr1(2 downto 1) is
+--								when "00" =>
+--									dataout1<=readcache_word0;
+--								when "01" =>
+--									dataout1<=readcache_word1;
+--								when "10" =>
+--									dataout1<=readcache_word2;
+--								when "11" =>
+--									dataout1<=readcache_word3;
+--							end case;
+--							readcache_dtack<='0';
+--						elsif Addr1(31 downto 3)=instcache_addr and instcache_dirty='0' then -- cache hit
+--							case addr1(2 downto 1) is
+--								when "00" =>
+--									dataout1<=instcache_word0;
+--								when "01" =>
+--									dataout1<=instcache_word1;
+--								when "10" =>
+--									dataout1<=instcache_word2;
+--								when "11" =>
+--									dataout1<=instcache_word3;
+--							end case;
+--							readcache_dtack<='0';
+--						else	-- cache miss
+--							if cachesel='0' then
+--								instcache_addr<=addr1(31 downto 3);
+--								instcache_dirty<='1';
+--								readcache_state<=fill2_1;
+--							else
+--								readcache_addr<=addr1(31 downto 3);
+--								readcache_dirty<='1';
+--								readcache_state<=fill1;
+--							end if;
+--							readcache_req<='1';
+--						end if;
+--					end if;
+--				-- FIXME - can we respond as soon as the required word comes in?
+--				when fill1 =>
+--					if readcache_fill='1' then
+--						readcache_word0<=sdata_reg;
+--						readcache_state<=fill2;
+--					end if;
+--				when fill2 =>
+--					readcache_word1<=sdata_reg;
+--					readcache_state<=fill3;
+--				when fill3 =>
+--					readcache_word2<=sdata_reg;
+--					readcache_state<=fill4;
+--				when fill4 =>
+--					readcache_word3<=sdata_reg;
+--					readcache_dirty<='0';
+--					readcache_req<='0';
+--					readcache_state<=waitread;
+--				when fill2_1 =>
+--					if readcache_fill='1' then
+--						instcache_word0<=sdata_reg;
+--						readcache_state<=fill2_2;
+--					end if;
+--				when fill2_2 =>
+--					instcache_word1<=sdata_reg;
+--					readcache_state<=fill2_3;
+--				when fill2_3 =>
+--					instcache_word2<=sdata_reg;
+--					readcache_state<=fill2_4;
+--				when fill2_4 =>
+--					instcache_word3<=sdata_reg;
+--					instcache_dirty<='0';
+--					readcache_req<='0';
+--					readcache_state<=waitread;
+--				when others =>
+--					null;
+--			end case;
+--
+--			-- Invalidate cacheline if the write cache is writing to the same address.
+--			-- Better yet, replace the cached word with the newly-written data.
+--			-- FIXME - need to take into account byte masking.
+--			if req1='1' and wr1='0' and addr1(31 downto 3) = readcache_addr(31 downto 3) then
+--				case addr1(2 downto 1) is
+--					when "00" =>
+--						readcache_word0<=datawr1;
+--					when "01" =>
+--						readcache_word1<=datawr1;
+--					when "10" =>
+--						readcache_word2<=datawr1;
+--					when "11" =>
+--						readcache_word3<=datawr1;
+--				end case;
+----				readcache_dirty<='1';
 --				-- Also cancel any read from the cache, and force a wait state.
---				readcache_req<='0';
---				readcache_state<=waitread;
---				readcache_dtack<='1';
+----				readcache_req<='0';
+----				readcache_state<=waitread;
+----				readcache_dtack<='1';
 --			end if;
-
-		end if;
-	end process;
+--
+--			-- In most cases there'll be no need to bus-snoop on the instruction cache.
+----			if writecache_dirty='1' and instcache_addr(23 downto 3) = writecache_addr(23 downto 3) then
+----				instcache_dirty<='1';
+----				-- Also cancel any read from the cache, and force a wait state.
+----				readcache_req<='0';
+----				readcache_state<=waitread;
+----				readcache_dtack<='1';
+----			end if;
+--
+--		end if;
+--	end process;
 
 	
 -------------------------------------------------------------------------

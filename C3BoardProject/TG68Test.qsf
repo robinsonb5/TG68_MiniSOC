@@ -314,35 +314,6 @@ set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to sd_miso
 set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to sd_mosi
 set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to sdram1_clk
 set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to sdram2_clk
-set_global_assignment -name SDC_FILE constraints.sdc
-set_global_assignment -name VHDL_FILE ../C3BoardRTL/C3BoardToplevel.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
-set_global_assignment -name VHDL_FILE ../RTL/DMACache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
-set_global_assignment -name VHDL_FILE ../C3BoardRTL/poweronreset.vhd
-set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
-set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
-set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
-set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
-set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
-set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
-set_global_assignment -name VHDL_FILE ../C3BoardRTL/statusleds_pwm.vhd
-set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
-set_global_assignment -name QIP_FILE ../CycloneIII_GeneratedRTL/DMACacheRAM.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL2.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/BootRom.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRom.qip
-set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRAM.qip
-set_global_assignment -name VHDL_FILE ../RTL/alternative_ps2.vhd
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "TG68Test:mytg68test|TG68KdotC_Kernel:myTG68|addr[0]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "TG68Test:mytg68test|TG68KdotC_Kernel:myTG68|addr[10]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "TG68Test:mytg68test|TG68KdotC_Kernel:myTG68|addr[11]" -section_id auto_signaltap_0
@@ -407,101 +378,472 @@ set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -t
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "TG68Test:mytg68test|TG68KdotC_Kernel:myTG68|addr[7]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "TG68Test:mytg68test|TG68KdotC_Kernel:myTG68|addr[8]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "TG68Test:mytg68test|TG68KdotC_Kernel:myTG68|addr[9]" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=2048" -section_id auto_signaltap_0
+set_global_assignment -name QIP_FILE ../CycloneIII_GeneratedRTL/CacheBlockRAM.qip
+set_global_assignment -name VERILOG_FILE ../RTL/TwoWayCache.v
+set_global_assignment -name SDC_FILE constraints.sdc
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/C3BoardToplevel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
+set_global_assignment -name VHDL_FILE ../RTL/DMACache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/poweronreset.vhd
+set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
+set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
+set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
+set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../C3BoardRTL/statusleds_pwm.vhd
+set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
+set_global_assignment -name QIP_FILE ../CycloneIII_GeneratedRTL/DMACacheRAM.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/PLL2.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/BootRom.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRom.qip
+set_global_assignment -name QIP_FILE ../C3BoardRTL/Generated/CharRAM.qip
+set_global_assignment -name VHDL_FILE ../RTL/alternative_ps2.vhd
 set_global_assignment -name VERILOG_FILE ../RTL/ps2_io.v
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mousebusy_d" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mouserecvack" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mousebusy_d" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mouserecvack" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mouserecvreg" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mousesendtrigger" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_int" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvack" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvtrigger" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|sendready" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|sendtrigger" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_clk_in" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_clk_out" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_dat_in" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_dat_out" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "TG68Test:mytg68test|reset" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mouserecvreg" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|mousesendtrigger" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_int" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|receive[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvack" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvdata[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|recvtrigger" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|send[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|sendready" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2_io:mymouse|sendtrigger" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_clk_in" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_clk_out" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_dat_in" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "TG68Test:mytg68test|peripheral_controller:myperipheral|ps2m_dat_out" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "TG68Test:mytg68test|reset" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=76" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=76" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=253" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=2048" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=27438" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=62509" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "TG68Test:mytg68test|reset" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_ack" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[18]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[19]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[20]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[21]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[22]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[23]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[24]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[25]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[26]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[27]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[28]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[29]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[30]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[31]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[96] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[97] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_req" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_rw" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[104] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[105] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[106] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[107] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[108] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[109] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[110] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[111] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[112] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[113] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[114] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[115] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[116] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[117] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[118] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[119] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[120] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[121] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[122] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[123] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[124] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[125] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[126] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[127] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[128] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[129] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[130] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[131] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[132] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[133] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[134] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[135] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[136] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[137] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[138] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[139] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[140] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[141] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[142] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[143] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[144] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[145] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[146] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[147] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[148] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[149] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[150] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[151] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[152] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[153] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[154] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[155] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[156] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[157] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[158] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[159] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[160] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[161] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[162] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[163] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[164] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[165] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[166] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[167] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[168] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[169] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[170] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[171] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[172] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[173] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[174] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[175] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[176] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[177] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[178] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[179] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[180] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[181] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[182] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[183] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[184] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[185] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[186] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_wren1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[187] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_wren2" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[188] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|readword[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[189] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|readword[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[190] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[191] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[192] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[193] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[194] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[195] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[196] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[197] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[198] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[199] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[18]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[200] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[19]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[201] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[202] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[20]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[203] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[21]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[204] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[22]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[205] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[23]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[206] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[24]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[207] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[25]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[208] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[26]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[209] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[27]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[210] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[28]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[211] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[29]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[212] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[213] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[30]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[214] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[31]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[215] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[216] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[217] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[218] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[219] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[220] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[221] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[222] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_fill" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[223] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_req" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[224] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_rw" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[225] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_mru1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[226] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[227] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[228] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[229] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[230] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[231] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[232] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[233] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[234] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[235] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[236] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[237] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[238] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[239] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[240] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[241] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[242] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[243] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "TG68Test:mytg68test|reset" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_a[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:dataram|address_b[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_a[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|CacheBlockRAM:tagram|address_b[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_ack" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[18]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[19]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[20]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[21]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[22]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[23]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[24]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[25]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[26]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[27]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[28]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[29]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[30]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[31]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[96] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[97] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_addr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_req" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|cpu_rw" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[104] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[105] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[106] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[107] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[108] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[109] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[110] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[111] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[112] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[113] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[114] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[115] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[116] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[117] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[118] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[119] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_cpu[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[120] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[121] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[122] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[123] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[124] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[125] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[126] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[127] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[128] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[129] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[130] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[131] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[132] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[133] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[134] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[135] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_from_sdram[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[136] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[137] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[138] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[139] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[140] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[141] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[142] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[143] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[144] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[145] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[146] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[147] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[148] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[149] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[150] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[151] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[152] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[153] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_ports_w[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[154] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[155] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[156] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[157] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[158] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[159] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[160] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[161] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[162] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[163] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[164] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[165] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[166] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[167] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[168] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[169] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_cpu[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[170] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[171] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[172] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[173] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[174] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[175] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[176] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[177] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[178] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[179] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[180] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[181] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[182] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[183] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[184] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[185] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_to_sdram[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[186] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_wren1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[187] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|data_wren2" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[188] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|readword[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[189] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|readword[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[190] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[191] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[192] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[193] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[194] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[195] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[196] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[197] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[198] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[199] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[18]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[200] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[19]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[201] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[202] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[20]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[203] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[21]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[204] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[22]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[205] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[23]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[206] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[24]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[207] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[25]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[208] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[26]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[209] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[27]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[210] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[28]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[211] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[29]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[212] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[213] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[30]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[214] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[31]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[215] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[216] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[217] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[218] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[219] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[220] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[221] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_addr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[222] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_fill" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[223] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_req" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[224] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|sdram_rw" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[225] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_mru1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[226] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[227] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[228] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[229] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[230] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[231] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[232] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[233] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[16]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[234] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[17]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[235] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[236] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[237] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[238] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[239] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[240] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[241] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[242] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[243] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_port1_w[9]" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=1024" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=1024" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[244] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_wren1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[245] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_wren2" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[244] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_wren1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[245] -to "TG68Test:mytg68test|sdram:mysdram|TwoWayCache:mytwc|tag_wren2" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=246" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=246" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=762" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=27318" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=27329" -section_id auto_signaltap_0
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
