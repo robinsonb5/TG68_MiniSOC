@@ -116,9 +116,11 @@ assign tag_port2_addr = {2'b0,cacheline2};
 // CPU address.
 // The first port has to be toggled between old and new data, depending upon
 // the state of the mru flag.
+// (Writing both ports on every access for troubleshooting)
 
 assign tag_port1_w = {tag_mru1,(tag_mru1 ? cpu_addr[25:9] : tag_port1_r[16:0])};
-assign tag_port2_w = {1'b0,cpu_addr[25:9]};
+assign tag_port2_w = {1'b0,(!tag_mru1 ? cpu_addr[25:9] : tag_port2_r[16:0])};
+//assign tag_port2_w = {1'b0,cpu_addr[25:9]};
 
 
 // In the data blockram the lower two bits of the address determine
@@ -182,8 +184,8 @@ begin
 				begin
 					// Write the data to the second cache way
 					// Write the data to the first cache way
-					data_wren1<=1'b1;
-					// Mark tag1 as most recently used.
+					data_wren2<=1'b1;
+					// Mark tag2 as most recently used.
 					tag_mru1<=1'b0;
 					tag_wren1<=1'b1;
 				end
@@ -234,9 +236,10 @@ begin
 //					tag_mru1<=cpu_addr[1];
 
 					tag_wren1<=1'b1;
+					tag_wren2<=1'b1;
 					// If r[17] is 1, tag_mru1 is 0, so we need to write to the second tag.
 					// FIXME - might be simpler to just write every cycle and switch between new and old data.
-					tag_wren2<=tag_port1_r[17];
+//					tag_wren2<=tag_port1_r[17];
 
 					readword<=2'b00;
 					// Pass request on to RAM controller.
