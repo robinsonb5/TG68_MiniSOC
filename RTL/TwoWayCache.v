@@ -22,10 +22,13 @@
 module TwoWayCache
 (
 	input clk,
+	input reset, // active low
 	input [31:0] cpu_addr,
 	input cpu_req,	// 1 to request attention
 	output reg cpu_ack,	// 1 to signal that data is ready.
 	input cpu_rw, // 1 for read cycles, 0 for write cycles
+	input cpu_wrl, // access low byte
+	input cpu_wru, // access high byte
 	input [15:0] data_from_cpu,
 	output reg [15:0] data_to_cpu,
 	output reg [31:0] sdram_addr,
@@ -33,6 +36,7 @@ module TwoWayCache
 	output reg [15:0] data_to_sdram,
 	output reg sdram_req,
 	input sdram_fill,
+	input pause, // hack to verify cause of byte problems.
 	output reg sdram_rw	// 1 for read cycles, 0 for write cycles
 );
 
@@ -40,11 +44,16 @@ module TwoWayCache
 // States for state machine
 parameter WAITING=0, WAITRD=1, WAITFILL=2,
 				FILL2=3, FILL3=4, FILL4=5, FILL5=6, PAUSE1=7,
-				WRITE1=8, WRITE2=9 ;
-reg [4:0] state = WAITING;
-
+				WRITE1=8, WRITE2=9, INIT1=10, INIT2=11;
+reg [4:0] state = INIT1;
+reg init;
+reg [7:0] initctr;
 
 // BlockRAM and related signals for data
+
+// In the top two bits of each record we store valid flags.
+// Bit 17 indicates that the upper byte is valid,
+// while bit 16 indicates that the lower byte is valid.
 
 wire [8:0] data_port1_addr;
 wire [8:0] data_port2_addr;
@@ -53,6 +62,10 @@ wire [17:0] data_port2_r;
 reg[17:0] data_ports_w;
 reg data_wren1;
 reg data_wren2;
+
+wire data_valid1;
+wire data_valid2;
+
 
 CacheBlockRAM dataram(
 	.clock(clk),
@@ -67,6 +80,12 @@ CacheBlockRAM dataram(
 );
 
 
+// data is considered valid if each byte's valid flag is 1, or if any 0 valid flags
+// are matched by a high byte select from the CPU.
+assign data_valid1=(data_port1_r[17]|cpu_wru) & (data_port1_r[16]|cpu_wrl);
+assign data_valid2=(data_port2_r[17]|cpu_wru) & (data_port2_r[16]|cpu_wrl);
+
+
 // BlockRAM and related signals for tags.
 
 wire [8:0] tag_port1_addr;
@@ -75,6 +94,9 @@ wire [17:0] tag_port1_r;
 wire [17:0] tag_port2_r;
 wire [17:0] tag_port1_w;
 wire [17:0] tag_port2_w;
+
+wire tag_hit1;
+wire tag_hit2;
 
 reg tag_wren1;
 reg tag_wren2;
@@ -122,6 +144,9 @@ assign tag_port1_w = {tag_mru1,(tag_mru1 ? cpu_addr[25:9] : tag_port1_r[16:0])};
 assign tag_port2_w = {1'b0,(!tag_mru1 ? cpu_addr[25:9] : tag_port2_r[16:0])};
 //assign tag_port2_w = {1'b0,cpu_addr[25:9]};
 
+// Compare the tag value with the CPU address and mark any hits.
+assign tag_hit1 = (tag_port1_r[16:0]==cpu_addr[25:9]) ? 1'b1 : 1'b0;
+assign tag_hit2 = (tag_port2_r[16:0]==cpu_addr[25:9]) ? 1'b1 : 1'b0;
 
 // In the data blockram the lower two bits of the address determine
 // which word of the burst we're reading.  When reading from the cache, this comes
@@ -130,8 +155,8 @@ assign tag_port2_w = {1'b0,(!tag_mru1 ? cpu_addr[25:9] : tag_port2_r[16:0])};
 
 reg [1:0] readword;
 
-assign data_port1_addr = {cacheline1,readword};
-assign data_port2_addr = {cacheline2,readword};
+assign data_port1_addr = init ? {1'b0,initctr} : {cacheline1,readword};
+assign data_port2_addr = init ? {1'b1,initctr} : {cacheline2,readword};
 
 
 
@@ -144,12 +169,30 @@ begin
 	data_wren1<=1'b0;
 	data_wren2<=1'b0;
 	cpu_ack<=1'b0;
+	init<=1'b0;
 
 	case(state)
 
-		// FIXME - need an init state here that loops through the data clearing
-		// the valid flag - for which we'll use bit 17 of the data entry.
-	
+		INIT1:
+		begin
+			init<=1'b1;	// need to mark the entire cache as invalid before starting.
+			initctr<=8'b0000_0000;
+			data_ports_w<=18'b0; // Mark entire cache as invalid
+			data_wren1<=1'b1;
+			data_wren2<=1'b1;
+			state<=INIT2;
+		end
+		
+		INIT2:
+		begin
+			init<=1'b1;
+			initctr<=initctr+1;
+			data_wren1<=1'b1;
+			data_wren2<=1'b1;
+			if(initctr==8'b1111_1111)
+				state<=WAITING;
+		end
+
 		WAITING:
 		begin
 			state<=WAITING;
@@ -170,9 +213,15 @@ begin
 				// FIXME - this won't work for byte accesses!
 				
 				readword=cpu_addr[2:1];
-				data_ports_w<=data_from_cpu;
+				
+				// We mark the data as valid only if the entire 16-bit word is written,
+				// otherwwise we just flush the cacheline.
+//				data_ports_w[17]<=~cpu_wru;
+//				data_ports_w[16]<=~cpu_wrl;
+				data_ports_w[17:16]<=2'b11;
+				data_ports_w[15:0]<=data_from_cpu; // data
 
- 				if(tag_port1_r[16:0]==cpu_addr[25:9])
+ 				if(tag_hit1)
 				begin
 					// Write the data to the first cache way
 					data_wren1<=1'b1;
@@ -180,7 +229,7 @@ begin
 					tag_mru1<=1'b1;
 					tag_wren1<=1'b1;
 				end
-				else if(tag_port2_r[16:0]==cpu_addr[25:9])
+				else if(tag_hit2)
 				begin
 					// Write the data to the second cache way
 					// Write the data to the first cache way
@@ -203,8 +252,8 @@ begin
 		WAITRD:
 			begin
 				state<=PAUSE1;
-				// Check both tags for a match...
-				if(tag_port1_r[16:0]==cpu_addr[25:9])
+				// Check both tags for a match...  Check valid flag, too.
+				if(tag_hit1 & data_valid1)
 				begin
 					// Copy data to output
 					data_to_cpu<=data_port1_r;
@@ -214,7 +263,7 @@ begin
 					tag_mru1<=1'b1;
 					tag_wren1<=1'b1;
 				end
-				else if(tag_port2_r[16:0]==cpu_addr[25:9])
+				else if(tag_hit2 & data_valid2)
 				begin
 					// Copy data to output
 					data_to_cpu<=data_port2_r;
@@ -230,7 +279,7 @@ begin
 					// (Whichever one was least recently used will be overwritten, so
 					// is now the most recently used.)
 
-					tag_mru1<=!tag_port1_r[17];
+					tag_mru1<=~tag_port1_r[17];
 
 //					For simulation only, to avoid the unknown value of unitialised blockram
 //					tag_mru1<=cpu_addr[1];
@@ -259,9 +308,9 @@ begin
 			begin
 				sdram_req<=1'b0;
 				// write first word to Cache...
-				data_ports_w<=data_from_sdram;
+				data_ports_w<={2'b11,data_from_sdram};
 				data_wren1<=tag_mru1;
-				data_wren2<=!tag_mru1;
+				data_wren2<=~tag_mru1;
 				state<=FILL2;
 			end
 		end
@@ -270,9 +319,9 @@ begin
 		begin
 			// write second word to Cache...
 			readword=2'b01;
-			data_ports_w<=data_from_sdram;
+			data_ports_w<={2'b11,data_from_sdram};
 			data_wren1<=tag_mru1;
-			data_wren2<=!tag_mru1;
+			data_wren2<=~tag_mru1;
 			state<=FILL3;
 		end
 
@@ -280,9 +329,9 @@ begin
 		begin
 			// write third word to Cache...
 			readword=2'b10;
-			data_ports_w<=data_from_sdram;
+			data_ports_w<={2'b11,data_from_sdram};
 			data_wren1<=tag_mru1;
-			data_wren2<=!tag_mru1;
+			data_wren2<=~tag_mru1;
 			state<=FILL4;
 		end
 
@@ -290,9 +339,9 @@ begin
 		begin
 			// write last word to Cache...
 			readword=2'b11;
-			data_ports_w<=data_from_sdram;
+			data_ports_w<={2'b11,data_from_sdram};
 			data_wren1<=tag_mru1;
-			data_wren2<=!tag_mru1;
+			data_wren2<=~tag_mru1;
 			state<=FILL5;
 		end
 		
@@ -305,6 +354,9 @@ begin
 		default:
 			state<=WAITING;
 	endcase
+
+	if(reset==1'b0)
+		state<=INIT1;
 end
 
 endmodule

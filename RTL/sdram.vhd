@@ -186,10 +186,13 @@ COMPONENT TwoWayCache
 	PORT
 	(
 		clk		:	 IN STD_LOGIC;
+		reset	: IN STD_LOGIC;
 		cpu_addr		:	 IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		cpu_req		:	 IN STD_LOGIC;
 		cpu_ack		:	 OUT STD_LOGIC;
 		cpu_rw		:	 IN STD_LOGIC;
+		cpu_wrl		: IN STD_LOGIC;
+		cpu_wru		: in std_logic;
 		data_from_cpu		:	 IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		data_to_cpu		:	 OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
 		sdram_addr		:	 OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -197,6 +200,7 @@ COMPONENT TwoWayCache
 		data_to_sdram		:	 OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
 		sdram_req		:	 OUT STD_LOGIC;
 		sdram_fill		:	 IN STD_LOGIC;
+		pause : in std_logic;
 		sdram_rw		:	 OUT STD_LOGIC
 	);
 END COMPONENT;
@@ -238,7 +242,8 @@ begin
 								writecache_dqm(7 downto 6)<=wrU1&wrL1;
 						end case;
 						writecache_req<='1';
-						writecache_dtack<='0';
+-- Temporary change while chasing TwoWayCache bug
+--						writecache_dtack<='0';
 						writecache_dirty<='1';
 						-- FIXME wait for req to drop here
 					end if;
@@ -249,6 +254,8 @@ begin
 				end if;
 			when fill =>
 				if writecache_burst='0' then
+-- Temporary change while chasing TwoWayCache bug
+						writecache_dtack<='0';
 					writecache_dirty<='0';
 					writecache_dqm<="11111111";
 					writecache_state<=waitwrite;
@@ -265,10 +272,13 @@ mytwc : component TwoWayCache
 	PORT map
 	(
 		clk => sysclk,
+		reset => reset,
 		cpu_addr => addr1,
 		cpu_req => req1,
 		cpu_ack => readcache_dtack,
 		cpu_rw => wr1,
+		cpu_wrl => wrL1,
+		cpu_wru => wrU1,
 		data_from_cpu => datawr1,
 		data_to_cpu => dataout1,
 		sdram_addr(31 downto 3) => readcache_addr(31 downto 3),
@@ -277,6 +287,7 @@ mytwc : component TwoWayCache
 		data_to_sdram => open,
 		sdram_req => readcache_req,
 		sdram_fill => readcache_fill,
+		pause => writecache_dirty,
 		sdram_rw => open
 	);
 

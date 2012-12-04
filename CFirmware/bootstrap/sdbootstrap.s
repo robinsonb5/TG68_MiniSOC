@@ -151,7 +151,7 @@ DoDecodeByte	; Takes address of longword in A0, rotates 4 bits left and ors in t
 HandleByte
 	add.w	#1,SREC_COLUMN
 
-	move.w	d0,PERREGS
+;	move.w	d0,PERREGS
 
 	cmp.b	#'S',d0		; First byte of a record is S - reset column counter.
 	bne.b	.nots

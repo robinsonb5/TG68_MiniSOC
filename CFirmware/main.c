@@ -307,7 +307,7 @@ void c_entry()
 
 	SDCardInit();
 
-	enum mainstate_t mainstate=MAIN_LOAD;
+	enum mainstate_t mainstate=MAIN_MEMCHECK;
 
 	while(1)
 	{
