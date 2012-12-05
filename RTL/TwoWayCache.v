@@ -22,6 +22,7 @@
 module TwoWayCache
 (
 	input clk,
+	input reset, // active low
 	input [31:0] cpu_addr,
 	input cpu_req,	// 1 to request attention
 	output reg cpu_ack,	// 1 to signal that data is ready.
@@ -40,8 +41,10 @@ module TwoWayCache
 // States for state machine
 parameter WAITING=0, WAITRD=1, WAITFILL=2,
 				FILL2=3, FILL3=4, FILL4=5, FILL5=6, PAUSE1=7,
-				WRITE1=8, WRITE2=9 ;
-reg [4:0] state = WAITING;
+				WRITE1=8, WRITE2=9, INIT1=10, INIT2=11;
+reg [4:0] state = INIT1;
+reg init;
+reg [7:0] initctr;
 
 
 // BlockRAM and related signals for data
@@ -66,6 +69,11 @@ CacheBlockRAM dataram(
 	.wren_b(data_wren2)
 );
 
+wire data_valid1;
+wire data_valid2;
+
+assign data_valid1 = data_port1_r[17] & data_port1_r[16];
+assign data_valid2 = data_port2_r[17] & data_port2_r[16];
 
 // BlockRAM and related signals for tags.
 
@@ -123,6 +131,15 @@ assign tag_port2_w = {1'b0,(!tag_mru1 ? cpu_addr[25:9] : tag_port2_r[16:0])};
 //assign tag_port2_w = {1'b0,cpu_addr[25:9]};
 
 
+// Boolean signals to indicate cache hits.
+
+wire tag_hit1;
+wire tag_hit2;
+
+assign tag_hit1 = tag_port1_r[16:0]==cpu_addr[25:9];
+assign tag_hit2 = tag_port2_r[16:0]==cpu_addr[25:9];
+
+
 // In the data blockram the lower two bits of the address determine
 // which word of the burst we're reading.  When reading from the cache, this comes
 // from the CPU address; when writing to the cache it's determined by the state
@@ -130,8 +147,8 @@ assign tag_port2_w = {1'b0,(!tag_mru1 ? cpu_addr[25:9] : tag_port2_r[16:0])};
 
 reg [1:0] readword;
 
-assign data_port1_addr = {cacheline1,readword};
-assign data_port2_addr = {cacheline2,readword};
+assign data_port1_addr = init ? {1'b0,initctr} : {cacheline1,readword};
+assign data_port2_addr = init ? {1'b1,initctr} : {cacheline2,readword};
 
 
 
@@ -144,12 +161,33 @@ begin
 	data_wren1<=1'b0;
 	data_wren2<=1'b0;
 	cpu_ack<=1'b0;
+	init<=1'b0;
 
 	case(state)
 
 		// FIXME - need an init state here that loops through the data clearing
 		// the valid flag - for which we'll use bit 17 of the data entry.
 	
+		INIT1:
+		begin
+			init<=1'b1;	// need to mark the entire cache as invalid before starting.
+			initctr<=8'b0000_0000;
+			data_ports_w<=18'b0; // Mark entire cache as invalid
+			data_wren1<=1'b1;
+			data_wren2<=1'b1;
+			state<=INIT2;
+		end
+		
+		INIT2:
+		begin
+			init<=1'b1;
+			initctr<=initctr+1;
+			data_wren1<=1'b1;
+			data_wren2<=1'b1;
+			if(initctr==8'b1111_1111)
+				state<=WAITING;
+		end
+
 		WAITING:
 		begin
 			state<=WAITING;
@@ -170,9 +208,9 @@ begin
 				// FIXME - this won't work for byte accesses!
 				
 				readword=cpu_addr[2:1];
-				data_ports_w<=data_from_cpu;
+				data_ports_w<={2'b11,data_from_cpu};
 
- 				if(tag_port1_r[16:0]==cpu_addr[25:9])
+ 				if(tag_hit1)
 				begin
 					// Write the data to the first cache way
 					data_wren1<=1'b1;
@@ -180,7 +218,7 @@ begin
 					tag_mru1<=1'b1;
 					tag_wren1<=1'b1;
 				end
-				else if(tag_port2_r[16:0]==cpu_addr[25:9])
+				else if(tag_hit2)
 				begin
 					// Write the data to the second cache way
 					// Write the data to the first cache way
@@ -204,7 +242,7 @@ begin
 			begin
 				state<=PAUSE1;
 				// Check both tags for a match...
-				if(tag_port1_r[16:0]==cpu_addr[25:9])
+				if(tag_hit1)
 				begin
 					// Copy data to output
 					data_to_cpu<=data_port1_r;
@@ -214,7 +252,7 @@ begin
 					tag_mru1<=1'b1;
 					tag_wren1<=1'b1;
 				end
-				else if(tag_port2_r[16:0]==cpu_addr[25:9])
+				else if(tag_hit2)
 				begin
 					// Copy data to output
 					data_to_cpu<=data_port2_r;
@@ -259,7 +297,7 @@ begin
 			begin
 				sdram_req<=1'b0;
 				// write first word to Cache...
-				data_ports_w<=data_from_sdram;
+				data_ports_w<={2'b11,data_from_sdram};
 				data_wren1<=tag_mru1;
 				data_wren2<=!tag_mru1;
 				state<=FILL2;
@@ -270,7 +308,7 @@ begin
 		begin
 			// write second word to Cache...
 			readword=2'b01;
-			data_ports_w<=data_from_sdram;
+			data_ports_w<={2'b11,data_from_sdram};
 			data_wren1<=tag_mru1;
 			data_wren2<=!tag_mru1;
 			state<=FILL3;
@@ -280,7 +318,7 @@ begin
 		begin
 			// write third word to Cache...
 			readword=2'b10;
-			data_ports_w<=data_from_sdram;
+			data_ports_w<={2'b11,data_from_sdram};
 			data_wren1<=tag_mru1;
 			data_wren2<=!tag_mru1;
 			state<=FILL4;
@@ -290,7 +328,7 @@ begin
 		begin
 			// write last word to Cache...
 			readword=2'b11;
-			data_ports_w<=data_from_sdram;
+			data_ports_w<={2'b11,data_from_sdram};
 			data_wren1<=tag_mru1;
 			data_wren2<=!tag_mru1;
 			state<=FILL5;
