@@ -242,7 +242,7 @@ begin
 			begin
 				state<=PAUSE1;
 				// Check both tags for a match...
-				if(tag_hit1)
+				if(tag_hit1 && data_valid1)
 				begin
 					// Copy data to output
 					data_to_cpu<=data_port1_r;
@@ -252,7 +252,7 @@ begin
 					tag_mru1<=1'b1;
 					tag_wren1<=1'b1;
 				end
-				else if(tag_hit2)
+				else if(tag_hit2 && data_valid2)
 				begin
 					// Copy data to output
 					data_to_cpu<=data_port2_r;
