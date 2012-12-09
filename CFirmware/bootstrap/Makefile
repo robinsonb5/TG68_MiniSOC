@@ -10,6 +10,11 @@ BOOTSTRAP=bootstrap.elf
 BOOTSTRAPSREC=bootstrap.srec
 BOOTSTRAPMIF=bootstrap.mif
 
+RAMTESTSRC=ramtest.s 
+RAMTEST=ramtest.elf
+RAMTESTSREC=ramtest.srec
+RAMTESTMIF=ramtest.mif
+
 SDBOOTSTRAP_CSRC=spi.c
 SDBOOTSTRAP_ASRC=sdbootstrap.s
 C_OBJ=$(patsubst %.c,%.o,$(SDBOOTSTRAP_CSRC))
@@ -19,12 +24,13 @@ SDBOOTSTRAP=sdbootstrap.elf
 SDBOOTSTRAPSREC=sdbootstrap.srec
 SDBOOTSTRAPMIF=sdbootstrap.mif
 
-all:  $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF)
+all:  $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF) $(RAMTESTMIF)
 
 clean:
-	rm $(BOOTSTRAP) $(BOOTSTRAPSREC) $(SDBOOTSTRAPSREC) $(SDBOOTSTRAPOBJ) $(SDBOOTSTRAP) $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF)
+	rm $(BOOTSTRAP) $(BOOTSTRAPSREC) $(SDBOOTSTRAPSREC) $(SDBOOTSTRAPOBJ) $(SDBOOTSTRAP) $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF) $(RAMTEST) $(RAMTESTSREC) $(RAMTESTMIF)
 
-$(BOOTSTRAP): $(BOOTSTRAPSRC)
+
+%.elf: %.s
 	$(VASM) -m68000 -Felf -o $@ $<
 
 %.o: %.s
@@ -33,17 +39,13 @@ $(BOOTSTRAP): $(BOOTSTRAPSRC)
 %.o: %.c
 	$(CC) -O1 -c -o $@ $<
 
+%.srec: %.elf
+	$(OBJCOPY) -O srec $< $@
+
+%.mif: %.srec
+	$(SRECCAT) $< -o $@ -mif 16
+
 $(SDBOOTSTRAP): $(SDBOOTSTRAPOBJ)
 	$(LD) -T ldscript.ld -o $@ $(SDBOOTSTRAPOBJ)
 
-$(BOOTSTRAPSREC): $(BOOTSTRAP)
-	$(OBJCOPY) -O srec $< $@
 
-$(SDBOOTSTRAPSREC): $(SDBOOTSTRAP)
-	$(OBJCOPY) -O srec $< $@
-
-$(BOOTSTRAPMIF): $(BOOTSTRAPSREC)
-	$(SRECCAT) $< -o $@ -mif 16
-
-$(SDBOOTSTRAPMIF): $(SDBOOTSTRAPSREC)
-	$(SRECCAT) $< -o $@ -mif 16

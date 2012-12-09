@@ -179,6 +179,8 @@ signal instcache_word2 : std_logic_vector(15 downto 0);
 signal instcache_word3 : std_logic_vector(15 downto 0);
 signal instcache_dirty : std_logic;
 
+signal cache_ready : std_logic;
+
 COMPONENT TwoWayCache
 	GENERIC ( WAITING : INTEGER := 0; WAITRD : INTEGER := 1; WAITFILL : INTEGER := 2; FILL2 : INTEGER := 3;
 		 FILL3 : INTEGER := 4; FILL4 : INTEGER := 5; FILL5 : INTEGER := 6; PAUSE1 : INTEGER := 7 );
@@ -186,10 +188,14 @@ COMPONENT TwoWayCache
 	PORT
 	(
 		clk		:	 IN STD_LOGIC;
+		reset	: IN std_logic;
+		ready : out std_logic;
 		cpu_addr		:	 IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		cpu_req		:	 IN STD_LOGIC;
 		cpu_ack		:	 OUT STD_LOGIC;
 		cpu_rw		:	 IN STD_LOGIC;
+		cpu_rwl	: in std_logic;
+		cpu_rwu : in std_logic;
 		data_from_cpu		:	 IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		data_to_cpu		:	 OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
 		sdram_addr		:	 OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -238,7 +244,8 @@ begin
 								writecache_dqm(7 downto 6)<=wrU1&wrL1;
 						end case;
 						writecache_req<='1';
-						writecache_dtack<='0';
+						-- temp
+--						writecache_dtack<='0';
 						writecache_dirty<='1';
 						-- FIXME wait for req to drop here
 					end if;
@@ -251,7 +258,12 @@ begin
 				if writecache_burst='0' then
 					writecache_dirty<='0';
 					writecache_dqm<="11111111";
-					writecache_state<=waitwrite;
+--					writecache_state<=waitwrite;
+-- Temp
+					if req1='0' then
+						writecache_state<=waitwrite;
+					end if;
+					writecache_dtack<='0';
 				end if;
 			when others =>
 				null;
@@ -265,10 +277,14 @@ mytwc : component TwoWayCache
 	PORT map
 	(
 		clk => sysclk,
+		reset => reset,
+		ready => cache_ready,
 		cpu_addr => addr1,
 		cpu_req => req1,
 		cpu_ack => readcache_dtack,
 		cpu_rw => wr1,
+		cpu_rwl => wrL1,
+		cpu_rwu => wrU1,
 		data_from_cpu => datawr1,
 		data_to_cpu => dataout1,
 		sdram_addr(31 downto 3) => readcache_addr(31 downto 3),
@@ -408,7 +424,7 @@ mytwc : component TwoWayCache
 -------------------------------------------------------------------------
 -- SDRAM Basic
 -------------------------------------------------------------------------
-	reset_out <= init_done;
+	reset_out <= init_done and cache_ready;
 --	port1bank <= unsigned(Addr1(4 downto 3));
 
 	process (sysclk, reset, sdwrite, datain) begin

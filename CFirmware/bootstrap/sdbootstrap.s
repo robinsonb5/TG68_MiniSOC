@@ -109,11 +109,14 @@ START:				; first instruction of program
 
 	bsr	sd_start	; If SD boot fails we drop through and receive from the serial port instead.
 
+	lea	CHARBUF,a5
+
 	move.w	#0,SREC_COLUMN
 .mainloop
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
 	beq.b	.mainloop
+	move.b	d0,(a5)+,
 	bsr.b	HandleByte
 	bra.b	.mainloop
 
@@ -151,7 +154,7 @@ DoDecodeByte	; Takes address of longword in A0, rotates 4 bits left and ors in t
 HandleByte
 	add.w	#1,SREC_COLUMN
 
-	move.w	d0,PERREGS
+	;	move.w	d0,PERREGS
 
 	cmp.b	#'S',d0		; First byte of a record is S - reset column counter.
 	bne.b	.nots
@@ -278,7 +281,6 @@ _Putcserial
 	move.w	d0,PERREGS
 	rts
 
-	btst	#9,PERREGS
 Writeserial	; A0 - string to be written
 	move.l	d0,-(a7)
 	moveq	#0,d0
