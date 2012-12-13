@@ -226,7 +226,10 @@ begin
 					tag_mru1<=1'b1;
 					tag_wren1<=1'b1;
 				end
-				else if(tag_hit2)
+				// Note: it's possible that both ways of the cache will end up caching
+				// the same address; if so, we must write to both ways, or at least
+				// invalidate them both, otherwise we'll have problems with stale data.
+				if(tag_hit2)
 				begin
 					// Write the data to the second cache way
 					data_wren2<=1'b1;

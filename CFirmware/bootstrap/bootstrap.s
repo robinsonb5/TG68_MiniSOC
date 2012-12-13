@@ -19,6 +19,7 @@ CHARBUF equ $80000800
 
 START:				; first instruction of program
 	lea	STACK,a7
+	moveq.l	#0,d0
 	move.w	PERREGS+PER_CAP_FREQ,d0	; Calculate serial speed from system clock frequency
 	mulu	#1000,d0	; Freq is in Mhz/10, cancel out 100 from baud rate.
 	divu	#1152,d0	; 115,200 baud.
@@ -31,6 +32,7 @@ START:				; first instruction of program
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
 	beq.b	.mainloop
+	move.w	#$55aa,HEX
 	move.b	d0,(a5)+
 	bsr.b	HandleByte
 	bra.b	.mainloop
@@ -81,7 +83,7 @@ HandleByte
 	cmp.b	#'S',d0		; First byte of a record is S - reset column counter.
 	bne.b	.nots
 	move.w	#$FFFF,HEX	; Debug
-	moveq	#0,d1
+	moveq.l	#0,d1
 	move.l	d1,d7		; Accumulator for byte values
 	move.l	d1,d6		; Accumulator for longword values
 	move.w	d1,SREC_COLUMN
@@ -92,6 +94,11 @@ HandleByte
 
 .nots
 	cmp.w	#1,SREC_COLUMN	; record type, high nybble
+	move.b	#'C',(a5)+
+	move.b	SREC_COLUMN+1,(a5)
+	add.b	#'0',(a5)+
+	move.b	#' ',(a5)+
+
 	bne.b	.nottype
 	move.w	#$FFFE,HEX	; Debug
 	lea	SREC_TYPE+3,a0
@@ -120,13 +127,14 @@ HandleByte
 
 	tst.l	SREC_TYPE
 	beq.w	.end	; Ignore type 0 records
-	cmp.l	#9,SREC_TYPE
-	bgt.w	.nottype1 ; Type 1 2 or 3 have data
+	cmp.l	#9,SREC_TYPE ; Ignore record types greater than 9.
+	bgt.w	.nottype1 ; Type 1 2 or 3 have data.  Types 7, 8 and 9 have address. 
 
 	cmp.w	#3,SREC_COLUMN	; Byte count
 	bgt.b	.notbc
 	lea	SREC_BYTECOUNT+3,a0
 	bsr.w	DoDecodeByte	; Called twice, should result in bytecount being in the low byte of SREC_BYTECOUNT
+	move.w	SREC_BYTECOUNT+2,HEX
 	bra.w	.end
 	
 .notbc	; extract the address
@@ -154,6 +162,7 @@ HandleByte
 
 	move.l	SREC_ADDR,a0
 	bsr.w	DoDecodeByte
+	move.w	d7,HEX
 	move.w	SREC_COUNTER,d1
 	subq.w	#1,SREC_COUNTER
 	subq.w	#1,d1
