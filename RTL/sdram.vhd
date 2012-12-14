@@ -222,7 +222,6 @@ begin
 		writecache_state<=waitwrite;
 	elsif rising_edge(sysclk) then
 
-		-- FIXME - need to take into account byte writes to successive byte addresses.
 		writecache_dtack<='1';
 		case writecache_state is
 			when waitwrite =>
@@ -244,8 +243,8 @@ begin
 								writecache_dqm(7 downto 6)<=wrU1&wrL1;
 						end case;
 						writecache_req<='1';
-						-- temp
---						writecache_dtack<='0';
+
+						writecache_dtack<='0';
 						writecache_dirty<='1';
 						-- FIXME wait for req to drop here
 					end if;
@@ -258,12 +257,12 @@ begin
 				if writecache_burst='0' then
 					writecache_dirty<='0';
 					writecache_dqm<="11111111";
---					writecache_state<=waitwrite;
+					writecache_state<=waitwrite;
 -- Temp
-					if req1='0' then
-						writecache_state<=waitwrite;
-					end if;
-					writecache_dtack<='0';
+--					if req1='0' then
+--						writecache_state<=waitwrite;
+--					end if;
+--					writecache_dtack<='0';
 				end if;
 			when others =>
 				null;

@@ -152,10 +152,10 @@ DoDecodeByte	; Takes address of longword in A0, rotates 4 bits left and ors in t
 	rts
 
 HandleByte
-	move.w	PERREGS,d1
-	btst	#8,d1
-	beq		HandleByte
-	move.w	d0,PERREGS
+;	move.w	PERREGS,d1
+;	btst	#8,d1
+;	beq		HandleByte
+;	move.w	d0,PERREGS
 	
 	add.w	#1,SREC_COLUMN
 
@@ -181,9 +181,9 @@ HandleByte
 	move.w	#$F000,HEX	; Debug
 	lea	SREC_TYPE+3,a0
 	bsr	DoDecodeByte	; Called once, should result in type being in the lowest nybble bye of SREC_TYPE
-	move.l	SREC_TYPE,d0
-	add.w	#'0',d0
-	bsr	_Putcserial
+;	move.l	SREC_TYPE,d0
+;	add.w	#'0',d0
+;	bsr	_Putcserial
 	move.l	SREC_TYPE,d1
 	cmp.l	#3,d1
 	ble	.dontinvert
@@ -237,8 +237,8 @@ HandleByte
 
 	move.l	SREC_ADDR,a0
 	bsr.w	DoDecodeByte
-	move.w	#'D',d0
-	bsr	_Putcserial
+;	move.w	#'D',d0
+;	bsr	_Putcserial
 	move.w	SREC_COUNTER,d1
 	subq.w	#1,SREC_COUNTER
 	subq.w	#1,d1
@@ -248,8 +248,8 @@ HandleByte
 	bra.b	.end	
 
 .finishtype1
-	move.w	#'F',d0
-	bsr	_Putcserial
+;	move.w	#'F',d0
+;	bsr	_Putcserial
 	move.w	SREC_COUNTER,d0
 	addq.w	#1,d0
 	and.w	#1,d0
@@ -260,8 +260,8 @@ HandleByte
 	move.B	d7,(a0)
 	
 .nottype1
-	move.w	#'N',d0
-	bsr	_Putcserial
+;	move.w	#'N',d0
+;	bsr	_Putcserial
 	move.w	#$F0F0,HEX	; Debug
 	cmp.l	#7,SREC_TYPE
 	blt.b	.end
