@@ -263,7 +263,7 @@ begin
 		generic map(
 			sdram_rows => 12,
 			sdram_cols => 9,
-			sysclk_frequency => 1000,
+			sysclk_frequency => 1330,
 			spi_maxspeed => 16
 		)
 		port map(

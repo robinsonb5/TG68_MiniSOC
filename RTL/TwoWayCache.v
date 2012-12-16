@@ -277,8 +277,15 @@ begin
 					// invert most recently used flags on both tags.
 					// (Whichever one was least recently used will be overwritten, so
 					// is now the most recently used.)
+					// If either tag matches, but the corresponding data is stale,
+					// we re-use the stale cacheline.
 
-					tag_mru1<=!tag_port1_r[17];
+					if(tag_hit1)
+						tag_mru1<=1'b1;	// Way 1 contains stale data
+					else if(tag_hit2)
+						tag_mru1<=1'b0;	// Way 2 contains stale data
+					else
+						tag_mru1<=!tag_port1_r[17];
 
 //					For simulation only, to avoid the unknown value of unitialised blockram
 //					tag_mru1<=cpu_addr[1];
