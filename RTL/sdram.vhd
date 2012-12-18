@@ -19,30 +19,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
- 
- 
--- Write cache implementation: (AMR)
--- states:
---    main:	wait for req1='1' and wr1='0'
---				Compare addrin(23 downto 3) with stored address, or stored address is FFFFFF
---					if equal, store data and DQM according to LSBs, assert dtack,
---				if stored address/=X"FFFFFF" assert req_sdram, set data/dqm for first word
---				if fill from SDRAM
---					write second word/dqm
---					goto state fill3
---		fill3
---			write third word / dqm
---			goto state fill4
---		fill4
---			write fourth word / dqm
---			goto state finish
---		finish
---			addr<=X"FFFFFF";
---			dqms<=X"11111111";
---			goto state main
-
--- FIXME - widen write slot window
--- FIXME - clash between slot2 write and slot 1 read
 
  
 library ieee;
@@ -214,7 +190,28 @@ begin
 	begin
 	
 	dtack1 <= port1_dtack and writecache_dtack and not readcache_dtack;
+
+-- Write cache implementation: (AMR)
+-- states:
+--    main:	wait for req1='1' and wr1='0'
+--				Compare addrin(23 downto 3) with stored address, or stored address is FFFFFF
+--					if equal, store data and DQM according to LSBs, assert dtack,
+--				if stored address/=X"FFFFFF" assert req_sdram, set data/dqm for first word
+--				if fill from SDRAM
+--					write second word/dqm
+--					goto state fill3
+--		fill3
+--			write third word / dqm
+--			goto state fill4
+--		fill4
+--			write fourth word / dqm
+--			goto state finish
+--		finish
+--			addr<=X"FFFFFF";
+--			dqms<=X"11111111";
+--			goto state main
 	
+
 	if reset='0' then
 		writecache_req<='0';
 		writecache_dirty<='0';
@@ -246,7 +243,6 @@ begin
 
 						writecache_dtack<='0';
 						writecache_dirty<='1';
-						-- FIXME wait for req to drop here
 					end if;
 				end if;
 				if writecache_burst='1' and writecache_dirty='1' then
@@ -258,11 +254,6 @@ begin
 					writecache_dirty<='0';
 					writecache_dqm<="11111111";
 					writecache_state<=waitwrite;
--- Temp
---					if req1='0' then
---						writecache_state<=waitwrite;
---					end if;
---					writecache_dtack<='0';
 				end if;
 			when others =>
 				null;
@@ -702,7 +693,7 @@ mytwc : component TwoWayCache
 							ba <= Addr1(4 downto 3);
 							slot1_bank <= Addr1(4 downto 3); -- slot1 bank
 							cas_dqm <= "00";
-							casaddr <= Addr1(31 downto 3) & "000";
+							casaddr <= Addr1(31 downto 1) & "0";
 --							datain <= datawr1;
 							cas_sd_cas <= '0';
 							cas_sd_we <= '1';
@@ -820,7 +811,7 @@ mytwc : component TwoWayCache
 							ba <= Addr1(4 downto 3);
 							slot2_bank <= Addr1(4 downto 3);
 							cas_dqm <= "00";
-							casaddr <= Addr1(31 downto 3) & "000"; -- Mask off LSBs for burst read
+							casaddr <= Addr1(31 downto 1) & "0"; -- We no longer mask off LSBs for burst read
 --							datain <= datawr1;
 							cas_sd_cas <= '0';
 							cas_sd_we <= '1';
