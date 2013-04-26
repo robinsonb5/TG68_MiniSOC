@@ -34,10 +34,10 @@ generic(
 	   port(clk               	: in std_logic;
         Reset	         	: in std_logic;
         clkena_lw         	: in std_logic:='1';
-        execOPC         	: in std_logic;
+        execOPC         	: in bit;
         exe_condition      	: in std_logic;
         exec_tas		   	: in std_logic;
-        long_start		   	: in std_logic;
+        long_start		   	: in bit;
         movem_presub	   	: in bit;
         set_stop	   		: in bit;
         Z_error 	        : in bit;
@@ -364,9 +364,9 @@ PROCESS (clk, exe_opcode, OP1out, OP2out, one_bit_in, bchg, bset, bit_Number, sn
 			END IF;
 		ELSE
 			IF exe_opcode(5 downto 4)="00" THEN
-				bit_number <= OP2out(4 downto 0);
+				bit_number <= reg_QB(4 downto 0);
 			ELSE
-				bit_number <= "00"&OP2out(2 downto 0);
+				bit_number <= "00"&reg_QB(2 downto 0);
 			END IF;
 		END IF;
 						

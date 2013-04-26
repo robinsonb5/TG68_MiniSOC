@@ -250,8 +250,9 @@ begin
 					case cpu_addr(31 downto 16) is
 						when X"FFFF" => -- Interrupt acknowledge cycle
 							-- CPU address bits 3 downto 1 contain the int number,
-							-- we respond with that number.  (Could just use autovectoring, of course.)
-							cpu_datain <= "0000000000000" & cpu_addr(3 downto 1);
+							-- we respond with that number + 0x18.
+							-- (Could just use autovectoring, of course.)
+							cpu_datain <= "0000000000011" & cpu_addr(3 downto 1);
 							int_ack<='1';
 							prgstate<=wait0;
 						when X"8000" => -- hardware registers - VGA controller

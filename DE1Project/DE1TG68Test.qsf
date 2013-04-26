@@ -533,44 +533,6 @@ set_global_assignment -name ENABLE_DRC_SETTINGS OFF
 set_global_assignment -name CYCLONEII_OPTIMIZATION_TECHNIQUE SPEED
 set_global_assignment -name ROUTER_TIMING_OPTIMIZATION_LEVEL MAXIMUM
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[11]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[10]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[9]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[8]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[7]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[6]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[5]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[4]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[3]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[2]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[1]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_ADDR[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_BA_0
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_BA_1
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_CAS_N
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_CKE
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_CLK
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_CS_N
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[15]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[14]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[13]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[12]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[11]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[10]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[9]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[8]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[7]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[6]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[5]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[4]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[3]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[2]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[1]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_DQ[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_LDQM
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_RAS_N
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_UDQM
-set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to DRAM_WE_N
 set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name OUTPUT_PIN_LOAD 4 -section_id "2.5 V"
 set_global_assignment -name OUTPUT_PIN_LOAD 10 -section_id "3.3-V PCI"
@@ -579,44 +541,6 @@ set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "NO HEAT SINK WITH STI
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
 set_global_assignment -name AUTO_RAM_RECOGNITION ON
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[11]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[10]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[9]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[8]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[7]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[6]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[5]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[4]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[3]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[2]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_ADDR[0]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_BA_0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_BA_1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_CAS_N
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_CKE
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_CLK
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_CS_N
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[15]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[14]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[13]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[12]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[11]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[10]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[9]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[8]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[7]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[6]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[5]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[4]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[3]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[2]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_DQ[0]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_LDQM
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_RAS_N
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_UDQM
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DRAM_WE_N
 set_location_assignment PIN_V20 -to SD_CLK
 set_location_assignment PIN_Y20 -to SD_CMD
 set_location_assignment PIN_W20 -to SD_DAT
@@ -624,36 +548,6 @@ set_location_assignment PIN_U20 -to SD_DAT3
 set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
 set_global_assignment -name RESERVE_ASDO_AFTER_CONFIGURATION "USE AS REGULAR IO"
 set_global_assignment -name SMART_RECOMPILE ON
-set_global_assignment -name VERILOG_FILE ../RTL/TwoWayCache.v
-set_global_assignment -name VHDL_FILE ../RTL/DMACache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
-set_global_assignment -name VHDL_FILE ../DE1RTL/poweronreset.vhd
-set_global_assignment -name VHDL_FILE ../DE1RTL/statusleds_pwm.vhd
-set_global_assignment -name QIP_FILE ../DE1RTL/Generated/PLL.qip
-set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRom.qip
-set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRAM.qip
-set_global_assignment -name QIP_FILE ../DE1RTL/Generated/BootRom.qip
-set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT_4.v
-set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT.v
-set_global_assignment -name VERILOG_FILE ../DE1RTL/DE1_Toplevel.v
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
-set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
-set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
-set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
-set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
-set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
-set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
-set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
-set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
-set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
-set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
-set_global_assignment -name QIP_FILE ../DE1RTL/Generated/DMACacheRAM.qip
-set_global_assignment -name QIP_FILE ../CycloneII_Generated/CacheBlockRAM.qip
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "TG68Test:myTG68Test|TG68KdotC_Kernel:myTG68|addr[0]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "TG68Test:myTG68Test|TG68KdotC_Kernel:myTG68|addr[10]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "TG68Test:myTG68Test|TG68KdotC_Kernel:myTG68|addr[11]" -section_id auto_signaltap_0
@@ -801,4 +695,38 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=1024
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=42962" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=20450" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=1024" -section_id auto_signaltap_0
+set_global_assignment -name QIP_FILE ../CycloneGeneric_GeneratedRTL/Cache_DataRAM.qip
+set_global_assignment -name VERILOG_FILE ../RTL/TwoWayCache.v
+set_global_assignment -name VHDL_FILE ../RTL/DMACache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
+set_global_assignment -name VHDL_FILE ../DE1RTL/poweronreset.vhd
+set_global_assignment -name VHDL_FILE ../DE1RTL/statusleds_pwm.vhd
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/PLL.qip
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRom.qip
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRAM.qip
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/BootRom.qip
+set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT_4.v
+set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT.v
+set_global_assignment -name VERILOG_FILE ../DE1RTL/DE1_Toplevel.v
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../RTL/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vgacache.vhd
+set_global_assignment -name VHDL_FILE ../RTL/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68Test.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../RTL/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../RTL/spi.vhd
+set_global_assignment -name VHDL_FILE ../RTL/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../RTL/sdram.vhd
+set_global_assignment -name VHDL_FILE ../RTL/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../RTL/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../RTL/chargen.vhd
+set_global_assignment -name VHDL_FILE ../RTL/cascade_timer.vhd
+set_global_assignment -name QIP_FILE ../DE1RTL/Generated/DMACacheRAM.qip
+set_global_assignment -name QIP_FILE ../CycloneII_Generated/CacheBlockRAM.qip
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to DRAM_*
+set_instance_assignment -name FAST_INPUT_REGISTER ON -to DRAM_DQ*
+set_global_assignment -name SDC_FILE DE1TG68Test.sdc
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
