@@ -27,7 +27,7 @@ void vblank_int()
 	char a=0;
 	int yoff;
 	framecount++;
-	microseconds+=16667;	// Assumes 60Hz video mode.
+	microseconds+=(16667*1250)/HW_PER(PER_CAP_CLOCKSPEED);	// Assumes 60Hz video mode.
 	if(framecount==959)
 		framecount=0;
 	if(framecount>=480)
@@ -282,6 +282,8 @@ void c_entry()
 	unsigned char *fbptr;
 	ClearTextBuffer();
 
+	HW_PER(PER_UART_CLKDIV)=(1000*HW_PER(PER_CAP_CLOCKSPEED))/112500;
+
 	AddMemory();
 
 	PS2Init();
@@ -330,7 +332,7 @@ void c_entry()
 			mainstate=MAIN_RECTANGLES;
 			puts("Switching to Rectangles mode\n");
 		}
-		if(TestKey(KEY_F1))
+		if(TestKey(KEY_F4))
 		{
 			mainstate=MAIN_DHRYSTONE;
 			puts("Switching to image mode\n");

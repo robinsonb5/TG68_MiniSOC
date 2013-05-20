@@ -267,7 +267,7 @@ mydither (
 
 defparam myTG68Test.sdram_rows = 12;
 defparam myTG68Test.sdram_cols = 8;
-defparam myTG68Test.sysclk_frequency = 1250;
+defparam myTG68Test.sysclk_frequency = 1330;
 defparam myTG68Test.spi_maxspeed = 4;
 
 TG68Test myTG68Test
