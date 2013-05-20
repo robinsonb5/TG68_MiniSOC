@@ -2,7 +2,7 @@ COMMON_C_SRC= minisoc_hardware.c textbuffer.c textbuffer.h ints.c ints.h ps2.c p
 	spi.c fat.c swap.c klibc/libc.a
 COMMON_A_SRC=startup.s spi_readsector.s
 
-MAIN_C_SRC=main.c
+MAIN_C_SRC=main.c dhry_1.c dhry_2.c dhry.h 
 MAIN_A_SRC=draw.s
 
 MEMCHECK_C_SRC=memcheck.c

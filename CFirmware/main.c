@@ -9,6 +9,7 @@
 #include "textbuffer.h"
 #include "spi.h"
 #include "fat.h"
+#include "dhry.h"
 
 short *FrameBuffer;
 extern short pen;
@@ -18,12 +19,15 @@ static short framecount=0;
 short MouseX=0,MouseY=0,MouseZ=0,MouseButtons=0;
 short mousetimeout=0;
 
+int microseconds=0;
+
 void vblank_int()
 {
 	static short mousemode=0;
 	char a=0;
 	int yoff;
 	framecount++;
+	microseconds+=16667;	// Assumes 60Hz video mode.
 	if(framecount==959)
 		framecount=0;
 	if(framecount>=480)
@@ -273,7 +277,7 @@ short SDCardInit()
 
 void c_entry()
 {
-	enum mainstate_t {MAIN_IDLE,MAIN_LOAD,MAIN_MEMCHECK,MAIN_RECTANGLES};
+	enum mainstate_t {MAIN_IDLE,MAIN_LOAD,MAIN_MEMCHECK,MAIN_RECTANGLES,MAIN_DHRYSTONE};
 	fileTYPE file;
 	unsigned char *fbptr;
 	ClearTextBuffer();
@@ -307,7 +311,7 @@ void c_entry()
 
 	SDCardInit();
 
-	enum mainstate_t mainstate=MAIN_RECTANGLES;
+	enum mainstate_t mainstate=MAIN_DHRYSTONE;
 
 	while(1)
 	{
@@ -325,6 +329,11 @@ void c_entry()
 		{
 			mainstate=MAIN_RECTANGLES;
 			puts("Switching to Rectangles mode\n");
+		}
+		if(TestKey(KEY_F1))
+		{
+			mainstate=MAIN_DHRYSTONE;
+			puts("Switching to image mode\n");
 		}
 
 		// Main loop iteration.
@@ -377,6 +386,10 @@ void c_entry()
 				if(MouseButtons&2)
 					pen-=0x400;
 				DrawIteration();
+				break;
+			case MAIN_DHRYSTONE:
+				Dhrystone();
+				mainstate=MAIN_RECTANGLES;
 				break;
 		}
 	}
