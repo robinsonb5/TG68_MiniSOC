@@ -22,7 +22,7 @@ SECTIONS
 	heap_low = .; /* region added to malloc heap */
 	heap_top = 0x7f0000;
 
-	stack_top = 0x7ffffe; /* for startup.s */
+	stack_top = 0x00000ffe; /* for startup.s */
 	start = 0x100;
 }
 
