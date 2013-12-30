@@ -92,6 +92,13 @@ audio_r <= X"0000";
 
 sdr_cke <='0'; -- Disable SDRAM for now
 sdr_cs <='1'; -- Disable SDRAM for now
+sdr_data <=(others => 'Z');
+sdr_addr <=(others => '1');
+sdr_dqm <=(others => '1');
+sdr_we <= '1';
+sdr_cas <='1';
+sdr_ras <='1';
+sdr_ba <=(others => '1');
 
 
 -- Reset counter.
