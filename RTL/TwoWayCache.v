@@ -60,7 +60,10 @@ reg[17:0] data_ports_w;
 reg data_wren1;
 reg data_wren2;
 
-Cache_DataRAM dataram(
+defparam dataram.addrbits = 11;
+defparam dataram.databits = 18;
+
+DualPortRAM dataram(
 	.clock(clk),
 	.address_a(data_port1_addr),
 	.address_b(data_port2_addr),
@@ -91,7 +94,10 @@ reg tag_wren1;
 reg tag_wren2;
 reg tag_mru1;
 
-CacheBlockRAM tagram(
+defparam tagram.addrbits = 9;
+defparam tagram.databits = 18;
+
+DualPortRAM tagram(
 	.clock(clk),
 	.address_a(tag_port1_addr),
 	.address_b(tag_port2_addr),
