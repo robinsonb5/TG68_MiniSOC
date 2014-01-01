@@ -216,10 +216,13 @@ myTG68 : entity work.TG68KdotC_Kernel
 	);
 
 
-mybootrom : entity work.BootRom
+mybootrom : entity work.sdbootstrap_ROM
+	generic map (
+		maxAddrBitBRAM => 11
+	)
 	port map (
-		clock => clk,
-		address => cpu_addr(11 downto 1),
+		clk => clk,
+		addr => cpu_addr(11 downto 0),
 		q => romdata
 		);
 

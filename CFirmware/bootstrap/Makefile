@@ -23,12 +23,27 @@ SDBOOTSTRAPOBJ=$(A_OBJ)
 SDBOOTSTRAP=sdbootstrap.elf
 SDBOOTSTRAPSREC=sdbootstrap.srec
 SDBOOTSTRAPMIF=sdbootstrap.mif
+SDBOOTSTRAPVHD=sdbootstrap_ROM.vhd
 
-all:  $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF)
+ROMGENDIR = ../../romgen
+ROMGEN = $(ROMGENDIR)/romgen
+
+
+all:  $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF) $(SDBOOTSTRAPVHD)
 
 clean:
 	rm $(BOOTSTRAP) $(BOOTSTRAPSREC) $(SDBOOTSTRAPSREC) $(SDBOOTSTRAPOBJ) $(SDBOOTSTRAP) $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF)
 
+$(ROMGEN): $(ROMGENDIR)/romgen.c
+	gcc -o $(ROMGENDIR)/romgen $(ROMGENDIR)/romgen.c
+
+%_ROM.vhd: %.bin $(ROMGEN)
+	sed 's/soc_firmware/$*_ROM/' >$*_ROM.vhd <$(ROMGENDIR)/rom_prologue.vhd
+	$(ROMGEN) $*.bin >>$*_ROM.vhd
+	cat >>$*_ROM.vhd $(ROMGENDIR)/rom_epilogue.vhd
+
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
 
 %.elf: %.s
 	$(VASM) -m68000 -Felf -o $@ $<
