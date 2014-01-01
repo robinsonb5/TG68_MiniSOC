@@ -629,27 +629,6 @@ set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44]
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "TG68Test:myTG68Test|cpu_datain[7]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "TG68Test:myTG68Test|cpu_datain[8]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "TG68Test:myTG68Test|cpu_datain[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "TG68Test:myTG68Test|sdram:mysdram|dtack1" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "TG68Test:myTG68Test|sdram:mysdram|req1" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "TG68Test:myTG68Test|sdram:mysdram|wr1" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "TG68Test:myTG68Test|cpu_datain[0]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "TG68Test:myTG68Test|cpu_datain[10]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "TG68Test:myTG68Test|cpu_datain[11]" -section_id auto_signaltap_0
@@ -666,34 +645,7 @@ set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -t
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "TG68Test:myTG68Test|cpu_datain[7]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "TG68Test:myTG68Test|cpu_datain[8]" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "TG68Test:myTG68Test|cpu_datain[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "TG68Test:myTG68Test|sdram:mysdram|dtack1" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "TG68Test:myTG68Test|sdram:mysdram|req1" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "TG68Test:myTG68Test|sdram:mysdram|wr1" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=69" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=69" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=231" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=1024" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=42962" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=20450" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=1024" -section_id auto_signaltap_0
 set_global_assignment -name QIP_FILE ../CycloneGeneric_GeneratedRTL/Cache_DataRAM.qip
 set_global_assignment -name VERILOG_FILE ../RTL/TwoWayCache.v
@@ -702,8 +654,6 @@ set_global_assignment -name VHDL_FILE ../RTL/Debounce.vhd
 set_global_assignment -name VHDL_FILE ../DE1RTL/poweronreset.vhd
 set_global_assignment -name VHDL_FILE ../DE1RTL/statusleds_pwm.vhd
 set_global_assignment -name QIP_FILE ../DE1RTL/Generated/PLL.qip
-set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRom.qip
-set_global_assignment -name QIP_FILE ../DE1RTL/Generated/CharRAM.qip
 set_global_assignment -name QIP_FILE ../DE1RTL/Generated/BootRom.qip
 set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT_4.v
 set_global_assignment -name VERILOG_FILE ../DE1RTL/SEG7_LUT.v
@@ -729,5 +679,109 @@ set_global_assignment -name QIP_FILE ../CycloneII_Generated/CacheBlockRAM.qip
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to DRAM_*
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to DRAM_DQ*
 set_global_assignment -name SDC_FILE DE1TG68Test.sdc
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VHDL_FILE ../RAMs/DualPortRAM.vhd
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxclock" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.bits" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.idle" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.start" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.stop" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txclock" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txgo" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txint" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txstate" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|uart_int" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "TG68Test:myTG68Test|sdram:mysdram|dtack1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "TG68Test:myTG68Test|sdram:mysdram|req1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "TG68Test:myTG68Test|sdram:mysdram|wr1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|clock_divisor[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxclock" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.bits" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.idle" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.start" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|rxstate.stop" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txclock" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txgo" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txint" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|simple_uart:myuart|txstate" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "TG68Test:myTG68Test|peripheral_controller:myperipheral|uart_int" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -to "TG68Test:myTG68Test|sdram:mysdram|dqm[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "TG68Test:myTG68Test|sdram:mysdram|dtack1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "TG68Test:myTG68Test|sdram:mysdram|req1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "TG68Test:myTG68Test|sdram:mysdram|sdata[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "TG68Test:myTG68Test|sdram:mysdram|wr1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=96" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=96" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=312" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=61252" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=41873" -section_id auto_signaltap_0
+set_global_assignment -name VHDL_FILE ../CharROM/CharROM_ROM.vhd
 set_global_assignment -name SLD_FILE /home/amr/FPGA/TG68MiniSOC/DE1Project/stp1_auto_stripped.stp
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -100,15 +100,23 @@ signal data_from_ram : std_logic_vector(15 downto 0);
 
 begin
 
-myDMACacheRAM : entity work.DMACacheRAM
+myDMACacheRAM : entity work.DualPortRAM
+	generic map
+	(
+		addrbits => 8,
+		databits => 16
+	)
 	port map
 	(
 		clock => clk,
-		data => data_from_ram,
-		rdaddress => cache_rdaddr,
-		wraddress => cache_wraddr,
-		wren => cache_wren,
-		q => data_out
+		data_a => (others => 'X'),
+		data_b => data_from_ram,
+		address_a => cache_rdaddr,
+		address_b => cache_wraddr,
+		wren_a => '0',
+		wren_b => cache_wren,
+		q_a => data_out,
+		q_b => open
 	);
 
 -- Employ bank reserve for SDRAM.

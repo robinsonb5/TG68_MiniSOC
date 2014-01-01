@@ -39,14 +39,22 @@ signal upd : std_logic;
 
 begin
 
-	mycharrom : entity work.CharRom
+	mycharrom : entity work.CharROM_ROM
+		generic map (
+			addrbits => 10
+		)
 		port map (
 			clock => clk,
 			address => std_logic_vector(romaddr),
 			q => chardata
 	  );
 
-  	mymessagerom : entity work.CharRAM
+--  	mymessagerom : entity work.CharRAM
+  	mymessagerom : entity work.DualPortRAM
+	generic map (
+		addrbits => 11,
+		databits => 8
+	)
 	port map (
 		clock => clk,
 		address_a => std_logic_vector(rowaddr),
