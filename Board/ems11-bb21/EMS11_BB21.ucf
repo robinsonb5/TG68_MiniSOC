@@ -47,7 +47,10 @@ NET "N_RTS1_TO_FPGA" IOSTANDARD = LVTTL;
 NET "TXD1_TO_FPGA" IOSTANDARD = LVTTL;
 
 # NET "RXD2(FROM_FPGA)" LOC = "K18";
-# NET "#CTS2(FROM_FPGA)" LOC = "A25";
+
+NET "N_CTS2_FROM_FPGA" LOC = "A25";
+NET "N_CTS2_FROM_FPGA" IOSTANDARD = LVTTL;
+
 # NET "#RTS2(TO_FPGA)" LOC = "K24";
 # NET "TXD2(TO_FPGA)" LOC = "N20";
 #
@@ -188,46 +191,49 @@ NET DR_CLK_O BUFG = CLK;
 #
 #	"VGA" Connector _________________________________________________
 #
-# NET "M1_S0" LOC = "B25";
-# NET "M1_S1" LOC = "L23";
-# NET "M1_S2" LOC = "B26";
-# NET "M1_S3" LOC = "M23";
-# NET "M1_S4" LOC = "C25";
-# NET "M1_S5" LOC = "N21";
-# NET "M1_S6" LOC = "C26";
-# NET "M1_S7" LOC = "N23";
-# NET "M1_S8" LOC = "D26";
-# NET "M1_S9" LOC = "N22";
-# NET "M1_S10" LOC = "E25";
-# NET "M1_S11" LOC = "P20";
-# NET "M1_S12" LOC = "E26";
-# NET "M1_S13" LOC = "P24";
-# NET "M1_S14" LOC = "F26";
-# NET "M1_S15" LOC = "R23";
-# NET "M1_S16" LOC = "G25";
-# NET "M1_S17" LOC = "R24";
-# NET "M1_S18" LOC = "G26";
-# NET "M1_S19" LOC = "P21";
-# NET "M1_S20" LOC = "H26";
-# NET "M1_S21" LOC = "T23";
-# NET "M1_S22" LOC = "J25";
-# NET "M1_S23" LOC = "U23";
-# NET "M1_S24" LOC = "J26";
-# NET "M1_S25" LOC = "V23";
-# NET "M1_S26" LOC = "K26";
-# NET "M1_S27" LOC = "AA24";
-# NET "M1_S28" LOC = "L25";
-# NET "M1_S29" LOC = "AA23";
-# NET "M1_S30" LOC = "L26";
-# NET "M1_S31" LOC = "L19";
-# NET "M1_S32" LOC = "M26";
-# NET "M1_S33" LOC = "L24";
-# NET "M1_S34" LOC = "N25";
-# NET "M1_S35" LOC = "M19";
-# NET "M1_S36" LOC = "N26";
-# NET "M1_S37" LOC = "M24";
-# NET "M1_S38" LOC = "N24";
-# NET "M1_S39" LOC = "M21";
+NET "M1_S<0>" LOC = "B25";
+NET "M1_S<1>" LOC = "L23";
+NET "M1_S<2>" LOC = "B26";
+NET "M1_S<3>" LOC = "M23";
+NET "M1_S<4>" LOC = "C25";
+NET "M1_S<5>" LOC = "N21";
+NET "M1_S<6>" LOC = "C26";
+NET "M1_S<7>" LOC = "N23";
+NET "M1_S<8>" LOC = "D26";
+NET "M1_S<9>" LOC = "N22";
+NET "M1_S<10>" LOC = "E25";
+NET "M1_S<11>" LOC = "P20";
+NET "M1_S<12>" LOC = "E26";
+NET "M1_S<13>" LOC = "P24";
+NET "M1_S<14>" LOC = "F26";
+NET "M1_S<15>" LOC = "R23";
+NET "M1_S<16>" LOC = "G25";
+NET "M1_S<17>" LOC = "R24";
+NET "M1_S<18>" LOC = "G26";
+NET "M1_S<19>" LOC = "P21";
+NET "M1_S<20>" LOC = "H26";
+NET "M1_S<21>" LOC = "T23";
+NET "M1_S<22>" LOC = "J25";
+NET "M1_S<23>" LOC = "U23";
+NET "M1_S<24>" LOC = "J26";
+NET "M1_S<25>" LOC = "V23";
+NET "M1_S<26>" LOC = "K26";
+NET "M1_S<27>" LOC = "AA24";
+NET "M1_S<28>" LOC = "L25";
+NET "M1_S<29>" LOC = "AA23";
+NET "M1_S<30>" LOC = "L26";
+NET "M1_S<31>" LOC = "L19";
+NET "M1_S<32>" LOC = "M26";
+NET "M1_S<33>" LOC = "L24";
+NET "M1_S<34>" LOC = "N25";
+NET "M1_S<35>" LOC = "M19";
+NET "M1_S<36>" LOC = "N26";
+NET "M1_S<37>" LOC = "M24";
+NET "M1_S<38>" LOC = "N24";
+NET "M1_S<39>" LOC = "M21";
+
+NET M1_S* IOSTANDARD = LVTTL |DRIVE = 16 |SLEW = FAST;
+
 #
 #	FPGA Programming pins, when used by MCU
 #

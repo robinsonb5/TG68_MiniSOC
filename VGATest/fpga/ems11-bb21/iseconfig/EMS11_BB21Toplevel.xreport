@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2014-01-03T19:00:32</DateModified>
+  <DateModified>2014-01-03T20:59:20</DateModified>
   <ModuleName>EMS11_BB21Toplevel</ModuleName>
-  <SummaryTimeStamp>2013-12-30T17:12:14</SummaryTimeStamp>
-  <SavedFilePath>/home/amr/FPGA/TG68MiniSOC/HelloWorld/fpga/ems11-bb21/iseconfig/EMS11_BB21Toplevel.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/amr/FPGA/TG68MiniSOC/HelloWorld/fpga/ems11-bb21/</ImplementationReportsDirectory>
-  <DateInitialized>2013-12-30T16:18:50</DateInitialized>
+  <SummaryTimeStamp>2014-01-03T20:57:03</SummaryTimeStamp>
+  <SavedFilePath>/home/amr/FPGA/TG68MiniSOC/VGATest/fpga/ems11-bb21/iseconfig/EMS11_BB21Toplevel.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/amr/FPGA/TG68MiniSOC/VGATest/fpga/ems11-bb21</ImplementationReportsDirectory>
+  <DateInitialized>2014-01-03T19:01:32</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
  <body>
