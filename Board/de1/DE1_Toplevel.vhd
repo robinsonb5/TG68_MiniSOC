@@ -57,8 +57,8 @@ entity DE1_Toplevel is
 		TDO		:	 out STD_LOGIC;
 		I2C_SDAT		:	 inout STD_LOGIC;
 		I2C_SCLK		:	 out STD_LOGIC;
-		PS2_DAT		:	 in STD_LOGIC;
-		PS2_CLK		:	 in STD_LOGIC;
+		PS2_DAT		:	 inout STD_LOGIC;
+		PS2_CLK		:	 inout STD_LOGIC;
 		VGA_HS		:	 out STD_LOGIC;
 		VGA_VS		:	 out STD_LOGIC;
 		VGA_R		:	 out unsigned(3 downto 0);
@@ -81,8 +81,28 @@ signal reset : std_logic;
 signal sysclk : std_logic;
 signal pll_locked : std_logic;
 
+signal ps2m_clk_in : std_logic;
+signal ps2m_clk_out : std_logic;
+signal ps2m_dat_in : std_logic;
+signal ps2m_dat_out : std_logic;
+
+signal ps2k_clk_in : std_logic;
+signal ps2k_clk_out : std_logic;
+signal ps2k_dat_in : std_logic;
+signal ps2k_dat_out : std_logic;
+
+signal vga_red : unsigned(7 downto 0);
+signal vga_green : unsigned(7 downto 0);
+signal vga_blue : unsigned(7 downto 0);
+signal vga_window : std_logic;
+signal vga_hsync : std_logic;
+signal vga_vsync : std_logic;
+
 signal audio_l : signed(15 downto 0);
 signal audio_r : signed(15 downto 0);
+
+alias PS2_MDAT : std_logic is GPIO_1(19);
+alias PS2_MCLK : std_logic is GPIO_1(18);
 
 begin
 
@@ -93,26 +113,36 @@ I2C_SDAT	<= 'Z';
 GPIO_0 <= (others => 'Z');
 GPIO_1 <= (others => 'Z');
 
---mypll : entity work.PLL
---port map
---(
---	inclk0 => CLOCK_50,
---	c0 => DRAM_CLK,
---	c1 => sysclk,
---	locked => pll_locked
---);
-pll_locked<='1';
+ps2m_dat_in<=PS2_MDAT;
+PS2_MDAT <= '0' when ps2m_dat_out='0' else 'Z';
+ps2m_clk_in<=PS2_MCLK;
+PS2_MCLK <= '0' when ps2m_clk_out='0' else 'Z';
+
+ps2k_dat_in<=PS2_DAT;
+PS2_DAT <= '0' when ps2k_dat_out='0' else 'Z';
+ps2k_clk_in<=PS2_CLK;
+PS2_CLK <= '0' when ps2k_clk_out='0' else 'Z';
+
+mypll : entity work.PLL_50to100
+port map
+(
+	inclk0 => CLOCK_50,
+	c0 => DRAM_CLK,
+	c1 => sysclk,
+	locked => pll_locked
+);
+--pll_locked<='1';
+--sysclk<=CLOCK_50;
 
 reset<=(not SW(0) xor KEY(0)) and pll_locked;
-sysclk<=CLOCK_50;
+
 
 myVirtualToplevel : entity work.VirtualToplevel
 generic map
 (
 	sdram_rows => 12,
 	sdram_cols => 8,
-	sysclk_frequency => 500, -- sysclk * 10
-	vga_bits => 4
+	sysclk_frequency => 1000 -- sysclk * 10
 )
 port map
 (	
@@ -120,12 +150,12 @@ port map
 	reset_in => reset,
 
 	-- video
-	vga_hsync => VGA_HS,
-	vga_vsync => VGA_VS,
-	vga_red => VGA_R,
-	vga_green => VGA_G,
-	vga_blue => VGA_B,
---	vga_window => vga_window,
+	vga_hsync => vga_hsync,
+	vga_vsync => vga_vsync,
+	vga_red => vga_red,
+	vga_green => vga_green,
+	vga_blue => vga_blue,
+	vga_window => vga_window,
 	
 	-- sdram
 	sdr_data => DRAM_DQ,
@@ -150,11 +180,43 @@ port map
 	spi_miso => SD_DAT,
 	spi_mosi => SD_CMD,
 	spi_clk => SD_CLK,
-	
+
+	-- PS/2
+	ps2k_clk_in => ps2k_clk_in,
+	ps2k_dat_in => ps2k_dat_in,
+	ps2k_clk_out => ps2k_clk_out,
+	ps2k_dat_out => ps2k_dat_out,
+	ps2m_clk_in => ps2m_clk_in,
+	ps2m_dat_in => ps2m_dat_in,
+	ps2m_clk_out => ps2m_clk_out,
+	ps2m_dat_out => ps2m_dat_out,
+
 	audio_l => audio_l,
 	audio_r => audio_r
 );
 
+
+video1: if Toplevel_UseVGA=true generate
+	VGA_HS<=vga_hsync;
+	VGA_VS<=vga_vsync;
+
+	mydither : entity work.video_vga_dither
+		generic map(
+			outbits => 4
+		)
+		port map(
+			clk=>sysclk,
+			hsync=>vga_hsync,
+			vsync=>vga_vsync,
+			vid_ena=>vga_window,
+			iRed => vga_red,
+			iGreen => vga_green,
+			iBlue => vga_blue,
+			oRed => VGA_R,
+			oGreen => VGA_G,
+			oBlue => VGA_B
+		);
+end generate;
 
 sound1: if Toplevel_UseAudio=true generate
 -- FIXME - make use of the DE1 board's codec
