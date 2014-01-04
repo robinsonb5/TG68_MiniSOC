@@ -7,7 +7,7 @@ entity VirtualToplevel is
 		sdram_rows : integer := 12;
 		sdram_cols : integer := 8;
 		sysclk_frequency : integer := 1000; -- Sysclk frequency * 10
-		vga_bits : integer := 4
+		vga_bits : integer := 8
 	);
 	port (
 		clk 			: in std_logic;
@@ -32,6 +32,16 @@ entity VirtualToplevel is
 		sdr_ba		: out std_logic_vector(1 downto 0);
 --		sdr_clk		: out std_logic;
 		sdr_cke		: out std_logic;
+
+		-- PS/2 keyboard / mouse
+		ps2k_clk_in : in std_logic;
+		ps2k_dat_in : in std_logic;
+		ps2k_clk_out : out std_logic;
+		ps2k_dat_out : out std_logic;
+		ps2m_clk_in : in std_logic;
+		ps2m_dat_in : in std_logic;
+		ps2m_clk_out : out std_logic;
+		ps2m_dat_out : out std_logic;
 
 		-- SPI signals
 		spi_miso		: in std_logic := '1'; -- Allow the SPI interface not to be plumbed in.
@@ -86,6 +96,9 @@ type soc_states is (delay1, enable, delay2, main, romread);
 signal soc_state : soc_states := main;
 
 begin
+
+spi_mosi<='1';
+spi_clk<='1';
 
 audio_l <= X"0000";
 audio_r <= X"0000";

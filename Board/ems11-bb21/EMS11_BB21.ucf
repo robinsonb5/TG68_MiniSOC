@@ -53,17 +53,22 @@ NET "N_CTS2_FROM_FPGA" IOSTANDARD = LVTTL;
 
 # NET "#RTS2(TO_FPGA)" LOC = "K24";
 # NET "TXD2(TO_FPGA)" LOC = "N20";
+
 #
 #	SD_Flash ________________________________________________________
 #
-# NET "#FPGA_SD_CDET" LOC = "D24";
-# NET "#FPGA_SD_WPROT" LOC = "N18";
-# NET "FPGA_SD_CMD" LOC = "B23";
-# NET "FPGA_SD_D0" LOC = "B24";
-# NET "FPGA_SD_D1" LOC = "M18";
-# NET "FPGA_SD_D2" LOC = "A23";
-# NET "FPGA_SD_D3" LOC = "L17";
-# NET "FPGA_SD_SCLK" LOC = "N17";
+
+NET "FPGA_SD_CDET" LOC = "D24";
+NET "FPGA_SD_WPROT" LOC = "N18";
+NET "FPGA_SD_CMD" LOC = "B23";
+NET "FPGA_SD_D0" LOC = "B24";
+NET "FPGA_SD_D1" LOC = "M18";
+NET "FPGA_SD_D2" LOC = "A23";
+NET "FPGA_SD_D3" LOC = "L17";
+NET "FPGA_SD_SCLK" LOC = "N17";
+
+NET "FPGA_SD_*" IOSTANDARD = LVTTL;
+
 #
 #	SDRAM mt48lc32m16A2_75 __________________________________________
 #

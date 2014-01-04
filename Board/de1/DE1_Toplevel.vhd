@@ -104,6 +104,24 @@ signal audio_r : signed(15 downto 0);
 alias PS2_MDAT : std_logic is GPIO_1(19);
 alias PS2_MCLK : std_logic is GPIO_1(18);
 
+COMPONENT video_vga_dither
+	generic (
+		outbits : integer :=4
+	);
+	port (
+		clk : in std_logic;
+		hsync : in std_logic;
+		vsync : in std_logic;
+		vid_ena : in std_logic;
+		iRed : in unsigned(7 downto 0);
+		iGreen : in unsigned(7 downto 0);
+		iBlue : in unsigned(7 downto 0);
+		oRed : out unsigned(outbits-1 downto 0);
+		oGreen : out unsigned(outbits-1 downto 0);
+		oBlue : out unsigned(outbits-1 downto 0)
+	);
+end COMPONENT;
+
 begin
 
 --	All bidir ports tri-stated
@@ -200,7 +218,7 @@ video1: if Toplevel_UseVGA=true generate
 	VGA_HS<=vga_hsync;
 	VGA_VS<=vga_vsync;
 
-	mydither : entity work.video_vga_dither
+	mydither : component video_vga_dither
 		generic map(
 			outbits => 4
 		)

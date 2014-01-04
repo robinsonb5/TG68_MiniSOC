@@ -33,6 +33,17 @@ port
 	DR_DQML : out std_logic;
 	DR_BA : out std_logic_vector(1 downto 0);
 	
+		-- SD Card
+
+	FPGA_SD_CDET : in std_logic;
+	FPGA_SD_WPROT : in std_logic;
+	FPGA_SD_CMD : out std_logic;
+	FPGA_SD_D0 : in std_logic;
+	FPGA_SD_D1 : in std_logic; -- High Z since we're using SPI-mode
+	FPGA_SD_D2 : in std_logic; -- High Z since we're using SPI-mode
+	FPGA_SD_D3 : out std_logic;
+	FPGA_SD_SCLK : out std_logic;
+	
 		-- VGA Connector
 	N_CTS2_FROM_FPGA : out std_logic; -- Actually used for VGA
 	M1_S : inout std_logic_vector(39 downto 0)
@@ -45,6 +56,7 @@ architecture rtl of EMS11_BB21Toplevel is
 signal sdram_clk : std_logic;
 signal sdram_clk_inv : std_logic;
 signal sysclk : std_logic;
+signal sysclk_inv : std_logic;
 signal clklocked : std_logic;
 
 signal vga_red : unsigned(9 downto 0);
@@ -59,54 +71,88 @@ signal vga_sync : std_logic;
 signal vga_psave : std_logic;
 
 -- PS/2 ports
-alias ps2_b_clk : std_logic is M1_S(35);
-alias ps2_b_data : std_logic is M1_S(33);
-alias ps2_a_clk : std_logic is M1_S(37);
-alias ps2_a_data : std_logic is M1_S(39);
+alias PS2_MCLK : std_logic is M1_S(35);
+alias PS2_MDAT : std_logic is M1_S(33);
+alias PS2_CLK : std_logic is M1_S(37);
+alias PS2_DAT : std_logic is M1_S(39);
+
+signal ps2m_clk_in : std_logic;
+signal ps2m_clk_out : std_logic;
+signal ps2m_dat_in : std_logic;
+signal ps2m_dat_out : std_logic;
+
+signal ps2k_clk_in : std_logic;
+signal ps2k_clk_out : std_logic;
+signal ps2k_dat_in : std_logic;
+signal ps2k_dat_out : std_logic;
 
 begin
 N_CTS1_FROM_FPGA<='1';  -- safe default since we're not using handshaking.
 
-DR_CLK_O<='1';
+-- DR_CLK_O<='1';
 
-ps2_a_clk <='Z';
-ps2_a_data <='Z';
-ps2_b_clk <='Z';
-ps2_b_data <='Z';
+ps2m_dat_in<=PS2_MDAT;
+PS2_MDAT <= '0' when ps2m_dat_out='0' else 'Z';
+ps2m_clk_in<=PS2_MCLK;
+PS2_MCLK <= '0' when ps2m_clk_out='0' else 'Z';
+
+ps2k_dat_in<=PS2_DAT;
+PS2_DAT <= '0' when ps2k_dat_out='0' else 'Z';
+ps2k_clk_in<=PS2_CLK;
+PS2_CLK <= '0' when ps2k_clk_out='0' else 'Z';
 
 -- Clock generation.  We need a system clock and an SDRAM clock.
 -- Limitations of the Spartan 6 mean we need to "forward" the SDRAM clock
 -- to the io pin.
 
---myclock : entity work.EMS11_BB21_sysclock
---port map(
---	CLK_IN1 => CLK50,
---	RESET => '0',
---	CLK_OUT1 => sysclk,
---	CLK_OUT2 => sdram_clk,
---	LOCKED => clklocked
---);
---
---sdram_clk_inv <= not sdram_clk;
---
---ODDR2_inst : ODDR2
---generic map(
---	DDR_ALIGNMENT => "NONE",
---	INIT => '0',
---	SRTYPE => "SYNC")
---port map (
---	Q => DR_CLK_O,
---	C0 => sdram_clk,
---	C1 => sdram_clk_inv,
---	CE => '1',
---	D0 => '0',
---	D1 => '1',
---	R => '0',    -- 1-bit reset input
---	S => '0'     -- 1-bit set input
---);
+myclock : entity work.Clock_50to100
+port map(
+	CLK_IN1 => CLK50,
+	RESET => '0',
+	CLK_OUT1 => sysclk,
+	CLK_OUT2 => sdram_clk,
+	LOCKED => clklocked
+);
+
+sysclk_inv <= not sysclk;
+sdram_clk_inv <= not sdram_clk;
+
+ODDR2_inst : ODDR2
+generic map(
+	DDR_ALIGNMENT => "NONE",
+	INIT => '0',
+	SRTYPE => "SYNC")
+port map (
+	Q => DR_CLK_O,
+	C0 => sdram_clk,
+	C1 => sdram_clk_inv,
+	CE => '1',
+	D0 => '0',
+	D1 => '1',
+	R => '0',    -- 1-bit reset input
+	S => '0'     -- 1-bit set input
+);
+
+-- Forward the VGA clock too.
+
+ODDR2_inst2 : ODDR2
+generic map(
+	DDR_ALIGNMENT => "NONE",
+	INIT => '0',
+	SRTYPE => "SYNC")
+port map (
+	Q => vga_clock,
+	C0 => sysclk,
+	C1 => sysclk_inv,
+	CE => '1',
+	D0 => '0',
+	D1 => '1',
+	R => '0',    -- 1-bit reset input
+	S => '0'     -- 1-bit set input
+);
 
 
-vga_clock <= CLK50;
+-- vga_clock <= sysclk;
 vga_sync <= '0';
 vga_blank <= vga_window;
 vga_psave <= '1';
@@ -153,15 +199,16 @@ M1_S(29)<=vga_red(1);
 M1_S(31)<=vga_red(0);
 M1_S(38)<='1';
 
+DR_A(12)<='0'; -- Temporary measure
+
 project: entity work.VirtualToplevel
 	generic map (
-		sdram_rows => 13,
-		sdram_cols => 10,
-		sysclk_frequency => 500, -- Sysclk frequency * 10
-		vga_bits => 8
+		sdram_rows => 12,
+		sdram_cols => 8,
+		sysclk_frequency => 1000 -- Sysclk frequency * 10
 	)
 	port map (
-		clk => CLK50,
+		clk => sysclk,
 		reset_in => '1',
 	
 		-- VGA
@@ -174,7 +221,7 @@ project: entity work.VirtualToplevel
 
 		-- SDRAM
 		sdr_data => DR_D,
-		sdr_addr => DR_A,
+		sdr_addr => DR_A(11 downto 0),
 		sdr_dqm(1) => DR_DQMH,
 		sdr_dqm(0) => DR_DQML,
 		sdr_we => DR_WE,
@@ -183,6 +230,22 @@ project: entity work.VirtualToplevel
 		sdr_cs => DR_CS,
 		sdr_ba => DR_BA,
 		sdr_cke => DR_CKE,
+
+		-- SD Card
+		spi_cs => FPGA_SD_D3,
+		spi_miso => FPGA_SD_D0,
+		spi_mosi => FPGA_SD_CMD,
+		spi_clk => FPGA_SD_SCLK,
+
+		-- PS/2
+		ps2k_clk_in => ps2k_clk_in,
+		ps2k_dat_in => ps2k_dat_in,
+		ps2k_clk_out => ps2k_clk_out,
+		ps2k_dat_out => ps2k_dat_out,
+		ps2m_clk_in => ps2m_clk_in,
+		ps2m_dat_in => ps2m_dat_in,
+		ps2m_clk_out => ps2m_clk_out,
+		ps2m_dat_out => ps2m_dat_out,
 
 		-- UART
 		rxd => TXD1_TO_FPGA,
