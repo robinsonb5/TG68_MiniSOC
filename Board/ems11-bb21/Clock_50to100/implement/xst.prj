@@ -1,0 +1,2 @@
+vhdl work ../../Clock_50to100.vhd
+vhdl work ../example_design/Clock_50to100_exdes.vhd
