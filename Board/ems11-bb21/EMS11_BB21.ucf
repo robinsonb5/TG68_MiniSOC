@@ -22,17 +22,25 @@ NET "CLK50" IOSTANDARD = LVTTL;
 NET "CLK50" TNM_NET = "CLK50" |CLOCK_DEDICATED_ROUTE = FALSE;
 TIMESPEC "TS_CLK50" = PERIOD "CLK50" 20 ns HIGH 50 %;
 
+# HACK - will need to address this later.
+# PIN "mysysclk/clkout1_buf.O" CLOCK_DEDICATED_ROUTE = FALSE;
 # NET "80MHZ" LOC = "A13";
 #
 #	LEDS
 #
-# NET "LED1" LOC = "M9";
-# NET "LED2" LOC = "M8";
+NET "LED1" LOC = "M9";
+NET "LED2" LOC = "M8";
+NET "LED1" IOSTANDARD = LVTTL;
+NET "LED2" IOSTANDARD = LVTTL;
+
 #
 #	Resets, Diagnostics, etc. _______________________________________
 #
-# NET "#DIAG" LOC = "P22";
-# NET "#RESET" LOC = "U22";
+NET "DIAG_N" LOC = "P22";
+NET "RESET_N" LOC = "U22";
+NET "DIAG_N" IOSTANDARD = LVTTL;
+NET "RESET_N" IOSTANDARD = LVTTL;
+
 # 
 # serial lines ______________________________________________________
 #
@@ -47,17 +55,14 @@ NET "N_RTS1_TO_FPGA" IOSTANDARD = LVTTL;
 NET "TXD1_TO_FPGA" IOSTANDARD = LVTTL;
 
 # NET "RXD2(FROM_FPGA)" LOC = "K18";
-
 NET "N_CTS2_FROM_FPGA" LOC = "A25";
 NET "N_CTS2_FROM_FPGA" IOSTANDARD = LVTTL;
 
 # NET "#RTS2(TO_FPGA)" LOC = "K24";
 # NET "TXD2(TO_FPGA)" LOC = "N20";
-
 #
 #	SD_Flash ________________________________________________________
 #
-
 NET "FPGA_SD_CDET" LOC = "D24";
 NET "FPGA_SD_WPROT" LOC = "N18";
 NET "FPGA_SD_CMD" LOC = "B23";
@@ -117,7 +122,7 @@ NET "DR_D<15>" LOC = "C5";
 NET "DR_DQMH" LOC = "B14";
 NET "DR_DQML" LOC = "C9";
 
-NET DR_* IOSTANDARD = LVTTL |DRIVE = 16 |SLEW = FAST;
+NET DR_* IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST;
 NET DR_CLK_O BUFG = CLK;
 
 
@@ -389,3 +394,6 @@ NET M1_S* IOSTANDARD = LVTTL |DRIVE = 16 |SLEW = FAST;
 #	end _____________________________________________________________
 #
 NET DR_D<*> NODELAY;
+#Created by Constraints Editor (xc6slx45-fgg676-3) - 2014/01/19
+INST "project/myTG68/*" TNM = tg68_1;
+TIMESPEC TS_TG68 = FROM "tg68_1" TO "tg68_1" TS_myclock_clkout0 * 3;

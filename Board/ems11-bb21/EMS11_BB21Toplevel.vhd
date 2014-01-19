@@ -46,7 +46,15 @@ port
 	
 		-- VGA Connector
 	N_CTS2_FROM_FPGA : out std_logic; -- Actually used for VGA
-	M1_S : inout std_logic_vector(39 downto 0)
+	M1_S : inout std_logic_vector(39 downto 0);
+
+		-- LEDs
+	LED1 : out std_logic;
+	LED2 : out std_logic;
+
+		-- Buttons
+	DIAG_N : in std_logic;
+	RESET_N : in std_logic
 );
 end entity;
 
@@ -90,6 +98,8 @@ begin
 N_CTS1_FROM_FPGA<='1';  -- safe default since we're not using handshaking.
 
 -- DR_CLK_O<='1';
+LED1 <= RESET_N;
+LED2 <= DIAG_N;
 
 ps2m_dat_in<=PS2_MDAT;
 PS2_MDAT <= '0' when ps2m_dat_out='0' else 'Z';
@@ -204,12 +214,12 @@ DR_A(12)<='0'; -- Temporary measure
 project: entity work.VirtualToplevel
 	generic map (
 		sdram_rows => 12,
-		sdram_cols => 8,
+		sdram_cols => 9,
 		sysclk_frequency => 1000 -- Sysclk frequency * 10
 	)
 	port map (
 		clk => sysclk,
-		reset_in => '1',
+		reset_in => RESET_N,
 	
 		-- VGA
 		vga_red => vga_red(9 downto 2),
