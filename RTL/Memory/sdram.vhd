@@ -223,21 +223,60 @@ begin
 		case writecache_state is
 			when waitwrite =>
 				if req1='1' and wr1='0' then -- write request
+					-- Need to be careful with write merges; if we byte-write to an address
+					-- that already has a pending word write, we must be sure not to cancel
+					-- the other half of the existing word write.
 					if writecache_dirty='0' or addr1(31 downto 3)=writecache_addr(31 downto 3) then
 						writecache_addr(31 downto 3)<=addr1(31 downto 3);
 						case addr1(2 downto 1) is
 							when "00" =>
-								writecache_word0<=datawr1;
-								writecache_dqm(1 downto 0)<=wrU1&wrL1;
+								if wrU1='0' then
+									writecache_word0(15 downto 8)<=datawr1(15 downto 8);
+									writecache_dqm(1)<='0';
+								end if;
+								if wrL1='0' then
+									writecache_word0(7 downto 0)<=datawr1(7 downto 0);
+									writecache_dqm(0)<='0';
+								end if;
 							when "01" =>
-								writecache_word1<=datawr1;
-								writecache_dqm(3 downto 2)<=wrU1&wrL1;
+								if wrU1='0' then
+									writecache_word1(15 downto 8)<=datawr1(15 downto 8);
+									writecache_dqm(3)<='0';
+								end if;
+								if wrL1='0' then
+									writecache_word1(7 downto 0)<=datawr1(7 downto 0);
+									writecache_dqm(2)<='0';
+								end if;
 							when "10" =>
-								writecache_word2<=datawr1;
-								writecache_dqm(5 downto 4)<=wrU1&wrL1;
+								if wrU1='0' then
+									writecache_word2(15 downto 8)<=datawr1(15 downto 8);
+									writecache_dqm(5)<='0';
+								end if;
+								if wrL1='0' then
+									writecache_word2(7 downto 0)<=datawr1(7 downto 0);
+									writecache_dqm(4)<='0';
+								end if;
 							when "11" =>
-								writecache_word3<=datawr1;
-								writecache_dqm(7 downto 6)<=wrU1&wrL1;
+								if wrU1='0' then
+									writecache_word3(15 downto 8)<=datawr1(15 downto 8);
+									writecache_dqm(7)<='0';
+								end if;
+								if wrL1='0' then
+									writecache_word3(7 downto 0)<=datawr1(7 downto 0);
+									writecache_dqm(6)<='0';
+								end if;
+--							when "00" =>
+--								writecache_word0<=datawr1;
+--								writecache_dqm(1 downto 0)<=wrU1&wrL1;
+--							when "01" =>
+--								writecache_word1<=datawr1;
+--								writecache_dqm(3 downto 2)<=wrU1&wrL1;
+--							when "10" =>
+--								writecache_word2<=datawr1;
+--								writecache_dqm(5 downto 4)<=wrU1&wrL1;
+--							when "11" =>
+--								writecache_word3<=datawr1;
+--								writecache_dqm(7 downto 6)<=wrU1&wrL1;
 							when others =>
 								null;
 						end case;
