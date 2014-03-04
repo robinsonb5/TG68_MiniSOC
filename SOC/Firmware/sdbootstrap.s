@@ -107,6 +107,18 @@ START:				; first instruction of program
 	lea	.welcome,a0
 	bsr put_msg
 
+	bsr	sanitycheck
+	tst.l	d0
+	beq	.issane
+	lea	.insane,a0
+	bsr put_msg
+.insaneend
+	bra	.insaneend
+
+.issane
+	lea	.sane,a0
+	bsr put_msg
+
 	bsr	sd_start	; If SD boot fails we drop through and receive from the serial port instead.
 
 	lea	CHARBUF,a5
@@ -121,11 +133,14 @@ START:				; first instruction of program
 	bra.b	.mainloop
 
 .welcome
-	dc.b	'Testing serial output...',13,10,0
+	dc.b	'Conducting sanity check...',13,10,0
+.sane
+	dc.b	'Sanity check passed.',13,10,0
+.insane
+	dc.b	'Sanity check failed.',13,10,0
 	cnop	0,2
 
 	; FIXME - move these into character RAM for safe keeping?
-
 
 	; Stores temporary value in d6 and d7 to avoid having to read from overlaid RAM.
 	
@@ -991,4 +1006,20 @@ fnc_end2:
 		move.l		(a7)+,d2
 		moveq		#0,d0
 		rts
+
+
+sanitycheck
+	lea	SREC_BYTECOUNT,a0
+	move.l	#$12345678,(a0)
+	move.l	#$fedcba98,4(a0)
+	move.l	#$aa55cc22,2(a0)
+	move.b	#$33,3(a0)
+	move.b	#$fe,4(a0)
+	move.l	(a0),d0
+	move.l	4(a0),d1
+	sub.l	#$1234aa33,d0
+	sub.l	#$fe22ba98,d1
+	or.l	d1,d0
+	rts
+
 

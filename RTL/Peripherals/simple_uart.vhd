@@ -21,6 +21,7 @@ entity simple_uart is
 
 		rxint : out std_logic;	-- Interrupt, momentary pulse when character received
 		txint : out std_logic;	-- Interrupt, momentary pulse when data has finished sending
+		framingerror : out std_logic;  -- High when a bad byte is received.
 
 		-- clock_divisor divides the system clock into the width of a single serial bit, so
 		-- for a 50MHz clock, 19,200 baud, we'd use 50,000,000 / 19,200 = 2604 decimal, X"0A2C" hex
@@ -59,6 +60,8 @@ begin
 	-- to another is not an atomic operation; leaving one state and entering the next
 	-- are distinct, and it's possible (and, in fact, common) for one 
 	-- to happen without the other if inputs aren't properly synchronised.
+	
+	-- FIXME - do we need some de-glitching on Rx too?
 	
 	process(clk,rxd)
 	begin
@@ -133,6 +136,7 @@ begin
 			rxint<='0';
 		elsif enable_rx and rising_edge(clk) then
 			rxint<='0';
+			framingerror<='0';
 			case rxstate is
 				when idle =>
 					if rxd_sync='0' then
@@ -144,6 +148,7 @@ begin
 							rxbuffer<="100000000"; -- Set marker bit.
 							rxstate<=bits;
 						else
+							framingerror<='1';  -- false start bit.
 							rxstate<=idle;
 						end if;
 					end if;
@@ -159,6 +164,8 @@ begin
 						if rxd_sync='1' then -- valid stop bit?
 							rxdata<=rxbuffer(8 downto 1);
 							rxint<='1';
+						else
+							framingerror<='1';  -- bad stop bit.
 						end if;
 						rxstate<=idle;
 					end if;

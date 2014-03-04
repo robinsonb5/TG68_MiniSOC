@@ -104,6 +104,10 @@ signal ser_rxdata : std_logic_vector(7 downto 0);
 signal ser_rxint : std_logic;
 signal ser_txint : std_logic;
 signal ser_ints : std_logic_vector(1 downto 0);
+signal ser_ferr : std_logic;
+signal ser_ferr_latched : std_logic;
+signal ser_overrun : std_logic;
+
 --signal ser_clock_divisor : unsigned(15 downto 0) := X"16E3";	-- 19200 baud @ 112.5MHz
 --signal ser_clock_divisor : unsigned(15 downto 0) := X"2DC6";	-- 9600 baud @ 112.5MHz
 signal ser_clock_divisor : unsigned(15 downto 0) := X"03D0";	-- 115200 baud @ 112.5MHz
@@ -195,6 +199,7 @@ begin
 			rxdata => ser_rxdata,
 			rxint => ser_rxint,
 			txint => ser_txint,
+			framingerror => ser_ferr,
 			clock_divisor => ser_clock_divisor,
 			rxd => uart_rxd,
 			txd => uart_txd
@@ -279,6 +284,8 @@ begin
 			extend_rw<='1';
 			uart_int<='0';
 			ser_ints<="00";
+			ser_ferr_latched<='0';
+			ser_overrun<='0';
 			timer_int<='0';
 			ps2_int<='0';
 			flags<=X"0001";	-- Re-enable overlay on reset
@@ -393,8 +400,12 @@ begin
 
 							-- Read from RS232
 							when X"000" => -- Serial data
-								reg_data_out<="00000"&ser_ints&ser_txready&ser_rxdata(7 downto 0);
+								reg_data_out<="000"&ser_overrun&ser_ferr_latched&
+									ser_ints&ser_txready&ser_rxdata(7 downto 0);
 								ser_ints<="00"; -- Clear int flags (Do this before setting them, or we miss bytes!)
+								ser_ferr_latched<='0';
+								ser_overrun<='0';
+
 							when X"002" => -- Baud rate (clock divisor)
 								reg_data_out<=std_logic_vector(ser_clock_divisor);
 
@@ -470,10 +481,16 @@ begin
 			-- When the CPU reads the register these are cleared.
 			uart_int<=ser_rxint or ser_txint;
 			if ser_rxint='1' then
+				if ser_ints(0)='1' then -- CPU hasn't read the last byte yet -> data lost!
+					ser_overrun<='1';
+				end if;
 				ser_ints(0)<='1';
 			end if;
 			if ser_txint='1' then
 				ser_ints(1)<='1';
+			end if;
+			if ser_ferr='1' then
+				ser_ferr_latched<='1';
 			end if;
 			
 			-- Store trigger flags.  These will be cleared on read.

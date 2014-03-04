@@ -26,7 +26,7 @@ LINKMAP  = $(STARTUP_DIR)/ldscript_bootrom.ld
 
 # Commandline options for each tool.
 
-CFLAGS  = -I. -c -Os -DDISABLE_UART_RX
+CFLAGS  = -I. -c -Os # -DDISABLE_UART_RX
 
 LFLAGS  = -nostartfiles -Wl,--relax -Os
 

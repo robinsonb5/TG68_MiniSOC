@@ -75,6 +75,7 @@ signal ser_rxdata : std_logic_vector(7 downto 0);
 signal ser_rxrecv : std_logic;
 signal ser_txgo : std_logic;
 signal ser_rxint : std_logic;
+signal ser_ferr : std_logic;
 
 -- TG68 signals
 
@@ -146,6 +147,7 @@ myuart : entity work.simple_uart
 		rxdata => ser_rxdata,
 		rxint => ser_rxint,
 		txint => open,
+		framingerror => ser_ferr,
 		clock_divisor => to_unsigned(uart_divisor,16),
 		rxd => rxd,
 		txd => txd
@@ -244,7 +246,7 @@ begin
 									case mem_addr(7 downto 0) is
 										when X"C0" => -- UART
 											mem_read<=(others=>'X');
-											mem_read(9 downto 0)<=ser_rxrecv&ser_txready&ser_rxdata;
+											mem_read(12 downto 0)<=ser_ferr&"00"&ser_rxrecv&ser_txready&ser_rxdata;
 											ser_rxrecv<='0';	-- Clear rx flag.
 											soc_state<=delay1;
 
