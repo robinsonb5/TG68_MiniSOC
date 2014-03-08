@@ -127,10 +127,10 @@ START:				; first instruction of program
 .mainloop
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
-	beq.b	.mainloop
-	move.b	d0,(a5)+,
-	bsr.b	HandleByte
-	bra.b	.mainloop
+	beq		.mainloop
+	move	d0,(a5)+,
+	bsr		HandleByte
+	bra		.mainloop
 
 .welcome
 	dc.b	'Conducting sanity check...',13,10,0
@@ -147,7 +147,7 @@ START:				; first instruction of program
 DoDecode		; Takes address of longword in A0, rotates 4 bits left and ors in the decoded nybble.
 	and.l	#$df,d0	; To upper case, if necessary - numbers are now 16-25
 	sub.b	#55,d0	; Map 'A' onto decimal 10.
-	bpl.b	.washex		; If negative, then digit was a number.
+	bpl		.washex		; If negative, then digit was a number.
 	add.b	#39,d0	; map '0' onto 0.
 .washex
 	lsl.l	#4,d6
@@ -158,7 +158,7 @@ DoDecode		; Takes address of longword in A0, rotates 4 bits left and ors in the 
 DoDecodeByte	; Takes address of longword in A0, rotates 4 bits left and ors in the decoded nybble.
 	and.l	#$df,d0	; To upper case, if necessary - numbers are now 16-25
 	sub.b	#55,d0	; Map 'A' onto decimal 10.
-	bpl.b	.washex		; If negative, then digit was a number.
+	bpl		.washex		; If negative, then digit was a number.
 	add.b	#39,d0	; map '0' onto 0.
 .washex
 	lsl.b	#4,d7
@@ -177,7 +177,7 @@ HandleByte
 	;	move.w	d0,PERREGS
 
 	cmp.b	#'S',d0		; First byte of a record is S - reset column counter.
-	bne.b	.nots
+	bne		.nots
 	move.w	#$FFFF,HEX	; Debug
 	moveq	#0,d1
 	move.l	d1,d7		; Accumulator for byte values
@@ -186,13 +186,13 @@ HandleByte
 	move.l	d1,SREC_ADDR
 	move.l	d1,SREC_BYTECOUNT
 	move.l	d1,SREC_TYPE
-	bra.w	.end
+	bra		.end
 
 .nots
 	move.l	SREC_ACC1,d6
 	move.l	SREC_ACC2,d7
 	cmp.w	#1,SREC_COLUMN	; record type, high nybble
-	bne.b	.nottype
+	bne		.nottype
 	move.w	#$F000,HEX	; Debug
 	lea	SREC_TYPE+3,a0
 	bsr	DoDecodeByte	; Called once, should result in type being in the lowest nybble bye of SREC_TYPE
@@ -208,22 +208,22 @@ HandleByte
 	addq.l	#1,d1
 	lsl.l	#1,d1
 	move.l	d1,SREC_ADDRSIZE ; Addr_Size is now 4, 6 or 8, depending on whether the address field is 16, 24 or 32 bits long.
-	bra.w	.end
+	bra		.end
 
 .nottype
 	move.w	SREC_TYPE+2,HEX	; Debug
 
 	tst.l	SREC_TYPE
-	beq.w	.end	; Ignore type 0 records
+	beq		.end	; Ignore type 0 records
 	cmp.l	#9,SREC_TYPE
-	bgt.w	.nottype1 ; Type 1 2 or 3 have data
+	bgt		.nottype1 ; Type 1 2 or 3 have data
 
 	cmp.w	#3,SREC_COLUMN	; Byte count
-	bgt.b	.notbc
+	bgt		.notbc
 	move.w	#$0F00,HEX	; Debug
 	lea	SREC_BYTECOUNT+3,a0
-	bsr.w	DoDecodeByte	; Called twice, should result in bytecount being in the low byte of SREC_BYTECOUNT
-	bra.w	.end
+	bsr		DoDecodeByte	; Called twice, should result in bytecount being in the low byte of SREC_BYTECOUNT
+	bra		.end
 	
 .notbc	; extract the address
 	move.l	SREC_ADDRSIZE,d1
@@ -232,14 +232,14 @@ HandleByte
 	cmp.w	d1,d2
 	bgt.b	.notaddr
 	lea	SREC_ADDR,a0
-	bsr.w	DoDecode	; Called 2, 3 or 4 times, depending upon the number of address bits.
+	bsr		DoDecode	; Called 2, 3 or 4 times, depending upon the number of address bits.
 	move.w	SREC_ADDR+2,HEX
 	move.w	#1,SREC_COUNTER
-	bra.w	.end
+	bra		.end
 .notaddr
 	; Now for the actual data....
 	cmp.l	#3,SREC_TYPE	; Only types 1, 2 and 3 have data...
-	bgt.b	.nottype1
+	bgt		.nottype1
 
 	move.w	#$000F,HEX	; Debug
 
@@ -248,19 +248,19 @@ HandleByte
 	addq.l	#1,d1
 	move.w	SREC_COLUMN,d2
 	cmp.w	d1,d2
-	bgt.b	.finishtype1
+	bgt		.finishtype1
 
 	move.l	SREC_ADDR,a0
-	bsr.w	DoDecodeByte
+	bsr		DoDecodeByte
 ;	move.w	#'D',d0
 ;	bsr	_Putcserial
 	move.w	SREC_COUNTER,d1
 	subq.w	#1,SREC_COUNTER
 	subq.w	#1,d1
-	bpl.b	.end
+	bpl		.end
 	addq.l	#1,SREC_ADDR
 	move.w	#1,SREC_COUNTER
-	bra.b	.end	
+	bra		.end	
 
 .finishtype1
 ;	move.w	#'F',d0
@@ -268,7 +268,7 @@ HandleByte
 	move.w	SREC_COUNTER,d0
 	addq.w	#1,d0
 	and.w	#1,d0
-	beq.b	.end
+	beq		.end
 	move.l	SREC_ADDR,a0
 	lsl.l	#2,d0
 	lsl.B	d0,d7
@@ -279,10 +279,10 @@ HandleByte
 ;	bsr	_Putcserial
 	move.w	#$F0F0,HEX	; Debug
 	cmp.l	#7,SREC_TYPE
-	blt.b	.end
+	blt		.end
 	move.w	#$F00F,HEX	; Debug
 	cmp.l	#9,SREC_TYPE
-	bgt.b	.end
+	bgt		.end
 	move.w	#$FFF0,HEX	; Debug
 	lea	.endmessage,a0
 	bsr	Writeserial
