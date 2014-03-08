@@ -22,6 +22,7 @@ SDBOOTSTRAPVHD=sdbootstrap_ROM.vhd
 ROMGENDIR = ../../romgen
 ROMGEN = $(ROMGENDIR)/romgen
 
+CFLAGS=-m$(ARCH) -O6
 
 all:  $(BOOTSTRAPMIF) $(SDBOOTSTRAPMIF) $(SDBOOTSTRAPVHD)
 
@@ -46,7 +47,7 @@ $(ROMGEN): $(ROMGENDIR)/romgen.c
 	$(VASM) -m68000 -Felf -o $@ $<
 
 %.o: %.c
-	$(CC) -O1 -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 %.srec: %.elf
 	$(OBJCOPY) -O srec $< $@

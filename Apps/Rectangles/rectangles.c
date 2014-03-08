@@ -12,7 +12,6 @@ static short framecount=0;
 void vblank_int()
 {
 	int yoff;
-	putchar('.');
 	framecount++;
 	if(framecount==959)
 		framecount=0;

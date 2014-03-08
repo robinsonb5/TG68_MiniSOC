@@ -1,3 +1,4 @@
+ARCH	= 68000
 BASE	= m68k-elf
 CC      = $(BASE)-gcc
 LD      = $(BASE)-gcc
@@ -32,9 +33,9 @@ LINKMAP  = $(STARTUP_DIR)/ldscript_bootrom.ld
 
 # Commandline options for each tool.
 
-CFLAGS  = -I. -c -Os -DDISABLE_UART_RX -I$(COMMON_DIR)
+CFLAGS  = -m$(ARCH) -I. -c -O6 -DDISABLE_UART_RX -I$(COMMON_DIR)
 
-LFLAGS  = -nostartfiles -Wl,--relax -Os
+LFLAGS  = -m$(ARCH) -nostartfiles -Wl,--relax -O6
 
 
 # Our target.

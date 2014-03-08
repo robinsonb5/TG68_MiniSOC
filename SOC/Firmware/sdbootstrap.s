@@ -128,7 +128,7 @@ START:				; first instruction of program
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
 	beq		.mainloop
-	move	d0,(a5)+,
+	move.b	d0,(a5)+,
 	bsr		HandleByte
 	bra		.mainloop
 
