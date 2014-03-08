@@ -325,7 +325,7 @@ begin
 					prgstate<=wait0;
 				end if;
 			when peripheral =>
-				per_reg_req<='1';
+--				per_reg_req<='1';  -- per_reg_req should be a single clock pulse.
 				cpu_datain<=per_reg_dataout;
 				per_reg_rw<=cpu_r_w;
 				if per_reg_dtack='0' then

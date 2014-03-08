@@ -4,6 +4,8 @@ use IEEE.numeric_std.ALL;
 
 -- Peripheral controller
 
+-- FIXME - loses data if req signal is more than a single clock wide.
+
 -- Need to provide:
 -- 	UART
 --    X"000" - UART_IO
