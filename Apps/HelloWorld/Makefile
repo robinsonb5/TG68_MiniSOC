@@ -24,7 +24,7 @@ MAIN_PRJ = HelloWorld
 MAIN_SRC = main.c
 MAIN_OBJ = $(COMMON_OBJ) $(patsubst %.c,$(BUILD_DIR)/%.o,$(MAIN_SRC)) $(LIB_OBJ)
 
-LINKMAP  = $(STARTUP_DIR)/ldscript_bootrom.ld
+LINKMAP  = $(STARTUP_DIR)/ldscript_app.ld
 
 
 # Commandline options for each tool.

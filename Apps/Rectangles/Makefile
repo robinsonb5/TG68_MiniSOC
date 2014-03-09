@@ -28,7 +28,7 @@ MAIN_S_OBJ = $(patsubst %.s,$(BUILD_DIR)/%.o,$(MAIN_S_SRC))
 
 MAIN_OBJ = $(COMMON_OBJ) $(MAIN_C_OBJ) $(MAIN_S_OBJ)
 
-LINKMAP  = $(STARTUP_DIR)/ldscript_bootrom.ld
+LINKMAP  = $(STARTUP_DIR)/ldscript_app.ld
 
 
 # Commandline options for each tool.
