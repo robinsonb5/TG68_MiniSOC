@@ -33,7 +33,7 @@ LINKMAP  = $(STARTUP_DIR)/ldscript_bootrom.ld
 
 # Commandline options for each tool.
 
-CFLAGS  = -m$(ARCH) -fomit-frame-pointer -I. -c -Os -DDISABLE_UART_RX -I$(COMMON_DIR)
+CFLAGS  = -m$(ARCH) -fomit-frame-pointer -fno-common -I. -c -Os -DDISABLE_UART_RX -I$(COMMON_DIR)
 
 LFLAGS  = -m$(ARCH) -nostartfiles -nostdlib -Wl,--relax -Os
 
