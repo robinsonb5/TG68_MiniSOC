@@ -1,4 +1,4 @@
-KLIBC_SRC=vsnprintf.c sprintf.c memcpy.c memcmp.c strcpy.c strcmp.c strcat.c strncat.c \
+KLIBC_SRC=vsnprintf.c sprintf.c memcpy.c memcmp.c memmove.c strcpy.c strcmp.c strcat.c strncat.c \
 	strncmp.c strlen.c strncpy.c strchr.c malloc.c calloc.c zalloc.c realloc.c
 KLIBC_ASM_SRC=memset_asm.s
 
