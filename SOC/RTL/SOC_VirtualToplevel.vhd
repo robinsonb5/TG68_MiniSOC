@@ -158,6 +158,9 @@ sdr_cke<='1';
 
 
 ps2m_db: entity work.Debounce
+	generic map(
+		bits => 4
+	)
 	port map(
 	clk => clk,
 	signal_in => ps2m_clk_in,
@@ -165,6 +168,9 @@ ps2m_db: entity work.Debounce
 );
 
 ps2k_db: entity work.Debounce
+	generic map(
+		bits => 4
+	)
 	port map(
 	clk => clk,
 	signal_in => ps2k_clk_in,

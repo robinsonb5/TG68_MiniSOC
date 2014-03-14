@@ -124,6 +124,7 @@ architecture rtl of vga_controller is
 	signal sprite0_xpos : unsigned(11 downto 0);
 	signal sprite0_ypos : unsigned(11 downto 0);
 	signal sprite0_data : std_logic_vector(15 downto 0);
+	signal sprite0_data_buf : std_logic_vector(15 downto 0); -- Prefetch buffer
 	signal sprite0_counter : unsigned(1 downto 0);
 
 	signal sprite_col : std_logic_vector(3 downto 0);
@@ -380,7 +381,11 @@ begin
 				if end_of_pixel='1' then
 					case sprite0_counter is
 						when "11" =>
-							sprite_col<=sprite0_data(15 downto 12);
+							-- Read the first pixel from the buffer, copy to the sprite proper.
+							-- Request the next word of sprite data.
+							req_spr0<='1';
+							sprite0_data(11 downto 0) <= sprite0_data_buf(11 downto 0);
+							sprite_col<=sprite0_data_buf(15 downto 12);
 							sprite0_counter<="10";
 						when "10" =>
 							sprite_col<=sprite0_data(11 downto 8);
@@ -390,7 +395,6 @@ begin
 							sprite0_counter<="00";
 						when "00" =>
 							sprite_col<=sprite0_data(3 downto 0);
-							req_spr0<='1';
 							sprite0_counter<="11";
 						when others =>
 							null;
@@ -408,7 +412,7 @@ begin
 			end if;
 			
 			if valid_spr0='1' then
-				sprite0_data<=data_from_dma;
+				sprite0_data_buf<=data_from_dma;
 			end if;
 
 		end if;
