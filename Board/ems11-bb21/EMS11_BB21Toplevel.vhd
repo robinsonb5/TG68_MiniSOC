@@ -209,12 +209,12 @@ M1_S(29)<=vga_red(1);
 M1_S(31)<=vga_red(0);
 M1_S(38)<='1';
 
-DR_A(12)<='0'; -- Temporary measure
+-- DR_A(12)<='0'; -- Temporary measure
 
 project: entity work.VirtualToplevel
 	generic map (
-		sdram_rows => 12,
-		sdram_cols => 9,
+		sdram_rows => 13,
+		sdram_cols => 10,
 		sysclk_frequency => 1000 -- Sysclk frequency * 10
 	)
 	port map (
@@ -231,7 +231,7 @@ project: entity work.VirtualToplevel
 
 		-- SDRAM
 		sdr_data => DR_D,
-		sdr_addr => DR_A(11 downto 0),
+		sdr_addr => DR_A(12 downto 0),
 		sdr_dqm(1) => DR_DQMH,
 		sdr_dqm(0) => DR_DQML,
 		sdr_we => DR_WE,

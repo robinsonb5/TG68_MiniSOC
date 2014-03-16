@@ -574,7 +574,7 @@ mytwc : component TwoWayCache
 			writecache_burst<='0';
 		elsif rising_edge(sysclk) THEN -- rising edge
 	
-			-- Attend to refresh counter
+			-- FIXME - need to make sure refresh happens often enough
 --			refreshcounter<=refreshcounter+"0000000000001";
 			if sdram_slot1=refresh then
 				refreshpending<='0';
@@ -584,12 +584,11 @@ mytwc : component TwoWayCache
 				refreshpending<='1';
 			end if;
 
-		--		ba <= Addr(22 downto 21);
 			sd_cs <='1';
 			sd_ras <= '1';
 			sd_cas <= '1';
 			sd_we <= '1';
-			sdaddr <= "XXXXXXXXXXXX";
+			sdaddr <= (others => 'X');
 			ba <= "00";
 			dqm <= "00";  -- safe defaults for everything...
 
@@ -619,7 +618,9 @@ mytwc : component TwoWayCache
 	--						sdaddr <= "001000100010"; --BURST=4 LATENCY=2
 --							sdaddr <= "001000110010"; --BURST=4 LATENCY=3
 --							sdaddr <= "001000110000"; --noBURST LATENCY=3
-							sdaddr <= "000000110010"; --BURST=4 LATENCY=3, BURST WRITES
+							sdaddr <= (others => '0');
+							sdaddr(5 downto 0) <= "110010";
+--							sdaddr <= "000000110010"; --BURST=4 LATENCY=3, BURST WRITES
 						when others =>	null;	--NOP
 					end case;
 				END IF;
@@ -695,7 +696,7 @@ mytwc : component TwoWayCache
 						elsif vga_req='1' then
 							if vga_addr(4 downto 3)/=slot2_bank or sdram_slot2=idle then
 								sdram_slot1<=port0;
-								sdaddr <= vga_addr(22 downto 11);
+								sdaddr <= vga_addr((rows+cols+2) downto (cols+3));
 								ba <= vga_addr(4 downto 3);
 								slot1_bank <= vga_addr(4 downto 3);
 --								if vga_idle='0' then
@@ -716,7 +717,7 @@ mytwc : component TwoWayCache
 								and (writecache_addr(4 downto 3)/=slot2_bank or sdram_slot2=idle)
 									then
 							sdram_slot1<=writecache;
-							sdaddr <= writecache_addr(22 downto 11);
+							sdaddr <= writecache_addr((rows+cols+2) downto (cols+3));
 							ba <= writecache_addr(4 downto 3);
 							slot1_bank <= writecache_addr(4 downto 3);
 							cas_dqm <= wrU1&wrL1;
@@ -730,7 +731,7 @@ mytwc : component TwoWayCache
 						elsif readcache_req='1' --req1='1' and wr1='1'
 								and (Addr1(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
 							sdram_slot1<=port1;
-							sdaddr <= Addr1(22 downto 11);
+							sdaddr <= Addr1((rows+cols+2) downto (cols+3));
 							ba <= Addr1(4 downto 3);
 							slot1_bank <= Addr1(4 downto 3); -- slot1 bank
 							cas_dqm <= "00";
@@ -774,7 +775,10 @@ mytwc : component TwoWayCache
 						end if;
 						
 					when ph5 => -- Read or Write command			
-						sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
+						sdaddr <= (others=>'0');
+						sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 5) & casaddr(2 downto 1) ;--auto precharge
+						sdaddr(10) <= '1'; -- Auto precharge.
+--						sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
 						ba <= casaddr(4 downto 3);
 						sd_cs <= cas_sd_cs; 
 
@@ -832,7 +836,7 @@ mytwc : component TwoWayCache
 								and (writecache_addr(4 downto 3)/=vga_reserveaddr(4 downto 3)
 									or vga_reservebank='0') then  -- Safe to use this slot with this bank?
 							sdram_slot2<=writecache;
-							sdaddr <= writecache_addr(22 downto 11);
+							sdaddr <= writecache_addr((rows+cols+2) downto (cols+3));
 							ba <= writecache_addr(4 downto 3);
 							slot2_bank <= writecache_addr(4 downto 3);
 							cas_dqm <= wrU1&wrL1;
@@ -848,7 +852,7 @@ mytwc : component TwoWayCache
 								and (Addr1(4 downto 3)/=vga_reserveaddr(4 downto 3)
 									or vga_reservebank='0') then  -- Safe to use this slot with this bank?
 							sdram_slot2<=port1;
-							sdaddr <= Addr1(22 downto 11);
+							sdaddr <= Addr1((rows+cols+2) downto (cols+3));
 							ba <= Addr1(4 downto 3);
 							slot2_bank <= Addr1(4 downto 3);
 							cas_dqm <= "00";
@@ -892,7 +896,10 @@ mytwc : component TwoWayCache
 					-- Phase 13 - CAS for second window...
 					when ph13 =>
 						if sdram_slot2/=idle then
-							sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
+							sdaddr <= (others=>'0');
+							sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 5) & casaddr(2 downto 1) ;--auto precharge
+							sdaddr(10) <= '1'; -- Auto precharge.
+--							sdaddr <=  "0100" & casaddr(10 downto 5) & casaddr(2 downto 1) ;--auto precharge
 							ba <= casaddr(4 downto 3);
 							sd_cs <= cas_sd_cs; 
 
