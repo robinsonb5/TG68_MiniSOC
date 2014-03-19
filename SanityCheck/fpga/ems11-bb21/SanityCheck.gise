@@ -105,17 +105,14 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1394666640" xil_pn:in_ck="8377338566509417719" xil_pn:name="TRANEXT_xstsynthesize_spartan6" xil_pn:prop_ck="-7155613372916553110" xil_pn:start_ts="1394666458">
-      <status xil_pn:value="SuccessfullyRun"/>
+    <transform xil_pn:end_ts="1395254279" xil_pn:in_ck="8377338566509417719" xil_pn:name="TRANEXT_xstsynthesize_spartan6" xil_pn:prop_ck="-7155613372916553110" xil_pn:start_ts="1395254265">
+      <status xil_pn:value="FailedRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForOutputs"/>
-      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.lso"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.ngc"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.ngr"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.prj"/>
-      <outfile xil_pn:name="EMS11_BB21Toplevel.stx"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.syr"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.xst"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel_xst.xrpt"/>
@@ -131,6 +128,8 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.bld"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.ngd"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel_ngdbuild.xrpt"/>
@@ -140,6 +139,8 @@
     <transform xil_pn:end_ts="1394666996" xil_pn:in_ck="-6993002978603623085" xil_pn:name="TRANEXT_map_spartan6" xil_pn:prop_ck="2155144218836469666" xil_pn:start_ts="1394666655">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
       <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.pcf"/>
@@ -156,6 +157,8 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.ncd"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.pad"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.par"/>
@@ -168,9 +171,10 @@
       <outfile xil_pn:name="_xmsgs/par.xmsgs"/>
     </transform>
     <transform xil_pn:end_ts="1394667303" xil_pn:in_ck="-6794938051666741317" xil_pn:name="TRANEXT_bitFile_spartan6" xil_pn:prop_ck="5341574683187206424" xil_pn:start_ts="1394667246">
-      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="AbortedRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.bgn"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.bit"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.drc"/>
@@ -183,6 +187,7 @@
     <transform xil_pn:end_ts="1394667246" xil_pn:in_ck="-6993002978603623217" xil_pn:name="TRAN_postRouteTrce" xil_pn:prop_ck="445577401284416185" xil_pn:start_ts="1394667206">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.twr"/>
       <outfile xil_pn:name="EMS11_BB21Toplevel.twx"/>
       <outfile xil_pn:name="_xmsgs/trce.xmsgs"/>

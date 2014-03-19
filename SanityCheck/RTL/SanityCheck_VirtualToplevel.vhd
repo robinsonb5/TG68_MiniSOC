@@ -23,7 +23,7 @@ entity VirtualToplevel is
 		
 		-- SDRAM
 		sdr_data		: inout std_logic_vector(15 downto 0);
-		sdr_addr		: out std_logic_vector(11 downto 0);
+		sdr_addr		: out std_logic_vector((sdram_rows-1) downto 0);
 		sdr_dqm 		: out std_logic_vector(1 downto 0);
 		sdr_we 		: out std_logic;
 		sdr_cas 		: out std_logic;
