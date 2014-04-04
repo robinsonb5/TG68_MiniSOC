@@ -388,6 +388,7 @@ void c_entry()
 				if(MouseButtons&2)
 					pen-=0x400;
 				DrawIteration();
+				HW_PER(PER_HEX)=pen;
 				break;
 			case MAIN_DHRYSTONE:
 				Dhrystone();

@@ -15,7 +15,7 @@ use IEEE.numeric_std.ALL;
 --			R/W - Gets/Sets current clock divisor for baud rate generator
 --		X"004" - Flags
 --			bit 0 : ROM Overlay
---		X"006" - Hex display
+--		X"006" - GPIO - on DE1 routed to Hex display
 
 -- 	PS/2 keyboard
 --		PS/2 Mouse
@@ -89,6 +89,10 @@ entity peripheral_controller is
 		spiclk_out : out std_logic;
 
 		-- Misc
+		gpio_out : out std_logic_vector(15 downto 0);
+		gpio_in : in std_logic_vector(15 downto 0) := X"0000";
+		
+		hex : out std_logic_vector(15 downto 0);
 
 		bootrom_overlay : out std_logic
 	);
@@ -147,9 +151,21 @@ signal spi_trigger : std_logic;
 signal spi_busy : std_logic;
 signal spi_wide : std_logic;
 
+signal gpio_in_s2 : std_logic_vector(15 downto 0);
+signal gpio_in_s : std_logic_vector(15 downto 0);
+
 begin
 
 	bootrom_overlay <= flags(0);
+
+	-- Double-sync gpio inputs
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			gpio_in_s<=gpio_in_s2;
+			gpio_in_s2<=gpio_in;
+		end if;
+	end process;
 
 	-- Handle CPU access to hardware registers
 
@@ -260,6 +276,7 @@ begin
 			kbdrecvreg <='0';
 			mouserecvreg <='0';
 			spi_cs<='1';
+			hex<=(others=>'0');
 		elsif rising_edge(clk) then
 			reg_dtack<='1';
 			ser_txgo<='0';
@@ -296,8 +313,9 @@ begin
 							
 						when X"004" => -- Flags
 							flags<=reg_data_in;
+							
 						when X"006" => -- HEX display
---							hex<=reg_data_in;
+							hex<=reg_data_in;
 
 						-- Write to PS/2 registers
 						when X"008" =>
@@ -358,6 +376,10 @@ begin
 								host_to_spi<=reg_data_in;
 							end if;
 
+						-- GPIO 0
+						when X"030" =>
+							gpio_out<=reg_data_in;
+
 						when others =>
 							reg_data_out<=X"0000";
 					end case;
@@ -380,6 +402,9 @@ begin
 							when X"004" => -- Flags
 								reg_data_out(15 downto 6)<=(others => '0');
 								reg_data_out(5 downto 0)<=flags(5 downto 0);
+
+							when X"006" => -- GPIO
+								reg_data_out<=gpio_in_s;
 								
 							-- Read from PS/2 regs
 							when X"008" =>
@@ -426,6 +451,10 @@ begin
 							when X"02C" =>
 								reg_data_out<=std_logic_vector(to_unsigned(spi_maxspeed,16));
 
+							-- GPIO 0
+							when X"030" =>
+								reg_data_out<=gpio_in;
+							
 							when others =>
 								reg_data_out<=X"0000";
 						end case;

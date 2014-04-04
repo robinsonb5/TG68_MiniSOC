@@ -101,8 +101,18 @@ signal vga_vsync : std_logic;
 signal audio_l : signed(15 downto 0);
 signal audio_r : signed(15 downto 0);
 
+signal hex : std_logic_vector(15 downto 0);
+
 alias PS2_MDAT : std_logic is GPIO_1(19);
 alias PS2_MCLK : std_logic is GPIO_1(18);
+
+COMPONENT SEG7_LUT
+	PORT
+	(
+		oSEG		:	 OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		iDIG		:	 IN STD_LOGIC_VECTOR(3 DOWNTO 0)
+	);
+END COMPONENT;
 
 COMPONENT video_vga_dither
 	generic (
@@ -154,6 +164,14 @@ port map
 
 reset<=(not SW(0) xor KEY(0)) and pll_locked;
 
+hexdigit0 : component SEG7_LUT
+	port map (oSEG => HEX0, iDIG => hex(3 downto 0));
+hexdigit1 : component SEG7_LUT
+	port map (oSEG => HEX1, iDIG => hex(7 downto 4));
+hexdigit2 : component SEG7_LUT
+	port map (oSEG => HEX2, iDIG => hex(11 downto 8));
+hexdigit3 : component SEG7_LUT
+	port map (oSEG => HEX3, iDIG => hex(15 downto 12));
 
 myVirtualToplevel : entity work.VirtualToplevel
 generic map
@@ -210,7 +228,9 @@ port map
 	ps2m_dat_out => ps2m_dat_out,
 
 	audio_l => audio_l,
-	audio_r => audio_r
+	audio_r => audio_r,
+	
+	hex => hex
 );
 
 

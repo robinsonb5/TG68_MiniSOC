@@ -17,13 +17,13 @@ CONFIG VCCAUX=3.3;
 #	NET "clk" LOC = "xxx";
 #	NET "clk" TNM_NET = "clk" | CLOCK_DEDICATED_ROUTE = FALSE;
 #	TIMESPEC "TS_clk" = PERIOD "clk" 10 ns HIGH 50 %;
-NET "CLK50" LOC = "D14";
-NET "CLK50" IOSTANDARD = LVTTL;
-#NET "CLK50" TNM_NET = "CLK50" |CLOCK_DEDICATED_ROUTE = FALSE;
-#TIMESPEC "TS_CLK50" = PERIOD "CLK50" 20 ns HIGH 50 %;
 
-# HACK - will need to address this later.
-# PIN "mysysclk/clkout1_buf.O" CLOCK_DEDICATED_ROUTE = FALSE;
+NET "CLK50" LOC = "D14" | IOSTANDARD = LVTTL;
+
+#Created by Constraints Editor (xc6slx45-fgg676-3) - 2014/03/19
+INST "project/myTG68/*" TNM = multi;
+TIMESPEC ts_multi = FROM "multi" TO "multi" TS_CLK50 * 3;
+
 # NET "80MHZ" LOC = "A13";
 #
 #	LEDS
@@ -394,6 +394,6 @@ NET M1_S* IOSTANDARD = LVTTL |DRIVE = 16 |SLEW = FAST;
 #	end _____________________________________________________________
 #
 NET DR_D<*> NODELAY;
-#Created by Constraints Editor (xc6slx45-fgg676-3) - 2014/01/19
-INST "project/myTG68/*" TNM = tg68_1;
-TIMESPEC TS_TG68 = FROM "tg68_1" TO "tg68_1" TS_myclock_clkout0 * 3;
+# Created by Constraints Editor (xc6slx45-fgg676-3) - 2014/01/19
+# INST "project/myTG68/*" TNM = tg68_1;
+# TIMESPEC TS_TG68 = FROM "mytg68_1" TO "mytg68_1" TS_myclock_clkout0 * 3;

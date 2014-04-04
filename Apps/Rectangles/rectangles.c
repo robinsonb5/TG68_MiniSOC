@@ -1,6 +1,7 @@
 #include "vga.h"
 #include "ints.h"
 #include "uart.h"
+#include "board.h"
 
 short *FrameBuffer;
 
@@ -26,6 +27,7 @@ void vblank_int()
 int main(int argc,char **argv)
 {
 	unsigned char *fbptr;
+	int c=0;
 
 	SetSprite();
 
@@ -38,6 +40,8 @@ int main(int argc,char **argv)
 
 	while(1)
 	{
+		++c;
+		HW_BOARD(REG_HEX)=c;
 		DrawIteration();
 	}
 }

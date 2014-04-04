@@ -2,13 +2,17 @@
 #define BOARD_H
 
 #define PERIPHERALBASE 0x81000000
-#define HW_PER(x) *(volatile unsigned short *)(PERIPHERALBASE+x)
+#define HW_BOARD(x) *(volatile unsigned short *)(PERIPHERALBASE+x)
+
+/* Misc board features */
+
+#define REG_HEX 0x06
 
 /* Capability registers */
 
-#define PER_CAP_RAMSIZE 0x28
-#define PER_CAP_CLOCKSPEED 0x2A
-#define PER_CAP_SPISPEED 0x2C
+#define REG_CAP_RAMSIZE 0x28
+#define REG_CAP_CLOCKSPEED 0x2A
+#define REG_CAP_SPISPEED 0x2C
 
 #endif
 
