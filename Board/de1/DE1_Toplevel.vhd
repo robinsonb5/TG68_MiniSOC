@@ -79,6 +79,7 @@ architecture rtl of DE1_Toplevel is
 
 signal reset : std_logic;
 signal sysclk : std_logic;
+signal slowclk : std_logic;
 signal pll_locked : std_logic;
 
 signal ps2m_clk_in : std_logic;
@@ -151,12 +152,13 @@ PS2_DAT <= '0' when ps2k_dat_out='0' else 'Z';
 ps2k_clk_in<=PS2_CLK;
 PS2_CLK <= '0' when ps2k_clk_out='0' else 'Z';
 
-mypll : entity work.PLL_50to100
+mypll : entity work.PLL_50to100Split
 port map
 (
 	inclk0 => CLOCK_50,
 	c0 => DRAM_CLK,
 	c1 => sysclk,
+	c2 => slowclk,
 	locked => pll_locked
 );
 --pll_locked<='1';
@@ -182,7 +184,8 @@ generic map
 )
 port map
 (	
-	clk => sysclk,
+	clk => slowclk,
+	clk_fast => sysclk,
 	reset_in => reset,
 
 	-- video
