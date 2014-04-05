@@ -67,11 +67,16 @@ end entity;
 architecture rtl of VirtualToplevel is
 signal cpu_datain : std_logic_vector(15 downto 0);	-- Data provided by us to CPU
 signal cpu_dataout : std_logic_vector(15 downto 0); -- Data received from the CPU
+signal cpu_dataout_r : std_logic_vector(15 downto 0); -- Above, registered
 signal cpu_addr : std_logic_vector(31 downto 0); -- CPU's current address
+signal cpu_addr_r : std_logic_vector(31 downto 0); -- CPU's current address
 signal cpu_as : std_logic; -- Address strobe
 signal cpu_uds : std_logic; -- upper data strobe
 signal cpu_lds : std_logic; -- lower data strobe
 signal cpu_r_w : std_logic; -- read(high)/write(low)
+signal cpu_uds_r : std_logic; -- upper data strobe
+signal cpu_lds_r : std_logic; -- lower data strobe
+signal cpu_r_w_r : std_logic; -- read(high)/write(low)
 signal busstate : std_logic_vector(1 downto 0);
 signal cpu_clkena : std_logic :='0';
 
@@ -92,7 +97,7 @@ signal chargen_window : std_logic;
 signal reset_reg : std_logic;
 signal reset : std_logic := '0';
 signal reset_counter : unsigned(15 downto 0) := X"FFFF";
-signal tg68_ready : std_logic := '1';
+signal tg68_ready : std_logic;
 signal sdr_ready : std_logic;
 signal write_address : std_logic_vector(31 downto 0);
 signal req_pending : std_logic :='0';
@@ -200,36 +205,32 @@ myint : entity work.interrupt_controller
 		ack => int_ack
 	);
 
---
---myTG68 : entity work.TG68KdotC_Kernel
---	generic map
---	(
---		MUL_Mode => 1
---	)
---   port map
---	(
---		clk => clk,
---      nReset => reset_in and sdr_ready,  -- Contributes to reset, so have to use reset_in here.
---      clkena_in => cpu_clkena,
---      data_in => cpu_datain,
---		IPL => ints,
---		IPL_autovector => '0',
---		CPU => "00",
---		addr => cpu_addr,
---		data_write => cpu_dataout,
---		nWr => cpu_r_w,
---		nUDS => cpu_uds,
---		nLDS => cpu_lds,
---		busstate => busstate,
---		nResetOut => tg68_ready,
---		FC => open,
----- for debug		
---		skipFetch => open,
---		regin => open
---	);
+
+myTG68 : entity work.TG68KdotC_Kernel
+	generic map
+	(
+		MUL_Mode => 1
+	)
+   port map
+	(
+		clk => clk,
+      nReset => reset_in and sdr_ready,  -- Contributes to reset, so have to use reset_in here.
+      clkena_in => cpu_clkena,
+      data_in => cpu_datain,
+		IPL => ints,
+		IPL_autovector => '0',
+		CPU => "00",
+		addr => cpu_addr,
+		data_write => cpu_dataout,
+		nWr => cpu_r_w,
+		nUDS => cpu_uds,
+		nLDS => cpu_lds,
+		busstate => busstate,
+		nResetOut => tg68_ready
+	);
 
 
-mybootrom : entity work.sdbootstrap_ROM
+mybootrom : entity work.Hex_ROM
 	generic map (
 		maxAddrBitBRAM => 11
 	)
@@ -253,15 +254,21 @@ begin
 		vga_reg_req<='0';
 		per_reg_rw<='1';
 		per_reg_req<='0';
+		
+		cpu_dataout_r <= cpu_dataout;
+		cpu_addr_r <= cpu_addr;
+		cpu_uds_r <= cpu_uds;
+		cpu_lds_r <= cpu_lds;
+		cpu_r_w_r <= cpu_r_w;
+
 		case prgstate is
 			when run =>
 				cpu_clkena<='0';
-				prgstate<=pause;
-			when pause =>
 				prgstate<=mem;
 			when mem =>
 				if busstate="01" then
-					prgstate<=wait0;
+					cpu_clkena<='1';
+					prgstate<=run;
 				else
 					case cpu_addr(31 downto 16) is
 						when X"FFFF" => -- Interrupt acknowledge cycle
@@ -327,7 +334,8 @@ begin
 			when rom =>
 				cpu_datain<=romdata;
 --				prgstate<=wait2;
-				prgstate<=wait0;
+				cpu_clkena<='1';
+				prgstate<=run;
 			when vga =>
 				cpu_datain<=vga_reg_dataout;
 				vga_reg_rw<=cpu_r_w;
@@ -403,12 +411,12 @@ mysdram : entity work.sdram
 
 		vga_newframe => vga_newframe,
 
-		datawr1 => cpu_dataout,
-		Addr1 => cpu_addr,
+		datawr1 => cpu_dataout_r,
+		Addr1 => cpu_addr_r,
 		req1 => req_pending,
-		wr1 => cpu_r_w,
-		wrL1 => cpu_lds,
-		wrU1 => cpu_uds,
+		wr1 => cpu_r_w_r,
+		wrL1 => cpu_lds_r,
+		wrU1 => cpu_uds_r,
 		cachesel => busstate(1), -- Use separate caches for instruction and data.  0 => inst, 1 => data
 		dataout1 => ramdata,
 		dtack1 => dtack1
@@ -423,8 +431,8 @@ mysdram : entity work.sdram
 		reg_data_in => vga_reg_datain,
 		reg_data_out => vga_reg_dataout,
 		reg_rw => vga_reg_rw,
-		reg_uds => cpu_uds,
-		reg_lds => cpu_lds,
+		reg_uds => cpu_uds_r,
+		reg_lds => cpu_lds_r,
 		reg_dtack => vga_reg_dtack,
 		reg_req => vga_reg_req,
 
@@ -460,7 +468,7 @@ mysdram : entity work.sdram
 --		reg_addr_in => per_reg_addr,
 		reg_addr_in => cpu_addr(11 downto 1)&'0',
 --		reg_data_in => per_reg_datain,
-		reg_data_in => cpu_dataout,
+		reg_data_in => cpu_dataout_r,
 		reg_data_out => per_reg_dataout,
 		reg_rw => per_reg_rw,
 		reg_uds => cpu_uds,

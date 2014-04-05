@@ -512,7 +512,7 @@ set_global_assignment -name ENABLE_SIGNALTAP ON
 set_global_assignment -name USE_SIGNALTAP_FILE output_files/stp1.stp
 
 set_global_assignment -name SLD_FILE /home/amr/FPGA/TG68MiniSOC/SOC/fpga/de1/output_files/stp1_auto_stripped.stp
-set_global_assignment -name VHDL_FILE ../../../SOC/Firmware/sdbootstrap_ROM.vhd
+set_global_assignment -name VHDL_FILE ../../Firmware/Hex_ROM.vhd
 set_global_assignment -name VHDL_FILE ../../RTL/Toplevel_Config.vhd
 set_global_assignment -name VHDL_FILE ../../RTL/SplitClock_VirtualToplevel.vhd
 set_global_assignment -name VERILOG_FILE ../../../Board/de1/SEG7_LUT_4.v
