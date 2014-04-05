@@ -148,7 +148,19 @@ architecture rtl of vga_controller is
 									writelowerbyte,writelowerbyte1,readlowerbyte1,readlowerbyte2);
 	signal charramstate : charramstates;			
 
+	signal req_d : std_logic;
+	signal req_e : std_logic;
+	
 begin
+
+	-- Detect the leading edge of the req pulse.
+	process(clk)
+	begin
+		req_e<=reg_req and not req_d;
+		if rising_edge(clk) then
+			req_d<=reg_req;
+		end if;
+	end process;
 
 	myVgaMaster : entity work.video_vga_master
 		generic map (
@@ -270,7 +282,7 @@ begin
 				-- We do one read and one write to both bytes on a 4-step cycle.
 				case charramstate is
 					when writeupperbyte =>
-						if reg_req='1' then
+						if req_e='1' then
 							chargen_addr<=reg_addr_in(10 downto 1) & '0';	-- Upper byte
 							chargen_datain<=reg_data_in(15 downto 8);
 							if reg_rw='0' and reg_uds='0' then
@@ -300,7 +312,7 @@ begin
 						reg_data_out(7 downto 0)<=chargen_dataout;
 						reg_dtack<='0';
 				end case;
-			elsif reg_req='1' then
+			elsif req_e='1' then
 				case reg_addr_in is
 					when X"000" =>
 	--					reg_data_out<=X"00"&framebuffer_pointer(23 downto 16);

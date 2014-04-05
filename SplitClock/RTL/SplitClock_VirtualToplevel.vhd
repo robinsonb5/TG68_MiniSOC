@@ -89,7 +89,6 @@ signal wblue : unsigned(7 downto 0);
 signal end_of_pixel : std_logic;
 signal refresh :std_logic;
 signal end_of_frame :std_logic;
-signal vga_data : std_logic_vector(15 downto 0);
 signal chargen_pixel : std_logic;
 signal chargen_window : std_logic;
 
@@ -104,13 +103,15 @@ signal req_pending : std_logic :='0';
 --signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
 
-signal vga_addr : std_logic_vector(31 downto 0);
-signal vga_req : std_logic;
-signal vga_fill : std_logic;
-signal vga_refresh : std_logic;
-signal vga_newframe : std_logic;
-signal vga_reservebank : std_logic; -- Keep bank clear for instant access.
-signal vga_reserveaddr : std_logic_vector(31 downto 0); -- to SDRAM
+signal sdr_vga_data : std_logic_vector(15 downto 0);
+signal sdr_vga_addr : std_logic_vector(31 downto 0);
+signal sdr_vga_req : std_logic;
+signal sdr_vga_fill : std_logic;
+signal sdr_vga_refresh : std_logic;
+signal sdr_vga_newframe : std_logic;
+signal sdr_vga_reservebank : std_logic; -- Keep bank clear for instant access.
+signal sdr_vga_reserveaddr : std_logic_vector(31 downto 0); -- to SDRAM
+signal sdr_vga_ack : std_logic;
 
 -- VGA register block signals
 
@@ -120,8 +121,10 @@ signal vga_reg_datain : std_logic_vector(15 downto 0);
 signal vga_reg_rw : std_logic;
 signal vga_reg_req : std_logic;
 signal vga_reg_dtack : std_logic;
-signal vga_ack : std_logic;
 signal vblank_int : std_logic;
+
+signal vga_ack_d : std_logic;
+signal vga_ackback : std_logic;
 
 -- Peripheral register block signals
 
@@ -152,8 +155,9 @@ signal rom_we_n : std_logic;
 signal ps2m_clk_db : std_logic;
 signal ps2k_clk_db : std_logic;
 
-type prgstates is (run,pause,mem,rom,waitread,waitwrite,wait0,wait1,wait2,wait3,waitvga,vga,peripheral);
-signal prgstate : prgstates :=wait2;
+
+type prgstates is (run,pause,mem,rom,waitread,waitwrite,waitvga,vga,peripheral);
+signal prgstate : prgstates :=run;
 begin
 
 audio_l<=X"0000";
@@ -249,8 +253,8 @@ mybootrom : entity work.Hex_ROM
 
 process(clk,cpu_addr)
 begin
-	if reset_in='0' then
-		prgstate<=wait2;
+	if reset='0' then
+		prgstate<=run;
 		req_pending<='0';
 		vga_reg_datain<=X"0000";
 	elsif rising_edge(clk) then
@@ -261,6 +265,8 @@ begin
 		per_reg_req<='0';
 		rom_we_n<='1';
 		
+		vga_ackback<='0';
+
 		cpu_dataout_r <= cpu_dataout;
 		cpu_addr_r <= cpu_addr;
 		cpu_uds_r <= cpu_uds;
@@ -283,7 +289,8 @@ begin
 							-- (Could just use autovectoring, of course.)
 							cpu_datain <= "0000000000011" & cpu_addr(3 downto 1);
 							int_ack<='1';
-							prgstate<=wait0;
+							cpu_clkena<='1';
+							prgstate<=run;
 						when X"8000" => -- hardware registers - VGA controller
 							vga_reg_addr<=cpu_addr(11 downto 1)&'0';
 							vga_reg_rw<=cpu_r_w;
@@ -291,10 +298,8 @@ begin
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=vga;
 						when X"8100" => -- more hardware registers - peripherals
---							per_reg_addr<=cpu_addr(11 downto 1)&'0';
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';
---							per_reg_datain<=cpu_dataout;
 							prgstate<=peripheral;
 						when X"0000" => -- ROM access
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
@@ -305,13 +310,9 @@ begin
 								req_pending<='1';
 								prgstate<=waitread;	-- overlay disabled.
 							else
---								cpu_datain<=romdata;
 								prgstate<=rom;
 							end if;
 						when others =>
---							datatoram<=cpu_dataout;
---							counter<=unsigned(cpu_dataout); -- Remove this...
---							write_address<=cpu_addr( downto 0);
 							req_pending<='1';
 							if cpu_r_w='0' then
 								prgstate<=waitwrite;
@@ -325,59 +326,52 @@ begin
 				if dtack1='0' then
 					cpu_datain<=ramdata;
 					req_pending<='0';
-					prgstate<=wait0;
---					cpu_clkena<='1';
---					prgstate<=run;
+					cpu_clkena<='1';
+					prgstate<=run;
 				end if;
 			when waitwrite =>
 				req_pending<='1';
 				if dtack1='0' then
 					req_pending<='0';
-					prgstate<=wait0;
---					cpu_clkena<='1';
---					prgstate<=run;
+					cpu_clkena<='1';
+					prgstate<=run;
 				end if;
 			when rom =>
 				cpu_datain<=romdata;
---				prgstate<=wait2;
 				cpu_clkena<='1';
 				rom_we_n<=cpu_r_w;
 				prgstate<=run;
 			when vga =>
 				cpu_datain<=vga_reg_dataout;
 				vga_reg_rw<=cpu_r_w;
-				if vga_reg_dtack='0' then
---					cpu_clkena<='1';
---					prgstate<=run;
-					prgstate<=wait0;
+				if vga_ack_d='1' then
+					vga_ackback<='1';
+					cpu_clkena<='1';
+					prgstate<=run;
+--					prgstate<=wait0;
 				end if;
 			when peripheral =>
---				per_reg_req<='1';  -- per_reg_req should be a single clock pulse.
 				cpu_datain<=per_reg_dataout;
 				per_reg_rw<=cpu_r_w;
 				if per_reg_dtack='0' then
---					cpu_clkena<='1';
---					prgstate<=run;
-					prgstate<=wait0;
-				end if;
-			when wait0 =>
-				prgstate<=wait3;
-			when wait1 =>
-				prgstate<=wait3;
-			when wait2 =>
-				prgstate<=wait3;
-			when wait3 =>
-				if (reset or not tg68_ready)='1' then
 					cpu_clkena<='1';
 					prgstate<=run;
+--					prgstate<=wait0;
 				end if;
+--			when wait0 =>
+--				prgstate<=wait3;
+--			when wait1 =>
+--				prgstate<=wait3;
+--			when wait2 =>
+--				prgstate<=wait3;
+--			when wait3 =>
+--				if (reset or not tg68_ready)='1' then
+--					cpu_clkena<='1';
+--					prgstate<=run;
+--				end if;
 			when others =>
 				null;
 		end case;
---		elsif busstate/="01" then	-- Does this cycle involve mem access if so, wait?
---			cpu_clkena<='0';
---		end if;
---		cpu_clkena<=(not cpu_clkena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
 	end if;
 end process;
 
@@ -407,16 +401,16 @@ mysdram : entity work.sdram
 		reset_out => sdr_ready,
 		reinit => '0',
 
-		vga_addr => vga_addr,
-		vga_data => vga_data,
-		vga_fill => vga_fill,
-		vga_req => vga_req,
-		vga_ack => vga_ack,
-		vga_refresh => vga_refresh,
-		vga_reservebank => vga_reservebank,
-		vga_reserveaddr => vga_reserveaddr,
+		vga_addr => sdr_vga_addr,
+		vga_data => sdr_vga_data,
+		vga_fill => sdr_vga_fill,
+		vga_req => sdr_vga_req,
+		vga_ack => sdr_vga_ack,
+		vga_refresh => sdr_vga_refresh,
+		vga_reservebank => sdr_vga_reservebank,
+		vga_reserveaddr => sdr_vga_reserveaddr,
 
-		vga_newframe => vga_newframe,
+		vga_newframe => sdr_vga_newframe,
 
 		datawr1 => cpu_dataout_r,
 		Addr1 => cpu_addr_r,
@@ -428,6 +422,24 @@ mysdram : entity work.sdram
 		dataout1 => ramdata,
 		dtack1 => dtack1
 	);
+
+
+	-- We're going to lose ack pulses from the VGA controller, since it's
+	-- running on a faster clock than the rest of the system.  Hence this
+	-- little acknowledge dance.
+	
+	process(clk_fast)
+	begin
+		if rising_edge(clk_fast) then
+			if vga_ackback='1' then
+				vga_ack_d<='0';
+			end if;
+			if vga_reg_dtack='0' then
+				vga_ack_d<='1';
+			end if;
+		end if;
+	end process;
+
 
 	myvga : entity work.vga_controller
 		port map (
@@ -443,14 +455,14 @@ mysdram : entity work.sdram
 		reg_dtack => vga_reg_dtack,
 		reg_req => vga_reg_req,
 
-		sdr_addrout => vga_addr,
-		sdr_datain => vga_data, 
-		sdr_fill => vga_fill,
-		sdr_req => vga_req,
-		sdr_ack => vga_ack,
-		sdr_reservebank => vga_reservebank,
-		sdr_reserveaddr => vga_reserveaddr,
-		sdr_refresh => vga_refresh,
+		sdr_addrout => sdr_vga_addr,
+		sdr_datain => sdr_vga_data, 
+		sdr_fill => sdr_vga_fill,
+		sdr_req => sdr_vga_req,
+		sdr_ack => sdr_vga_ack,
+		sdr_reservebank => sdr_vga_reservebank,
+		sdr_reserveaddr => sdr_vga_reserveaddr,
+		sdr_refresh => sdr_vga_refresh,
 
 		hsync => vga_hsync,
 		vsync => vga_vsync,
