@@ -180,7 +180,7 @@ generic map
 (
 	sdram_rows => 12,
 	sdram_cols => 8,
-	sysclk_frequency => 1000 -- sysclk * 10
+	sysclk_frequency => 250 -- sysclk * 10
 )
 port map
 (	

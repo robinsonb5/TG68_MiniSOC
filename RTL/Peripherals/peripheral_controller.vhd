@@ -4,7 +4,8 @@ use IEEE.numeric_std.ALL;
 
 -- Peripheral controller
 
--- FIXME - loses data if req signal is more than a single clock wide.
+-- FIXED - used to lose data if req signal is more than a single clock wide.
+-- solved by detecting rising edge of req signal.
 
 -- Need to provide:
 -- 	UART
@@ -94,7 +95,8 @@ entity peripheral_controller is
 		
 		hex : out std_logic_vector(15 downto 0);
 
-		bootrom_overlay : out std_logic
+		bootrom_overlay : out std_logic;	-- Low page reads
+		bootram_overlay : out std_logic -- Low page writes
 	);
 end entity;
 	
@@ -119,7 +121,7 @@ signal ser_overrun : std_logic;
 signal ser_clock_divisor : unsigned(15 downto 0) := X"03D0";	-- 115200 baud @ 112.5MHz
 
 
-signal flags : std_logic_vector(15 downto 0) :=X"0001" ; -- Bootrom overlay enabled by default
+signal flags : std_logic_vector(15 downto 0) :=X"0003" ; -- Bootrom overlay enabled by default
 
 signal timer_set : std_logic :='0';
 signal timer_divisor : std_logic_vector(2 downto 0);
@@ -154,9 +156,23 @@ signal spi_wide : std_logic;
 signal gpio_in_s2 : std_logic_vector(15 downto 0);
 signal gpio_in_s : std_logic_vector(15 downto 0);
 
+signal req_d : std_logic; -- store the previous value of req, so we can detect edges.
+signal req_e : std_logic; -- Edge of req signal
+
 begin
 
 	bootrom_overlay <= flags(0);
+	bootram_overlay <= flags(1);
+
+	-- Edge detection for req input
+	process(clk)
+	begin
+		req_e <= reg_req and not req_d;
+		if rising_edge(clk) then
+			req_d<=reg_req;
+		end if;
+	end process;
+	
 
 	-- Double-sync gpio inputs
 	process(clk)
@@ -271,7 +287,7 @@ begin
 			ser_overrun<='0';
 			timer_int<='0';
 			ps2_int<='0';
-			flags<=X"0001";	-- Re-enable overlay on reset
+			flags<=X"0003";	-- Re-enable overlay on reset
 			timer_flags<=X"0000";
 			kbdrecvreg <='0';
 			mouserecvreg <='0';
@@ -291,7 +307,7 @@ begin
 			extend_cycle<='0';
 			extend_rw<='1';
 			
-			if reg_req='1' or extend_cycle='1' then
+			if req_e='1' or extend_cycle='1' then
 
 				reg_dtack<='0';	-- None of these registers takes more than one cycle to respond.
 										-- (Exception: blocking SPI register)

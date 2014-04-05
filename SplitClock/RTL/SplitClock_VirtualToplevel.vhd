@@ -146,6 +146,8 @@ signal framectr : unsigned(15 downto 0);
 signal resetctr : std_logic;
 
 signal bootrom_overlay : std_logic;
+signal bootram_overlay : std_logic;
+signal rom_we_n : std_logic;
 
 signal ps2m_clk_db : std_logic;
 signal ps2k_clk_db : std_logic;
@@ -237,11 +239,14 @@ mybootrom : entity work.Hex_ROM
 	port map (
 		clk => clk,
 		addr => cpu_addr(11 downto 0),
-		q => romdata
-		);
+		q => romdata,
+		d => cpu_dataout_r,
+		we_n => rom_we_n,
+		uds_n => cpu_uds_r,
+		lds_n => cpu_lds_r
+	);
 
 
--- Make use of boot rom
 process(clk,cpu_addr)
 begin
 	if reset_in='0' then
@@ -254,6 +259,7 @@ begin
 		vga_reg_req<='0';
 		per_reg_rw<='1';
 		per_reg_req<='0';
+		rom_we_n<='1';
 		
 		cpu_dataout_r <= cpu_dataout;
 		cpu_addr_r <= cpu_addr;
@@ -266,7 +272,7 @@ begin
 				cpu_clkena<='0';
 				prgstate<=mem;
 			when mem =>
-				if busstate="01" then
+				if busstate="01" then -- Can we anticipate this and save a cycle?
 					cpu_clkena<='1';
 					prgstate<=run;
 				else
@@ -292,7 +298,7 @@ begin
 							prgstate<=peripheral;
 						when X"0000" => -- ROM access
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
-							if cpu_r_w='0' then	-- Pass writes through to RAM.
+							if cpu_r_w='0' and bootram_overlay='0' then	-- Pass writes through to RAM.
 								req_pending<='1';
 								prgstate<=waitwrite;
 							elsif bootrom_overlay='0' then
@@ -335,6 +341,7 @@ begin
 				cpu_datain<=romdata;
 --				prgstate<=wait2;
 				cpu_clkena<='1';
+				rom_we_n<=cpu_r_w;
 				prgstate<=run;
 			when vga =>
 				cpu_datain<=vga_reg_dataout;
@@ -503,7 +510,8 @@ mysdram : entity work.sdram
 		
 		hex => hex,
 
-		bootrom_overlay => bootrom_overlay
+		bootrom_overlay => bootrom_overlay,
+		bootram_overlay => bootram_overlay
 	);
 
 	

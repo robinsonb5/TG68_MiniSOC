@@ -1,3 +1,4 @@
+ARCH	= 68000
 BASE	= m68k-elf
 CC      = $(BASE)-gcc
 LD      = $(BASE)-gcc
@@ -9,13 +10,17 @@ VASM	= vasmm68k_mot
 ROMGENDIR = ../../romgen
 ROMGEN = $(ROMGENDIR)/romgen
 
-# we use crt0.s from here
-STARTUP_DIR = ../../Firmware_Common
-
 BUILD_DIR=m68k_obj
 
+
+# we use crt0.s from here
+STARTUP_DIR = ../../Firmware_Common
 STARTUP_SRC = $(STARTUP_DIR)/startup_bootrom.s
 STARTUP_OBJ = $(patsubst $(STARTUP_DIR)/%.s,$(BUILD_DIR)/%.o,$(STARTUP_SRC))
+
+COMMON_DIR = ../../Firmware_Common
+COMMON_SRC = uart.c
+COMMON_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(COMMON_SRC))
 
 MAIN_PRJ = Hex
 MAIN_SRC = main.c
@@ -26,9 +31,9 @@ LINKMAP  = $(STARTUP_DIR)/ldscript_bootrom.ld
 
 # Commandline options for each tool.
 
-CFLAGS  = -I. -I ../../Firmware_Common -c -Os # -DDISABLE_UART_RX
+CFLAGS  = -m$(ARCH) -I. -I ../../Firmware_Common -c -Os # -DDISABLE_UART_RX
 
-LFLAGS  = -nostartfiles -Wl,--relax -Os
+LFLAGS  = -m$(ARCH) -nostartfiles -Wl,--relax -Os
 
 
 # Our target.
@@ -65,6 +70,9 @@ $(MAIN_PRJ).elf: $(STARTUP_OBJ) $(MAIN_OBJ)
 	$(LD) $(LFLAGS) -T $(LINKMAP) -o $@ $+ $(LIBS)
 
 $(BUILD_DIR)/%.o: %.c Makefile
+	$(CC) $(CFLAGS)  -o $@ -c $<
+
+$(BUILD_DIR)/%.o: $(COMMON_DIR)/%.c Makefile
 	$(CC) $(CFLAGS)  -o $@ -c $<
 
 $(BUILD_DIR)/%.o: %.s

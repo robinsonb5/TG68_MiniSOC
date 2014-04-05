@@ -282,7 +282,7 @@ void c_entry()
 	unsigned char *fbptr;
 	ClearTextBuffer();
 
-	HW_PER(PER_UART_CLKDIV)=(1000*HW_PER(PER_CAP_CLOCKSPEED))/112500;
+	HW_PER(PER_UART_CLKDIV)=(1000*HW_PER(PER_CAP_CLOCKSPEED))/1152;
 
 	AddMemory();
 
