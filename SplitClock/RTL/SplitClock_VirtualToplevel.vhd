@@ -79,6 +79,8 @@ signal cpu_lds_r : std_logic; -- lower data strobe
 signal cpu_r_w_r : std_logic; -- read(high)/write(low)
 signal busstate : std_logic_vector(1 downto 0);
 signal cpu_clkena : std_logic :='0';
+signal cpu_decode : std_logic;
+signal cpu_run : std_logic;
 
 -- VGA
 signal currentX : unsigned(11 downto 0);
@@ -221,7 +223,7 @@ myTG68 : entity work.TG68KdotC_Kernel
 	(
 		clk => clk,
       nReset => reset_in and sdr_ready,  -- Contributes to reset, so have to use reset_in here.
-      clkena_in => cpu_clkena,
+      clkena_in => cpu_run,
       data_in => cpu_datain,
 		IPL => ints,
 		IPL_autovector => '0',
@@ -250,6 +252,8 @@ mybootrom : entity work.sdbootstrap_ROM
 		lds_n => cpu_lds_r
 	);
 
+cpu_decode<='1' when busstate="01" else '0';
+cpu_run <= cpu_decode or cpu_clkena;
 
 process(clk,cpu_addr)
 begin
@@ -273,15 +277,16 @@ begin
 		cpu_lds_r <= cpu_lds;
 		cpu_r_w_r <= cpu_r_w;
 
+		
 		case prgstate is
 			when run =>
 				cpu_clkena<='0';
 				prgstate<=mem;
 			when mem =>
-				if busstate="01" then -- Can we anticipate this and save a cycle?
-					cpu_clkena<='1';
-					prgstate<=run;
-				else
+				if busstate/="01" then -- Can we anticipate this and save a cycle?
+--					cpu_clkena<='1';
+--					prgstate<=run;
+--				else
 					case cpu_addr(31 downto 16) is
 						when X"FFFF" => -- Interrupt acknowledge cycle
 							-- CPU address bits 3 downto 1 contain the int number,
@@ -349,7 +354,6 @@ begin
 					vga_ackback<='1';
 					cpu_clkena<='1';
 					prgstate<=run;
---					prgstate<=wait0;
 				end if;
 			when peripheral =>
 				cpu_datain<=per_reg_dataout;
@@ -357,19 +361,7 @@ begin
 				if per_reg_dtack='0' then
 					cpu_clkena<='1';
 					prgstate<=run;
---					prgstate<=wait0;
 				end if;
---			when wait0 =>
---				prgstate<=wait3;
---			when wait1 =>
---				prgstate<=wait3;
---			when wait2 =>
---				prgstate<=wait3;
---			when wait3 =>
---				if (reset or not tg68_ready)='1' then
---					cpu_clkena<='1';
---					prgstate<=run;
---				end if;
 			when others =>
 				null;
 		end case;
@@ -425,7 +417,7 @@ mysdram : entity work.sdram
 	);
 
 
-	-- We're going to lose ack pulses from the VGA controller, since it's
+	-- We're in danger of losing ack pulses from the VGA controller, since it's
 	-- running on a faster clock than the rest of the system.  Hence this
 	-- little acknowledge dance.
 	
