@@ -7,7 +7,7 @@ entity VirtualToplevel is
 		sdram_rows : integer := 12;
 		sdram_cols : integer := 8;
 		sysclk_frequency : integer := 1000; -- Sysclk frequency * 10
-		spi_maxspeed : integer := 4	-- lowest acceptable timer DIV7 value
+		spi_maxspeed : integer := 1	-- lowest acceptable timer DIV7 value
 	);
 	port (
 		clk 			: in std_logic;
@@ -160,6 +160,10 @@ signal ps2k_clk_db : std_logic;
 
 type prgstates is (run,pause,mem,rom,waitread,waitwrite,waitvga,vga,peripheral);
 signal prgstate : prgstates :=run;
+
+type fastprgstates is (waitcpu,waitram);
+signal fast_prgstate : fastprgstates :=waitcpu;
+
 begin
 
 audio_l<=X"0000";
@@ -255,11 +259,23 @@ mybootrom : entity work.sdbootstrap_ROM
 cpu_decode<='1' when busstate="01" else '0';
 cpu_run <= cpu_decode or cpu_clkena;
 
+process(clk)
+begin
+	if rising_edge(clk_fast) then
+		cpu_dataout_r <= cpu_dataout;
+		cpu_addr_r <= cpu_addr;
+		cpu_uds_r <= cpu_uds;
+		cpu_lds_r <= cpu_lds;
+		cpu_r_w_r <= cpu_r_w;
+	end if;
+end process;
+
+
 process(clk,cpu_addr)
 begin
 	if reset='0' then
 		prgstate<=run;
-		req_pending<='0';
+--		req_pending<='0';
 		vga_reg_datain<=X"0000";
 	elsif rising_edge(clk) then
 		int_ack<='0';
@@ -270,23 +286,13 @@ begin
 		rom_we_n<='1';
 		
 		vga_ackback<='0';
-
-		cpu_dataout_r <= cpu_dataout;
-		cpu_addr_r <= cpu_addr;
-		cpu_uds_r <= cpu_uds;
-		cpu_lds_r <= cpu_lds;
-		cpu_r_w_r <= cpu_r_w;
-
 		
 		case prgstate is
 			when run =>
 				cpu_clkena<='0';
 				prgstate<=mem;
 			when mem =>
-				if busstate/="01" then -- Can we anticipate this and save a cycle?
---					cpu_clkena<='1';
---					prgstate<=run;
---				else
+				if busstate/="01" then
 					case cpu_addr(31 downto 16) is
 						when X"FFFF" => -- Interrupt acknowledge cycle
 							-- CPU address bits 3 downto 1 contain the int number,
@@ -310,38 +316,20 @@ begin
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
 							if cpu_r_w='0' then	-- Pass writes through to RAM.
 								rom_we_n<=not bootram_overlay;
-								req_pending<='1';
 								prgstate<=waitwrite;
 							elsif bootrom_overlay='0' then
-								req_pending<='1';
 								prgstate<=waitread;	-- overlay disabled.
 							else
 								prgstate<=rom;
 							end if;
-						when others =>
-							req_pending<='1';
-							if cpu_r_w='0' then
-								prgstate<=waitwrite;
-							else	-- SDRAM read
+						when others => -- SDRAM access (handled by a second state machine running on a faster clock.)
 								prgstate<=waitread;
-							end if;
 					end case;
 				end if;
 			when waitread =>
-				req_pending<='1';
-				if dtack1='0' then
-					cpu_datain<=ramdata;
-					req_pending<='0';
-					cpu_clkena<='1';
-					prgstate<=run;
-				end if;
-			when waitwrite =>
-				req_pending<='1';
-				if dtack1='0' then
-					req_pending<='0';
-					cpu_clkena<='1';
-					prgstate<=run;
-				end if;
+				-- A dummy state - a second state machine running on the faster clock handles
+				-- SDRAM access, and when it's finished, this state machine is forced back
+				-- to the "run" state
 			when rom =>
 				cpu_datain<=romdata;
 				cpu_clkena<='1';
@@ -365,8 +353,56 @@ begin
 			when others =>
 				null;
 		end case;
+
+		-- When SDRAM access finishes, force the state machine back to the "run" state
+		if dtack1='0' then
+			cpu_datain<=ramdata;
+			cpu_clkena<='1';
+			prgstate<=run;
+		end if;
+
 	end if;
 end process;
+
+
+-- State machine running on the faster clock for SDRAM access
+-- FIXME - tidier to handle the VGA controller on this context too, maybe?
+
+process(clk,cpu_addr)
+begin
+	if reset='0' then
+		req_pending<='0';
+	elsif rising_edge(clk_fast) then
+
+		case fast_prgstate is
+			when waitcpu =>
+				-- Wait for the CPU next to be paused
+				if cpu_run='0' and busstate/="01" and cpu_addr(31)='0' then
+					case cpu_addr(31 downto 16) is -- ROM
+						when X"0000" => -- ROM access
+							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
+							if cpu_r_w='0' or bootrom_overlay='0' then	-- Pass writes through to RAM.
+								req_pending<='1';
+								fast_prgstate<=waitram;
+							end if;
+						when others =>
+							req_pending<='1';
+							fast_prgstate<=waitram;
+					end case;
+				end if;
+			when waitram => -- Hold the SDRAM req signal until the CPU is next enabled.
+				req_pending<='1';
+				if cpu_run='1' then
+					req_pending<='0';
+					fast_prgstate<=waitcpu;
+				end if;
+			when others =>
+				null;
+		end case;
+	end if;
+end process;
+
+
 
 	
 -- SDRAM
