@@ -157,11 +157,15 @@ signal rom_we_n : std_logic;
 signal ps2m_clk_db : std_logic;
 signal ps2k_clk_db : std_logic;
 
-
 type prgstates is (run,pause,mem,rom,waitread,waitwrite,waitvga,vga,peripheral);
 signal prgstate : prgstates :=run;
 
-type fastprgstates is (waitcpu,waitram);
+-- Address decoding for fast state machine
+
+signal sel_rom : std_logic;
+signal sel_peripherals : std_logic;
+
+type fastprgstates is (waitcpu,testaccess,waitram);
 signal fast_prgstate : fastprgstates :=waitcpu;
 
 begin
@@ -368,6 +372,9 @@ end process;
 -- State machine running on the faster clock for SDRAM access
 -- FIXME - tidier to handle the VGA controller on this context too, maybe?
 
+sel_rom <= '1' when cpu_addr_r(31 downto 16)=X"0000" else '0';
+sel_peripherals <= '1' when cpu_addr_r(31)='1' else '0';
+
 process(clk,cpu_addr)
 begin
 	if reset='0' then
@@ -377,18 +384,15 @@ begin
 		case fast_prgstate is
 			when waitcpu =>
 				-- Wait for the CPU next to be paused
-				if cpu_run='0' and busstate/="01" and cpu_addr(31)='0' then
-					case cpu_addr(31 downto 16) is -- ROM
-						when X"0000" => -- ROM access
-							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
-							if cpu_r_w='0' or bootrom_overlay='0' then	-- Pass writes through to RAM.
-								req_pending<='1';
-								fast_prgstate<=waitram;
-							end if;
-						when others =>
-							req_pending<='1';
-							fast_prgstate<=waitram;
-					end case;
+				if cpu_run='0' and busstate/="01" then
+					fast_prgstate<=testaccess;
+				end if;
+			when testaccess =>
+				if sel_peripherals='0' and (sel_rom='0' or cpu_r_w='0' or bootrom_overlay='0') then	-- Pass writes through to RAM.
+					req_pending<='1';
+					fast_prgstate<=waitram;
+				else
+					fast_prgstate<=waitcpu;
 				end if;
 			when waitram => -- Hold the SDRAM req signal until the CPU is next enabled.
 				req_pending<='1';

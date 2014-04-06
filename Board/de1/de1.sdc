@@ -48,6 +48,7 @@ create_clock -name {clk_50} -period 20.000 -waveform { 0.000 0.500 } [get_ports 
 derive_pll_clocks 
 create_generated_clock -name sd1clk_pin -source [get_pins {mypll|altpll_component|pll|clk[0]}] [get_ports {DRAM_CLK}]
 create_generated_clock -name sysclk -source [get_pins {mypll|altpll_component|pll|clk[1]}]
+create_generated_clock -name sysclk_slow -source [get_pins {mypll|altpll_component|pll|clk[2]}]
 
 #**************************************************************
 # Set Clock Latency
@@ -73,6 +74,10 @@ set_input_delay -clock sysclk -min 0.0 [get_ports {UART_RXD}]
 set_input_delay -clock sysclk -max 0.0 [get_ports {UART_RXD}]
 
 
+set_input_delay  -clock sysclk_slow  -min 0.0 [get_ports {SD_DAT}]
+set_input_delay  -clock sysclk_slow  -min 0.5 [get_ports {SD_DAT}]
+
+
 #**************************************************************
 # Set Output Delay
 #**************************************************************
@@ -84,8 +89,20 @@ set_output_delay -clock sd1clk_pin -min 0.5 [get_ports DRAM_CLK]
 
 # Delays for async signals - not necessary, but might as well avoid
 # having unconstrained ports in the design
-set_output_delay -clock sysclk -min 0.0 [get_ports UART_TXD]
-set_output_delay -clock sysclk -max 0.5 [get_ports UART_TXD]
+set_output_delay -clock sysclk_slow -min 0.0 [get_ports UART_TXD]
+set_output_delay -clock sysclk_slow -max 0.5 [get_ports UART_TXD]
+
+set_output_delay -clock sysclk_slow -min 0.0 [get_ports SD_CLK]
+set_output_delay -clock sysclk_slow -max 0.5 [get_ports SD_CLK]
+set_output_delay -clock sysclk_slow -min 0.0 [get_ports SD_CS]
+set_output_delay -clock sysclk_slow -max 0.5 [get_ports SD_CS]
+set_output_delay -clock sysclk_slow -min 0.0 [get_ports SD_CMD]
+set_output_delay -clock sysclk_slow -max 0.5 [get_ports SD_CMD]
+set_output_delay -clock sysclk_slow -min 0.0 [get_ports SD_DAT3]
+set_output_delay -clock sysclk_slow -max 0.5 [get_ports SD_DAT3]
+
+set_output_delay -clock sysclk -min 0.0 [get_ports VGA*]
+set_output_delay -clock sysclk -max 0.5 [get_ports VGA*]
 
 
 #**************************************************************
@@ -100,7 +117,13 @@ set_output_delay -clock sysclk -max 0.5 [get_ports UART_TXD]
 
 set_false_path -from {KEY*} -to {*}
 set_false_path -from {SW*} -to {*}
-
+set_false_path -from {PS2_*} -to {*}
+set_false_path -to {PS2_*} -from {*}
+set_false_path -from {GPIO_1[18]} -to {*}
+set_false_path -from {GPIO_1[19]} -to {*}
+set_false_path -to {GPIO_1[18]} -from {*}
+set_false_path -to {GPIO_1[19]} -from {*}
+set_false_path -to {HEX*[*]} -from {*}
 
 #**************************************************************
 # Set Multicycle Path
