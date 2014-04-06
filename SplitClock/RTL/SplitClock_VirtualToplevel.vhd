@@ -102,6 +102,7 @@ signal tg68_ready : std_logic;
 signal sdr_ready : std_logic;
 signal write_address : std_logic_vector(31 downto 0);
 signal req_pending : std_logic :='0';
+signal sdram_req : std_logic;
 --signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
 
@@ -165,7 +166,7 @@ signal prgstate : prgstates :=run;
 signal sel_rom : std_logic;
 signal sel_peripherals : std_logic;
 
-type fastprgstates is (waitcpu,testaccess,waitram);
+type fastprgstates is (waitcpu,waitram);
 signal fast_prgstate : fastprgstates :=waitcpu;
 
 begin
@@ -251,8 +252,8 @@ mybootrom : entity work.sdbootstrap_ROM
 		maxAddrBitBRAM => 11
 	)
 	port map (
-		clk => clk,
-		addr => cpu_addr(11 downto 0),
+		clk => clk_fast,
+		addr => cpu_addr_r(11 downto 0),
 		q => romdata,
 		d => cpu_dataout_r,
 		we_n => rom_we_n,
@@ -320,14 +321,12 @@ begin
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
 							if cpu_r_w='0' then	-- Pass writes through to RAM.
 								rom_we_n<=not bootram_overlay;
-								prgstate<=waitwrite;
-							elsif bootrom_overlay='0' then
-								prgstate<=waitread;	-- overlay disabled.
-							else
-								prgstate<=rom;
 							end if;
+							-- We allow the SDRAM reading logic to terminate ROM cycles;
+							-- this allows us to delay address decoding until after the SDRAM read is done.
+							prgstate<=waitread;
 						when others => -- SDRAM access (handled by a second state machine running on a faster clock.)
-								prgstate<=waitread;
+							prgstate<=waitread;
 					end case;
 				end if;
 			when waitread =>
@@ -360,7 +359,11 @@ begin
 
 		-- When SDRAM access finishes, force the state machine back to the "run" state
 		if dtack1='0' then
-			cpu_datain<=ramdata;
+			if sel_rom='1' then
+				cpu_datain<=romdata;
+			else
+				cpu_datain<=ramdata;
+			end if;
 			cpu_clkena<='1';
 			prgstate<=run;
 		end if;
@@ -372,31 +375,32 @@ end process;
 -- State machine running on the faster clock for SDRAM access
 -- FIXME - tidier to handle the VGA controller on this context too, maybe?
 
-sel_rom <= '1' when cpu_addr_r(31 downto 16)=X"0000" else '0';
-sel_peripherals <= '1' when cpu_addr_r(31)='1' else '0';
+sel_rom <= '1' when cpu_addr_r(31 downto 16)=X"0000" and bootrom_overlay='1' else '0';
+sel_peripherals <= cpu_addr_r(31);
+
+-- Filtering the sdram_req signal like this allows us to trigger the access
+-- one 100MHz cycle earlier, which allows to to catch an earlier 25Mhz cpu clock edge.
+sdram_req <=req_pending and not sel_peripherals;
 
 process(clk,cpu_addr)
 begin
 	if reset='0' then
 		req_pending<='0';
+		fast_prgstate<=waitcpu;
 	elsif rising_edge(clk_fast) then
 
 		case fast_prgstate is
 			when waitcpu =>
 				-- Wait for the CPU next to be paused
 				if cpu_run='0' and busstate/="01" then
-					fast_prgstate<=testaccess;
-				end if;
-			when testaccess =>
-				if sel_peripherals='0' and (sel_rom='0' or cpu_r_w='0' or bootrom_overlay='0') then	-- Pass writes through to RAM.
+					-- Trigger a read from SDRAM even if the read's destined for ROM.
+					-- That way we can avoid address decoding here.
 					req_pending<='1';
 					fast_prgstate<=waitram;
-				else
-					fast_prgstate<=waitcpu;
 				end if;
 			when waitram => -- Hold the SDRAM req signal until the CPU is next enabled.
 				req_pending<='1';
-				if cpu_run='1' then
+				if cpu_run='1' or sel_peripherals='1' then
 					req_pending<='0';
 					fast_prgstate<=waitcpu;
 				end if;
@@ -405,8 +409,6 @@ begin
 		end case;
 	end if;
 end process;
-
-
 
 	
 -- SDRAM
@@ -447,7 +449,7 @@ mysdram : entity work.sdram
 
 		datawr1 => cpu_dataout_r,
 		Addr1 => cpu_addr_r,
-		req1 => req_pending,
+		req1 => sdram_req,
 		wr1 => cpu_r_w_r,
 		wrL1 => cpu_lds_r,
 		wrU1 => cpu_uds_r,
