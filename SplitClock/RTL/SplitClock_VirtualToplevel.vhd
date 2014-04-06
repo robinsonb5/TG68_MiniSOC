@@ -198,7 +198,7 @@ ps2k_db: entity work.Debounce
 
 myint : entity work.interrupt_controller
 	port map(
-		clk => clk,
+		clk => clk_fast,
 		reset => reset,
 		int7 => '0',
 		int1 => vblank_int,
@@ -236,7 +236,7 @@ myTG68 : entity work.TG68KdotC_Kernel
 	);
 
 
-mybootrom : entity work.Hex_ROM
+mybootrom : entity work.sdbootstrap_ROM
 	generic map (
 		maxAddrBitBRAM => 11
 	)
@@ -303,7 +303,8 @@ begin
 							prgstate<=peripheral;
 						when X"0000" => -- ROM access
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
-							if cpu_r_w='0' and bootram_overlay='0' then	-- Pass writes through to RAM.
+							if cpu_r_w='0' then	-- Pass writes through to RAM.
+								rom_we_n<=not bootram_overlay;
 								req_pending<='1';
 								prgstate<=waitwrite;
 							elsif bootrom_overlay='0' then
