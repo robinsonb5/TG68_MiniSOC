@@ -21,8 +21,8 @@ CONFIG VCCAUX=3.3;
 NET "CLK50" LOC = "D14" | IOSTANDARD = LVTTL;
 
 #Created by Constraints Editor (xc6slx45-fgg676-3) - 2014/03/19
-INST "project/myTG68/*" TNM = multi;
-TIMESPEC ts_multi = FROM "multi" TO "multi" TS_CLK50 * 3;
+#INST "project/myTG68/*" TNM = multi;
+#TIMESPEC ts_multi = FROM "multi" TO "multi" TS_CLK50 * 3;
 
 # NET "80MHZ" LOC = "A13";
 #

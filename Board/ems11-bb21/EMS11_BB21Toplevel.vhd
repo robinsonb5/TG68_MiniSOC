@@ -66,6 +66,7 @@ signal sdram_clk_inv : std_logic;
 signal sysclk : std_logic;
 signal sysclk_inv : std_logic;
 signal clklocked : std_logic;
+signal sysclk_slow : std_logic;
 
 signal vga_red : unsigned(9 downto 0);
 signal vga_green : unsigned(9 downto 0);
@@ -115,12 +116,13 @@ PS2_CLK <= '0' when ps2k_clk_out='0' else 'Z';
 -- Limitations of the Spartan 6 mean we need to "forward" the SDRAM clock
 -- to the io pin.
 
-myclock : entity work.Clock_50to100
+myclock : entity work.Clock_50to100Split
 port map(
 	CLK_IN1 => CLK50,
 	RESET => '0',
 	CLK_OUT1 => sysclk,
 	CLK_OUT2 => sdram_clk,
+	CLK_OUT3 => sysclk_slow,
 	LOCKED => clklocked
 );
 
@@ -215,10 +217,11 @@ project: entity work.VirtualToplevel
 	generic map (
 		sdram_rows => 13,
 		sdram_cols => 10,
-		sysclk_frequency => 1000 -- Sysclk frequency * 10
+		sysclk_frequency => 250 -- Sysclk frequency * 10
 	)
 	port map (
-		clk => sysclk,
+		clk => sysclk_slow,
+		clk_fast => sysclk,
 		reset_in => RESET_N,
 	
 		-- VGA

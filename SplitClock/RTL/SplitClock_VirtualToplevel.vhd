@@ -538,11 +538,11 @@ mysdram : entity work.sdram
 		uart_txd => txd,
 		uart_rxd => rxd,
 
-		ps2k_clk_in => ps2k_clk_db,
+		ps2k_clk_in => ps2k_clk_in,
 		ps2k_dat_in => ps2k_dat_in,
 		ps2k_clk_out => ps2k_clk_out,
 		ps2k_dat_out => ps2k_dat_out,
-		ps2m_clk_in => ps2m_clk_db,
+		ps2m_clk_in => ps2m_clk_in,
 		ps2m_dat_in => ps2m_dat_in,
 		ps2m_clk_out => ps2m_clk_out,
 		ps2m_dat_out => ps2m_dat_out,
