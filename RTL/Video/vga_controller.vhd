@@ -2,6 +2,11 @@ library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.numeric_std.ALL;
 
+library work;
+use work.DMACache_pkg.ALL;
+use work.DMACache_config.ALL;
+
+
 -- VGA controller
 -- a module to handle VGA output
 
@@ -75,14 +80,13 @@ entity vga_controller is
 		reg_dtack : out std_logic;	-- Needed for char ram access.
 		reg_req : in std_logic;
 
-		sdr_addrout : buffer std_logic_vector(31 downto 0); -- to SDRAM
-		sdr_datain : in std_logic_vector(15 downto 0);	-- from SDRAM
-		sdr_fill : in std_logic; -- High when data is being written from SDRAM controller
-		sdr_req : buffer std_logic; -- Request service from SDRAM controller
-		sdr_reservebank : buffer std_logic; -- Indicate to SDR controller when requests are not critical timewise
-		sdr_reserveaddr : buffer std_logic_vector(31 downto 0); -- Indicate to SDR controller when requests are not critical timewise
+		dma_data : in std_logic_vector(15 downto 0);
+		vgachannel_fromhost : out DMAChannel_FromHost;
+		vgachannel_tohost : in DMAChannel_ToHost;
+		spr0channel_fromhost : out DMAChannel_FromHost;
+		spr0channel_tohost : in DMAChannel_ToHost;
+		
 		sdr_refresh : out std_logic;
-		sdr_ack : in std_logic;
 
 		vblank_int : out std_logic;
 		hsync : out std_logic; -- to monitor
@@ -97,19 +101,10 @@ end entity;
 architecture rtl of vga_controller is
 	constant vgaticks : integer := (sysclk_frequency/250)-1;
 	signal vga_pointer : std_logic_vector(31 downto 0);
-
-	signal dma_addr : std_logic_vector(31 downto 0);
-	signal setaddr_vga : std_logic;
-	signal setaddr_spr0 : std_logic;
-	signal dma_len : unsigned(11 downto 0);
-	signal setlen_vga : std_logic;
-	signal setlen_spr0 : std_logic;
-	signal req_vga : std_logic;
-	signal req_spr0 : std_logic;
-	signal data_from_dma : std_logic_vector(15 downto 0);
-	signal valid_vga : std_logic;
-	signal valid_spr0 : std_logic;
 	
+	signal vgasetaddr : std_logic;
+	signal spr0setaddr : std_logic;
+
 	signal framebuffer_pointer : std_logic_vector(31 downto 0) := X"00100000";
 	signal hsize : unsigned(11 downto 0) := TO_UNSIGNED(640,12);
 	signal htotal : unsigned(11 downto 0) := TO_UNSIGNED(800,12);
@@ -153,6 +148,10 @@ architecture rtl of vga_controller is
 	
 begin
 
+	-- Need this to be readable
+	spr0channel_fromhost.setaddr<=spr0setaddr;
+	vgachannel_fromhost.setaddr<=vgasetaddr;
+
 	-- Detect the leading edge of the req pulse.
 	process(clk)
 	begin
@@ -191,47 +190,6 @@ begin
 			ySyncTo => vbstop
 		);		
 
-	mydmacache : entity work.DMACache
-		port map(
-			clk => clk,
-			reset_n => reset,
-
-			-- DMA addressing
-			addr_in => dma_addr,
-			setaddr_vga => setaddr_vga,
-			setaddr_sprite0 => setaddr_spr0,
-			setaddr_audio0 => '0',
-			setaddr_audio1 => '0',
-
-			-- DMA request lengths
-			req_length => dma_len,
-			setreqlen_vga => setlen_vga,
-			setreqlen_sprite0 => setlen_spr0,
-			setreqlen_audio0 => '0',
-			setreqlen_audio1 => '0',
-
-			-- Read requests
-			req_vga => req_vga,
-			req_sprite0 => req_spr0,
-			req_audio0 => '0',
-			req_audio1 => '0',
-
-			-- DMA channel output and valid flags.
-			data_out => data_from_dma,
-			valid_vga => valid_vga,
-			valid_sprite0 => valid_spr0,
-			valid_audio0 => open,
-			valid_audio1 => open,
-			
-			-- SDRAM interface
-			sdram_addr=> sdr_addrout,
-			sdram_reserveaddr(31 downto 0) => sdr_reserveaddr,
-			sdram_reserve => sdr_reservebank,
-			sdram_req => sdr_req,
-			sdram_ack => sdr_ack,
-			sdram_fill => sdr_fill,
-			sdram_data => sdr_datain
-		);
 
 	mychargen : entity work.charactergenerator
 		generic map (
@@ -387,7 +345,7 @@ begin
 	process(clk, reset, currentX, currentY)
 	begin
 		if rising_edge(clk) then
-			req_spr0<='0';
+			spr0channel_fromhost.req<='0';
 			if currentX>=sprite0_xpos and currentX-sprite0_xpos<16
 						and currentY>=sprite0_ypos and currentY-sprite0_ypos<16 then	
 				if end_of_pixel='1' then
@@ -395,7 +353,7 @@ begin
 						when "11" =>
 							-- Read the first pixel from the buffer, copy to the sprite proper.
 							-- Request the next word of sprite data.
-							req_spr0<='1';
+							spr0channel_fromhost.req<='1';
 							sprite0_data(11 downto 0) <= sprite0_data_buf(11 downto 0);
 							sprite_col<=sprite0_data_buf(15 downto 12);
 							sprite0_counter<="10";
@@ -418,13 +376,13 @@ begin
 			end if;
 
 --			Prefetch first word.
-			if setaddr_spr0='1' then
-				req_spr0<='1';
+			if spr0setaddr='1' then -- spr0channel_fromhost.setaddr='1' then
+				spr0channel_fromhost.req<='1';
 				sprite0_counter<="11";
 			end if;
 			
-			if valid_spr0='1' then
-				sprite0_data_buf<=data_from_dma;
+			if spr0channel_tohost.valid='1' then
+				sprite0_data_buf<=dma_data;
 			end if;
 
 		end if;
@@ -442,15 +400,16 @@ begin
 		
 		if rising_edge(clk) then
 			vblank_int<='0';
-			req_vga<='0';
+			vgachannel_fromhost.req<='0';
 			vga_newframe<='0';
-			setaddr_vga<='0';
-			setaddr_spr0<='0';
-			setlen_vga<='0';
-			setlen_spr0<='0';	
+			vgachannel_fromhost.req<='0';
+			vgasetaddr<='0';
+			vgachannel_fromhost.setreqlen<='0';
+			spr0setaddr<='0';
+			spr0channel_fromhost.setreqlen<='0';	
 
-			if(valid_vga='1') then
-				vgadata<=data_from_dma;
+			if(vgachannel_tohost.valid='1') then
+				vgadata<=dma_data;
 			end if;
 
 			if end_of_pixel='1' then
@@ -459,7 +418,7 @@ begin
 				if currentX<640 and currentY<480 then
 					vga_window<='1';
 					-- Request next pixel from VGA cache
-					req_vga<='1';
+					vgachannel_fromhost.req<='1';
 
 					if sprite_col(3)='1' then
 						red <= (others => sprite_col(2));
@@ -502,22 +461,22 @@ begin
 					-- Last line of VBLANK - update DMA pointers
 					if currentY=vtotal then
 							if currentX=0 then
-								dma_addr<=framebuffer_pointer;
-								setaddr_vga<='1';
+								vgachannel_fromhost.addr<=framebuffer_pointer;
+								vgasetaddr<='1';
 							elsif currentX=1 then
-								dma_addr<=sprite0_pointer;
-								setaddr_spr0<='1';
+								spr0channel_fromhost.addr<=sprite0_pointer;
+								spr0setaddr<='1';
 							end if;
 					end if;
 					
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
 					if currentX=(htotal - 20) then	-- Signal to SDRAM controller that we're
-						dma_len<=TO_UNSIGNED(640,12);
-						setlen_vga<='1';
+						vgachannel_fromhost.reqlen<=TO_UNSIGNED(640,16);
+						vgachannel_fromhost.setreqlen<='1';
 --						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
 					elsif currentX=(htotal - 19) then
-						dma_len<=TO_UNSIGNED(4,12);
-						setlen_spr0<='1';
+						spr0channel_fromhost.reqlen<=TO_UNSIGNED(4,16);
+						spr0channel_fromhost.setreqlen<='1';
 					end if;
 				end if;
 			end if;

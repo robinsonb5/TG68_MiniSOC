@@ -2,6 +2,10 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.ALL;
 
+library work;
+use work.DMACache_pkg.ALL;
+use work.DMACache_config.ALL;
+
 entity VirtualToplevel is
 	generic (
 		sdram_rows : integer := 12;
@@ -106,15 +110,28 @@ signal sdram_req : std_logic;
 --signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
 
-signal sdr_vga_data : std_logic_vector(15 downto 0);
-signal sdr_vga_addr : std_logic_vector(31 downto 0);
-signal sdr_vga_req : std_logic;
-signal sdr_vga_fill : std_logic;
-signal sdr_vga_refresh : std_logic;
-signal sdr_vga_newframe : std_logic;
-signal sdr_vga_reservebank : std_logic; -- Keep bank clear for instant access.
-signal sdr_vga_reserveaddr : std_logic_vector(31 downto 0); -- to SDRAM
-signal sdr_vga_ack : std_logic;
+-- Plumbing between DMA controller and SDRAM
+
+signal vga_addr : std_logic_vector(31 downto 0);
+signal vga_data : std_logic_vector(15 downto 0);
+signal vga_req : std_logic;
+signal vga_ack : std_logic;
+signal vga_fill : std_logic;
+signal vga_refresh : std_logic;
+signal vga_newframe : std_logic;
+signal vga_reservebank : std_logic; -- Keep bank clear for instant access.
+signal vga_reserveaddr : std_logic_vector(31 downto 0); -- to SDRAM
+
+signal dma_data : std_logic_vector(15 downto 0);
+
+
+-- Plumbing between VGA controller and DMA controller
+
+signal vgachannel_fromhost : DMAChannel_FromHost;
+signal vgachannel_tohost : DMAChannel_ToHost;
+signal spr0channel_fromhost : DMAChannel_FromHost;
+signal spr0channel_tohost : DMAChannel_ToHost;
+
 
 -- VGA register block signals
 
@@ -436,16 +453,16 @@ mysdram : entity work.sdram
 		reset_out => sdr_ready,
 		reinit => '0',
 
-		vga_addr => sdr_vga_addr,
-		vga_data => sdr_vga_data,
-		vga_fill => sdr_vga_fill,
-		vga_req => sdr_vga_req,
-		vga_ack => sdr_vga_ack,
-		vga_refresh => sdr_vga_refresh,
-		vga_reservebank => sdr_vga_reservebank,
-		vga_reserveaddr => sdr_vga_reserveaddr,
+		vga_addr => vga_addr,
+		vga_data => vga_data,
+		vga_fill => vga_fill,
+		vga_req => vga_req,
+		vga_ack => vga_ack,
+		vga_refresh => vga_refresh,
+		vga_reservebank => vga_reservebank,
+		vga_reserveaddr => vga_reserveaddr,
 
-		vga_newframe => sdr_vga_newframe,
+		vga_newframe => vga_newframe,
 
 		datawr1 => cpu_dataout_r,
 		Addr1 => cpu_addr_r,
@@ -476,6 +493,31 @@ mysdram : entity work.sdram
 	end process;
 
 
+	-- DMA controller
+
+	mydmacache : entity work.DMACache
+		port map(
+			clk => clk_fast,
+			reset_n => reset,
+
+			channels_from_host(0) => vgachannel_fromhost,
+			channels_from_host(1) => spr0channel_fromhost,
+			channels_to_host(0) => vgachannel_tohost,	
+			channels_to_host(1) => spr0channel_tohost,
+
+			data_out => dma_data,
+
+			-- SDRAM interface
+			sdram_addr=> vga_addr,
+			sdram_reserveaddr(31 downto 0) => vga_reserveaddr,
+			sdram_reserve => vga_reservebank,
+			sdram_req => vga_req,
+			sdram_ack => vga_ack,
+			sdram_fill => vga_fill,
+			sdram_data => vga_data
+		);	
+
+		
 	myvga : entity work.vga_controller
 		port map (
 		clk => clk_fast,
@@ -490,14 +532,13 @@ mysdram : entity work.sdram
 		reg_dtack => vga_reg_dtack,
 		reg_req => vga_reg_req,
 
-		sdr_addrout => sdr_vga_addr,
-		sdr_datain => sdr_vga_data, 
-		sdr_fill => sdr_vga_fill,
-		sdr_req => sdr_vga_req,
-		sdr_ack => sdr_vga_ack,
-		sdr_reservebank => sdr_vga_reservebank,
-		sdr_reserveaddr => sdr_vga_reserveaddr,
-		sdr_refresh => sdr_vga_refresh,
+		sdr_refresh => vga_refresh,
+
+		dma_data => dma_data,
+		vgachannel_fromhost => vgachannel_fromhost,
+		vgachannel_tohost => vgachannel_tohost,
+		spr0channel_fromhost => spr0channel_fromhost,
+		spr0channel_tohost => spr0channel_tohost,
 
 		hsync => vga_hsync,
 		vsync => vga_vsync,
