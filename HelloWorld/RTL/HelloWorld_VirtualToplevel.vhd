@@ -11,6 +11,7 @@ entity VirtualToplevel is
 	);
 	port (
 		clk 			: in std_logic;
+		clk_fast 	: in std_logic;
 		reset_in 	: in std_logic;
 
 		-- VGA
@@ -55,7 +56,10 @@ entity VirtualToplevel is
 		
 		-- Audio
 		audio_l : out signed(15 downto 0);
-		audio_r : out signed(15 downto 0)
+		audio_r : out signed(15 downto 0);
+
+		-- Misc IO
+		hex : out std_logic_vector(15 downto 0)
 );
 end entity;
 

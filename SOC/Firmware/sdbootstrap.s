@@ -92,6 +92,8 @@ START:				; first instruction of program
 
 	move.w	#$f000,HEX
 
+	move.w 	#1,PERREGS+4	; Divert lowmem reads to ROM, pass writes to RAM.
+
 	lea	.welcome,a0
 	bsr	Writeserial
 

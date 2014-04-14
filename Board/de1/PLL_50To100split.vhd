@@ -157,7 +157,7 @@ BEGIN
 		clk0_divide_by => 1,
 		clk0_duty_cycle => 50,
 		clk0_multiply_by => 2,
-		clk0_phase_shift => "-1500",
+		clk0_phase_shift => "-1000",
 		clk1_divide_by => 1,
 		clk1_duty_cycle => 50,
 		clk1_multiply_by => 2,
@@ -298,7 +298,7 @@ END SYN;
 -- Retrieval info: PRIVATE: OUTPUT_FREQ_UNIT2 STRING "MHz"
 -- Retrieval info: PRIVATE: PHASE_RECONFIG_FEATURE_ENABLED STRING "0"
 -- Retrieval info: PRIVATE: PHASE_RECONFIG_INPUTS_CHECK STRING "0"
--- Retrieval info: PRIVATE: PHASE_SHIFT0 STRING "-1.50000000"
+-- Retrieval info: PRIVATE: PHASE_SHIFT0 STRING "-1.00000000"
 -- Retrieval info: PRIVATE: PHASE_SHIFT1 STRING "0.00000000"
 -- Retrieval info: PRIVATE: PHASE_SHIFT2 STRING "0.00000000"
 -- Retrieval info: PRIVATE: PHASE_SHIFT_STEP_ENABLED_CHECK STRING "0"
@@ -345,7 +345,7 @@ END SYN;
 -- Retrieval info: CONSTANT: CLK0_DIVIDE_BY NUMERIC "1"
 -- Retrieval info: CONSTANT: CLK0_DUTY_CYCLE NUMERIC "50"
 -- Retrieval info: CONSTANT: CLK0_MULTIPLY_BY NUMERIC "2"
--- Retrieval info: CONSTANT: CLK0_PHASE_SHIFT STRING "-1500"
+-- Retrieval info: CONSTANT: CLK0_PHASE_SHIFT STRING "-1000"
 -- Retrieval info: CONSTANT: CLK1_DIVIDE_BY NUMERIC "1"
 -- Retrieval info: CONSTANT: CLK1_DUTY_CYCLE NUMERIC "50"
 -- Retrieval info: CONSTANT: CLK1_MULTIPLY_BY NUMERIC "2"
