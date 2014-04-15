@@ -114,7 +114,7 @@ begin
 		-- Request and receive data from SDRAM:
 		case inputstate is
 			-- First state: Read.  Check the channels in priority order.
-			-- VGA has absolutel priority, and the others won't do anything until the VGA buffer is
+			-- VGA has absolute priority, and the others won't do anything until the VGA buffer is
 			-- full.
 			when rd1 =>
 				activereq:='0';
@@ -223,8 +223,9 @@ begin
 				internals(I).pending<='1';
 			end if;
 
-			channels_to_host(I).valid<=internals(I).valid_d;
-			internals(I).valid_d<='0';
+--			channels_to_host(I).valid<=internals(I).valid_d;
+--			internals(I).valid_d<='0';
+			channels_to_host(I).valid<='0';
 		end loop;
 		
 		serviceactive := '0';
@@ -242,7 +243,8 @@ begin
 		if serviceactive='1' then
 			cache_rdaddr<=std_logic_vector(to_unsigned(servicechannel,3))&std_logic_vector(internals(servicechannel).rdptr);
 			internals(servicechannel).rdptr<=internals(servicechannel).rdptr+1;
-			internals(servicechannel).valid_d<='1';
+--			internals(servicechannel).valid_d<='1';
+			channels_to_host(servicechannel).valid<='1';
 			internals(servicechannel).pending<='0';
 		end if;
 
