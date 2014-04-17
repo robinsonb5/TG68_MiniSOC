@@ -39,7 +39,7 @@ end entity;
 
 architecture rtl of dmacache is
 
-type inputstate_t is (rd1,rcv1,rcv2,rcv3,rcv4);
+type inputstate_t is (rd1,rcv1,rcv2,rcv3,rcv4,rcv5,rcv6,rcv7,rcv8);
 signal inputstate : inputstate_t := rd1;
 
 constant vga_base : std_logic_vector(2 downto 0) := "000";
@@ -100,7 +100,7 @@ begin
 			for I in 0 to DMACache_MaxChannel loop
 				internals(I).count<=(others => '0');
 				internals(I).wrptr<=(others => '0');
-				internals(I).wrptr_next<=(2=>'1', others =>'0');
+				internals(I).wrptr_next<=(3=>'1', others =>'0');
 			end loop;
 		end if;
 
@@ -119,13 +119,13 @@ begin
 			when rd1 =>
 				activereq:='0';
 				for I in 1 to DMACache_MaxChannel loop
-					if internals(I).rdptr( DMACache_MaxCacheBit downto 2)/=internals(I).wrptr_next( DMACache_MaxCacheBit downto 2) and internals(I).count/=X"000" then
+					if internals(I).rdptr( DMACache_MaxCacheBit downto 3)/=internals(I).wrptr_next( DMACache_MaxCacheBit downto 3) and internals(I).count/=X"000" then
 						activechannel := I;
 						activereq:='1';
 					end if;
 				end loop;
 				-- Give channel zero priority:
-				if internals(0).rdptr( DMACache_MaxCacheBit downto 2)/=internals(0).wrptr_next( DMACache_MaxCacheBit downto 2) and internals(0).count/=X"000" then
+				if internals(0).rdptr( DMACache_MaxCacheBit downto 3)/=internals(0).wrptr_next( DMACache_MaxCacheBit downto 3) and internals(0).count/=X"000" then
 					activechannel := 0;
 					activereq:='1';
 				end if;
@@ -134,10 +134,10 @@ begin
 					cache_wraddr<=std_logic_vector(to_unsigned(activechannel,3))&std_logic_vector(internals(activechannel).wrptr);
 					sdram_req<='1';
 					sdram_addr<=internals(activechannel).addr;
-					internals(activechannel).addr<=std_logic_vector(unsigned(internals(activechannel).addr)+8);
+					internals(activechannel).addr<=std_logic_vector(unsigned(internals(activechannel).addr)+16);
 					inputstate<=rcv1;
 					internals(activechannel).sdram_pending<='1';
-					internals(activechannel).count<=internals(activechannel).count-4;
+					internals(activechannel).count<=internals(activechannel).count-8;
 				end if;
 
 --				elsif internals(1).rdptr( DMACache_MaxCacheBit downto 2)/=internals(1).wrptr_next( DMACache_MaxCacheBit downto 2) and internals(1).count/=X"000" then
@@ -171,10 +171,30 @@ begin
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
+				inputstate<=rcv5;
+			when rcv5 =>
+				data_from_ram<=sdram_data;
+				cache_wren<='1';
+				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
+				inputstate<=rcv6;
+			when rcv6 =>
+				data_from_ram<=sdram_data;
+				cache_wren<='1';
+				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
+				inputstate<=rcv7;
+			when rcv7 =>
+				data_from_ram<=sdram_data;
+				cache_wren<='1';
+				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
+				inputstate<=rcv8;
+			when rcv8 =>
+				data_from_ram<=sdram_data;
+				cache_wren<='1';
+				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				inputstate<=rd1;
 				
 				internals(activechannel).wrptr<=internals(activechannel).wrptr_next;
-				internals(activechannel).wrptr_next<=internals(activechannel).wrptr_next+4;
+				internals(activechannel).wrptr_next<=internals(activechannel).wrptr_next+8;
 			when others =>
 				null;
 		end case;
@@ -183,7 +203,7 @@ begin
 			if channels_from_host(I).setaddr='1' then
 				internals(I).addr<=channels_from_host(I).addr;
 				internals(I).wrptr<=(others =>'0');
-				internals(I).wrptr_next<=(2=>'1', others =>'0');
+				internals(I).wrptr_next<=(3=>'1', others =>'0');
 			end if;
 			if channels_from_host(I).setreqlen='1' then
 				internals(I).count<=channels_from_host(I).reqlen;
