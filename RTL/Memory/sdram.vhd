@@ -404,6 +404,9 @@ mytwc : component TwoWayCache
 						sdwrite<='1';
 					end if;
 				when ph1_3 => sdram_state <= ph1_4;
+					if sdram_slot2=writecache then
+						sdwrite<='1';
+					end if;
 				when ph1_4 => sdram_state <= ph2;
 				when ph2 => sdram_state <= ph3;
 				when ph3 =>	sdram_state <= ph4;
@@ -626,7 +629,7 @@ mytwc : component TwoWayCache
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
 						elsif readcache_req='1' --req1='1' and wr1='1'
-								and (Addr1(4 downto 3)/=slot2_bank or sdram_slot2=idle) then
+								and (Addr1(5 downto 4)/=slot2_bank or sdram_slot2=idle) then
 							sdram_slot1<=port1;
 							sdaddr <= Addr1((rows+cols+2) downto (cols+3));
 							ba <= Addr1(5 downto 4);
@@ -691,14 +694,12 @@ mytwc : component TwoWayCache
 						if sdram_slot1=writecache then
 							datain <= writecache_word3;
 							dqm <= writecache_dqm(7 downto 6);
-							writecache_burst<='0';
 						end if;
 
 					when ph9 =>
 						if sdram_slot1=writecache then
 							datain <= writecache_word4;
 							dqm <= writecache_dqm(9 downto 8);
-							writecache_burst<='0';
 						end if;
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
@@ -708,7 +709,6 @@ mytwc : component TwoWayCache
 						if sdram_slot1=writecache then
 							datain <= writecache_word5;
 							dqm <= writecache_dqm(11 downto 10);
-							writecache_burst<='0';
 						end if;
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
@@ -718,7 +718,6 @@ mytwc : component TwoWayCache
 						if sdram_slot1=writecache then
 							datain <= writecache_word6;
 							dqm <= writecache_dqm(13 downto 12);
-							writecache_burst<='0';
 						end if;
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
@@ -767,8 +766,8 @@ mytwc : component TwoWayCache
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
 						elsif readcache_req='1' -- req1='1' and wr1='1'
-								and (Addr1(4 downto 3)/=slot1_bank or sdram_slot1=idle)
-								and (Addr1(4 downto 3)/=vga_reserveaddr(5 downto 4)
+								and (Addr1(5 downto 4)/=slot1_bank or sdram_slot1=idle)
+								and (Addr1(5 downto 4)/=vga_reserveaddr(5 downto 4)
 									or vga_reservebank='0') then  -- Safe to use this slot with this bank?
 							sdram_slot2<=port1;
 							sdaddr <= Addr1((rows+cols+2) downto (cols+3));
@@ -837,14 +836,12 @@ mytwc : component TwoWayCache
 						if sdram_slot2=writecache then
 							datain <= writecache_word3;
 							dqm <= writecache_dqm(7 downto 6);
-							writecache_burst<='0';
 						end if;
 
 					when ph1 =>
 						if sdram_slot2=writecache then
 							datain <= writecache_word4;
 							dqm <= writecache_dqm(9 downto 8);
-							writecache_burst<='0';
 						end if;
 						if sdram_slot2=port1 then
 							readcache_fill<='1';
@@ -854,7 +851,6 @@ mytwc : component TwoWayCache
 						if sdram_slot2=writecache then
 							datain <= writecache_word5;
 							dqm <= writecache_dqm(11 downto 10);
-							writecache_burst<='0';
 						end if;
 						if sdram_slot2=port1 then
 							readcache_fill<='1';
@@ -864,7 +860,6 @@ mytwc : component TwoWayCache
 						if sdram_slot2=writecache then
 							datain <= writecache_word6;
 							dqm <= writecache_dqm(13 downto 12);
-							writecache_burst<='0';
 						end if;
 						if sdram_slot2=port1 then
 							readcache_fill<='1';

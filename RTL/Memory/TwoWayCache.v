@@ -317,7 +317,9 @@ begin
 
 		PAUSE1:
 		begin
-			state<=WAITING;
+			cpu_ack<=cpu_req;
+			if(cpu_req==1'b0)
+				state<=WAITING;
 		end
 		
 		WAITFILL:
@@ -331,7 +333,7 @@ begin
 				sdram_req<=1'b0;
 				// Forward data to CPU
 				data_to_cpu<=data_from_sdram;
-				cpu_ack<=1'b1;
+//				cpu_ack<=1'b1; // Too soon
 
 				// write first word to Cache...
 				data_ports_w<={2'b11,data_from_sdram};
@@ -343,6 +345,7 @@ begin
 
 		FILL2:
 		begin
+			cpu_ack<=cpu_req; // Maintain ack signal if necessary
 			// write second word to Cache...
 			readword_burst<=1'b1;
 			readword<=readword+1;
@@ -354,6 +357,7 @@ begin
 
 		FILL3:
 		begin
+			cpu_ack<=cpu_req; // Maintain ack signal if necessary
 			// write third word to Cache...
 			readword_burst<=1'b1;
 			readword<=readword+1;
@@ -365,6 +369,7 @@ begin
 
 		FILL4:
 		begin
+			cpu_ack<=cpu_req; // Maintain ack signal if necessary - that's four cycles, should be plenty
 			// write last word to Cache...
 			readword_burst<=1'b1;
 			readword<=readword+1;
@@ -376,6 +381,8 @@ begin
 
 		FILL5:
 		begin
+			cpu_ack<=1'b1; // Can safely release the CPU at this point...
+
 			// write last word to Cache...
 			readword_burst<=1'b1;
 			readword<=readword+1;
