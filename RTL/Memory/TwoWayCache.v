@@ -32,7 +32,7 @@ module TwoWayCache
 	input cpu_rwu,
 	input [15:0] data_from_cpu,
 	output reg [15:0] data_to_cpu,
-	output reg [31:0] sdram_addr,
+//	output reg [31:0] sdram_addr, // The SDRAM controller uses the CPU address directly
 	input [15:0] data_from_sdram,
 	output reg [15:0] data_to_sdram,
 	output reg sdram_req,
@@ -41,15 +41,15 @@ module TwoWayCache
 );
 
 // States for state machine
-parameter WAITING=0, WAITRD=1, WAITFILL=2,
-				FILL2=3, FILL3=4, FILL4=5, FILL5=6, FILL6=8,
-				FILL7=9, FILL8=0, FILL9=10, PAUSE1=7,
-				WRITE1=8, WRITE2=9, INIT1=10, INIT2=11;
-reg [4:0] state = INIT1;
-reg init;
-reg [7:0] initctr;
-assign ready=~init;
+localparam	INIT1=0, INIT2=1, WAITING=2, WAITRD=3, PAUSE1=4;
+localparam	WRITE1=5, WRITE2=6, WAITFILL=7, FILL2=8, FILL3=9;
+localparam 	FILL4=10, FILL5=11, FILL6=12, FILL7=13, FILL8=14, FILL9=15;
 
+reg [15:0] state = INIT1;
+reg init;
+reg [9:0] initctr;
+assign ready=~init;
+reg reset_pending=1'b1;
 
 // BlockRAM and related signals for data
 
@@ -197,7 +197,10 @@ begin
 			data_wren1<=1'b1;
 			data_wren2<=1'b1;
 			if(initctr==8'b1111_1111)
+			begin
 				state<=WAITING;
+				reset_pending<=1'b0;
+			end
 		end
 
 		WAITING:
@@ -209,6 +212,8 @@ begin
 					state<=WAITRD;
 				else	// Write cycle
 					state<=WRITE1;
+				if(reset_pending)
+					state<=INIT1;
 			end
 		end
 		WRITE1:
@@ -298,21 +303,18 @@ begin
 					else
 						tag_mru1<=!tag_port1_r[17];
 
-//					For simulation only, to avoid the unknown value of unitialised blockram
-//					tag_mru1<=cpu_addr[1];
-
 					tag_wren1<=1'b1;
 					tag_wren2<=1'b1;
 					// If r[17] is 1, tag_mru1 is 0, so we need to write to the second tag.
 					// FIXME - might be simpler to just write every cycle and switch between new and old data.
 //					tag_wren2<=tag_port1_r[17];
 
-					// Pass request on to RAM controller.
-					sdram_addr<={cpu_addr[31:3],3'b000};
 					sdram_req<=1'b1;
 					sdram_rw<=1'b1;	// Read cycle
 					state<=WAITFILL;
 				end
+				if(reset_pending)
+					state<=INIT1;
 			end
 
 		PAUSE1:
@@ -333,7 +335,7 @@ begin
 				sdram_req<=1'b0;
 				// Forward data to CPU
 				data_to_cpu<=data_from_sdram;
-//				cpu_ack<=1'b1; // Too soon
+				cpu_ack<=1'b1; // Too soon?
 
 				// write first word to Cache...
 				data_ports_w<={2'b11,data_from_sdram};
@@ -370,7 +372,6 @@ begin
 		FILL4:
 		begin
 			cpu_ack<=cpu_req; // Maintain ack signal if necessary - that's four cycles, should be plenty
-			// write last word to Cache...
 			readword_burst<=1'b1;
 			readword<=readword+1;
 			data_ports_w<={2'b11,data_from_sdram};
@@ -381,9 +382,7 @@ begin
 
 		FILL5:
 		begin
-			cpu_ack<=1'b1; // Can safely release the CPU at this point...
-
-			// write last word to Cache...
+//			cpu_ack<=cpu_req; // Maintain ack signal if necessary
 			readword_burst<=1'b1;
 			readword<=readword+1;
 			data_ports_w<={2'b11,data_from_sdram};
@@ -391,10 +390,10 @@ begin
 			data_wren2<=!tag_mru1;
 			state<=FILL6;
 		end
-		
+
 		FILL6:
 		begin
-			// write last word to Cache...
+//			cpu_ack<=cpu_req; // Maintain ack signal if necessary - that's four cycles, should be plenty
 			readword_burst<=1'b1;
 			readword<=readword+1;
 			data_ports_w<={2'b11,data_from_sdram};
@@ -402,10 +401,10 @@ begin
 			data_wren2<=!tag_mru1;
 			state<=FILL7;
 		end
-		
+
 		FILL7:
 		begin
-			// write last word to Cache...
+//			cpu_ack<=cpu_req; // Maintain ack signal if necessary - that's four cycles, should be plenty
 			readword_burst<=1'b1;
 			readword<=readword+1;
 			data_ports_w<={2'b11,data_from_sdram};
@@ -416,7 +415,7 @@ begin
 		
 		FILL8:
 		begin
-			// write last word to Cache...
+//			cpu_ack<=cpu_req; // Maintain ack signal if necessary - that's four cycles, should be plenty
 			readword_burst<=1'b1;
 			readword<=readword+1;
 			data_ports_w<={2'b11,data_from_sdram};
@@ -434,9 +433,9 @@ begin
 		default:
 			state<=WAITING;
 	endcase
-	
+
 	if(reset==1'b0)
-		state<=INIT1;
+		reset_pending<=1'b1;
 end
 
 

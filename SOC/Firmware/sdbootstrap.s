@@ -85,31 +85,31 @@ CHARBUF equ $80000800
 
 START:				; first instruction of program
 
-	lea	$100000,a0
-	move.l	a0,VGABASE
+;	lea	$100000,a0
+;	move.l	a0,VGABASE
 
-	moveq	#0,d0
-	move.l	#479,d7
-.vgaouter
-	move.l	#639,d6
-.vgainner
-	move.w	d0,(a0)+
-	addq	#1,d0
-	dbf	d6,.vgainner
-	dbf	d7,.vgaouter
+;	moveq	#0,d0
+;	move.l	#479,d7
+;.vgaouter
+;	move.l	#639,d6
+;.vgainner
+;	move.w	d0,(a0)+
+;	addq	#1,d0
+;	dbf	d6,.vgainner
+;	dbf	d7,.vgaouter
 
-.loop
+;.loop
 
-	lea	$100000,a0
-	move.l	#479,d7
-.vgaouter2
-	move.l	#39,d6
-.vgainner2
-	movem.l	(a0)+,d0-4/a0-a4
-	dbf	d6,.vgainner2
-	dbf	d7,.vgaouter2
+;	lea	$100000,a0
+;	move.l	#479,d7
+;.vgaouter2
+;	move.l	#39,d6
+;.vgainner2
+;	movem.l	(a0)+,d0-4/a0-a4
+;	dbf	d6,.vgainner2
+;	dbf	d7,.vgaouter2
 
-	bra	.loop
+;	bra	.loop
 
 	lea 	STACK,a7
 	moveq	#0,d0
@@ -122,17 +122,6 @@ START:				; first instruction of program
 	move.w	#$f000,HEX
 
 	move.w 	#1,PERREGS+4	; Divert lowmem reads to ROM, pass writes to RAM.
-
-	lea	SREC_BYTECOUNT,a0
-	move.l	#$12345678,(a0)
-	move.l	#$fedcba98,4(a0)
-	move.l	#$aa55cc22,2(a0)
-	move.b	#$33,3(a0)
-	move.b	#$fe,4(a0)
-	move.l	(a0),d0
-	move.l	4(a0),d1
-	sub.l	#$1234aa33,d0
-	sub.l	#$fe22ba98,d1
 
 	lea	.welcome,a0
 	bsr	Writeserial

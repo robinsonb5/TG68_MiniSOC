@@ -156,9 +156,6 @@ signal instcache_dirty : std_logic;
 signal cache_ready : std_logic;
 
 COMPONENT TwoWayCache
-	GENERIC ( WAITING : INTEGER := 0; WAITRD : INTEGER := 1; WAITFILL : INTEGER := 2; FILL2 : INTEGER := 3;
-		 FILL3 : INTEGER := 4; FILL4 : INTEGER := 5; FILL5 : INTEGER := 6; PAUSE1 : INTEGER := 7 );
-		
 	PORT
 	(
 		clk		:	 IN STD_LOGIC;
@@ -172,7 +169,7 @@ COMPONENT TwoWayCache
 		cpu_rwu : in std_logic;
 		data_from_cpu		:	 IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		data_to_cpu		:	 OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-		sdram_addr		:	 OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+--		sdram_addr		:	 OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		data_from_sdram		:	 IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		data_to_sdram		:	 OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
 		sdram_req		:	 OUT STD_LOGIC;
@@ -340,8 +337,8 @@ mytwc : component TwoWayCache
 		cpu_rwu => wrU1,
 		data_from_cpu => datawr1,
 		data_to_cpu => dataout1,
-		sdram_addr(31 downto 3) => readcache_addr(31 downto 3),
-		sdram_addr(2 downto 0) => open,
+--		sdram_addr(31 downto 3) => readcache_addr(31 downto 3),
+--		sdram_addr(2 downto 0) => open,
 		data_from_sdram => sdata_reg,
 		data_to_sdram => open,
 		sdram_req => readcache_req,
@@ -663,7 +660,7 @@ mytwc : component TwoWayCache
 						
 					when ph5 => -- Read or Write command			
 						sdaddr <= (others=>'0');
-						sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 5) & casaddr(2 downto 1) ;--auto precharge
+						sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 6) & casaddr(3 downto 1) ;--auto precharge
 						sdaddr(10) <= '1'; -- Auto precharge.
 						ba <= casaddr(5 downto 4);
 						sd_cs <= cas_sd_cs; 
@@ -804,7 +801,7 @@ mytwc : component TwoWayCache
 					when ph13 =>
 						if sdram_slot2/=idle then
 							sdaddr <= (others=>'0');
-							sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 5) & casaddr(2 downto 1) ;--auto precharge
+							sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 6) & casaddr(3 downto 1) ;--auto precharge
 							sdaddr(10) <= '1'; -- Auto precharge.
 							ba <= casaddr(5 downto 4);
 							sd_cs <= cas_sd_cs; 
