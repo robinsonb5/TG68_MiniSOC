@@ -68,14 +68,18 @@ signal internals : DMAChannels_Internal;
 
 -- interface to the blockram
 
-signal cache_wraddr : std_logic_vector(7 downto 0);
-signal cache_rdaddr : std_logic_vector(7 downto 0);
+signal cache_wraddr : std_logic_vector(8 downto 0);
+signal cache_rdaddr : std_logic_vector(8 downto 0);
 signal cache_wren : std_logic;
 signal data_from_ram : std_logic_vector(15 downto 0);
 
 begin
 
 myDMACacheRAM : entity work.DMACacheRAM
+	generic map
+	(
+		CacheAddrBits => 9
+	)
 	port map
 	(
 		clock => clk,
@@ -99,8 +103,8 @@ begin
 			inputstate<=rd1;
 			for I in 0 to DMACache_MaxChannel loop
 				internals(I).count<=(others => '0');
-				internals(I).wrptr<=(others => '0');
-				internals(I).wrptr_next<=(3=>'1', others =>'0');
+--				internals(I).wrptr<=(others => '0');
+--				internals(I).wrptr_next<=(3=>'1', others =>'0');
 			end loop;
 		end if;
 
@@ -204,6 +208,7 @@ begin
 				internals(I).addr<=channels_from_host(I).addr;
 				internals(I).wrptr<=(others =>'0');
 				internals(I).wrptr_next<=(3=>'1', others =>'0');
+				internals(I).count<=(others=>'0');
 			end if;
 			if channels_from_host(I).setreqlen='1' then
 				internals(I).count<=channels_from_host(I).reqlen;
@@ -219,11 +224,11 @@ process(clk)
 	variable serviceactive : std_logic;
 begin
 	if rising_edge(clk) then
-		if reset_n='0' then
-			for I in 0 to DMACache_MaxChannel loop
-				internals(I).rdptr<=(others => '0');
-			end loop;
-		end if;
+--		if reset_n='0' then
+--			for I in 0 to DMACache_MaxChannel loop
+--				internals(I).rdptr<=(others => '0');
+--			end loop;
+--		end if;
 
 	-- Reset read pointers when a new address is set
 		for I in 0 to DMACache_MaxChannel loop

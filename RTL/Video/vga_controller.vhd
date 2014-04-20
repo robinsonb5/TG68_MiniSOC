@@ -139,6 +139,9 @@ architecture rtl of vga_controller is
 	signal chargen_rw : std_logic :='1';
 	signal chargen_overlay : std_logic :='1';
 	
+	signal vga_window_d2 : std_logic;
+	signal vga_window_d : std_logic;
+
 	type charramstates is (writeupperbyte,writeupperbyte1,readupperbyte1,readupperbyte2,
 									writelowerbyte,writelowerbyte1,readlowerbyte1,readlowerbyte2);
 	signal charramstate : charramstates;			
@@ -408,6 +411,9 @@ begin
 			spr0setaddr<='0';
 			spr0channel_fromhost.setreqlen<='0';	
 
+			vga_window<=vga_window_d2;
+			vga_window_d2<=vga_window_d;
+			
 			if(vgachannel_tohost.valid='1') then
 				vgadata<=dma_data;
 			end if;
@@ -416,7 +422,7 @@ begin
 --				sdr_reservebank<='1';
 
 				if currentX<640 and currentY<480 then
-					vga_window<='1';
+					vga_window_d<='1';
 					-- Request next pixel from VGA cache
 					vgachannel_fromhost.req<='1';
 
@@ -451,7 +457,7 @@ begin
 					end if;
 
 				else
-					vga_window<='0';
+					vga_window_d<='0';
 					
 					-- New frame...
 					if currentY=vsize and currentX=0 then
@@ -468,15 +474,19 @@ begin
 								spr0setaddr<='1';
 							end if;
 					end if;
-					
+
+					if currentY=vtotal or currentY<480 then
+						-- Setting reqlen triggers the read, so save bandwidth by only
+						-- triggering it during active video.
 --					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
-					if currentX=(htotal - 20) then	-- Signal to SDRAM controller that we're
-						vgachannel_fromhost.reqlen<=TO_UNSIGNED(640,16);
-						vgachannel_fromhost.setreqlen<='1';
---						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
-					elsif currentX=(htotal - 19) then
-						spr0channel_fromhost.reqlen<=TO_UNSIGNED(4,16);
-						spr0channel_fromhost.setreqlen<='1';
+						if currentX=(htotal - 39) then	-- Signal to SDRAM controller that we're
+							vgachannel_fromhost.reqlen<=TO_UNSIGNED(640,16);
+							vgachannel_fromhost.setreqlen<='1';
+	--						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
+						elsif currentX=(htotal - 40) then
+							spr0channel_fromhost.reqlen<=TO_UNSIGNED(4,16);
+							spr0channel_fromhost.setreqlen<='1';
+						end if;
 					end if;
 				end if;
 			end if;

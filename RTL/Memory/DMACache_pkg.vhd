@@ -7,7 +7,7 @@ use work.DMACache_Config.all;
 
 
 package DMACache_pkg is
-	constant DMACache_MaxCacheBit : integer :=4;
+	constant DMACache_MaxCacheBit : integer :=5;
 
 	type DMAChannel_FromHost is record
 		addr : std_logic_vector(31 downto 0);
