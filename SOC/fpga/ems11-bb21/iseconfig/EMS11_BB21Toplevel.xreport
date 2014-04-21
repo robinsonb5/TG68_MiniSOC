@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2014-04-14T00:49:58</DateModified>
+  <DateModified>2014-04-21T11:05:20</DateModified>
   <ModuleName>EMS11_BB21Toplevel</ModuleName>
-  <SummaryTimeStamp>2014-01-18T23:20:58</SummaryTimeStamp>
+  <SummaryTimeStamp>2014-04-21T10:46:45</SummaryTimeStamp>
   <SavedFilePath>/home/amr/FPGA/TG68MiniSOC/SOC/fpga/ems11-bb21/iseconfig/EMS11_BB21Toplevel.xreport</SavedFilePath>
   <ImplementationReportsDirectory>/home/amr/FPGA/TG68MiniSOC/SOC/fpga/ems11-bb21/</ImplementationReportsDirectory>
   <DateInitialized>2014-01-04T18:07:11</DateInitialized>
