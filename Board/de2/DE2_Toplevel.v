@@ -335,6 +335,15 @@ assign	VGA_BLANK	=	vga_window;
 assign	VGA_SYNC	=	1'b0;
 assign	VGA_CLK	=	clk133;
 
+wire reset;
+poweronreset mypor
+(
+	.clk(clk_slow),
+	.reset_button(!SW[0]^KEY[0]),
+	.reset_out(reset)
+);
+
+
 //video_vga_dither
 //# (
 //	.outbits(4) )
@@ -360,7 +369,7 @@ VirtualToplevel myvirtualtoplevel
 (	
 	.clk_fast(clk133),
 	.clk(clk_slow),
-	.reset_in(!SW[0]^KEY[0]),
+	.reset_in(reset),
 	
 	// video
 	.vga_hsync(VGA_HS),

@@ -8,7 +8,7 @@ entity poweronreset is
 		clk : in std_logic;
 		reset_button : in std_logic;
 		reset_out : out std_logic;
-		power_button : in std_logic;
+		power_button : in std_logic := '1';
 		power_hold : out std_logic := '1'
 	);
 end entity;
