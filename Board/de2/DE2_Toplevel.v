@@ -339,7 +339,7 @@ wire reset;
 poweronreset mypor
 (
 	.clk(clk_slow),
-	.reset_button(!SW[0]^KEY[0]),
+	.reset_button((!SW[0]^KEY[0])&pll_locked),
 	.reset_out(reset)
 );
 

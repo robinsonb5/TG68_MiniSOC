@@ -13,6 +13,16 @@
 #define HW_VGA_L(x) *(volatile unsigned long *)(VGABASE+x)
 #define VGA_INT_VBLANK 1
 
+#define VGA_HTOTAL 0x08
+#define VGA_HSIZE 0x0a
+#define VGA_HBSTART 0x0c
+#define VGA_HBSTOP 0x0e
+#define VGA_VTOTAL 0x10
+#define VGA_VSIZE 0x12
+#define VGA_VBSTART 0x14
+#define VGA_VBSTOP 0x16
+#define VGA_CONTROL 0x18
+
 /*
 4	Word	Even row modulo (not yet implemented)
 

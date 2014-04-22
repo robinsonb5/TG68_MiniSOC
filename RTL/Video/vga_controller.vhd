@@ -30,7 +30,7 @@ use work.DMACache_config.ALL;
 
 --    18  Control:
 --     0  Visible
---     1  Resolution - high, low  - alternatively could make pixel clock programmable...
+-- 3...1  Clocks per pixel
 --     7  Character overlay on/off
 
 --   Character buffer (2048 bytes)
@@ -114,6 +114,8 @@ architecture rtl of vga_controller is
 	signal vtotal : unsigned(11 downto 0) := TO_UNSIGNED(525,12);
 	signal vbstart : unsigned(11 downto 0) := TO_UNSIGNED(500,12);
 	signal vbstop : unsigned(11 downto 0) := TO_UNSIGNED(502,12);
+	
+	signal clocks_per_pixel : unsigned(2 downto 0):="011";
 
 	signal sprite0_pointer : std_logic_vector(31 downto 0) := X"00000000";
 	signal sprite0_xpos : unsigned(11 downto 0);
@@ -166,12 +168,11 @@ begin
 
 	myVgaMaster : entity work.video_vga_master
 		generic map (
-			clkDivBits => 4
+			clkDivBits => 3
 		)
 		port map (
 			clk => clk,
---			clkDiv => X"3",	-- 100 Mhz / (3+1) = 25 Mhz
-			clkDiv => to_unsigned(vgaticks,4),
+			clkDiv => clocks_per_pixel,
 
 			hSync => hsync,
 			vSync => vsync,
@@ -228,6 +229,7 @@ begin
 			hbstop <= TO_UNSIGNED(752,12);
 			vbstart <= TO_UNSIGNED(500,12);
 			vbstop <= TO_UNSIGNED(502,12);
+			clocks_per_pixel <= TO_UNSIGNED(vgaticks,3);
 			reg_data_out<=X"0000";
 			sprite0_xpos<=X"000";
 			sprite0_ypos<=X"000";
@@ -276,27 +278,55 @@ begin
 			elsif req_e='1' then
 				case reg_addr_in is
 					when X"000" =>
-	--					reg_data_out<=X"00"&framebuffer_pointer(23 downto 16);
 						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
 							framebuffer_pointer(31 downto 16) <= reg_data_in;
 						end if;
 					when X"002" =>
-	--					reg_data_out<=framebuffer_pointer(15 downto 0);
 						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
 							framebuffer_pointer(15 downto 0) <= reg_data_in;
 						end if;
+					when X"008" => -- htotal
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							htotal<=unsigned(reg_data_in(11 downto 0));
+						end if;				
+					when X"00A" => -- hsize
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							hsize<=unsigned(reg_data_in(11 downto 0));
+						end if;				
+					when X"00C" => -- hbstart
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							hbstart<=unsigned(reg_data_in(11 downto 0));
+						end if;
+					when X"00E" => -- hbstop
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							hbstop<=unsigned(reg_data_in(11 downto 0));
+						end if;
+					when X"010" => -- vtotal
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							vtotal<=unsigned(reg_data_in(11 downto 0));
+						end if;				
+					when X"012" => -- vsize
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							vsize<=unsigned(reg_data_in(11 downto 0));
+						end if;				
+					when X"014" => -- vbstart
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							vbstart<=unsigned(reg_data_in(11 downto 0));
+						end if;				
+					when X"016" => -- vbstop
+						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
+							vbstop<=unsigned(reg_data_in(11 downto 0));
+						end if;				
 					when X"018" => -- Control register
-	--					reg_data_out<=framebuffer_pointer(15 downto 0);
 						if reg_rw='0' then
 							chargen_overlay<=reg_data_in(7);
+							clocks_per_pixel<=unsigned(reg_data_in(3 downto 1));
 						end if;
 					when X"100" =>
-	--					reg_data_out<=X"00"&sprite0_pointer(23 downto 16);
 						if reg_rw='0' then
 							sprite0_pointer(31 downto 16) <= reg_data_in;
 						end if;
 					when X"102" =>
-	--					reg_data_out<=sprite0_pointer(15 downto 0);
 						if reg_rw='0' and reg_uds='0' and reg_lds='0' then
 							sprite0_pointer(15 downto 0) <= reg_data_in;
 						end if;
@@ -313,32 +343,10 @@ begin
 				end case;
 				reg_dtack<='0';
 			end if;
--- FBPTH equ $0000	; Framebuffer pointer - must be 64-bit aligned.
--- FBPTL equ $0002
 
+-- Not yet implemented:
 --     4   Even row modulo
 --     6   Odd row modulo (allows scandoubling)
-
---     8  HTotal
---     A  HSize (typically 640)
---     C  HBStart
---     E  HBStop
-
---    10  VTotal
---    12  VSize (typically 480)
---    14  VBStart
---    16  VBStop
-
---    18  Control:
---     0  Visible
---     1  Resolution - high, low  - alternatively could make pixel clock programmable...
---     7  Character overlay on/off
-
--- SP0PTH equ $0100 ; Pointer to sprite 0's data - must be 64-bit aligned.
--- SP0PTL equ $0102
--- SP0XPOS	equ $0104
--- SP0YPOS equ $0106
-
 
 		end if;
 	end process;
@@ -421,7 +429,7 @@ begin
 			if end_of_pixel='1' then
 --				sdr_reservebank<='1';
 
-				if currentX<640 and currentY<480 then
+				if currentX<hsize and currentY<vsize then
 					vga_window_d<='1';
 					-- Request next pixel from VGA cache
 					vgachannel_fromhost.req<='1';
@@ -475,14 +483,11 @@ begin
 							end if;
 					end if;
 
-					if currentY=vtotal or currentY<480 then
-						-- Setting reqlen triggers the read, so save bandwidth by only
-						-- triggering it during active video.
---					if currentX>(hsize+12) and currentX<(htotal - 4) then	-- Signal to SDRAM controller that we're
+					if currentY=vtotal or currentY<vsize then
 						if currentX=(htotal - 39) then	-- Signal to SDRAM controller that we're
-							vgachannel_fromhost.reqlen<=TO_UNSIGNED(640,16);
+							vgachannel_fromhost.reqlen<=(others=>'0');
+							vgachannel_fromhost.reqlen(11 downto 0)<=hsize;
 							vgachannel_fromhost.setreqlen<='1';
-	--						sdr_reservebank<='0'; -- in blank areas, so there's no need to keep slot 2 off the next bank.
 						elsif currentX=(htotal - 40) then
 							spr0channel_fromhost.reqlen<=TO_UNSIGNED(4,16);
 							spr0channel_fromhost.setreqlen<='1';
