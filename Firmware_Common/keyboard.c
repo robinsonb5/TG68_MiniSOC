@@ -1,6 +1,7 @@
 #include "keyboard.h"
 #include "ps2.h"
 #include "textbuffer.h"
+#include "ints.h"
 
 // FIXME - create another ring buffer for ASCII keystrokes
 
@@ -136,8 +137,11 @@ void ClearKeyboard()
 
 short TestKey(short rawcode)
 {
-	short result=keytable[rawcode];
+	short result;
+	DisableInterrupts();	// Make sure a new character doesn't arrive halfway through the read
+	result=keytable[rawcode];
 	keytable[rawcode]&=0xfd;	// Mask off the "pressed since last test" bit.
+	EnableInterrupts();
 	return(result);
 }
 

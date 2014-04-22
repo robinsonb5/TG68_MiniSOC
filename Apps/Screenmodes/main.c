@@ -119,6 +119,97 @@ void AddMemory()
 }
 
 
+enum Screenmodes {
+	MODE_640_480,
+	MODE_320_480,
+	MODE_800_600,
+	MODE_768_576
+};
+
+void SetMode(enum Screenmodes mode)
+{
+	switch(mode)
+	{
+		case MODE_640_480:
+			HW_VGA(VGA_HTOTAL)=800;
+			HW_VGA(VGA_HSIZE)=640;
+			HW_VGA(VGA_HBSTART)=656;
+			HW_VGA(VGA_HBSTOP)=752;
+			HW_VGA(VGA_VTOTAL)=525;
+			HW_VGA(VGA_VSIZE)=480;
+			HW_VGA(VGA_VBSTART)=500;
+			HW_VGA(VGA_VBSTOP)=502;
+			HW_VGA(VGA_CONTROL)=0x87;
+			break;	
+
+		case MODE_320_480:
+			HW_VGA(VGA_HTOTAL)=400;
+			HW_VGA(VGA_HSIZE)=320;
+			HW_VGA(VGA_HBSTART)=328;
+			HW_VGA(VGA_HBSTOP)=376;
+			HW_VGA(VGA_VTOTAL)=525;
+			HW_VGA(VGA_VSIZE)=480;
+			HW_VGA(VGA_VBSTART)=490;
+			HW_VGA(VGA_VBSTOP)=492;
+			HW_VGA(VGA_CONTROL)=0x8d;
+			break;
+
+		case MODE_800_600:
+			HW_VGA(VGA_HTOTAL)=1024;
+			HW_VGA(VGA_HSIZE)=800;
+			HW_VGA(VGA_HBSTART)=824;
+			HW_VGA(VGA_HBSTOP)=896;
+			HW_VGA(VGA_VTOTAL)=625;
+			HW_VGA(VGA_VSIZE)=600;
+			HW_VGA(VGA_VBSTART)=601;
+			HW_VGA(VGA_VBSTOP)=602;
+			HW_VGA(VGA_CONTROL)=0x85;
+		break;
+
+		case MODE_768_576:
+			HW_VGA(VGA_HTOTAL)=976;
+			HW_VGA(VGA_HSIZE)=768;
+			HW_VGA(VGA_HBSTART)=792;
+			HW_VGA(VGA_HBSTOP)=872;
+			HW_VGA(VGA_VTOTAL)=597;
+			HW_VGA(VGA_VSIZE)=576;
+			HW_VGA(VGA_VBSTART)=577;
+			HW_VGA(VGA_VBSTOP)=580;
+			HW_VGA(VGA_CONTROL)=0x85;
+			break;
+	}
+}
+
+
+void DrawTestcard(short *fbptr,int w, int h)
+{
+	int x,y;
+
+	for(y=0;y<(h/4);++y)
+	{
+		for(x=0;x<(w/2);++x)
+			*fbptr++=0xffff;
+		for(;x<w;++x)
+			*fbptr++=0x0;
+	}
+	for(;y<(3*h/4);++y)
+	{
+		int g=y-h/4;
+		for(x=0;x<w;++x)
+		{
+			*fbptr++=((x&31)<<11)|(g&63)<<5|((x+y)&31);
+		}
+	}
+	for(;y<h;++y)
+	{
+		for(x=0;x<(w/2);++x)
+			*fbptr++=0xffff;
+		for(;x<w;++x)
+			*fbptr++=0x0;
+	}
+}
+
+
 int main(int argc,char *argv)
 {
 	unsigned char *fbptr;
@@ -131,9 +222,12 @@ int main(int argc,char *argv)
 	PS2Init();
 	SetSprite();
 
-	FrameBuffer=(short *)malloc(sizeof(short)*640*960+15);
+	FrameBuffer=(short *)malloc(sizeof(short)*800*600+15);
 	FrameBuffer=(short *)(((int)FrameBuffer+15)&~15); // Align to nearest 16 byte boundary.
 	HW_VGA_L(FRAMEBUFFERPTR)=FrameBuffer;
+
+	SetMode(MODE_800_600);
+	DrawTestcard(FrameBuffer,800,600);
 
 	EnableInterrupts();
 
@@ -156,65 +250,34 @@ int main(int argc,char *argv)
 	{
 		if(TestKey(KEY_F1))
 		{
-			puts("Mode 1\n");
-			HW_VGA(VGA_HTOTAL)=800;
-			HW_VGA(VGA_HSIZE)=640;
-			HW_VGA(VGA_HBSTART)=656;
-			HW_VGA(VGA_HBSTOP)=752;
-			HW_VGA(VGA_VTOTAL)=525;
-			HW_VGA(VGA_VSIZE)=480;
-			HW_VGA(VGA_VBSTART)=490;
-			HW_VGA(VGA_VBSTOP)=492;
-			HW_VGA(VGA_CONTROL)=0x87;
-
+			puts("640 x 480\n");
+			SetMode(MODE_640_480);
+			DrawTestcard(FrameBuffer,640,480);
 			while(TestKey(KEY_F1))
 				;
 		}
 		if(TestKey(KEY_F2))
 		{
-			puts("Mode 2\n");
-			HW_VGA(VGA_HTOTAL)=400;
-			HW_VGA(VGA_HSIZE)=320;
-			HW_VGA(VGA_HBSTART)=328;
-			HW_VGA(VGA_HBSTOP)=376;
-			HW_VGA(VGA_VTOTAL)=525;
-			HW_VGA(VGA_VSIZE)=480;
-			HW_VGA(VGA_VBSTART)=490;
-			HW_VGA(VGA_VBSTOP)=492;
-			HW_VGA(VGA_CONTROL)=0x8d;
+			puts("320 x 480\n");
+			SetMode(MODE_320_480);
+			DrawTestcard(FrameBuffer,320,480);
 
 			while(TestKey(KEY_F2))
 				;
 		}
 		if(TestKey(KEY_F3))
 		{
-			puts("Mode 3\n");
-			HW_VGA(VGA_HTOTAL)=1024;
-			HW_VGA(VGA_HSIZE)=800;
-			HW_VGA(VGA_HBSTART)=824;
-			HW_VGA(VGA_HBSTOP)=896;
-			HW_VGA(VGA_VTOTAL)=625;
-			HW_VGA(VGA_VSIZE)=600;
-			HW_VGA(VGA_VBSTART)=601;
-			HW_VGA(VGA_VBSTOP)=602;
-			HW_VGA(VGA_CONTROL)=0x85;
-
+			puts("800 x 600\n");
+			SetMode(MODE_800_600);
+			DrawTestcard(FrameBuffer,800,600);
 			while(TestKey(KEY_F3))
 				;
 		}
 		if(TestKey(KEY_F4))
 		{
-			puts("Mode 4\n");
-			HW_VGA(VGA_HTOTAL)=976;
-			HW_VGA(VGA_HSIZE)=768;
-			HW_VGA(VGA_HBSTART)=792;
-			HW_VGA(VGA_HBSTOP)=872;
-			HW_VGA(VGA_VTOTAL)=597;
-			HW_VGA(VGA_VSIZE)=576;
-			HW_VGA(VGA_VBSTART)=577;
-			HW_VGA(VGA_VBSTOP)=580;
-			HW_VGA(VGA_CONTROL)=0x85;
-
+			puts("768 x 576\n");
+			SetMode(MODE_768_576);
+			DrawTestcard(FrameBuffer,768,576);
 			while(TestKey(KEY_F4))
 				;
 		}
