@@ -22,7 +22,7 @@ entity sound_controller is
 		audiotick : in std_logic;
 
 		reg_addr_in : in std_logic_vector(7 downto 0); -- from host CPU
-		reg_data_in: in std_logic_vector(31 downto 0);
+		reg_data_in: in std_logic_vector(15 downto 0);
 		reg_data_out: out std_logic_vector(15 downto 0);
 		reg_rw : in std_logic;
 		reg_req : in std_logic;
@@ -102,18 +102,20 @@ begin
 			if reg_req='1' and reg_rw='0' then
 				case reg_addr_in is
 					when X"00" =>	-- Data pointer
-						datapointer <= reg_data_in;
+						datapointer(31 downto 16) <= reg_data_in;
+					when X"02" =>	-- Data pointer
+						datapointer(15 downto 0) <= reg_data_in;
 					when X"04" => -- Data length
 						repeatlen <= unsigned(reg_data_in(15 downto 0));
-					when X"08" => -- Trigger
+					when X"06" => -- Trigger
 						channel_fromhost.addr <= datapointer;
 						channel_fromhost.setaddr <='1';			
 						channel_fromhost.reqlen <= repeatlen;
 						datalen <= repeatlen;
 						channel_fromhost.setreqlen <='1';
-					when X"0c" => -- Period
-						period <= reg_data_in(15 downto 0);
-					when X"10" => -- Volume
+					when X"08" => -- Period
+						period <= reg_data_in;
+					when X"0A" => -- Volume
 						volume(5 downto 0) <= signed(reg_data_in(5 downto 0));
 					when others =>
 				end case;

@@ -133,6 +133,20 @@ signal spr0channel_fromhost : DMAChannel_FromHost;
 signal spr0channel_tohost : DMAChannel_ToHost;
 
 
+-- Audio channel plumbing
+
+signal aud0_fromhost : DMAChannel_FromHost;
+signal aud0_tohost : DMAChannel_ToHost;
+signal aud1_fromhost : DMAChannel_FromHost;
+signal aud1_tohost : DMAChannel_ToHost;
+signal aud2_fromhost : DMAChannel_FromHost;
+signal aud2_tohost : DMAChannel_ToHost;
+signal aud3_fromhost : DMAChannel_FromHost;
+signal aud3_tohost : DMAChannel_ToHost;
+
+signal audio_reg_req : std_logic;
+
+
 -- VGA register block signals
 
 signal vga_reg_addr : std_logic_vector(11 downto 0);
@@ -188,8 +202,6 @@ signal fast_prgstate : fastprgstates :=waitcpu;
 
 begin
 
-audio_l<=X"0000";
-audio_r<=X"0000";
 sdr_cke <='1';
 
 process(clk)
@@ -305,6 +317,7 @@ begin
 		vga_reg_req<='0';
 		per_reg_rw<='1';
 		per_reg_req<='0';
+		audio_reg_req<='0';
 		rom_we_n<='1';
 		
 		vga_ackback<='0';
@@ -331,6 +344,9 @@ begin
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=vga;
 						when X"8100" => -- more hardware registers - peripherals
+							audio_reg_req<='1';
+							prgstate<=peripheral;
+						when X"8200" => -- Audio controller
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';
 							prgstate<=peripheral;
@@ -505,6 +521,15 @@ mysdram : entity work.sdram
 			channels_to_host(0) => vgachannel_tohost,	
 			channels_to_host(1) => spr0channel_tohost,
 
+			channels_from_host(2) => aud0_fromhost,
+			channels_to_host(2) => aud0_tohost,
+			channels_from_host(3) => aud1_fromhost,
+			channels_to_host(3) => aud1_tohost,
+			channels_from_host(4) => aud2_fromhost,
+			channels_to_host(4) => aud2_tohost,
+			channels_from_host(5) => aud3_fromhost,
+			channels_to_host(5) => aud3_tohost,
+
 			data_out => dma_data,
 
 			-- SDRAM interface
@@ -600,6 +625,35 @@ mysdram : entity work.sdram
 
 		bootrom_overlay => bootrom_overlay,
 		bootram_overlay => bootram_overlay
+	);
+
+	-- Audio controller
+
+	myaudio : entity work.sound_wrapper
+		generic map(
+			clk_frequency => sysclk_frequency -- Prescale incoming clock
+		)
+	port map (
+		clk => clk_fast,
+		reset => reset,
+
+		reg_addr_in => cpu_addr_r(7 downto 0),
+		reg_data_in => cpu_dataout_r,
+		reg_rw => '0', -- we never read from the sound controller
+		reg_req => audio_reg_req,
+
+		dma_data => dma_data,
+		channel0_fromhost => aud0_fromhost,
+		channel0_tohost => aud0_tohost,
+		channel1_fromhost => aud1_fromhost,
+		channel1_tohost => aud1_tohost,
+		channel2_fromhost => aud2_fromhost,
+		channel2_tohost => aud2_tohost,
+		channel3_fromhost => aud3_fromhost,
+		channel3_tohost => aud3_tohost,
+
+		audio_l => audio_l,
+		audio_r => audio_r
 	);
 
 	

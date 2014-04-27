@@ -16,7 +16,7 @@ entity sound_wrapper is
 		reset : in std_logic;
 
 		reg_addr_in : in std_logic_vector(7 downto 0); -- from host CPU
-		reg_data_in: in std_logic_vector(31 downto 0);
+		reg_data_in: in std_logic_vector(15 downto 0);
 		reg_data_out: out std_logic_vector(15 downto 0);
 		reg_rw : in std_logic;
 		reg_req : in std_logic;

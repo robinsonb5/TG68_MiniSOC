@@ -6,6 +6,9 @@ use IEEE.numeric_std.ALL;
 library altera;
 use altera.altera_syn_attributes.all;
 
+library work;
+use work.Toplevel_Config.ALL;
+
 
 entity C3BoardToplevel is
 port(
@@ -170,7 +173,8 @@ attribute chip_pin of misc_ios_3 : signal is "95,177";
 signal clk : std_logic;
 signal clk_fast : std_logic;
 signal reset : std_logic;  -- active low
-signal counter : unsigned(34 downto 0);
+signal pll1_locked : std_logic;
+signal pll2_locked : std_logic;
 
 signal debugvalue : std_logic_vector(15 downto 0);
 
@@ -213,6 +217,20 @@ signal vga_r : unsigned(7 downto 0);
 signal vga_g : unsigned(7 downto 0);
 signal vga_b : unsigned(7 downto 0);
 signal vga_window : std_logic;
+
+signal audio_l : signed(15 downto 0);
+signal audio_r : signed(15 downto 0);
+
+-- Sigma Delta audio
+COMPONENT hybrid_pwm_sd
+	PORT
+	(
+		clk		:	 IN STD_LOGIC;
+		n_reset		:	 IN STD_LOGIC;
+		din		:	 IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		dout		:	 OUT STD_LOGIC
+	);
+END COMPONENT;
 
 begin
 
@@ -270,13 +288,15 @@ begin
 			inclk0 => clk_50,
 			c0 => clk_fast,
 			c1 => sdram1_clk,
-			c2 => clk
+			c2 => clk,
+			locked => pll1_locked
 		);
 		
 	mypll2 : entity work.Clock_50to100Split_2ndRAM
 		port map (
 			inclk0 => clk_50,
-			c1 => sdram2_clk
+			c1 => sdram2_clk,
+			locked => pll2_locked
 		);
 
 	myleds : entity work.statusleds_pwm
@@ -292,7 +312,7 @@ begin
 	myreset : entity work.poweronreset
 		port map(
 			clk => clk,
-			reset_button => reset_n,
+			reset_button => reset_n and pll1_locked and pll2_locked,
 			reset_out => reset,
 			power_button => power_button,
 			power_hold => power_hold		
@@ -366,14 +386,44 @@ begin
 			spi_cs => sd_cs,
 			spi_miso => sd_miso,
 			spi_mosi => sd_mosi,
-			spi_clk => sd_clk
+			spi_clk => sd_clk,
 			
 			-- Audio - FIXME abstract this out, too.
---			aud_l => aud_l,
---			aud_r => aud_r,
+			audio_l => audio_l,
+			audio_r => audio_r
 			
 			-- LEDs
 		);
-		
+
+		-- Do we have audio?  If so, instantiate a two DAC channels.
+audio2: if Toplevel_UseAudio = true generate
+leftsd: component hybrid_pwm_sd
+	port map
+	(
+		clk => clk,
+		n_reset => reset,
+		din(15) => not audio_l(15),
+		din(14 downto 0) => std_logic_vector(audio_l(14 downto 0)),
+		dout => aud_l
+	);
+	
+rightsd: component hybrid_pwm_sd
+	port map
+	(
+		clk => clk,
+		n_reset => reset,
+		din(15) => not audio_r(15),
+		din(14 downto 0) => std_logic_vector(audio_r(14 downto 0)),
+		dout => aud_r
+	);
+end generate;
+
+-- No audio?  Make the audio pins high Z.
+
+audio3: if Toplevel_UseAudio = false generate
+	aud_l<='Z';
+	aud_r<='Z';
+end generate;
+
 end RTL;
 
