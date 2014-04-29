@@ -470,25 +470,25 @@ begin
 					-- New frame...
 					if currentY=vsize and currentX=0 then
 						vblank_int<='1';
-					end if;
+--					end if;
 
 					-- Last line of VBLANK - update DMA pointers
-					if currentY=vtotal then
-							if currentX=0 then
+--					if currentY=vtotal then
+--							if currentX=0 then
 								vgachannel_fromhost.addr<=framebuffer_pointer;
 								vgasetaddr<='1';
-							elsif currentX=1 then
+--							elsif currentX=1 then
 								spr0channel_fromhost.addr<=sprite0_pointer;
 								spr0setaddr<='1';
-							end if;
+--							end if;
 					end if;
 
 					if currentY=vtotal or currentY<vsize then
-						if currentX=(htotal - 39) then	-- Signal to SDRAM controller that we're
+						if currentX=hsize then	-- Signal to SDRAM controller that we're
 							vgachannel_fromhost.reqlen<=(others=>'0');
 							vgachannel_fromhost.reqlen(11 downto 0)<=hsize;
 							vgachannel_fromhost.setreqlen<='1';
-						elsif currentX=(htotal - 40) then
+--						elsif currentX=3 then
 							spr0channel_fromhost.reqlen<=TO_UNSIGNED(4,16);
 							spr0channel_fromhost.setreqlen<='1';
 						end if;

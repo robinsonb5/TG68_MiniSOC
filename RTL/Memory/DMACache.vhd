@@ -103,6 +103,7 @@ begin
 
 	-- We update these outside the clock edge
 	sdram_addr<=internals(activechannel).addr;
+	sdram_reserveaddr<=internals(0).addr;
 	cache_wraddr(2 downto 0)<=cache_wraddr_lsb;
 
 	if rising_edge(clk) then
@@ -122,6 +123,8 @@ begin
 		
 		if sdram_ack='1' then
 			sdram_req<='0';
+			internals(activechannel).addr<=std_logic_vector(unsigned(internals(activechannel).addr)+16);
+			internals(activechannel).count<=internals(activechannel).count-8;
 		end if;
 
 		-- Request and receive data from SDRAM:
@@ -155,14 +158,12 @@ begin
 					data_from_ram<=sdram_data;
 					cache_wren<='1';
 					inputstate<=rcv2;
-					internals(activechannel).addr<=std_logic_vector(unsigned(internals(activechannel).addr)+16);
 					cache_wraddr_lsb<="000";
 				end if;
 			when rcv2 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
-				sdram_reserveaddr<=internals(0).addr;
 				cache_wraddr_lsb<="001";
 				inputstate<=rcv3;
 			when rcv3 =>
@@ -202,7 +203,6 @@ begin
 				cache_wraddr_lsb<="111";
 				inputstate<=rd1;
 
-				internals(activechannel).count<=internals(activechannel).count-8;
 				internals(activechannel).wrptr<=internals(activechannel).wrptr_next;
 				internals(activechannel).wrptr_next<=internals(activechannel).wrptr_next+8;
 			when others =>

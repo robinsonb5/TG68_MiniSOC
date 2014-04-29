@@ -273,7 +273,7 @@ begin
 			c2 => clk
 		);
 		
-	mypll2 : entity work.Clock_50to100Split
+	mypll2 : entity work.Clock_50to100Split_2ndRAM
 		port map (
 			inclk0 => clk_50,
 			c1 => sdram2_clk
