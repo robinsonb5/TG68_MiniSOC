@@ -58,7 +58,11 @@ type DMAChannel_Internal is record
 	rdptr : unsigned(DMACache_MaxCacheBit downto 0);
 	addr : std_logic_vector(31 downto 0); -- Current RAM address
 	count : unsigned(15 downto 0); -- Number of words to transfer.
-	pending : std_logic; -- Host has a request pending on this channel.
+	pending : std_logic; -- Host has a request pending on this channel
+	fill : std_logic;	-- Add a word to the FIFO
+	full : std_logic; -- Is the FIFO full?
+	drain : std_logic; -- Drain a word from the FIFO
+	empty : std_logic; -- Is the FIFO completely empty?
 end record;
 
 type DMAChannels_Internal is array (DMACache_MaxChannel downto 0) of DMAChannel_Internal;
@@ -76,6 +80,19 @@ signal data_from_ram : std_logic_vector(15 downto 0);
 signal activechannel : integer range 0 to DMACache_MaxChannel;
 
 begin
+
+FIFOCounters:
+for CHANNEL in 0 to DMACache_MaxChannel generate
+	myfifocounter : entity work.FIFO_Counter
+	port map(
+		clk => clk,
+		reset_n => reset_n,
+		fill => internals(CHANNEL).fill,
+		drain => internals(CHANNEL).drain,
+		full => internals(CHANNEL).full,
+		empty => internals(CHANNEL).empty
+	);
+end generate;
 
 myDMACacheRAM : entity work.DMACacheRAM
 	generic map
@@ -127,6 +144,8 @@ begin
 			internals(activechannel).count<=internals(activechannel).count-8;
 		end if;
 
+		internals(activechannel).fill<='0';
+
 		-- Request and receive data from SDRAM:
 		case inputstate is
 			-- First state: Read.  Check the channels in priority order.
@@ -135,7 +154,8 @@ begin
 			when rd1 =>
 				activereq:='0';
 				for I in DMACache_MaxChannel downto 0 loop
-					if internals(I).rdptr( DMACache_MaxCacheBit downto 3)/=internals(I).wrptr_next( DMACache_MaxCacheBit downto 3) and internals(I).count/=X"000" then
+					if internals(I).full='0' then
+--					if internals(I).rdptr( DMACache_MaxCacheBit downto 3)/=internals(I).wrptr_next( DMACache_MaxCacheBit downto 3) and internals(I).count/=X"000" then
 						activechannel <= I;
 						activereq:='1';
 					end if;
@@ -159,48 +179,56 @@ begin
 					cache_wren<='1';
 					inputstate<=rcv2;
 					cache_wraddr_lsb<="000";
+					internals(activechannel).fill<='1';
 				end if;
 			when rcv2 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="001";
+				internals(activechannel).fill<='1';
 				inputstate<=rcv3;
 			when rcv3 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="010";
+				internals(activechannel).fill<='1';
 				inputstate<=rcv4;
 			when rcv4 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="011";
+				internals(activechannel).fill<='1';
 				inputstate<=rcv5;
 			when rcv5 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="100";
+				internals(activechannel).fill<='1';
 				inputstate<=rcv6;
 			when rcv6 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="101";
+				internals(activechannel).fill<='1';
 				inputstate<=rcv7;
 			when rcv7 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="110";
+				internals(activechannel).fill<='1';
 				inputstate<=rcv8;
 			when rcv8 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
 --				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="111";
+				internals(activechannel).fill<='1';
 				inputstate<=rd1;
 
 				internals(activechannel).wrptr<=internals(activechannel).wrptr_next;
@@ -248,12 +276,13 @@ begin
 				internals(I).pending<='1';
 			end if;
 
+			internals(I).drain<='0';
 			channels_to_host(I).valid<='0';
 		end loop;
 		
 		serviceactive := '0';
 		for I in DMACache_MaxChannel downto 0 loop
-			if internals(I).pending='1' and internals(I).rdptr/=internals(I).wrptr then
+			if internals(I).pending='1' and internals(I).empty='0' then
 				serviceactive := '1';
 				servicechannel := I;
 			end if;
@@ -264,6 +293,7 @@ begin
 			internals(servicechannel).rdptr<=internals(servicechannel).rdptr+1;
 --			internals(servicechannel).valid_d<='1';
 			channels_to_host(servicechannel).valid<='1';
+			internals(servicechannel).drain<='1';
 			internals(servicechannel).pending<='0';
 		end if;
 
