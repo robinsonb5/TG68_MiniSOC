@@ -480,6 +480,8 @@ begin
 --							elsif currentX=1 then
 								spr0channel_fromhost.addr<=sprite0_pointer;
 								spr0setaddr<='1';
+								spr0channel_fromhost.reqlen<=TO_UNSIGNED(64,16);
+								spr0channel_fromhost.setreqlen<='1';
 --							end if;
 					end if;
 
@@ -489,8 +491,8 @@ begin
 							vgachannel_fromhost.reqlen(11 downto 0)<=hsize;
 							vgachannel_fromhost.setreqlen<='1';
 --						elsif currentX=3 then
-							spr0channel_fromhost.reqlen<=TO_UNSIGNED(4,16);
-							spr0channel_fromhost.setreqlen<='1';
+--							spr0channel_fromhost.reqlen<=TO_UNSIGNED(4,16);
+--							spr0channel_fromhost.setreqlen<='1';
 						end if;
 					end if;
 				end if;
