@@ -23,7 +23,19 @@ short mousetimeout=0;
 
 int microseconds=0;
 
-void vblank_int()
+static void heartbeat_int()
+{
+	microseconds+=10000;	// 100 Hz heartbeat
+}
+
+void SetHeartbeat()
+{
+	HW_PER(PER_TIMER_CONTROL)=(1<<PER_TIMER_EN1);
+	HW_PER(PER_TIMER_DIV1)=1000; // 100Hz heartbeat
+	SetIntHandler(PER_INT_TIMER,&heartbeat_int);
+}
+
+static void vblank_int()
 {
 	static short mousemode=0;
 	char a=0;
@@ -31,7 +43,7 @@ void vblank_int()
 	framecount++;
 //	microseconds+=(16667*1250)/HW_PER(PER_CAP_CLOCKSPEED);	// Assumes 60Hz video mode.
 
-	microseconds+=16667;	// Assumes 60Hz video mode.
+//	microseconds+=16667;	// Assumes 60Hz video mode.
 
 	if(framecount==959)
 		framecount=0;
@@ -102,7 +114,7 @@ void vblank_int()
 		while((a=HandlePS2RawCodes()))
 		{
 			char buf[2]={0,0};
-			HW_PER(PER_UART)=a;
+//			HW_PER(PER_UART)=a;
 			buf[0]=a;
 			puts(buf);
 		}
@@ -110,7 +122,7 @@ void vblank_int()
 }
 
 
-void timer_int()
+static void mousetimer_int()
 {
 	if(HW_PER(PER_TIMER_CONTROL) & (1<<PER_TIMER_TR5))
 		mousetimeout=1;
@@ -118,10 +130,12 @@ void timer_int()
 }
 
 
-void SetTimeout(int delay)
+void SetMouseTimeout(int delay)
 {
+	mousetimeout=0;
 	HW_PER(PER_TIMER_CONTROL)=(1<<PER_TIMER_EN5);
 	HW_PER(PER_TIMER_DIV5)=delay;
+	SetIntHandler(PER_INT_TIMER,&mousetimer_int);
 }
 
 
@@ -290,6 +304,7 @@ int main(int argc,char *argv)
 	ClearTextBuffer();
 
 	HW_PER(PER_UART_CLKDIV)=(1000*HW_PER(PER_CAP_CLOCKSPEED))/1152;
+	HW_PER(PER_TIMER_DIV0)=HW_PER(PER_CAP_CLOCKSPEED)*2; // Clocks 1 through 6 are now based on 100khz base clock.
 
 	AddMemory();
 
@@ -308,8 +323,7 @@ int main(int argc,char *argv)
 		; // Drain the buffer;
 	PS2MouseWrite(0xf4);
 
-	SetIntHandler(PER_INT_TIMER,&timer_int);
-	SetTimeout(10000);
+	SetMouseTimeout(1000);
 	while(PS2MouseRead()!=0xfa && mousetimeout==0)
 		; // Read the acknowledge byte
 
@@ -318,6 +332,8 @@ int main(int argc,char *argv)
 
 	// Don't set the VBlank int handler until the mouse has been initialised.
 	SetIntHandler(VGA_INT_VBLANK,&vblank_int);
+
+	SetHeartbeat();
 
 	SDCardInit();
 

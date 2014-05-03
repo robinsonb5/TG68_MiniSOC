@@ -60,7 +60,9 @@ void PS2Handler()
 
 	if(kbd & (1<<PER_PS2_RECV))
 	{
+#ifdef PS2_DEBUG
 		HW_PER(PER_UART)='k';
+#endif
 //		printf("KRCV, %d\n",kbbuffer.in_hw);
 		kbbuffer.inbuf[kbbuffer.in_hw]=(unsigned char)kbd;
 		kbbuffer.in_hw=(kbbuffer.in_hw+1) & (PS2_RINGBUFFER_SIZE-1);
@@ -77,7 +79,9 @@ void PS2Handler()
 	}
 	if(mouse & (1<<PER_PS2_RECV))
 	{
+#ifdef PS2_DEBUG
 		HW_PER(PER_UART)='m';
+#endif
 //		printf("MRCV, %d\n",kbbuffer.in_hw);
 		mousebuffer.inbuf[mousebuffer.in_hw]=(unsigned char)mouse;
 		mousebuffer.in_hw=(mousebuffer.in_hw+1) & (PS2_RINGBUFFER_SIZE-1);
