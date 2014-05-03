@@ -114,7 +114,8 @@ myDMACacheRAM : entity work.DMACacheRAM
 
 -- Employ bank reserve for SDRAM.
 -- FIXME - use pointer comparison to turn off reserve when not needed.
-sdram_reserve<='1' when internals(0).count(15 downto 0)/=X"0000" else '0';
+sdram_reserve<='1' when internals(0).count(15 downto 0)/=X"0000"
+								and internals(0).full='0' else '0';
 
 
 process(clk)

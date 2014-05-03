@@ -53,6 +53,15 @@ E	Word	HBStop – end of the horizontal blanking period. (Not yet implemented)
 #define VGACHARBUFFERBASE 0x80000800
 extern char *VGACharBuffer;
 
+enum VGA_ScreenModes {
+	MODE_640_480,
+	MODE_320_480,
+	MODE_800_600,
+	MODE_768_576
+};
+
+void VGA_SetScreenMode(enum VGA_ScreenModes mode);
+
 void SetSprite();
 
 #endif

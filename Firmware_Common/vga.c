@@ -26,7 +26,62 @@ unsigned long SpriteData[]=
 
 extern unsigned long StandardPointer[];
 
-void SetSprite()
+
+void VGA_SetScreenMode(enum VGA_ScreenModes mode)
+{
+	switch(mode)
+	{
+		case MODE_640_480:
+			HW_VGA(VGA_HTOTAL)=800;
+			HW_VGA(VGA_HSIZE)=640;
+			HW_VGA(VGA_HBSTART)=656;
+			HW_VGA(VGA_HBSTOP)=752;
+			HW_VGA(VGA_VTOTAL)=525;
+			HW_VGA(VGA_VSIZE)=480;
+			HW_VGA(VGA_VBSTART)=500;
+			HW_VGA(VGA_VBSTOP)=502;
+			HW_VGA(VGA_CONTROL)=0x87;
+			break;	
+
+		case MODE_320_480:
+			HW_VGA(VGA_HTOTAL)=400;
+			HW_VGA(VGA_HSIZE)=320;
+			HW_VGA(VGA_HBSTART)=328;
+			HW_VGA(VGA_HBSTOP)=376;
+			HW_VGA(VGA_VTOTAL)=525;
+			HW_VGA(VGA_VSIZE)=480;
+			HW_VGA(VGA_VBSTART)=490;
+			HW_VGA(VGA_VBSTOP)=492;
+			HW_VGA(VGA_CONTROL)=0x8d;
+			break;
+
+		case MODE_800_600:
+			HW_VGA(VGA_HTOTAL)=1024;
+			HW_VGA(VGA_HSIZE)=800;
+			HW_VGA(VGA_HBSTART)=824;
+			HW_VGA(VGA_HBSTOP)=896;
+			HW_VGA(VGA_VTOTAL)=625;
+			HW_VGA(VGA_VSIZE)=600;
+			HW_VGA(VGA_VBSTART)=601;
+			HW_VGA(VGA_VBSTOP)=602;
+			HW_VGA(VGA_CONTROL)=0x85;
+		break;
+
+		case MODE_768_576:
+			HW_VGA(VGA_HTOTAL)=976;
+			HW_VGA(VGA_HSIZE)=768;
+			HW_VGA(VGA_HBSTART)=792;
+			HW_VGA(VGA_HBSTOP)=872;
+			HW_VGA(VGA_VTOTAL)=597;
+			HW_VGA(VGA_VSIZE)=576;
+			HW_VGA(VGA_VBSTART)=577;
+			HW_VGA(VGA_VBSTOP)=580;
+			HW_VGA(VGA_CONTROL)=0x85;
+			break;
+	}
+}
+
+void VGA_SetSprite()
 {
 	HW_VGA_L(SP0PTR)=(unsigned long)StandardPointer;
 }

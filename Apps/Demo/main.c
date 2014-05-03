@@ -294,7 +294,7 @@ int main(int argc,char *argv)
 	AddMemory();
 
 	PS2Init();
-	SetSprite();
+	VGA_SetSprite();
 
 	FrameBuffer=(short *)malloc(sizeof(short)*640*960+15);
 	FrameBuffer=(short *)(((int)FrameBuffer+15)&~15); // Align to nearest 16 byte boundary.
@@ -329,21 +329,57 @@ int main(int argc,char *argv)
 		{
 			mainstate=MAIN_LOAD;
 			puts("Switching to image mode\n");
+			while(TestKey(KEY_F1))
+				;
 		}
 		if(TestKey(KEY_F2))
 		{
 			mainstate=MAIN_MEMCHECK;
 			puts("Switching to Memcheck mode\n");
+			while(TestKey(KEY_F2))
+				;
 		}
 		if(TestKey(KEY_F3))
 		{
 			mainstate=MAIN_RECTANGLES;
 			puts("Switching to Rectangles mode\n");
+			while(TestKey(KEY_F3))
+				;
 		}
 		if(TestKey(KEY_F4))
 		{
 			mainstate=MAIN_DHRYSTONE;
 			puts("Switching to image mode\n");
+			while(TestKey(KEY_F4))
+				;
+		}
+		if(TestKey(KEY_F5))
+		{
+			puts("640 x 480\n");
+			VGA_SetScreenMode(MODE_640_480);
+			while(TestKey(KEY_F5))
+				;
+		}
+		if(TestKey(KEY_F6))
+		{
+			puts("320 x 480\n");
+			VGA_SetScreenMode(MODE_320_480);
+			while(TestKey(KEY_F6))
+				;
+		}
+		if(TestKey(KEY_F7))
+		{
+			puts("800 x 600\n");
+			VGA_SetScreenMode(MODE_800_600);
+			while(TestKey(KEY_F7))
+				;
+		}
+		if(TestKey(KEY_F8))
+		{
+			puts("768 x 576\n");
+			VGA_SetScreenMode(MODE_768_576);
+			while(TestKey(KEY_F8))
+				;
 		}
 
 		// Main loop iteration.

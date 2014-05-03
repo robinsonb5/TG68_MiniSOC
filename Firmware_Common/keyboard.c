@@ -68,14 +68,14 @@ char HandlePS2RawCodes()
 			extkey=1;
 		else
 		{
-			if(key<128)
-			{
+//			if(key<128)
+//			{
 				short keyidx=extkey ? 128+key : key;
 				if(keyup)
 					keytable[keyidx]&=0xfe;  // Mask off the "currently pressed" bit.
 				else
 					keytable[keyidx]=3;	// Currently pressed and pressed since last test.
-			}
+//			}
 			if(keyup==0)
 			{
 				char a=0;
