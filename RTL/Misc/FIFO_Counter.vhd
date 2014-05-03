@@ -10,7 +10,7 @@ entity FIFO_Counter is
 	);
 	port(
 		clk : in std_logic;
-		reset_n : in std_logic;
+		reset : in std_logic; -- Active high
 		fill : in std_logic; -- FIFO has received an entry
 		drain : in std_logic;	-- An entry has been read
 		full : out std_logic;	-- FIFO is full
@@ -20,9 +20,9 @@ end entity;
 
 
 architecture RTL of FIFO_Counter is
-signal counter : unsigned(maxbit downto 0);
+signal counter : unsigned(maxbit+1 downto 0);
 constant	hightide : unsigned(maxbit downto lowbit) := (others=>'1');
-constant	lowtide : unsigned(maxbit downto lowbit) := (others=>'0');
+constant	lowtide : unsigned(maxbit+1 downto 0) := (others=>'0');
 
 begin
 
@@ -30,20 +30,21 @@ begin
 -- Need to increment and decrement the counters according to the fill and drain signals
 -- Must be able to cope with both signals being triggered simultaneously.
 
-full <='1' when counter(maxbit downto lowbit)=hightide else '0';
-empty <='1' when counter(maxbit downto lowbit)=lowtide else '0';
+full <='1' when counter(maxbit+1)='1' or counter(maxbit downto lowbit)=hightide else '0';
+empty <='1' when counter(maxbit+1 downto 0)=lowtide else '0';
 
 process(clk)
 begin
 
 	if rising_edge(clk) then
-		if reset_n='0' then
+		if reset='1' then
 			counter<=(others=>'0');
+			counter(0)<='1';
 		else
 			if fill='1' and drain='0' then
-				counter<=counter+to_unsigned(increment,maxbit+1);
+				counter<=counter+to_unsigned(increment,maxbit+2);
 			elsif fill='0' and drain='1' then
-				counter<=counter-to_unsigned(increment,maxbit+1);
+				counter<=counter-to_unsigned(increment,maxbit+2);
 			end if;
 		end if;
 	end if;

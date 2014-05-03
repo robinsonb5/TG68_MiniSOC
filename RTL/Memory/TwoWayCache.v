@@ -49,7 +49,6 @@ reg [15:0] state = INIT1;
 reg init;
 reg [9:0] initctr;
 assign ready=~init;
-reg reset_pending=1'b1;
 
 // BlockRAM and related signals for data
 
@@ -110,13 +109,15 @@ DualPortRAM tagram(
 	.wren_b(tag_wren2)
 );
 
-//   bits 2:1 specify which word of a burst we're interested in.
-//   Bits 10:3 specify the six bit address of the cachelines;
+//   bits 3:1 specify which word of a burst we're interested in.
+//   Bits 10:4 specify the seven bit address of the cachelines;
 //   Since we're building a 2-way cache, we'll map this to 
-//   {1'b0,addr[10:3]} and {1;b1,addr[10:3]} respectively.
+//   {1'b0,addr[10:4]} and {1;b1,addr[10:4]} respectively.
 
 wire [10:0] cacheline1;
 wire [10:0] cacheline2;
+
+reg [10:4] latched_cpuaddr;
 
 reg readword_burst; // Set to 1 when the lsb of the cache address should
 							// track the SDRAM controller.
@@ -159,9 +160,10 @@ assign tag_hit2 = tag_port2_r[16:0]==cpu_addr[25:9];
 // machine.
 
 
-assign data_port1_addr = init ? {1'b0,initctr} : cacheline1;
-assign data_port2_addr = init ? {1'b1,initctr} : cacheline2;
-
+assign data_port1_addr = init ? {1'b0,initctr} :
+			readword_burst ? {1'b0,latched_cpuaddr,readword} : cacheline1;
+assign data_port2_addr = init ? {1'b1,initctr} :
+			readword_burst ? {1'b1,latched_cpuaddr,readword} : cacheline2;
 
 always @(posedge clk)
 begin
@@ -197,10 +199,7 @@ begin
 			data_wren1<=1'b1;
 			data_wren2<=1'b1;
 			if(initctr==8'b1111_1111)
-			begin
 				state<=WAITING;
-				reset_pending<=1'b0;
-			end
 		end
 
 		WAITING:
@@ -212,8 +211,6 @@ begin
 					state<=WAITRD;
 				else	// Write cycle
 					state<=WRITE1;
-				if(reset_pending)
-					state<=INIT1;
 			end
 		end
 		WRITE1:
@@ -296,6 +293,8 @@ begin
 					// If either tag matches, but the corresponding data is stale,
 					// we re-use the stale cacheline.
 
+					latched_cpuaddr[10:4]<=cpu_addr[10:4];
+
 					if(tag_hit1)
 						tag_mru1<=1'b1;	// Way 1 contains stale data
 					else if(tag_hit2)
@@ -313,8 +312,6 @@ begin
 					sdram_rw<=1'b1;	// Read cycle
 					state<=WAITFILL;
 				end
-				if(reset_pending)
-					state<=INIT1;
 			end
 
 		PAUSE1:
@@ -435,7 +432,7 @@ begin
 	endcase
 
 	if(reset==1'b0)
-		reset_pending<=1'b1;
+		state<=INIT1;
 end
 
 

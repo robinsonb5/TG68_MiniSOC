@@ -57,7 +57,7 @@ type DMAChannel_Internal is record
 	wrptr_next : unsigned(DMACache_MaxCacheBit downto 0);
 	rdptr : unsigned(DMACache_MaxCacheBit downto 0);
 	addr : std_logic_vector(31 downto 0); -- Current RAM address
-	count : unsigned(15 downto 0); -- Number of words to transfer.
+	count : unsigned(16 downto 0); -- Number of words to transfer.
 	pending : std_logic; -- Host has a request pending on this channel
 	fill : std_logic;	-- Add a word to the FIFO
 	full : std_logic; -- Is the FIFO full?
@@ -84,9 +84,12 @@ begin
 FIFOCounters:
 for CHANNEL in 0 to DMACache_MaxChannel generate
 	myfifocounter : entity work.FIFO_Counter
+	generic map(
+		maxbit=>5
+	)
 	port map(
 		clk => clk,
-		reset_n => reset_n,
+		reset => channels_from_host(CHANNEL).setaddr,
 		fill => internals(CHANNEL).fill,
 		drain => internals(CHANNEL).drain,
 		full => internals(CHANNEL).full,
@@ -111,7 +114,7 @@ myDMACacheRAM : entity work.DMACacheRAM
 
 -- Employ bank reserve for SDRAM.
 -- FIXME - use pointer comparison to turn off reserve when not needed.
-sdram_reserve<='1' when internals(0).count/=X"000" else '0';
+sdram_reserve<='1' when internals(0).count(15 downto 0)/=X"0000" else '0';
 
 
 process(clk)
@@ -154,22 +157,15 @@ begin
 			when rd1 =>
 				activereq:='0';
 				for I in DMACache_MaxChannel downto 0 loop
-					if internals(I).full='0' then
---					if internals(I).rdptr( DMACache_MaxCacheBit downto 3)/=internals(I).wrptr_next( DMACache_MaxCacheBit downto 3) and internals(I).count/=X"000" then
+					if internals(I).full='0'
+						and internals(I).count(15 downto 0)/=X"0000"
+							and internals(I).count(16)='0' then
 						activechannel <= I;
 						activereq:='1';
+						sdram_req<='1';
+						inputstate<=rcv1;
 					end if;
 				end loop;
-
-				if activereq='1' then
---					cache_wraddr<=std_logic_vector(to_unsigned(activechannel,3))&std_logic_vector(internals(activechannel).wrptr);
-					sdram_req<='1';
---					sdram_addr<=internals(activechannel).addr;
---					internals(activechannel).addr<=std_logic_vector(unsigned(internals(activechannel).addr)+16);
-					inputstate<=rcv1;
---					internals(activechannel).sdram_pending<='1';
---					internals(activechannel).count<=internals(activechannel).count-8;
-				end if;
 
 
 			-- Wait for SDRAM, fill first word.
@@ -245,7 +241,8 @@ begin
 				internals(I).count<=(others=>'0');
 			end if;
 			if channels_from_host(I).setreqlen='1' then
-				internals(I).count<=channels_from_host(I).reqlen;
+				internals(I).count(15 downto 0)<=channels_from_host(I).reqlen;
+				internals(I).count(16)<='0';
 			end if;
 		end loop;
 
@@ -258,13 +255,6 @@ process(clk)
 	variable serviceactive : std_logic;
 begin
 	if rising_edge(clk) then
-	-- Reset read pointers when a new address is set
-		for I in 0 to DMACache_MaxChannel loop
-			if channels_from_host(I).setaddr='1' then
-				internals(I).rdptr<=(others => '0');
-				internals(I).pending<='0';
-			end if;
-		end loop;
 
 	-- Handle timeslicing of output registers
 	-- We prioritise simply by testing in order of priority.
@@ -296,6 +286,18 @@ begin
 			internals(servicechannel).drain<='1';
 			internals(servicechannel).pending<='0';
 		end if;
+
+		-- Reset read pointers when a new address is set
+		for I in 0 to DMACache_MaxChannel loop
+			if channels_from_host(I).setaddr='1' then
+				internals(I).rdptr<=(others => '0');
+				internals(I).pending<='0';
+			end if;
+--			if channels_from_host(I).setreqlen='1' then
+--				internals(I).rdptr<=(others => '0');
+--				internals(I).pending<='0';
+--			end if;
+		end loop;
 
 	end if;
 end process;
