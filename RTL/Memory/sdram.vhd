@@ -118,16 +118,16 @@ signal port1_dtack : std_logic;
 type writecache_states is (waitwrite,fill,finish);
 signal writecache_state : writecache_states;
 
-signal writecache_addr : std_logic_vector(31 downto 4);
+signal writecache_addr : std_logic_vector(31 downto 3);
 signal writecache_word0 : std_logic_vector(15 downto 0);
 signal writecache_word1 : std_logic_vector(15 downto 0);
 signal writecache_word2 : std_logic_vector(15 downto 0);
 signal writecache_word3 : std_logic_vector(15 downto 0);
-signal writecache_word4 : std_logic_vector(15 downto 0);
-signal writecache_word5 : std_logic_vector(15 downto 0);
-signal writecache_word6 : std_logic_vector(15 downto 0);
-signal writecache_word7 : std_logic_vector(15 downto 0);
-signal writecache_dqm : std_logic_vector(15 downto 0);
+--signal writecache_word4 : std_logic_vector(15 downto 0);
+--signal writecache_word5 : std_logic_vector(15 downto 0);
+--signal writecache_word6 : std_logic_vector(15 downto 0);
+--signal writecache_word7 : std_logic_vector(15 downto 0);
+signal writecache_dqm : std_logic_vector(7 downto 0);
 signal writecache_req : std_logic;
 signal writecache_dirty : std_logic;
 signal writecache_dtack : std_logic;
@@ -221,10 +221,10 @@ begin
 					-- Need to be careful with write merges; if we byte-write to an address
 					-- that already has a pending word write, we must be sure not to cancel
 					-- the other half of the existing word write.
-					if writecache_dirty='0' or addr1(31 downto 4)=writecache_addr(31 downto 4) then
-						writecache_addr(31 downto 4)<=addr1(31 downto 4);
-						case addr1(3 downto 1) is
-							when "000" =>
+					if writecache_dirty='0' or addr1(31 downto 3)=writecache_addr(31 downto 3) then
+						writecache_addr(31 downto 3)<=addr1(31 downto 3);
+						case addr1(2 downto 1) is
+							when "00" =>
 								if wrU1='0' then
 									writecache_word0(15 downto 8)<=datawr1(15 downto 8);
 									writecache_dqm(1)<='0';
@@ -233,7 +233,7 @@ begin
 									writecache_word0(7 downto 0)<=datawr1(7 downto 0);
 									writecache_dqm(0)<='0';
 								end if;
-							when "001" =>
+							when "01" =>
 								if wrU1='0' then
 									writecache_word1(15 downto 8)<=datawr1(15 downto 8);
 									writecache_dqm(3)<='0';
@@ -242,7 +242,7 @@ begin
 									writecache_word1(7 downto 0)<=datawr1(7 downto 0);
 									writecache_dqm(2)<='0';
 								end if;
-							when "010" =>
+							when "10" =>
 								if wrU1='0' then
 									writecache_word2(15 downto 8)<=datawr1(15 downto 8);
 									writecache_dqm(5)<='0';
@@ -251,7 +251,7 @@ begin
 									writecache_word2(7 downto 0)<=datawr1(7 downto 0);
 									writecache_dqm(4)<='0';
 								end if;
-							when "011" =>
+							when "11" =>
 								if wrU1='0' then
 									writecache_word3(15 downto 8)<=datawr1(15 downto 8);
 									writecache_dqm(7)<='0';
@@ -260,42 +260,42 @@ begin
 									writecache_word3(7 downto 0)<=datawr1(7 downto 0);
 									writecache_dqm(6)<='0';
 								end if;
-							when "100" =>
-								if wrU1='0' then
-									writecache_word4(15 downto 8)<=datawr1(15 downto 8);
-									writecache_dqm(9)<='0';
-								end if;
-								if wrL1='0' then
-									writecache_word4(7 downto 0)<=datawr1(7 downto 0);
-									writecache_dqm(8)<='0';
-								end if;
-							when "101" =>
-								if wrU1='0' then
-									writecache_word5(15 downto 8)<=datawr1(15 downto 8);
-									writecache_dqm(11)<='0';
-								end if;
-								if wrL1='0' then
-									writecache_word5(7 downto 0)<=datawr1(7 downto 0);
-									writecache_dqm(10)<='0';
-								end if;
-							when "110" =>
-								if wrU1='0' then
-									writecache_word6(15 downto 8)<=datawr1(15 downto 8);
-									writecache_dqm(13)<='0';
-								end if;
-								if wrL1='0' then
-									writecache_word6(7 downto 0)<=datawr1(7 downto 0);
-									writecache_dqm(12)<='0';
-								end if;
-							when "111" =>
-								if wrU1='0' then
-									writecache_word7(15 downto 8)<=datawr1(15 downto 8);
-									writecache_dqm(15)<='0';
-								end if;
-								if wrL1='0' then
-									writecache_word7(7 downto 0)<=datawr1(7 downto 0);
-									writecache_dqm(14)<='0';
-								end if;
+--							when "100" =>
+--								if wrU1='0' then
+--									writecache_word4(15 downto 8)<=datawr1(15 downto 8);
+--									writecache_dqm(9)<='0';
+--								end if;
+--								if wrL1='0' then
+--									writecache_word4(7 downto 0)<=datawr1(7 downto 0);
+--									writecache_dqm(8)<='0';
+--								end if;
+--							when "101" =>
+--								if wrU1='0' then
+--									writecache_word5(15 downto 8)<=datawr1(15 downto 8);
+--									writecache_dqm(11)<='0';
+--								end if;
+--								if wrL1='0' then
+--									writecache_word5(7 downto 0)<=datawr1(7 downto 0);
+--									writecache_dqm(10)<='0';
+--								end if;
+--							when "110" =>
+--								if wrU1='0' then
+--									writecache_word6(15 downto 8)<=datawr1(15 downto 8);
+--									writecache_dqm(13)<='0';
+--								end if;
+--								if wrL1='0' then
+--									writecache_word6(7 downto 0)<=datawr1(7 downto 0);
+--									writecache_dqm(12)<='0';
+--								end if;
+--							when "111" =>
+--								if wrU1='0' then
+--									writecache_word7(15 downto 8)<=datawr1(15 downto 8);
+--									writecache_dqm(15)<='0';
+--								end if;
+--								if wrL1='0' then
+--									writecache_word7(7 downto 0)<=datawr1(7 downto 0);
+--									writecache_dqm(14)<='0';
+--								end if;
 							when others =>
 								null;
 						end case;
@@ -370,9 +370,7 @@ mytwc : component TwoWayCache
 			initstate <= (others => '0');
 			init_done <= '0';
 			sdram_state <= ph0;
-			sdwrite <= '0';
 		ELSIF rising_edge(sysclk) THEN
-			sdwrite <= '0';
 
 			if reinit='1' then
 				init_done<='0';
@@ -382,73 +380,36 @@ mytwc : component TwoWayCache
 
 			case sdram_state is	--LATENCY=3
 				when ph0 =>	sdram_state <= ph1;
-					if sdram_slot2=writecache then
-						sdwrite<='1';
-					end if;
 				when ph1 =>	sdram_state <= ph1_1;
-					if sdram_slot2=writecache then
-						sdwrite<='1';
-					end if;
 					if sdram_slot2=port0 then
 						vga_fill<='1';
 					end if;
 				when ph1_1 => sdram_state <= ph1_2;
-					if sdram_slot2=writecache then
-						sdwrite<='1';
-					end if;
 				when ph1_2 => sdram_state <= ph1_3;
-					if sdram_slot2=writecache then
-						sdwrite<='1';
-					end if;
 				when ph1_3 => sdram_state <= ph1_4;
-					if sdram_slot2=writecache then
-						sdwrite<='1';
-					end if;
 				when ph1_4 => sdram_state <= ph2;
 				when ph2 => sdram_state <= ph3;
 				when ph3 =>	sdram_state <= ph4;
 				when ph4 =>	sdram_state <= ph5;
-					sdwrite <= '1';
 				when ph5 => sdram_state <= ph6;
 					vga_fill<='0';
-					sdwrite <= '1';
 				when ph6 =>	sdram_state <= ph7;
-					sdwrite <= '1';
 				when ph7 =>	sdram_state <= ph8;
-					sdwrite <= '1';
 				when ph8 =>	sdram_state <= ph9;
-					if sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
-						sdwrite<='1';
-					end if;					
 				when ph9 =>	sdram_state <= ph9_1;
-					if sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
-						sdwrite<='1';
-					end if;
 					if sdram_slot1=port0 then
 						vga_fill<='1';
 					end if;
 				when ph9_1 => sdram_state <= ph9_2;
-					if sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
-						sdwrite<='1';
-					end if;
 				when ph9_2 => sdram_state <= ph9_3;
-					if sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
-						sdwrite<='1';
-					end if;
 				when ph9_3 => sdram_state <= ph9_4;
-					if sdram_slot1=writecache then -- port1 and sdram_slot1_readwrite='0' then
-						sdwrite<='1';
-					end if;
 				when ph9_4 => sdram_state <= ph10;
 				when ph10 => sdram_state <= ph11;
 				when ph11 => sdram_state <= ph12;
 				when ph12 => sdram_state <= ph13;
-					sdwrite<='1';
 				when ph13 => sdram_state <= ph14;
 					vga_fill<='0';
-					sdwrite<='1';
 				when ph14 =>
-						sdwrite<='1';
 						if initstate /= "1111" THEN -- 16 complete phase cycles before we allow the rest of the design to come out of reset.
 							initstate <= initstate+1;
 							sdram_state <= ph15;
@@ -459,7 +420,6 @@ mytwc : component TwoWayCache
 							sdram_state <= ph0;
 						end if;
 				when ph15 => sdram_state <= ph0;
-					sdwrite<='1';
 				when others => sdram_state <= ph0;
 			end case;	
 		END IF;	
@@ -476,6 +436,7 @@ mytwc : component TwoWayCache
 			slot1_bank<="00";
 			slot2_bank<="11";
 			writecache_burst<='0';
+			sdwrite<='0';
 		elsif rising_edge(sysclk) THEN -- rising edge
 	
 			-- FIXME - need to make sure refresh happens often enough
@@ -488,6 +449,7 @@ mytwc : component TwoWayCache
 				refreshpending<='1';
 			end if;
 
+			sdwrite<='0';
 			sd_cs <='1';
 			sd_ras <= '1';
 			sd_cas <= '1';
@@ -530,52 +492,6 @@ mytwc : component TwoWayCache
 				END IF;
 			else		
 
-			
--- We have 8 megabytes to play with, addressed with bits 22 downto 0
--- bits 22 and 21 are used as bank select
--- bits 20 downto 9 are the row address, set in phase 2.
--- bits 23, 8 downto 1
-
--- In the interests of interleaving bank access, rearrange this somewhat
--- We're transferring 4 word bursts, so 8 bytes at a time, so leave lower 3 bits
--- as they are, but try making the next two the bank select bits
-
--- Bank select will thus be addr(4 downto 3),
--- Column will be addr(10 downto 5) & addr(2 downto 1) instead of addr(8 downto 1)
--- Row will be addr(22 downto 11) instead of (20 downto 9)
-
---  ph0				(drive data)
---
---  ph1
---						Data word 1
---  ph2 Active first bank / Autorefresh (RAS)
---						Data word 2
---  ph3
---						Data word 3 -  Assert dtack, propagates next cycle by which time all data is valid.
---  ph4
---						Data word 4
---  ph5 ReadA (CAS) (drive data)
-
---  ph6 (drive data)
-
---  ph7 (drive data)
-
---  ph8 (drive data)
---  ph9 Data word 1
-
--- ph10 Data word 2
---						Active second bank
-
--- ph11 Data word 3  -  Assert dtack, propagates next cycle by which time all data is valid.
-
--- ph12 Data word 4
-
--- ph13
---						ReadA (CAS) (drive data)
--- ph14
---						(drive data)
--- ph15
---						(drive data)
 
 -- Time slot control			
 
@@ -619,7 +535,7 @@ mytwc : component TwoWayCache
 							ba <= writecache_addr(5 downto 4);
 							slot1_bank <= writecache_addr(5 downto 4);
 							cas_dqm <= wrU1&wrL1;
-							casaddr <= writecache_addr&"0000";
+							casaddr <= writecache_addr&"000";
 							cas_sd_cas <= '0';
 							cas_sd_we <= '0';
 							sdram_slot1_readwrite <= '0';
@@ -661,8 +577,9 @@ mytwc : component TwoWayCache
 					when ph5 => -- Read or Write command			
 						sdaddr <= (others=>'0');
 						sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 6) & casaddr(3 downto 1) ;--auto precharge
-						sdaddr(10) <= '1'; -- Auto precharge.
-						ba <= casaddr(5 downto 4);
+						sdaddr(10) <= cas_sd_we;  -- Don't use auto-precharge for writes.
+--						sdaddr(10) <= '1'; -- Auto precharge.
+						ba <= slot1_bank;
 						sd_cs <= cas_sd_cs; 
 
 						dqm <= cas_dqm;
@@ -671,32 +588,38 @@ mytwc : component TwoWayCache
 						sd_cas <= cas_sd_cas;
 						sd_we  <= cas_sd_we;
 						if sdram_slot1=writecache then
+							sdwrite<='1';
 							datain <= writecache_word0;
 							dqm <= writecache_dqm(1 downto 0);
 						end if;
 
 					when ph6 => -- Next word of burst write
 						if sdram_slot1=writecache then
+							sdwrite<='1';
 							datain <= writecache_word1;
 							dqm <= writecache_dqm(3 downto 2);
 						end if;
 
 					when ph7 => -- third word of burst write
 						if sdram_slot1=writecache then
+							sdwrite<='1';
 							datain <= writecache_word2;
 							dqm <= writecache_dqm(5 downto 4);
 						end if;
 				
 					when ph8 =>
 						if sdram_slot1=writecache then
+							sdwrite<='1';
 							datain <= writecache_word3;
+							writecache_burst<='0';
 							dqm <= writecache_dqm(7 downto 6);
 						end if;
 
 					when ph9 =>
 						if sdram_slot1=writecache then
-							datain <= writecache_word4;
-							dqm <= writecache_dqm(9 downto 8);
+							dqm<="11"; -- Mask off end of burst
+--							datain <= writecache_word4;
+--							dqm <= writecache_dqm(9 downto 8);
 						end if;
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
@@ -704,28 +627,33 @@ mytwc : component TwoWayCache
 
 					when ph9_1 =>
 						if sdram_slot1=writecache then
-							datain <= writecache_word5;
-							dqm <= writecache_dqm(11 downto 10);
+							-- Issue precharge command to terminate the burst.
+							sd_we<='0';
+							sd_ras<='0';
+							sd_cs<='0'; -- Chip select
+							ba<=slot1_bank;
+							dqm<="11"; -- Mask off end of burst
+--							datain <= writecache_word5;
+--							dqm <= writecache_dqm(11 downto 10);
 						end if;
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
 						end if;
 
 					when ph9_2 =>
-						if sdram_slot1=writecache then
-							datain <= writecache_word6;
-							dqm <= writecache_dqm(13 downto 12);
-						end if;
+--						if sdram_slot1=writecache then
+--							datain <= writecache_word6;
+--							dqm <= writecache_dqm(13 downto 12);
+--						end if;
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
 						end if;
 
 					when ph9_3 =>
-						if sdram_slot1=writecache then
-							datain <= writecache_word7;
-							dqm <= writecache_dqm(15 downto 14);
-							writecache_burst<='0';
-						end if;
+--						if sdram_slot1=writecache then
+--							datain <= writecache_word7;
+--							dqm <= writecache_dqm(15 downto 14);
+--						end if;
 						if sdram_slot1=port1 then
 							readcache_fill<='1';
 						end if;
@@ -756,7 +684,7 @@ mytwc : component TwoWayCache
 							ba <= writecache_addr(5 downto 4);
 							slot2_bank <= writecache_addr(5 downto 4);
 							cas_dqm <= wrU1&wrL1;
-							casaddr <= writecache_addr&"0000";
+							casaddr <= writecache_addr&"000";
 							cas_sd_cas <= '0';
 							cas_sd_we <= '0';
 							sdram_slot2_readwrite <= '0';
@@ -802,8 +730,9 @@ mytwc : component TwoWayCache
 						if sdram_slot2/=idle then
 							sdaddr <= (others=>'0');
 							sdaddr((cols-1) downto 0) <= casaddr((cols+2) downto 6) & casaddr(3 downto 1) ;--auto precharge
-							sdaddr(10) <= '1'; -- Auto precharge.
-							ba <= casaddr(5 downto 4);
+							sdaddr(10) <= cas_sd_we;  -- Don't use auto-precharge for writes.
+--							sdaddr(10) <= '1'; -- Auto precharge.
+							ba <= slot2_bank;
 							sd_cs <= cas_sd_cs; 
 
 							dqm <= cas_dqm;
@@ -812,6 +741,7 @@ mytwc : component TwoWayCache
 							sd_cas <= cas_sd_cas;
 							sd_we  <= cas_sd_we;
 							if sdram_slot2=writecache then
+								sdwrite<='1';
 								datain <= writecache_word0;
 								dqm <= writecache_dqm(1 downto 0);
 							end if;
@@ -819,26 +749,31 @@ mytwc : component TwoWayCache
 
 					when ph14 => -- Second word of burst write
 						if sdram_slot2=writecache then
+							sdwrite<='1';
 							datain <= writecache_word1;
 							dqm <= writecache_dqm(3 downto 2);
 						end if;
 
 					when ph15 => -- Third word of burst write
 						if sdram_slot2=writecache then
+							sdwrite<='1';
 							datain <= writecache_word2;
 							dqm <= writecache_dqm(5 downto 4);
 						end if;
 
 					when ph0 => -- Final word of burst write
 						if sdram_slot2=writecache then
+							sdwrite<='1';
 							datain <= writecache_word3;
 							dqm <= writecache_dqm(7 downto 6);
+							writecache_burst<='0';
 						end if;
 
 					when ph1 =>
 						if sdram_slot2=writecache then
-							datain <= writecache_word4;
-							dqm <= writecache_dqm(9 downto 8);
+							dqm <= "11"; -- Mask off end of write burst
+--							datain <= writecache_word4;
+--							dqm <= writecache_dqm(9 downto 8);
 						end if;
 						if sdram_slot2=port1 then
 							readcache_fill<='1';
@@ -846,28 +781,33 @@ mytwc : component TwoWayCache
 
 					when ph1_1 =>
 						if sdram_slot2=writecache then
-							datain <= writecache_word5;
-							dqm <= writecache_dqm(11 downto 10);
+							-- Issue precharge command to terminate the burst.
+							sd_we<='0';
+							sd_ras<='0';
+							sd_cs<='0'; -- Chip select
+							ba<=slot2_bank;
+							dqm <= "11"; -- Mask off end of write burst
+--							datain <= writecache_word5;
+--							dqm <= writecache_dqm(11 downto 10);
 						end if;
 						if sdram_slot2=port1 then
 							readcache_fill<='1';
 						end if;
 
 					when ph1_2 =>
-						if sdram_slot2=writecache then
-							datain <= writecache_word6;
-							dqm <= writecache_dqm(13 downto 12);
-						end if;
+--						if sdram_slot2=writecache then
+--							datain <= writecache_word6;
+--							dqm <= writecache_dqm(13 downto 12);
+--						end if;
 						if sdram_slot2=port1 then
 							readcache_fill<='1';
 						end if;
 
 					when ph1_3 =>
-						if sdram_slot2=writecache then
-							datain <= writecache_word7;
-							dqm <= writecache_dqm(15 downto 14);
-							writecache_burst<='0';
-						end if;
+--						if sdram_slot2=writecache then
+--							datain <= writecache_word7;
+--							dqm <= writecache_dqm(15 downto 14);
+--						end if;
 						if sdram_slot2=port1 then
 							readcache_fill<='1';
 						end if;

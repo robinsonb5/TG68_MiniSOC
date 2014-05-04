@@ -10,7 +10,7 @@
 // The address is broken down as follows:
 //   bit 0 is irrelevant because we're working in 16-bit words.
 //   bits 3:1 specify which word of a burst we're interested in.
-//   Bits 10:4 specify the six bit address of the cachelines;
+//   Bits 10:4 specify the seven bit address of the cachelines;
 //     this will map to {1'b0,addr[8:3]} and {1;b1,addr[8:3]} respectively.
 //   Bits 25:11 have to be stored in the tag, which, it turns out is no problem,
 //     since we can use have 18-bit wide words.  The highest bit will be used as
@@ -179,7 +179,7 @@ begin
 
 	case(state)
 
-		// FIXME - need an init state here that loops through the data clearing
+		// We use an init state here to loos through the data, clearing
 		// the valid flag - for which we'll use bit 17 of the data entry.
 	
 		INIT1:
