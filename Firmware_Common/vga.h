@@ -57,6 +57,7 @@ enum VGA_ScreenModes {
 	MODE_640_480,
 	MODE_320_480,
 	MODE_800_600,
+	MODE_800_600_72,
 	MODE_768_576
 };
 

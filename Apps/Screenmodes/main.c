@@ -219,6 +219,15 @@ int main(int argc,char *argv)
 			while(TestKey(KEY_F4))
 				;
 		}
+		if(TestKey(KEY_F5))
+		{
+			puts("800 x 600 @ 72\n");
+			VGA_SetScreenMode(MODE_800_600_72);
+
+			DrawTestcard(FrameBuffer,800,600);
+			while(TestKey(KEY_F4))
+				;
+		}
 
 	}
 }
