@@ -323,7 +323,7 @@ begin
 			outbits => 6
 		)
 		port map(
-			clk=>clk,
+			clk=>clk_fast,
 			hsync=>vga_hsync,
 			vsync=>vga_vsync,
 			vid_ena=>vga_window,

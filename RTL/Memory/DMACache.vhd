@@ -119,7 +119,6 @@ sdram_reserve<='1' when internals(0).count(15 downto 0)/=X"0000"
 
 
 process(clk)
-	variable activereq : std_logic;
 begin
 
 	-- We update these outside the clock edge
@@ -156,13 +155,11 @@ begin
 			-- VGA has absolute priority, and the others won't do anything until the VGA buffer is
 			-- full.
 			when rd1 =>
-				activereq:='0';
 				for I in DMACache_MaxChannel downto 0 loop
 					if internals(I).full='0'
 						and internals(I).count(15 downto 0)/=X"0000"
 							and internals(I).count(16)='0' then
 						activechannel <= I;
-						activereq:='1';
 						sdram_req<='1';
 						inputstate<=rcv1;
 					end if;
@@ -230,6 +227,17 @@ begin
 
 				internals(activechannel).wrptr<=internals(activechannel).wrptr_next;
 				internals(activechannel).wrptr_next<=internals(activechannel).wrptr_next+8;
+
+				for I in DMACache_MaxChannel downto 0 loop
+					if internals(I).full='0'
+						and internals(I).count(15 downto 0)/=X"0000"
+							and internals(I).count(16)='0' then
+						activechannel <= I;
+						sdram_req<='1';
+						inputstate<=rcv1;
+					end if;
+				end loop;
+	
 			when others =>
 				null;
 		end case;

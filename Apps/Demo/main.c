@@ -389,7 +389,7 @@ int main(int argc,char *argv)
 		}
 		if(TestKey(KEY_F7))
 		{
-			puts("800 x 600\n");
+			puts("800 x 600 @ 50Hz\n");
 			screenwidth=800;
 			VGA_SetScreenMode(MODE_800_600);
 			while(TestKey(KEY_F7))
@@ -401,6 +401,15 @@ int main(int argc,char *argv)
 			screenwidth=768;
 			VGA_SetScreenMode(MODE_768_576);
 			while(TestKey(KEY_F8))
+				;
+		}
+
+		if(TestKey(KEY_F9))
+		{
+			puts("800 x 600 @ 72Hz\n");
+			screenwidth=800;
+			VGA_SetScreenMode(MODE_800_600_72);
+			while(TestKey(KEY_F9))
 				;
 		}
 
