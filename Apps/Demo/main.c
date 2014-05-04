@@ -35,6 +35,8 @@ void SetHeartbeat()
 	SetIntHandler(PER_INT_TIMER,&heartbeat_int);
 }
 
+int screenwidth=640;
+
 static void vblank_int()
 {
 	static short mousemode=0;
@@ -51,7 +53,7 @@ static void vblank_int()
 		yoff=959-framecount;
 	else
 		yoff=framecount;
-	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*640]);
+	HW_VGA_L(FRAMEBUFFERPTR)=(unsigned long)(&FrameBuffer[yoff*screenwidth]);
 
 	while(PS2MouseBytesReady()>=(3+mousemode))	// FIXME - institute some kind of timeout here to re-sync if sync lost.
 	{
@@ -372,6 +374,7 @@ int main(int argc,char *argv)
 		if(TestKey(KEY_F5))
 		{
 			puts("640 x 480\n");
+			screenwidth=640;
 			VGA_SetScreenMode(MODE_640_480);
 			while(TestKey(KEY_F5))
 				;
@@ -379,6 +382,7 @@ int main(int argc,char *argv)
 		if(TestKey(KEY_F6))
 		{
 			puts("320 x 480\n");
+			screenwidth=320;
 			VGA_SetScreenMode(MODE_320_480);
 			while(TestKey(KEY_F6))
 				;
@@ -386,6 +390,7 @@ int main(int argc,char *argv)
 		if(TestKey(KEY_F7))
 		{
 			puts("800 x 600\n");
+			screenwidth=800;
 			VGA_SetScreenMode(MODE_800_600);
 			while(TestKey(KEY_F7))
 				;
@@ -393,6 +398,7 @@ int main(int argc,char *argv)
 		if(TestKey(KEY_F8))
 		{
 			puts("768 x 576\n");
+			screenwidth=768;
 			VGA_SetScreenMode(MODE_768_576);
 			while(TestKey(KEY_F8))
 				;

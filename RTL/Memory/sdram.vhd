@@ -109,6 +109,10 @@ signal sdram_slot2_readwrite : std_logic;
 signal slot1_bank : std_logic_vector(1 downto 0) := "00";
 signal slot2_bank : std_logic_vector(1 downto 0) := "11";
 
+signal slot1_fill : std_logic;
+signal slot2_fill : std_logic;
+
+
 -- refresh timer - once per scanline, so don't need the counter...
 -- signal refreshcounter : unsigned(12 downto 0);	-- 13 bits gives us 8192 cycles between refreshes => pretty conservative.
 signal refreshpending : std_logic :='0';
@@ -180,6 +184,14 @@ END COMPONENT;
 
 
 begin
+
+	readcache_fill <= '1' when (slot1_fill='1' and sdram_slot1=port1)
+								or (slot2_fill='1' and sdram_slot2=port1)
+									else '0';
+
+	vga_fill <= '1' when (slot1_fill='1' and sdram_slot1=port0)
+								or (slot2_fill='1' and sdram_slot2=port0)
+									else '0';
 
 	process(sysclk)
 	begin
@@ -260,42 +272,6 @@ begin
 									writecache_word3(7 downto 0)<=datawr1(7 downto 0);
 									writecache_dqm(6)<='0';
 								end if;
---							when "100" =>
---								if wrU1='0' then
---									writecache_word4(15 downto 8)<=datawr1(15 downto 8);
---									writecache_dqm(9)<='0';
---								end if;
---								if wrL1='0' then
---									writecache_word4(7 downto 0)<=datawr1(7 downto 0);
---									writecache_dqm(8)<='0';
---								end if;
---							when "101" =>
---								if wrU1='0' then
---									writecache_word5(15 downto 8)<=datawr1(15 downto 8);
---									writecache_dqm(11)<='0';
---								end if;
---								if wrL1='0' then
---									writecache_word5(7 downto 0)<=datawr1(7 downto 0);
---									writecache_dqm(10)<='0';
---								end if;
---							when "110" =>
---								if wrU1='0' then
---									writecache_word6(15 downto 8)<=datawr1(15 downto 8);
---									writecache_dqm(13)<='0';
---								end if;
---								if wrL1='0' then
---									writecache_word6(7 downto 0)<=datawr1(7 downto 0);
---									writecache_dqm(12)<='0';
---								end if;
---							when "111" =>
---								if wrU1='0' then
---									writecache_word7(15 downto 8)<=datawr1(15 downto 8);
---									writecache_dqm(15)<='0';
---								end if;
---								if wrL1='0' then
---									writecache_word7(7 downto 0)<=datawr1(7 downto 0);
---									writecache_dqm(14)<='0';
---								end if;
 							when others =>
 								null;
 						end case;
@@ -337,8 +313,6 @@ mytwc : component TwoWayCache
 		cpu_rwu => wrU1,
 		data_from_cpu => datawr1,
 		data_to_cpu => dataout1,
---		sdram_addr(31 downto 3) => readcache_addr(31 downto 3),
---		sdram_addr(2 downto 0) => open,
 		data_from_sdram => sdata_reg,
 		data_to_sdram => open,
 		sdram_req => readcache_req,
@@ -381,9 +355,7 @@ mytwc : component TwoWayCache
 			case sdram_state is	--LATENCY=3
 				when ph0 =>	sdram_state <= ph1;
 				when ph1 =>	sdram_state <= ph1_1;
-					if sdram_slot2=port0 then
-						vga_fill<='1';
-					end if;
+					slot2_fill<='1';
 				when ph1_1 => sdram_state <= ph1_2;
 				when ph1_2 => sdram_state <= ph1_3;
 				when ph1_3 => sdram_state <= ph1_4;
@@ -392,14 +364,12 @@ mytwc : component TwoWayCache
 				when ph3 =>	sdram_state <= ph4;
 				when ph4 =>	sdram_state <= ph5;
 				when ph5 => sdram_state <= ph6;
-					vga_fill<='0';
+					slot2_fill<='0';
 				when ph6 =>	sdram_state <= ph7;
 				when ph7 =>	sdram_state <= ph8;
 				when ph8 =>	sdram_state <= ph9;
 				when ph9 =>	sdram_state <= ph9_1;
-					if sdram_slot1=port0 then
-						vga_fill<='1';
-					end if;
+					slot1_fill<='1';
 				when ph9_1 => sdram_state <= ph9_2;
 				when ph9_2 => sdram_state <= ph9_3;
 				when ph9_3 => sdram_state <= ph9_4;
@@ -408,7 +378,7 @@ mytwc : component TwoWayCache
 				when ph11 => sdram_state <= ph12;
 				when ph12 => sdram_state <= ph13;
 				when ph13 => sdram_state <= ph14;
-					vga_fill<='0';
+					slot1_fill<='0';
 				when ph14 =>
 						if initstate /= "1111" THEN -- 16 complete phase cycles before we allow the rest of the design to come out of reset.
 							initstate <= initstate+1;
@@ -495,7 +465,6 @@ mytwc : component TwoWayCache
 
 -- Time slot control			
 
-				readcache_fill<='0';
 				vga_ack<='0';
 				case sdram_state is
 
@@ -556,23 +525,13 @@ mytwc : component TwoWayCache
 							sd_ras <= '0';
 						end if;
 
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
-
 
 					when ph3 =>
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
 						if sdram_slot1=writecache then
 							writecache_burst<='1';	-- Close the door on new write data
 						end if;
 
 					when ph4 =>
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
 						
 					when ph5 => -- Read or Write command			
 						sdaddr <= (others=>'0');
@@ -618,11 +577,6 @@ mytwc : component TwoWayCache
 					when ph9 =>
 						if sdram_slot1=writecache then
 							dqm<="11"; -- Mask off end of burst
---							datain <= writecache_word4;
---							dqm <= writecache_dqm(9 downto 8);
-						end if;
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
 						end if;
 
 					when ph9_1 =>
@@ -633,35 +587,13 @@ mytwc : component TwoWayCache
 							sd_cs<='0'; -- Chip select
 							ba<=slot1_bank;
 							dqm<="11"; -- Mask off end of burst
---							datain <= writecache_word5;
---							dqm <= writecache_dqm(11 downto 10);
-						end if;
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
 						end if;
 
 					when ph9_2 =>
---						if sdram_slot1=writecache then
---							datain <= writecache_word6;
---							dqm <= writecache_dqm(13 downto 12);
---						end if;
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
 
 					when ph9_3 =>
---						if sdram_slot1=writecache then
---							datain <= writecache_word7;
---							dqm <= writecache_dqm(15 downto 14);
---						end if;
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
 						
 					when ph9_4 =>
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
 
 					when ph10 => -- Second access slot...
 						cas_sd_cs <= '0';  -- Only the lowest bit has any significance...
@@ -706,25 +638,15 @@ mytwc : component TwoWayCache
 							sd_cs <= '0'; --ACTIVE
 							sd_ras <= '0';
 						end if;
-
-						-- Fill - takes effect next cycle.
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
 				
 					when ph11 =>
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
 						if sdram_slot2=writecache then
 							writecache_burst<='1';  -- close the door on new write data
 						end if;
 
 					when ph12 =>
-						if sdram_slot1=port1 then
-							readcache_fill<='1';
-						end if;
-						
+
+					
 					-- Phase 13 - CAS for second window...
 					when ph13 =>
 						if sdram_slot2/=idle then
@@ -772,11 +694,6 @@ mytwc : component TwoWayCache
 					when ph1 =>
 						if sdram_slot2=writecache then
 							dqm <= "11"; -- Mask off end of write burst
---							datain <= writecache_word4;
---							dqm <= writecache_dqm(9 downto 8);
-						end if;
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
 						end if;
 
 					when ph1_1 =>
@@ -787,35 +704,13 @@ mytwc : component TwoWayCache
 							sd_cs<='0'; -- Chip select
 							ba<=slot2_bank;
 							dqm <= "11"; -- Mask off end of write burst
---							datain <= writecache_word5;
---							dqm <= writecache_dqm(11 downto 10);
-						end if;
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
 						end if;
 
 					when ph1_2 =>
---						if sdram_slot2=writecache then
---							datain <= writecache_word6;
---							dqm <= writecache_dqm(13 downto 12);
---						end if;
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
 
 					when ph1_3 =>
---						if sdram_slot2=writecache then
---							datain <= writecache_word7;
---							dqm <= writecache_dqm(15 downto 14);
---						end if;
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
 
 					when ph1_4 =>
-						if sdram_slot2=port1 then
-							readcache_fill<='1';
-						end if;
 
 					when others =>
 						null;
