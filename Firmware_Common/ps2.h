@@ -32,4 +32,6 @@ void PS2Init();
 #define PS2MouseBytesReady(x) ps2_ringbuffer_count(&mousebuffer)
 #define PS2MouseWrite(x) ps2_ringbuffer_write(&mousebuffer,x);
 
+#define PS2_INT 4
+
 #endif

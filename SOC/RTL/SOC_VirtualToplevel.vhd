@@ -189,7 +189,7 @@ signal rom_we_n : std_logic;
 signal ps2m_clk_db : std_logic;
 signal ps2k_clk_db : std_logic;
 
-type prgstates is (run,pause,mem,rom,waitread,waitwrite,waitvga,vga,peripheral);
+type prgstates is (run,pause,mem,rom,waitread,waitwrite,waitvga,vga,audio,peripheral);
 signal prgstate : prgstates :=run;
 
 -- Address decoding for fast state machine
@@ -344,11 +344,11 @@ begin
 							vga_reg_datain<=cpu_dataout;
 							prgstate<=vga;
 						when X"8100" => -- more hardware registers - peripherals
-							audio_reg_req<='1';
-							prgstate<=peripheral;
-						when X"8200" => -- Audio controller
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';
+							prgstate<=peripheral;
+						when X"8200" => -- Audio controller
+							audio_reg_req<='1';
 							prgstate<=peripheral;
 						when X"0000" => -- ROM access
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
@@ -386,6 +386,9 @@ begin
 					cpu_clkena<='1';
 					prgstate<=run;
 				end if;
+			when audio =>
+				cpu_clkena<='1';
+				prgstate<=run;
 			when others =>
 				null;
 		end case;

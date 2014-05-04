@@ -96,6 +96,9 @@ set_output_delay -clock sysclk_slow -max 1.0 [get_ports sd_clk]
 set_output_delay -clock sysclk_slow -max 1.0 [get_ports altera_reserved*]
 set_output_delay -clock sysclk_slow -min 0.5 [get_ports altera_reserved*]
 
+set_output_delay -clock sysclk_fast -max 1.0 [get_ports aud_*]
+set_output_delay -clock sysclk_fast -min 0.5 [get_ports aud_*]
+
 #**************************************************************
 # Set Clock Groups
 #**************************************************************

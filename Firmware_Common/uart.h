@@ -11,6 +11,8 @@
 #define REG_UART_RXINT 9
 #define REG_UART_TXREADY 8
 
+#define INT_UART 2
+
 #ifndef DISABLE_UART_TX
 int putchar(int c);
 int puts(const char *msg);
