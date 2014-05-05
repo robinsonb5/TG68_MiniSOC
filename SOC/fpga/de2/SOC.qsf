@@ -666,38 +666,7 @@ set_global_assignment -name SMART_RECOMPILE ON
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
 
 
-set_global_assignment -name SDC_FILE ../../../Board/de2/Constraints.sdc
-set_global_assignment -name QIP_FILE ../../../Board/de1/PLL_50To100split.qip
-set_global_assignment -name VERILOG_FILE ../../../Board/de1/SEG7_LUT_4.v
-set_global_assignment -name VERILOG_FILE ../../../Board/de1/SEG7_LUT.v
-set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/spi.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/peripheral_controller.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/io_ps2_com.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/interrupt_controller.vhd
-set_global_assignment -name VHDL_FILE ../../../CharROM/CharROM_ROM.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Video/video_vga_master.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Video/video_vga_dither.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Video/vga_controller.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Video/chargen.vhd
-set_global_assignment -name VERILOG_FILE ../../../RTL/Memory/TwoWayCache.v
-set_global_assignment -name VHDL_FILE ../../../RTL/Memory/sdram.vhd
-set_global_assignment -name VHDL_FILE ../../RTL/Toplevel_Config.vhd
-set_global_assignment -name VHDL_FILE ../../RTL/SOC_VirtualToplevel.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/simple_uart.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/CPU/TG68KdotC_Kernel.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/CPU/TG68K_Pack.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/CPU/TG68K_ALU.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/cascade_timer.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACache.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DualPortRAM.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Misc/Debounce.vhd
-set_global_assignment -name VHDL_FILE ../../Firmware/sdbootstrap_ROM.vhd
-set_global_assignment -name VERILOG_FILE ../../../Board/de2/DE2_Toplevel.v
-set_global_assignment -name SIGNALTAP_FILE stp1.stp
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "PLL_50To100split:mypll|c1" -section_id auto_signaltap_0
-set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACache_pkg.vhd
-set_global_assignment -name VHDL_FILE ../../RTL/DMACache_config.vhd
-set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACacheRAM.vhd
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=512" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=512" -section_id auto_signaltap_0
 set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "VirtualToplevel:myvirtualtoplevel|DMACache:mydmacache|DMACacheRAM:myDMACacheRAM|q[0]" -section_id auto_signaltap_0
@@ -1304,6 +1273,41 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=920" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=55145" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=14460" -section_id auto_signaltap_0
+set_global_assignment -name VHDL_FILE ../../../RTL/Misc/risingedge_divider.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Sound/sound_wrapper.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Sound/sound_controller.vhd
+set_global_assignment -name VERILOG_FILE ../../../RTL/Sound/hybrid_pwm_sd.v
+set_global_assignment -name SDC_FILE ../../../Board/de2/Constraints.sdc
+set_global_assignment -name QIP_FILE ../../../Board/de1/PLL_50To100split.qip
+set_global_assignment -name VERILOG_FILE ../../../Board/de1/SEG7_LUT_4.v
+set_global_assignment -name VERILOG_FILE ../../../Board/de1/SEG7_LUT.v
+set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/spi.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/peripheral_controller.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/io_ps2_com.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/interrupt_controller.vhd
+set_global_assignment -name VHDL_FILE ../../../CharROM/CharROM_ROM.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Video/video_vga_master.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Video/video_vga_dither.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Video/vga_controller.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Video/chargen.vhd
+set_global_assignment -name VERILOG_FILE ../../../RTL/Memory/TwoWayCache.v
+set_global_assignment -name VHDL_FILE ../../../RTL/Memory/sdram.vhd
+set_global_assignment -name VHDL_FILE ../../RTL/Toplevel_Config.vhd
+set_global_assignment -name VHDL_FILE ../../RTL/SOC_VirtualToplevel.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/simple_uart.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/CPU/TG68KdotC_Kernel.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/CPU/TG68K_Pack.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/CPU/TG68K_ALU.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Peripherals/cascade_timer.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACache.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DualPortRAM.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Misc/Debounce.vhd
+set_global_assignment -name VHDL_FILE ../../Firmware/sdbootstrap_ROM.vhd
+set_global_assignment -name VERILOG_FILE ../../../Board/de2/DE2_Toplevel.v
+set_global_assignment -name SIGNALTAP_FILE stp1.stp
+set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACache_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../RTL/DMACache_config.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACacheRAM.vhd
 set_global_assignment -name VHDL_FILE ../../../RTL/Misc/poweronreset.vhd
 set_global_assignment -name VHDL_FILE ../../../RTL/Misc/FIFO_Counter.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

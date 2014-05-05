@@ -1,17 +1,21 @@
-#include <stdio.h>
-#include <string.h>
-#include <malloc.h>
 
-#include "minisoc_hardware.h"
+//#include "minisoc_hardware.h"
+#include "board.h"
+#include "timer.h"
 #include "ints.h"
 #include "ps2.h"
 #include "keyboard.h"
 #include "textbuffer.h"
 #include "spi.h"
 #include "fat.h"
-#include "dhry.h"
-//#include "uart.h"
+#include "uart.h"
 #include "vga.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <malloc.h>
+
+#include "dhry.h"
 
 short *FrameBuffer;
 extern short pen;
@@ -30,9 +34,10 @@ static void heartbeat_int()
 
 void SetHeartbeat()
 {
-	HW_PER(PER_TIMER_CONTROL)=(1<<PER_TIMER_EN1);
-	HW_PER(PER_TIMER_DIV1)=1000; // 100Hz heartbeat
-	SetIntHandler(PER_INT_TIMER,&heartbeat_int);
+	HW_TIMER(REG_TIMER_DIV0)=HW_BOARD(REG_CAP_CLOCKSPEED)*2; // Timers 1 through 6 are now based on 100khz base clock.
+	HW_TIMER(REG_TIMER_CONTROL)=(1<<REG_TIMER_EN1);
+	HW_TIMER(REG_TIMER_DIV1)=1000; // 100Hz heartbeat
+	SetIntHandler(TIMER_INT,&heartbeat_int);
 }
 
 int screenwidth=640;
@@ -126,7 +131,7 @@ static void vblank_int()
 
 static void mousetimer_int()
 {
-	if(HW_PER(PER_TIMER_CONTROL) & (1<<PER_TIMER_TR5))
+	if(HW_TIMER(REG_TIMER_CONTROL) & (1<<REG_TIMER_TR5))
 		mousetimeout=1;
 //	puts("Timer int received\n");
 }
@@ -135,9 +140,9 @@ static void mousetimer_int()
 void SetMouseTimeout(int delay)
 {
 	mousetimeout=0;
-	HW_PER(PER_TIMER_CONTROL)=(1<<PER_TIMER_EN5);
-	HW_PER(PER_TIMER_DIV5)=delay;
-	SetIntHandler(PER_INT_TIMER,&mousetimer_int);
+	HW_TIMER(REG_TIMER_CONTROL)=(1<<REG_TIMER_EN5);
+	HW_TIMER(REG_TIMER_DIV5)=delay;
+	SetIntHandler(TIMER_INT,&mousetimer_int);
 }
 
 
@@ -149,7 +154,7 @@ void AddMemory()
 	low=(size_t)&heap_low;
 	low+=15;
 	low&=0xfffffff0; // Align to SDRAM burst boundary
-	size=1L<<HW_PER(PER_CAP_RAMSIZE);
+	size=1L<<HW_BOARD(REG_CAP_RAMSIZE);
 	size-=low;
 	size-=0x1000; // Leave room for the stack
 	printf("Heap_low: %lx, heap_size: %lx\n",low,size);
@@ -305,8 +310,8 @@ int main(int argc,char *argv)
 	unsigned char *fbptr;
 	ClearTextBuffer();
 
-	HW_PER(PER_UART_CLKDIV)=(1000*HW_PER(PER_CAP_CLOCKSPEED))/1152;
-	HW_PER(PER_TIMER_DIV0)=HW_PER(PER_CAP_CLOCKSPEED)*2; // Clocks 1 through 6 are now based on 100khz base clock.
+	HW_UART(REG_UART_CLKDIV)=(1000*HW_BOARD(REG_CAP_CLOCKSPEED))/1152;
+	HW_TIMER(REG_TIMER_DIV0)=HW_BOARD(REG_CAP_CLOCKSPEED)*2; // Clocks 1 through 6 are now based on 100khz base clock.
 
 	AddMemory();
 
@@ -463,7 +468,7 @@ int main(int argc,char *argv)
 				if(MouseButtons&2)
 					pen-=0x400;
 				DrawIteration();
-				HW_PER(PER_HEX)=pen;
+				HW_BOARD(REG_HEX)=pen;
 				break;
 			case MAIN_DHRYSTONE:
 				Dhrystone();

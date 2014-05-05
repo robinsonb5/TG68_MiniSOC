@@ -521,16 +521,16 @@ mysdram : entity work.sdram
 
 			channels_from_host(0) => vgachannel_fromhost,
 			channels_from_host(1) => spr0channel_fromhost,
+			channels_from_host(2) => aud0_fromhost,
+			channels_from_host(3) => aud1_fromhost,
+			channels_from_host(4) => aud2_fromhost,
+			channels_from_host(5) => aud3_fromhost,
+
 			channels_to_host(0) => vgachannel_tohost,	
 			channels_to_host(1) => spr0channel_tohost,
-
-			channels_from_host(2) => aud0_fromhost,
 			channels_to_host(2) => aud0_tohost,
-			channels_from_host(3) => aud1_fromhost,
 			channels_to_host(3) => aud1_tohost,
-			channels_from_host(4) => aud2_fromhost,
 			channels_to_host(4) => aud2_tohost,
-			channels_from_host(5) => aud3_fromhost,
 			channels_to_host(5) => aud3_tohost,
 
 			data_out => dma_data,
