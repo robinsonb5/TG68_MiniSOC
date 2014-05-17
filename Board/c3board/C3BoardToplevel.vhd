@@ -339,7 +339,8 @@ begin
 		generic map(
 			sdram_rows => 12,
 			sdram_cols => 10,
-			sysclk_frequency => 250
+			sysclk_frequency => 250,
+			fastclk_frequency => 1000
 		)
 		port map(
 			clk => clk,

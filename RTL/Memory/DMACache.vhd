@@ -32,6 +32,7 @@ entity DMACache is
 		sdram_reserve : out std_logic;
 		sdram_req : out std_logic;
 		sdram_ack : in std_logic; -- Set when the request has been acknowledged.
+		sdram_nak : in std_logic; -- Set when bank collisions prevent the request being serviced
 		sdram_fill : in std_logic;
 		sdram_data : in std_logic_vector(15 downto 0)
 	);
@@ -113,7 +114,6 @@ myDMACacheRAM : entity work.DMACacheRAM
 	);
 
 -- Employ bank reserve for SDRAM.
--- FIXME - use pointer comparison to turn off reserve when not needed.
 sdram_reserve<='1' when internals(0).count(15 downto 0)/=X"0000"
 								and internals(0).full='0' else '0';
 
@@ -146,8 +146,11 @@ begin
 			internals(activechannel).addr<=std_logic_vector(unsigned(internals(activechannel).addr)+16);
 			internals(activechannel).count<=internals(activechannel).count-8;
 		end if;
+		
 
-		internals(activechannel).fill<='0';
+		for I in 0 to DMACache_MaxChannel loop
+			internals(activechannel).fill<='0';
+		end loop;
 
 		-- Request and receive data from SDRAM:
 		case inputstate is
@@ -168,6 +171,10 @@ begin
 
 			-- Wait for SDRAM, fill first word.
 			when rcv1 =>
+				if sdram_nak='1' then -- Back out of a read request if the cycle's not serviced
+					sdram_req<='0';	-- (Allows priorities to be reconsidered.)
+					inputstate<=rd1;
+				end if;
 				if sdram_fill='1' then
 					data_from_ram<=sdram_data;
 					cache_wren<='1';

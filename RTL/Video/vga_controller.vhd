@@ -90,7 +90,7 @@ entity vga_controller is
 
 		vblank_int : out std_logic;
 		hsync : out std_logic; -- to monitor
-		vsync : buffer std_logic; -- to monitor
+		vsync : out std_logic; -- to monitor
 		red : out unsigned(7 downto 0);		-- Allow for 8bpp even if we
 		green : out unsigned(7 downto 0);	-- only currently support 16-bit
 		blue : out unsigned(7 downto 0);		-- 5-6-5 output
