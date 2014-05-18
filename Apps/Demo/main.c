@@ -35,7 +35,7 @@ static void heartbeat_int()
 void SetHeartbeat()
 {
 	HW_TIMER(REG_TIMER_DIV0)=HW_BOARD(REG_CAP_CLOCKSPEED)*2; // Timers 1 through 6 are now based on 100khz base clock.
-	HW_TIMER(REG_TIMER_CONTROL)=(1<<REG_TIMER_EN1);
+	HW_TIMER(REG_TIMER_CONTROL)=(1<<BIT_TIMER_EN1);
 	HW_TIMER(REG_TIMER_DIV1)=1000; // 100Hz heartbeat
 	SetIntHandler(TIMER_INT,&heartbeat_int);
 }
@@ -123,7 +123,7 @@ static void vblank_int()
 			char buf[2]={0,0};
 //			HW_PER(PER_UART)=a;
 			buf[0]=a;
-			puts(buf);
+			tb_puts(buf);
 		}
 	}
 }
@@ -131,7 +131,7 @@ static void vblank_int()
 
 static void mousetimer_int()
 {
-	if(HW_TIMER(REG_TIMER_CONTROL) & (1<<REG_TIMER_TR5))
+	if(HW_TIMER(REG_TIMER_CONTROL) & (1<<BIT_TIMER_TR5))
 		mousetimeout=1;
 //	puts("Timer int received\n");
 }
@@ -140,7 +140,7 @@ static void mousetimer_int()
 void SetMouseTimeout(int delay)
 {
 	mousetimeout=0;
-	HW_TIMER(REG_TIMER_CONTROL)=(1<<REG_TIMER_EN5);
+	HW_TIMER(REG_TIMER_CONTROL)=(1<<BIT_TIMER_EN5);
 	HW_TIMER(REG_TIMER_DIV5)=delay;
 	SetIntHandler(TIMER_INT,&mousetimer_int);
 }
@@ -342,7 +342,15 @@ int main(int argc,char *argv)
 
 	SetHeartbeat();
 
-	SDCardInit();
+	tb_puts("\r\nWelcome to TG68MiniSOC, a minimal System-on-Chip,\r\nbuilt around Tobias Gubener's TG68k processor core.\r\n");
+
+	tb_puts("Initializing SD card.\r\n");
+	if(!SDCardInit())
+		tb_puts("  SD card error!\r\n");
+
+	tb_puts("Press F1 through F4 to change test mode.\r\n");
+	tb_puts("Press F5 through F9 to change screenmode.\r\n");
+	tb_puts("Press F12 to toggle character overlay.\r\n");
 
 	enum mainstate_t mainstate=MAIN_DHRYSTONE;
 
@@ -418,6 +426,19 @@ int main(int argc,char *argv)
 				;
 		}
 
+		if(TestKey(KEY_F12))
+		{
+			static short overlay=0;
+			puts("Toggling overlay\n");
+			overlay=~overlay;
+			if(overlay)
+				VGA_HideOverlay();
+			else
+				VGA_ShowOverlay();
+			while(TestKey(KEY_F12))
+				;
+		}
+
 		// Main loop iteration.
 		switch(mainstate)
 		{
@@ -452,8 +473,6 @@ int main(int argc,char *argv)
 							}
 						}
 					}
-					puts("\r\nWelcome to TG68MiniSOC, a minimal System-on-Chip,\r\nbuilt around Tobias Gubener's TG68k processor core.\r\n");
-					puts("Press F1, F2 or F3 to change test mode.\r\n");
 				}
 				else
 					printf("Couldn't load test.img\n");

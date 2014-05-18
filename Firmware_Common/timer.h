@@ -10,19 +10,19 @@
 #define REG_TIMER_CONTROL 0xE
 
 /* Control bits */
-#define REG_TIMER_TR6 6
-#define REG_TIMER_TR5 5
-#define REG_TIMER_TR4 4
-#define REG_TIMER_TR3 3
-#define REG_TIMER_TR2 2
-#define REG_TIMER_TR1 1
+#define BIT_TIMER_TR6 6
+#define BIT_TIMER_TR5 5
+#define BIT_TIMER_TR4 4
+#define BIT_TIMER_TR3 3
+#define BIT_TIMER_TR2 2
+#define BIT_TIMER_TR1 1
 
-#define REG_TIMER_EN6 14
-#define REG_TIMER_EN5 13
-#define REG_TIMER_EN4 12
-#define REG_TIMER_EN3 11
-#define REG_TIMER_EN2 10
-#define REG_TIMER_EN1 9
+#define BIT_TIMER_EN6 14
+#define BIT_TIMER_EN5 13
+#define BIT_TIMER_EN4 12
+#define BIT_TIMER_EN3 11
+#define BIT_TIMER_EN2 10
+#define BIT_TIMER_EN1 9
 
 /* Divisor registers */
 #define REG_TIMER_DIV0 0x10

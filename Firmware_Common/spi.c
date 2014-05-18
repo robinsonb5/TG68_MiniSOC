@@ -1,20 +1,21 @@
 #include <stdio.h>
-#include "minisoc_hardware.h"
-#include "textbuffer.h"
+#include "spi.h"
+#include "timer.h"
+#include "board.h"
 
 short SDHCtype=1;
 
-// #define SPI_WAIT(x) while(HW_PER(PER_SPI_CS)&(1<<PER_SPI_BUSY));
-// #define SPI(x) {while((HW_PER(PER_SPI_CS)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI)=(x);}
-// #define SPI_READ(x) (HW_PER(PER_SPI)&255)
+// #define SPI_WAIT(x) while(HW_SPI(REG_SPI_CS)&(1<<BIT_SPI_BUSY));
+// #define SPI(x) {while((HW_SPI(REG_SPI_CS)&(1<<BIT_SPI_BUSY))); HW_SPI(REG_SPI)=(x);}
+// #define SPI_READ(x) (HW_SPI(REG_SPI)&255)
 
 #define SPI_WAIT(x) ;
-#define SPI(x) HW_PER(PER_SPI_BLOCKING)=(x)
-#define SPI_PUMP(x) HW_PER(PER_SPI_PUMP)
-#define SPI_PUMP_L(x) HW_PER_L(PER_SPI_PUMP)
-#define SPI_READ(x) (HW_PER(PER_SPI_BLOCKING)&255)
+#define SPI(x) HW_SPI(REG_SPI_BLOCKING)=(x)
+#define SPI_PUMP(x) HW_SPI(REG_SPI_PUMP)
+#define SPI_PUMP_L(x) HW_SPI_L(REG_SPI_PUMP)
+#define SPI_READ(x) (HW_SPI(REG_SPI_BLOCKING)&255)
 
-#define SPI_CS(x) {while((HW_PER(PER_SPI_CS)&(1<<PER_SPI_BUSY))); HW_PER(PER_SPI_CS)=(x);}
+#define SPI_CS(x) {while((HW_SPI(REG_SPI_CS)&(1<<BIT_SPI_BUSY))); HW_SPI(REG_SPI_CS)=(x);}
 
 #define cmd_reset(x) cmd_write(0x950040,0) // Use SPI mode
 #define cmd_init(x) cmd_write(0xff0041,0)
@@ -202,7 +203,7 @@ short spi_init()
 	int i;
 	int r;
 	SDHCtype=1;
-	HW_PER(PER_TIMER_DIV7)=150;	// About 350KHz
+	HW_TIMER(REG_TIMER_DIV7)=150;	// About 350KHz
 	SPI_CS(0);	// Disable CS
 	spi_spin();
 	SPI_CS(1);
@@ -225,7 +226,7 @@ short spi_init()
 	SPI(0xFF);
 	SPI_CS(0);
 
-	HW_PER(PER_TIMER_DIV7)=HW_PER(PER_CAP_SPISPEED);
+	HW_TIMER(REG_TIMER_DIV7)=HW_BOARD(REG_CAP_SPISPEED);
 	return(1);
 }
 

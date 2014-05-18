@@ -19,8 +19,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "minisoc_hardware.h"
-
 /* Global Variables: */
 
 Rec_Pointer     Ptr_Glob,

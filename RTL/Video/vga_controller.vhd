@@ -140,6 +140,7 @@ architecture rtl of vga_controller is
 	signal chargen_pixel : std_logic := '0';
 	signal chargen_rw : std_logic :='1';
 	signal chargen_overlay : std_logic :='1';
+	signal chargen_reset : std_logic;
 	
 	signal vga_window_d2 : std_logic;
 	signal vga_window_d : std_logic;
@@ -194,6 +195,7 @@ begin
 			ySyncTo => vbstop
 		);		
 
+	chargen_reset<=reset and chargen_overlay;
 
 	mychargen : entity work.charactergenerator
 		generic map (
@@ -205,7 +207,7 @@ begin
 		)
 		port map (
 			clk => clk,
-			reset => reset,
+			reset => chargen_reset,
 			xpos => currentX(9 downto 0),
 			ypos => currentY(9 downto 0),
 			pixel_clock => end_of_pixel,

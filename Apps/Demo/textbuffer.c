@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "minisoc_hardware.h"
+#include "vga.h"
 #include "textbuffer.h"
 
 #define text_rows 25
@@ -96,3 +96,5 @@ void ClearTextBuffer()
 	for(i=0;i<2048;i+=4)
 		*p++=0;
 }
+
+
