@@ -303,6 +303,8 @@ short SDCardInit()
 }
 
 
+char printf_buffer[256];
+
 int main(int argc,char *argv)
 {
 	enum mainstate_t {MAIN_IDLE,MAIN_LOAD,MAIN_MEMCHECK,MAIN_RECTANGLES,MAIN_DHRYSTONE};
@@ -344,7 +346,7 @@ int main(int argc,char *argv)
 
 	tb_puts("\r\nWelcome to TG68MiniSOC, a minimal System-on-Chip,\r\nbuilt around Tobias Gubener's TG68k processor core.\r\n");
 
-	tb_puts("Initializing SD card.\r\n");
+	tb_puts("Initializing SD card...\r\n");
 	if(!SDCardInit())
 		tb_puts("  SD card error!\r\n");
 
@@ -490,7 +492,13 @@ int main(int argc,char *argv)
 				HW_BOARD(REG_HEX)=pen;
 				break;
 			case MAIN_DHRYSTONE:
-				Dhrystone();
+				tb_puts("Running Dhrystone benchmark...\r\n");
+				{
+					int result=Dhrystone();
+
+					sprintf(printf_buffer, "%d DMIPS\r\n",result);
+					tb_puts(printf_buffer);
+				}
 				mainstate=MAIN_RECTANGLES;
 				break;
 		}

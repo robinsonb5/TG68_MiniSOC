@@ -309,7 +309,7 @@ int Dhrystone()
     printf ("\n");
   }
   
-  return 0;
+  return Vax_Mips;
 }
 
 
