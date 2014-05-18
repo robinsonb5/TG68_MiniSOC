@@ -149,7 +149,7 @@ begin
 		
 
 		for I in 0 to DMACache_MaxChannel loop
-			internals(activechannel).fill<='0';
+			internals(I).fill<='0';
 		end loop;
 
 		-- Request and receive data from SDRAM:
