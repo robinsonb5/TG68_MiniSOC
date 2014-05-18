@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="Clock_50to100Split">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2014-4-6T20:47:11</timestamp>
+    <timestamp>2014-5-18T9:31:53</timestamp>
     <pin polarity="Input" x="0" y="80" name="clk_in1" />
     <pin polarity="Input" x="0" y="432" name="reset" />
     <pin polarity="Output" x="608" y="80" name="clk_out1" />

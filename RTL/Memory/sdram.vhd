@@ -543,6 +543,7 @@ mytwc : component TwoWayCache
 						 -- Final word of burst write
 						if sdram_slot2=writecache then
 							-- Issue precharge command to terminate the burst.
+							sdaddr(10)<='0'; -- Precharge only the one bank.
 							sd_we<='0';
 							sd_ras<='0';
 							sd_cs<='0'; -- Chip select
@@ -669,6 +670,7 @@ mytwc : component TwoWayCache
 							sd_ras<='0';
 							sd_cs<='0'; -- Chip select
 							ba<=slot1_bank;
+							sdaddr(10)<='0'; -- Precharge only the one bank.
 							dqm<="11"; -- Mask off end of burst
 						end if;
 

@@ -43,13 +43,6 @@ architecture rtl of dmacache is
 type inputstate_t is (rd1,rcv1,rcv2,rcv3,rcv4,rcv5,rcv6,rcv7,rcv8);
 signal inputstate : inputstate_t := rd1;
 
-constant vga_base : std_logic_vector(2 downto 0) := "000";
-constant spr0_base : std_logic_vector(2 downto 0) := "001";
-constant spr1_base : std_logic_vector(2 downto 0) := "010";
-constant aud0_base : std_logic_vector(2 downto 0) := "011";
-constant aud1_base : std_logic_vector(2 downto 0) := "100";
-constant aud2_base : std_logic_vector(2 downto 0) := "101";
-constant aud3_base : std_logic_vector(2 downto 0) := "110";
 
 -- DMA channel state information
 type DMAChannel_Internal is record
@@ -131,8 +124,6 @@ begin
 			inputstate<=rd1;
 			for I in 0 to DMACache_MaxChannel loop
 				internals(I).count<=(others => '0');
---				internals(I).wrptr<=(others => '0');
---				internals(I).wrptr_next<=(3=>'1', others =>'0');
 			end loop;
 		end if;
 
@@ -185,49 +176,42 @@ begin
 			when rcv2 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
---				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="001";
 				internals(activechannel).fill<='1';
 				inputstate<=rcv3;
 			when rcv3 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
---				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="010";
 				internals(activechannel).fill<='1';
 				inputstate<=rcv4;
 			when rcv4 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
---				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="011";
 				internals(activechannel).fill<='1';
 				inputstate<=rcv5;
 			when rcv5 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
---				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="100";
 				internals(activechannel).fill<='1';
 				inputstate<=rcv6;
 			when rcv6 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
---				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="101";
 				internals(activechannel).fill<='1';
 				inputstate<=rcv7;
 			when rcv7 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
---				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="110";
 				internals(activechannel).fill<='1';
 				inputstate<=rcv8;
 			when rcv8 =>
 				data_from_ram<=sdram_data;
 				cache_wren<='1';
---				cache_wraddr<=std_logic_vector(unsigned(cache_wraddr)+1);
 				cache_wraddr_lsb<="111";
 				internals(activechannel).fill<='1';
 				inputstate<=rd1;
@@ -297,7 +281,6 @@ begin
 		if serviceactive='1' then
 			cache_rdaddr<=std_logic_vector(to_unsigned(servicechannel,3))&std_logic_vector(internals(servicechannel).rdptr);
 			internals(servicechannel).rdptr<=internals(servicechannel).rdptr+1;
---			internals(servicechannel).valid_d<='1';
 			channels_to_host(servicechannel).valid<='1';
 			internals(servicechannel).drain<='1';
 			internals(servicechannel).pending<='0';
@@ -307,12 +290,10 @@ begin
 		for I in 0 to DMACache_MaxChannel loop
 			if channels_from_host(I).setaddr='1' then
 				internals(I).rdptr<=(others => '0');
+				internals(I).rdptr(2 downto 0)<=
+					unsigned(channels_from_host(I).addr(3 downto 1));	-- Offset to allow non-aligned accesses.
 				internals(I).pending<='0';
 			end if;
---			if channels_from_host(I).setreqlen='1' then
---				internals(I).rdptr<=(others => '0');
---				internals(I).pending<='0';
---			end if;
 		end loop;
 
 	end if;
