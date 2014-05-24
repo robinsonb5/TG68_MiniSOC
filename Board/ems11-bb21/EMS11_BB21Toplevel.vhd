@@ -14,16 +14,16 @@ port
 	CLK50 : in std_logic;
 
 		-- UART
-	TXD1_TO_FPGA : in std_logic;
-	RXD1_FROM_FPGA : out std_logic;
-	N_RTS1_TO_FPGA : in std_logic;
-	N_CTS1_FROM_FPGA : out std_logic;
+	UART1_TXD : out std_logic;
+	UART1_RXD : in std_logic;
+	UART1_RTS_N : out std_logic;
+	UART1_CTS_N : in std_logic;
 	
 		-- SDRAM
-	DR_CAS : out std_logic;
-	DR_CS : out std_logic;
-	DR_RAS : out std_logic;
-	DR_WE	: out std_logic;
+	DR_CAS_N : out std_logic;
+	DR_CS_N : out std_logic;
+	DR_RAS_N : out std_logic;
+	DR_WE_N	: out std_logic;
 	DR_CLK_I : in std_logic;
 	DR_CLK_O : out std_logic;
 	DR_CKE : out std_logic;
@@ -35,8 +35,8 @@ port
 	
 		-- SD Card
 
-	FPGA_SD_CDET : in std_logic;
-	FPGA_SD_WPROT : in std_logic;
+	FPGA_SD_CDET_N : in std_logic;
+	FPGA_SD_WPROT_N : in std_logic;
 	FPGA_SD_CMD : out std_logic;
 	FPGA_SD_D0 : in std_logic;
 	FPGA_SD_D1 : in std_logic; -- High Z since we're using SPI-mode
@@ -45,12 +45,15 @@ port
 	FPGA_SD_SCLK : out std_logic;
 	
 		-- VGA Connector
-	N_CTS2_FROM_FPGA : out std_logic; -- Actually used for VGA
+	UART2_RTS_N : out std_logic; -- Actually used for VGA
 	M1_S : inout std_logic_vector(39 downto 0);
 
 		-- LEDs
 	LED1 : out std_logic;
 	LED2 : out std_logic;
+	
+		-- Emus GPIO
+	GPIO : inout std_logic_vector(15 downto 0);
 
 		-- Buttons
 	DIAG_N : in std_logic;
@@ -80,10 +83,15 @@ signal vga_sync : std_logic;
 signal vga_psave : std_logic;
 
 -- PS/2 ports
-alias PS2_MCLK : std_logic is M1_S(35);
-alias PS2_MDAT : std_logic is M1_S(33);
-alias PS2_CLK : std_logic is M1_S(37);
-alias PS2_DAT : std_logic is M1_S(39);
+-- alias PS2_MCLK : std_logic is M1_S(35);
+-- alias PS2_MDAT : std_logic is M1_S(33);
+-- alias PS2_CLK : std_logic is M1_S(37);
+-- alias PS2_DAT : std_logic is M1_S(39);
+
+alias PS2_MCLK : std_logic is M1_S(33);
+alias PS2_MDAT : std_logic is M1_S(35);
+alias PS2_CLK : std_logic is M1_S(39);
+alias PS2_DAT : std_logic is M1_S(37);
 
 signal ps2m_clk_in : std_logic;
 signal ps2m_clk_out : std_logic;
@@ -96,7 +104,7 @@ signal ps2k_dat_in : std_logic;
 signal ps2k_dat_out : std_logic;
 
 begin
-N_CTS1_FROM_FPGA<='1';  -- safe default since we're not using handshaking.
+UART1_RTS_N<='1';  -- safe default since we're not using handshaking.
 
 -- DR_CLK_O<='1';
 LED1 <= RESET_N;
@@ -169,7 +177,7 @@ vga_sync <= '0';
 vga_blank <= vga_window;
 vga_psave <= '1';
 
-N_CTS2_FROM_FPGA<=vga_green(9);
+UART2_RTS_N<=vga_green(9);
 M1_S(0)<=vga_green(8);
 M1_S(2)<=vga_green(7);
 M1_S(4)<=vga_green(6);
@@ -238,10 +246,10 @@ project: entity work.VirtualToplevel
 		sdr_addr => DR_A(12 downto 0),
 		sdr_dqm(1) => DR_DQMH,
 		sdr_dqm(0) => DR_DQML,
-		sdr_we => DR_WE,
-		sdr_cas => DR_CAS,
-		sdr_ras => DR_RAS,
-		sdr_cs => DR_CS,
+		sdr_we => DR_WE_N,
+		sdr_cas => DR_CAS_N,
+		sdr_ras => DR_RAS_N,
+		sdr_cs => DR_CS_N,
 		sdr_ba => DR_BA,
 		sdr_cke => DR_CKE,
 
@@ -260,10 +268,13 @@ project: entity work.VirtualToplevel
 		ps2m_dat_in => ps2m_dat_in,
 		ps2m_clk_out => ps2m_clk_out,
 		ps2m_dat_out => ps2m_dat_out,
+		
+		-- Emus GPIO
+		gpio_data => GPIO,
 
 		-- UART
-		rxd => TXD1_TO_FPGA,
-		txd => RXD1_FROM_FPGA
+		rxd => UART1_RXD,
+		txd => UART1_TXD
 );
 
 end architecture;

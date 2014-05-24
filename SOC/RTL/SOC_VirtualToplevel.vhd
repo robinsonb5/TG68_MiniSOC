@@ -62,8 +62,8 @@ entity VirtualToplevel is
 		audio_l : out signed(15 downto 0);
 		audio_r : out signed(15 downto 0);
 		
-		gpio_in : in std_logic_vector(15 downto 0) := X"0000";
-		gpio_out : out std_logic_vector(15 downto 0);
+		gpio_dir : inout std_logic_vector(15 downto 0);
+		gpio_data : inout std_logic_vector(15 downto 0) := X"0000";
 		
 		hex : out std_logic_vector(15 downto 0)
 	);
@@ -625,8 +625,8 @@ mysdram : entity work.sdram
 		spiclk_out => spi_clk,
 		spi_cs => spi_cs,
 		
-		gpio_in => gpio_in,
-		gpio_out => gpio_out,
+		gpio_data => gpio_data,
+		gpio_dir => gpio_dir,
 		
 		hex => hex,
 
