@@ -1,9 +1,0 @@
-run
--ifmt MIXED
--top Clock_50to100Split_exdes
--p xc6slx45-fgg676-3
--ifn xst.prj
--ofn Clock_50to100Split_exdes
--keep_hierarchy soft 
--equivalent_register_removal no 
--max_fanout 65535
