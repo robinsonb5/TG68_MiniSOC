@@ -14,7 +14,7 @@ LIB_DIR = ../../Firmware_Common/klibc
 
 BUILD_DIR=m68k_obj
 
-STARTUP_SRC = $(STARTUP_DIR)/startup_bootrom.s
+STARTUP_SRC = $(STARTUP_DIR)/startup_app.s
 STARTUP_OBJ = $(patsubst $(STARTUP_DIR)/%.s,$(BUILD_DIR)/%.o,$(STARTUP_SRC))
 
 LIB_SRC = memcpy.c strcpy.c strcmp.c

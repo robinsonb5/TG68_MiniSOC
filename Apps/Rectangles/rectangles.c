@@ -29,7 +29,7 @@ int main(int argc,char **argv)
 	unsigned char *fbptr;
 	int c=0;
 
-	SetSprite();
+	VGA_SetSprite();
 
 	FrameBuffer=(short *)0x10000;
 	HW_VGA_L(FRAMEBUFFERPTR)=FrameBuffer;

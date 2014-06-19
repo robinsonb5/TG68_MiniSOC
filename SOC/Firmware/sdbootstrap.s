@@ -74,6 +74,8 @@ PER_CAP_SPISPEED equ $2C
 PER_SPI_PUMP equ $100
 PER_TIMER_DIV7 equ $1e
 
+VGABASE equ $80000000
+
 CHARBUF equ $80000800
 
 ;	org $0
@@ -82,6 +84,33 @@ CHARBUF equ $80000800
 	dc.l	START
 
 START:				; first instruction of program
+
+;	lea	$100000,a0
+;	move.l	a0,VGABASE
+
+;	moveq	#0,d0
+;	move.l	#479,d7
+;.vgaouter
+;	move.l	#639,d6
+;.vgainner
+;	move.w	d0,(a0)+
+;	addq	#1,d0
+;	dbf	d6,.vgainner
+;	dbf	d7,.vgaouter
+
+;.loop
+
+;	lea	$100000,a0
+;	move.l	#479,d7
+;.vgaouter2
+;	move.l	#39,d6
+;.vgainner2
+;	movem.l	(a0)+,d0-4/a0-a4
+;	dbf	d6,.vgainner2
+;	dbf	d7,.vgaouter2
+
+;	bra	.loop
+
 	lea 	STACK,a7
 	moveq	#0,d0
 	move.w	PERREGS+PER_CAP_FREQ,d0	; Calculate serial speed from system clock frequency
@@ -130,7 +159,11 @@ START:				; first instruction of program
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
 	beq		.mainloop
-	move.b	d0,(a5)+,
+;	move.b	d0,(a5)+
+;	move.l	a5,d1	; Make sure the address doesn't roll past the text buffer
+;	or.l	$00000800,d1
+;	and.l	$ffffefff,d1
+;	move.l	d1,a5
 	bsr		HandleByte
 	bra		.mainloop
 

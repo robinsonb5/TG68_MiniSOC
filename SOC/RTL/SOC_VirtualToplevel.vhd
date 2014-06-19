@@ -2,11 +2,16 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.ALL;
 
+library work;
+use work.DMACache_pkg.ALL;
+use work.DMACache_config.ALL;
+
 entity VirtualToplevel is
 	generic (
 		sdram_rows : integer := 12;
 		sdram_cols : integer := 8;
-		sysclk_frequency : integer := 1000; -- Sysclk frequency * 10
+		sysclk_frequency : integer := 250; -- Sysclk frequency (MHz) * 10
+		fastclk_frequency : integer := 1000; -- fastclk frequency (MHz) * 10
 		spi_maxspeed : integer := 1	-- lowest acceptable timer DIV7 value
 	);
 	port (
@@ -57,8 +62,8 @@ entity VirtualToplevel is
 		audio_l : out signed(15 downto 0);
 		audio_r : out signed(15 downto 0);
 		
-		gpio_in : in std_logic_vector(15 downto 0) := X"0000";
-		gpio_out : out std_logic_vector(15 downto 0);
+		gpio_dir : inout std_logic_vector(15 downto 0);
+		gpio_data : inout std_logic_vector(15 downto 0) := X"0000";
 		
 		hex : out std_logic_vector(15 downto 0)
 	);
@@ -106,15 +111,43 @@ signal sdram_req : std_logic;
 --signal write_pending : std_logic :='0';
 signal dtack1 : std_logic;
 
-signal sdr_vga_data : std_logic_vector(15 downto 0);
-signal sdr_vga_addr : std_logic_vector(31 downto 0);
-signal sdr_vga_req : std_logic;
-signal sdr_vga_fill : std_logic;
-signal sdr_vga_refresh : std_logic;
-signal sdr_vga_newframe : std_logic;
-signal sdr_vga_reservebank : std_logic; -- Keep bank clear for instant access.
-signal sdr_vga_reserveaddr : std_logic_vector(31 downto 0); -- to SDRAM
-signal sdr_vga_ack : std_logic;
+-- Plumbing between DMA controller and SDRAM
+
+signal vga_addr : std_logic_vector(31 downto 0);
+signal vga_data : std_logic_vector(15 downto 0);
+signal vga_req : std_logic;
+signal vga_ack : std_logic;
+signal vga_nak : std_logic;
+signal vga_fill : std_logic;
+signal vga_refresh : std_logic;
+signal vga_newframe : std_logic;
+signal vga_reservebank : std_logic; -- Keep bank clear for instant access.
+signal vga_reserveaddr : std_logic_vector(31 downto 0); -- to SDRAM
+
+signal dma_data : std_logic_vector(15 downto 0);
+
+
+-- Plumbing between VGA controller and DMA controller
+
+signal vgachannel_fromhost : DMAChannel_FromHost;
+signal vgachannel_tohost : DMAChannel_ToHost;
+signal spr0channel_fromhost : DMAChannel_FromHost;
+signal spr0channel_tohost : DMAChannel_ToHost;
+
+
+-- Audio channel plumbing
+
+signal aud0_fromhost : DMAChannel_FromHost;
+signal aud0_tohost : DMAChannel_ToHost;
+signal aud1_fromhost : DMAChannel_FromHost;
+signal aud1_tohost : DMAChannel_ToHost;
+signal aud2_fromhost : DMAChannel_FromHost;
+signal aud2_tohost : DMAChannel_ToHost;
+signal aud3_fromhost : DMAChannel_FromHost;
+signal aud3_tohost : DMAChannel_ToHost;
+
+signal audio_reg_req : std_logic;
+
 
 -- VGA register block signals
 
@@ -158,7 +191,7 @@ signal rom_we_n : std_logic;
 signal ps2m_clk_db : std_logic;
 signal ps2k_clk_db : std_logic;
 
-type prgstates is (run,pause,mem,rom,waitread,waitwrite,waitvga,vga,peripheral);
+type prgstates is (run,pause,mem,rom,waitread,waitwrite,waitvga,vga,audio,peripheral);
 signal prgstate : prgstates :=run;
 
 -- Address decoding for fast state machine
@@ -171,8 +204,6 @@ signal fast_prgstate : fastprgstates :=waitcpu;
 
 begin
 
-audio_l<=X"0000";
-audio_r<=X"0000";
 sdr_cke <='1';
 
 process(clk)
@@ -288,6 +319,7 @@ begin
 		vga_reg_req<='0';
 		per_reg_rw<='1';
 		per_reg_req<='0';
+		audio_reg_req<='0';
 		rom_we_n<='1';
 		
 		vga_ackback<='0';
@@ -317,6 +349,9 @@ begin
 							per_reg_rw<=cpu_r_w;
 							per_reg_req<='1';
 							prgstate<=peripheral;
+						when X"8200" => -- Audio controller
+							audio_reg_req<='1';
+							prgstate<=audio;
 						when X"0000" => -- ROM access
 							-- We replace the first page of RAM with the bootrom if the bootrom_overlay flag is set.
 							if cpu_r_w='0' then	-- Pass writes through to RAM.
@@ -353,6 +388,9 @@ begin
 					cpu_clkena<='1';
 					prgstate<=run;
 				end if;
+			when audio =>
+				cpu_clkena<='1';
+				prgstate<=run;
 			when others =>
 				null;
 		end case;
@@ -436,16 +474,17 @@ mysdram : entity work.sdram
 		reset_out => sdr_ready,
 		reinit => '0',
 
-		vga_addr => sdr_vga_addr,
-		vga_data => sdr_vga_data,
-		vga_fill => sdr_vga_fill,
-		vga_req => sdr_vga_req,
-		vga_ack => sdr_vga_ack,
-		vga_refresh => sdr_vga_refresh,
-		vga_reservebank => sdr_vga_reservebank,
-		vga_reserveaddr => sdr_vga_reserveaddr,
+		vga_addr => vga_addr,
+		vga_data => vga_data,
+		vga_fill => vga_fill,
+		vga_req => vga_req,
+		vga_ack => vga_ack,
+		vga_nak => vga_nak,
+		vga_refresh => vga_refresh,
+		vga_reservebank => vga_reservebank,
+		vga_reserveaddr => vga_reserveaddr,
 
-		vga_newframe => sdr_vga_newframe,
+		vga_newframe => vga_newframe,
 
 		datawr1 => cpu_dataout_r,
 		Addr1 => cpu_addr_r,
@@ -476,6 +515,41 @@ mysdram : entity work.sdram
 	end process;
 
 
+	-- DMA controller
+
+	mydmacache : entity work.DMACache
+		port map(
+			clk => clk_fast,
+			reset_n => reset,
+
+			channels_from_host(0) => vgachannel_fromhost,
+			channels_from_host(1) => spr0channel_fromhost,
+			channels_from_host(2) => aud0_fromhost,
+			channels_from_host(3) => aud1_fromhost,
+			channels_from_host(4) => aud2_fromhost,
+			channels_from_host(5) => aud3_fromhost,
+
+			channels_to_host(0) => vgachannel_tohost,	
+			channels_to_host(1) => spr0channel_tohost,
+			channels_to_host(2) => aud0_tohost,
+			channels_to_host(3) => aud1_tohost,
+			channels_to_host(4) => aud2_tohost,
+			channels_to_host(5) => aud3_tohost,
+
+			data_out => dma_data,
+
+			-- SDRAM interface
+			sdram_addr=> vga_addr,
+			sdram_reserveaddr(31 downto 0) => vga_reserveaddr,
+			sdram_reserve => vga_reservebank,
+			sdram_req => vga_req,
+			sdram_ack => vga_ack,
+			sdram_nak => vga_nak,
+			sdram_fill => vga_fill,
+			sdram_data => vga_data
+		);	
+
+		
 	myvga : entity work.vga_controller
 		port map (
 		clk => clk_fast,
@@ -490,14 +564,13 @@ mysdram : entity work.sdram
 		reg_dtack => vga_reg_dtack,
 		reg_req => vga_reg_req,
 
-		sdr_addrout => sdr_vga_addr,
-		sdr_datain => sdr_vga_data, 
-		sdr_fill => sdr_vga_fill,
-		sdr_req => sdr_vga_req,
-		sdr_ack => sdr_vga_ack,
-		sdr_reservebank => sdr_vga_reservebank,
-		sdr_reserveaddr => sdr_vga_reserveaddr,
-		sdr_refresh => sdr_vga_refresh,
+		sdr_refresh => vga_refresh,
+
+		dma_data => dma_data,
+		vgachannel_fromhost => vgachannel_fromhost,
+		vgachannel_tohost => vgachannel_tohost,
+		spr0channel_fromhost => spr0channel_fromhost,
+		spr0channel_tohost => spr0channel_tohost,
 
 		hsync => vga_hsync,
 		vsync => vga_vsync,
@@ -552,13 +625,42 @@ mysdram : entity work.sdram
 		spiclk_out => spi_clk,
 		spi_cs => spi_cs,
 		
-		gpio_in => gpio_in,
-		gpio_out => gpio_out,
+		gpio_data => gpio_data,
+		gpio_dir => gpio_dir,
 		
 		hex => hex,
 
 		bootrom_overlay => bootrom_overlay,
 		bootram_overlay => bootram_overlay
+	);
+
+	-- Audio controller
+
+	myaudio : entity work.sound_wrapper
+		generic map(
+			clk_frequency => fastclk_frequency -- Prescale incoming clock
+		)
+	port map (
+		clk => clk_fast,
+		reset => reset,
+
+		reg_addr_in => cpu_addr_r(7 downto 0),
+		reg_data_in => cpu_dataout_r,
+		reg_rw => '0', -- we never read from the sound controller
+		reg_req => audio_reg_req,
+
+		dma_data => dma_data,
+		channel0_fromhost => aud0_fromhost,
+		channel0_tohost => aud0_tohost,
+		channel1_fromhost => aud1_fromhost,
+		channel1_tohost => aud1_tohost,
+		channel2_fromhost => aud2_fromhost,
+		channel2_tohost => aud2_tohost,
+		channel3_fromhost => aud3_fromhost,
+		channel3_tohost => aud3_tohost,
+
+		audio_l => audio_l,
+		audio_r => audio_r
 	);
 
 	

@@ -701,6 +701,14 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=272" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=11926" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=3502" -section_id auto_signaltap_0
+set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACacheRAM.vhd
+set_global_assignment -name VHDL_FILE ../../RTL/DMACache_config.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Memory/DMACache_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Misc/risingedge_divider.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Misc/FIFO_Counter.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Sound/sound_wrapper.vhd
+set_global_assignment -name VHDL_FILE ../../../RTL/Sound/sound_controller.vhd
+set_global_assignment -name VERILOG_FILE ../../../RTL/Sound/hybrid_pwm_sd.v
 set_global_assignment -name QIP_FILE ../../../Board/de1/PLL_50To100split.qip
 set_global_assignment -name VERILOG_FILE ../../../Board/de1/SEG7_LUT_4.v
 set_global_assignment -name VERILOG_FILE ../../../Board/de1/SEG7_LUT.v

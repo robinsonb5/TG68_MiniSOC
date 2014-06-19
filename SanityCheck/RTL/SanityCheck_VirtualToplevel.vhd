@@ -6,11 +6,12 @@ entity VirtualToplevel is
 	generic (
 		sdram_rows : integer := 12;
 		sdram_cols : integer := 8;
-		sysclk_frequency : integer := 1000; -- Sysclk frequency * 10
+		sysclk_frequency : integer := 1000; -- Sysclk_fast frequency * 10
 		spi_maxspeed : integer := 4	-- lowest acceptable timer DIV7 value
 	);
 	port (
 		clk 			: in std_logic;
+		clk_fast 	: in std_logic;
 		reset_in 	: in std_logic;
 
 		-- VGA
@@ -30,7 +31,7 @@ entity VirtualToplevel is
 		sdr_ras 		: out std_logic;
 		sdr_cs		: out std_logic;
 		sdr_ba		: out std_logic_vector(1 downto 0);
---		sdr_clk		: out std_logic; -- Board specific, from the PLL
+--		sdr_clk_fast		: out std_logic; -- Board specific, from the PLL
 		sdr_cke	: out std_logic;
 		
 		-- UART
@@ -54,7 +55,9 @@ entity VirtualToplevel is
 		spi_clk : out std_logic;
 		
 		audio_l : out signed(15 downto 0);
-		audio_r : out signed(15 downto 0)
+		audio_r : out signed(15 downto 0);
+		
+		hex : out std_logic_vector(15 downto 0)
 	);
 end entity;
 
@@ -67,7 +70,7 @@ signal cpu_uds : std_logic; -- upper data strobe
 signal cpu_lds : std_logic; -- lower data strobe
 signal cpu_r_w : std_logic; -- read(high)/write(low)
 signal busstate : std_logic_vector(1 downto 0);
-signal cpu_clkena : std_logic :='0';
+signal cpu_clk_fastena : std_logic :='0';
 
 -- VGA
 signal currentX : unsigned(11 downto 0);
@@ -148,9 +151,9 @@ audio_l<=X"0000";
 audio_r<=X"0000";
 sdr_cke <='1';
 
-process(clk)
+process(clk_fast)
 begin
-	if rising_edge(clk) then
+	if rising_edge(clk_fast) then
 		reset <= tg68_ready and sdr_ready and reset_in;
 	end if;
 end process;
@@ -160,14 +163,14 @@ sdr_cke<='1';
 
 ps2m_db: entity work.Debounce
 	port map(
-	clk => clk,
+	clk => clk_fast,
 	signal_in => ps2m_clk_in,
 	signal_out => ps2m_clk_db
 );
 
 ps2k_db: entity work.Debounce
 	port map(
-	clk => clk,
+	clk => clk_fast,
 	signal_in => ps2k_clk_in,
 	signal_out => ps2k_clk_db
 );
@@ -176,7 +179,7 @@ ps2k_db: entity work.Debounce
 
 myint : entity work.interrupt_controller
 	port map(
-		clk => clk,
+		clk => clk_fast,
 		reset => reset,
 		int7 => '0',
 		int1 => vblank_int,
@@ -197,9 +200,9 @@ myTG68 : entity work.TG68KdotC_Kernel
 	)
    port map
 	(
-		clk => clk,
+		clk => clk_fast,
       nReset => reset_in and sdr_ready,  -- Contributes to reset, so have to use reset_in here.
-      clkena_in => cpu_clkena,
+      clkena_in => cpu_clk_fastena,
       data_in => cpu_datain,
 		IPL => ints,
 		IPL_autovector => '0',
@@ -223,7 +226,7 @@ mybootrom : entity work.SanityCheck_ROM
 		maxAddrBitBRAM => 11
 	)
 	port map (
-		clk => clk,
+		clk => clk_fast,
 		addr => cpu_addr(11 downto 0),
 		q => romdata,
 		d => cpu_dataout,
@@ -234,13 +237,13 @@ mybootrom : entity work.SanityCheck_ROM
 
 
 -- Make use of boot rom
-process(clk,cpu_addr)
+process(clk_fast,cpu_addr)
 begin
 	if reset_in='0' then
 		prgstate<=wait2;
 		req_pending<='0';
 		vga_reg_datain<=X"0000";
-	elsif rising_edge(clk) then
+	elsif rising_edge(clk_fast) then
 		int_ack<='0';
 		vga_reg_rw<='1';
 		vga_reg_req<='0';
@@ -249,7 +252,7 @@ begin
 		rom_we_n<='1';
 		case prgstate is
 			when run =>
-				cpu_clkena<='0';
+				cpu_clk_fastena<='0';
 				prgstate<=pause;
 			when pause =>
 				prgstate<=mem;
@@ -309,7 +312,7 @@ begin
 					cpu_datain<=ramdata;
 					req_pending<='0';
 					prgstate<=wait0;
---					cpu_clkena<='1';
+--					cpu_clk_fastena<='1';
 --					prgstate<=run;
 				end if;
 			when waitwrite =>
@@ -317,7 +320,7 @@ begin
 				if dtack1='0' then
 					req_pending<='0';
 					prgstate<=wait0;
---					cpu_clkena<='1';
+--					cpu_clk_fastena<='1';
 --					prgstate<=run;
 				end if;
 			when rom =>
@@ -328,7 +331,7 @@ begin
 				cpu_datain<=vga_reg_dataout;
 				vga_reg_rw<=cpu_r_w;
 				if vga_reg_dtack='0' then
---					cpu_clkena<='1';
+--					cpu_clk_fastena<='1';
 --					prgstate<=run;
 					prgstate<=wait0;
 				end if;
@@ -337,7 +340,7 @@ begin
 				cpu_datain<=per_reg_dataout;
 				per_reg_rw<=cpu_r_w;
 				if per_reg_dtack='0' then
---					cpu_clkena<='1';
+--					cpu_clk_fastena<='1';
 --					prgstate<=run;
 					prgstate<=wait0;
 				end if;
@@ -349,16 +352,16 @@ begin
 				prgstate<=wait3;
 			when wait3 =>
 				if (reset or not tg68_ready)='1' then
-					cpu_clkena<='1';
+					cpu_clk_fastena<='1';
 					prgstate<=run;
 				end if;
 			when others =>
 				null;
 		end case;
 --		elsif busstate/="01" then	-- Does this cycle involve mem access if so, wait?
---			cpu_clkena<='0';
+--			cpu_clk_fastena<='0';
 --		end if;
---		cpu_clkena<=(not cpu_clkena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
+--		cpu_clk_fastena<=(not cpu_clk_fastena) and (ready or not tg68_ready);	-- Don't let TG68 start until the SDRAM is ready
 	end if;
 end process;
 
@@ -383,7 +386,7 @@ mysdram : entity work.sdram
 		ba	=> sdr_ba,
 
 	-- Housekeeping
-		sysclk => clk,
+		sysclk => clk_fast,
 		reset => reset_in,  -- Contributes to reset, so have to use reset_in here.
 		reset_out => sdr_ready,
 		reinit => '0',
@@ -412,7 +415,7 @@ mysdram : entity work.sdram
 
 	myvga : entity work.vga_controller
 		port map (
-		clk => clk,
+		clk => clk_fast,
 		reset => reset,
 
 		reg_addr_in => vga_reg_addr,
@@ -450,7 +453,7 @@ mysdram : entity work.sdram
 			spi_maxspeed => spi_maxspeed
 		)
 		port map (
-		clk => clk,
+		clk => clk_fast,
 		reset => reset,
 		
 --		reg_addr_in => per_reg_addr,
@@ -483,7 +486,7 @@ mysdram : entity work.sdram
 
 		miso => spi_miso,
 		mosi => spi_mosi,
-		spiclk_out => spi_clk,
+		spiclk_fast_out => spi_clk,
 		spi_cs => spi_cs,
 		
 		bootrom_overlay => bootrom_overlay

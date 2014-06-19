@@ -106,25 +106,6 @@ DisableInterrupts
 	move.w	#$2700,SR
 	rts
 
-	cnop 0,8 ; must be quadword aligned.
-StandardPointer
-	dc.l $CF000000,$00000000
-	dc.l $8CFFF000,$00000000
-	dc.l $08CCFFF0,$00000000
-	dc.l $08CCCCFF,$FF000000
-	dc.l $088CCCCC,$CFFF0000
-	dc.l $008CCCCC,$CCC80000
-	dc.l $0088CCCC,$CC800000
-	dc.l $0008CCCC,$CF000000
-	dc.l $0008CCCC,$CCF00000
-	dc.l $00088CC8,$CCCF0000
-	dc.l $00008C80,$8CCCF000
-	dc.l $00008800,$08CCCF00
-	dc.l $00000000,$008CCCF0
-	dc.l $00000000,$0008CCC8
-	dc.l $00000000,$00008C80
-	dc.l $00000000,$00000800
-
 	; make symbols visible to C code
 
 	XDEF EnableInterrupts
@@ -136,4 +117,4 @@ StandardPointer
 	XDEF IntHandler5
 	XDEF IntHandler6
 	XDEF IntHandler7
-	XDEF StandardPointer
+
