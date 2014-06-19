@@ -29,14 +29,14 @@ int microseconds=0;
 
 static void heartbeat_int()
 {
-	microseconds+=10000;	// 100 Hz heartbeat
+	microseconds+=10000;	// 100 HZ heartbeat
 }
 
 void SetHeartbeat()
 {
-	HW_TIMER(REG_TIMER_DIV0)=HW_BOARD(REG_CAP_CLOCKSPEED)*2; // Timers 1 through 6 are now based on 100khz base clock.
+	HW_TIMER(REG_TIMER_DIV0)=HW_BOARD(REG_CAP_CLOCKSPEED)*2; // Timers 1 through 6 are now based on 100kHZ base clock.
 	HW_TIMER(REG_TIMER_CONTROL)=(1<<BIT_TIMER_EN1);
-	HW_TIMER(REG_TIMER_DIV1)=1000; // 100Hz heartbeat
+	HW_TIMER(REG_TIMER_DIV1)=1000; // 100HZ heartbeat
 	SetIntHandler(TIMER_INT,&heartbeat_int);
 }
 
@@ -48,9 +48,9 @@ static void vblank_int()
 	char a=0;
 	int yoff;
 	framecount++;
-//	microseconds+=(16667*1250)/HW_PER(PER_CAP_CLOCKSPEED);	// Assumes 60Hz video mode.
+//	microseconds+=(16667*1250)/HW_PER(PER_CAP_CLOCKSPEED);	// Assumes 60HZ video mode.
 
-//	microseconds+=16667;	// Assumes 60Hz video mode.
+//	microseconds+=16667;	// Assumes 60HZ video mode.
 
 	if(framecount==959)
 		framecount=0;
@@ -313,7 +313,7 @@ int main(int argc,char *argv)
 	ClearTextBuffer();
 
 	HW_UART(REG_UART_CLKDIV)=(1000*HW_BOARD(REG_CAP_CLOCKSPEED))/1152;
-	HW_TIMER(REG_TIMER_DIV0)=HW_BOARD(REG_CAP_CLOCKSPEED)*2; // Clocks 1 through 6 are now based on 100khz base clock.
+	HW_TIMER(REG_TIMER_DIV0)=HW_BOARD(REG_CAP_CLOCKSPEED)*2; // Clocks 1 through 6 are now based on 100kHZ base clock.
 
 	AddMemory();
 
@@ -390,7 +390,7 @@ int main(int argc,char *argv)
 		{
 			puts("640 x 480\n");
 			screenwidth=640;
-			VGA_SetScreenMode(MODE_640_480);
+			VGA_SetScreenMode(MODE_640_480_60HZ);
 			while(TestKey(KEY_F5))
 				;
 		}
@@ -398,15 +398,15 @@ int main(int argc,char *argv)
 		{
 			puts("320 x 480\n");
 			screenwidth=320;
-			VGA_SetScreenMode(MODE_320_480);
+			VGA_SetScreenMode(MODE_320_480_60HZ);
 			while(TestKey(KEY_F6))
 				;
 		}
 		if(TestKey(KEY_F7))
 		{
-			puts("800 x 600 @ 50Hz\n");
+			puts("800 x 600 @ 50HZ\n");
 			screenwidth=800;
-			VGA_SetScreenMode(MODE_800_600);
+			VGA_SetScreenMode(MODE_800_600_52HZ);
 			while(TestKey(KEY_F7))
 				;
 		}
@@ -414,16 +414,16 @@ int main(int argc,char *argv)
 		{
 			puts("768 x 576\n");
 			screenwidth=768;
-			VGA_SetScreenMode(MODE_768_576);
+			VGA_SetScreenMode(MODE_768_576_57HZ);
 			while(TestKey(KEY_F8))
 				;
 		}
 
 		if(TestKey(KEY_F9))
 		{
-			puts("800 x 600 @ 72Hz\n");
+			puts("800 x 600 @ 72HZ\n");
 			screenwidth=800;
-			VGA_SetScreenMode(MODE_800_600_72);
+			VGA_SetScreenMode(MODE_800_600_72HZ);
 			while(TestKey(KEY_F9))
 				;
 		}

@@ -31,7 +31,7 @@ void VGA_SetScreenMode(enum VGA_ScreenModes mode)
 {
 	switch(mode)
 	{
-		case MODE_640_480:
+		case MODE_640_480_60HZ:
 			HW_VGA(REG_VGA_HTOTAL)=800;
 			HW_VGA(REG_VGA_HSIZE)=640;
 			HW_VGA(REG_VGA_HBSTART)=656;
@@ -44,7 +44,7 @@ void VGA_SetScreenMode(enum VGA_ScreenModes mode)
 			HW_VGA(REG_VGA_CONTROL)=screenmode;
 			break;	
 
-		case MODE_320_480:
+		case MODE_320_480_60HZ:
 			HW_VGA(REG_VGA_HTOTAL)=400;
 			HW_VGA(REG_VGA_HSIZE)=320;
 			HW_VGA(REG_VGA_HBSTART)=328;
@@ -57,7 +57,7 @@ void VGA_SetScreenMode(enum VGA_ScreenModes mode)
 			HW_VGA(REG_VGA_CONTROL)=screenmode;
 			break;
 
-		case MODE_800_600:
+		case MODE_800_600_52HZ:
 			HW_VGA(REG_VGA_HTOTAL)=1024;
 			HW_VGA(REG_VGA_HSIZE)=800;
 			HW_VGA(REG_VGA_HBSTART)=824;
@@ -70,7 +70,7 @@ void VGA_SetScreenMode(enum VGA_ScreenModes mode)
 			HW_VGA(REG_VGA_CONTROL)=screenmode;
 		break;
 
-		case MODE_800_600_72:
+		case MODE_800_600_72HZ:
 			HW_VGA(REG_VGA_HTOTAL)=1040;
 			HW_VGA(REG_VGA_HSIZE)=800;
 			HW_VGA(REG_VGA_HBSTART)=856;
@@ -83,7 +83,7 @@ void VGA_SetScreenMode(enum VGA_ScreenModes mode)
 			HW_VGA(REG_VGA_CONTROL)=screenmode;
 		break;
 
-		case MODE_768_576:
+		case MODE_768_576_57HZ:
 			HW_VGA(REG_VGA_HTOTAL)=976;
 			HW_VGA(REG_VGA_HSIZE)=768;
 			HW_VGA(REG_VGA_HBSTART)=792;

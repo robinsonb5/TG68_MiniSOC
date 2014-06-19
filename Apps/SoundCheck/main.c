@@ -1,14 +1,14 @@
 #include "uart.h"
 #include "soundhw.h"
 
-char *soundbuffer=0x100000;
+char *soundbuffer=0x10000e;
 
 int main(int argc, char **argv)
 {
 	int i;
 	puts("Sound check\n");
 
-	for(i=0;i<255;++i)
+	for(i=0;i<256;++i)
 	{
 		soundbuffer[i]=i;
 	}

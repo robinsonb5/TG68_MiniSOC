@@ -57,6 +57,7 @@ type DMAChannel_Internal is record
 	full : std_logic; -- Is the FIFO full?
 	drain : std_logic; -- Drain a word from the FIFO
 	empty : std_logic; -- Is the FIFO completely empty?
+	extend : std_logic;
 end record;
 
 type DMAChannels_Internal is array (DMACache_MaxChannel downto 0) of DMAChannel_Internal;
@@ -135,7 +136,11 @@ begin
 		if sdram_ack='1' then
 			sdram_req<='0';
 			internals(activechannel).addr<=std_logic_vector(unsigned(internals(activechannel).addr)+16);
-			internals(activechannel).count<=internals(activechannel).count-8;
+			if internals(activechannel).extend='1' then -- Read an extra word for non-aligned reads.
+				internals(activechannel).extend<='0';
+			else
+				internals(activechannel).count<=internals(activechannel).count-8;
+			end if;
 		end if;
 		
 
@@ -243,6 +248,10 @@ begin
 			if channels_from_host(I).setreqlen='1' then
 				internals(I).count(15 downto 0)<=channels_from_host(I).reqlen;
 				internals(I).count(16)<='0';
+				internals(I).extend<='1'; -- If the data isn't burst-aligned we need to read an extra burst.
+				if internals(I).addr(2 downto 0)="000" then
+					internals(I).extend<='0';
+				end if;
 			end if;
 		end loop;
 
