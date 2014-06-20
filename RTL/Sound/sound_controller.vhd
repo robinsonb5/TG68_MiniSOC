@@ -68,7 +68,9 @@ begin
 	process(clk,reset)
 	begin
 		if reset='0' then
-
+			channel_fromhost.reqlen <= (others => '0');
+			channel_fromhost.setreqlen <='1';
+			volume(5 downto 0) <= (others => '0');
 		elsif rising_edge(clk) then
 
 			channel_fromhost.setaddr <='0';
