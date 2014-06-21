@@ -20,7 +20,7 @@ STARTUP_OBJ = $(patsubst $(STARTUP_DIR)/%.s,$(BUILD_DIR)/%.o,$(STARTUP_SRC))
 LIB_SRC = memcpy.c strcpy.c strcmp.c
 LIB_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(LIB_SRC))
 
-COMMON_SRC = vga.c uart.c ints.c small_printf.c
+COMMON_SRC = vga.c uart.c interrupts.c small_printf.c
 COMMON_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(COMMON_SRC))
 
 MAIN_PRJ = Dhrystone

@@ -2,7 +2,7 @@
 
 #include "ps2.h"
 #include "timer.h"
-#include "ints.h"
+#include "interrupts.h"
 #include "keyboard.h"
 
 void ps2_ringbuffer_init(struct ps2_ringbuffer *r)

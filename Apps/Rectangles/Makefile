@@ -16,7 +16,7 @@ BUILD_DIR=m68k_obj
 STARTUP_SRC = $(STARTUP_DIR)/startup_app.s  $(STARTUP_DIR)/premain.s
 STARTUP_OBJ = $(patsubst $(STARTUP_DIR)/%.s,$(BUILD_DIR)/%.o,$(STARTUP_SRC))
 
-COMMON_SRC = vga.c uart.c ints.c
+COMMON_SRC = vga.c uart.c interrupts.c
 COMMON_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(COMMON_SRC))
 
 MAIN_PRJ = Rectangles

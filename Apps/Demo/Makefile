@@ -21,7 +21,7 @@ LIB_SRC = memcpy.c strcpy.c strcmp.c strncmp.c strncpy.c vsnprintf.c sprintf.c m
 	 strlen.c malloc.c printf.c textbuffer.c
 LIB_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(LIB_SRC))
 
-COMMON_SRC = vga.c uart.c ints.c ps2.c keyboard.c swap.c spi.c
+COMMON_SRC = vga.c uart.c interrupts.c ps2.c keyboard.c swap.c spi.c
 COMMON_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(COMMON_SRC))
 
 MAIN_PRJ = MiniSOCDemo

@@ -22,7 +22,7 @@ LIB_SRC = memcpy.c strcpy.c strcmp.c strncmp.c strncpy.c vsnprintf.c sprintf.c m
 	 strlen.c malloc.c printf.c vsscanf.c sscanf.c strntoumax.c ctypes.c
 LIB_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(LIB_SRC))
 
-COMMON_SRC = vga.c uart.c ints.c ps2.c keyboard.c swap.c spi.c small_printf.c fat.c rafile.c syscalls.c textbuffer.c 
+COMMON_SRC = vga.c uart.c swap.c spi.c small_printf.c fat.c rafile.c syscalls.c textbuffer.c 
 COMMON_OBJ = $(patsubst %.c,$(BUILD_DIR)/%.o,$(COMMON_SRC))
 COMMON_S_SRC= $(COMMON_DIR)/spi_readsector.s
 COMMON_S_OBJ = $(patsubst $(COMMON_DIR)/%.s,$(BUILD_DIR)/%.o,$(COMMON_S_SRC))

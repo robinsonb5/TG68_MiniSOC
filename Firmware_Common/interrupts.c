@@ -1,4 +1,4 @@
-#include "ints.h"
+#include "interrupts.h"
 
 extern void (*IntHandler1)();
 
