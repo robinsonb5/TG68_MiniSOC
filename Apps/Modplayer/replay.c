@@ -294,9 +294,8 @@ static void mt_RetrigNote(PT_CHN *ch)
         {
             mt_paulaSetDat(ch->n_index, ch->n_start);
             mt_paulaSetLen(ch->n_index, ch->n_length);
-            mt_paulaSetLoop(ch->n_index, ch->n_loopstart, ch->n_replen);
-
             mt_paulaStart(ch->n_index);
+            mt_paulaSetLoop(ch->n_index, ch->n_loopstart, ch->n_replen);
         }
     }
 }
@@ -358,9 +357,9 @@ static void mt_NoteDelay(PT_CHN *ch)
         {
             mt_paulaSetDat(ch->n_index, ch->n_start);
             mt_paulaSetLen(ch->n_index, ch->n_length);
+            mt_paulaStart(ch->n_index);
             mt_paulaSetLoop(ch->n_index, ch->n_loopstart, ch->n_replen);
 
-            mt_paulaStart(ch->n_index);
         }
     }
 }
@@ -821,11 +820,12 @@ static void mt_SetPeriod(PT_CHN *ch)
     if ((ch->n_wavecontrol & (1 << 6)) == 0) ch->n_tremolopos = 0;
  
 	printf("Triggering hardware for channel %d\n",ch->n_index);
-	printf("Sample start: %d\n",ch->n_start);
+//	small_printf("Sample start: %d\n",ch->n_start);
     mt_paulaSetDat(ch->n_index, ch->n_start);
-	printf("Sample len: %d\n",ch->n_length);
+//	small_printf("Sample len: %d\n",ch->n_length);
+//	small_printf("Repeat len: %d\n",ch->n_replen);
     mt_paulaSetLen(ch->n_index, ch->n_length);
-	printf("Sample period: %d\n",ch->n_period);
+//	printf("Sample period: %d\n",ch->n_period);
     mt_paulaSetPer(ch->n_index, ch->n_period);
 
 	puts("Triggering playback\n");
@@ -888,7 +888,7 @@ static void mt_PlayVoice(PT_CHN *ch, int pattPos)
         {
             ch->n_loopstart = ch->n_start + repeat;
             ch->n_wavestart = ch->n_start + repeat;
-            ch->n_length = repeat + ch->n_replen;
+            ch->n_length = (repeat>>2) + ch->n_replen; // FIXME - is this right?
         }
         else
         {

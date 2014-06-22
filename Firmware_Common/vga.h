@@ -40,6 +40,7 @@
 extern char *VGACharBuffer;
 
 enum VGA_ScreenModes {
+	MODE_640_400_70HZ,
 	MODE_640_480_60HZ,
 	MODE_320_480_60HZ,
 	MODE_800_600_52HZ,

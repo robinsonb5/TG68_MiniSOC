@@ -88,7 +88,7 @@ channel0 : entity work.sound_controller
 		reset => reset,
 		audiotick => audiotick,
 
-		reg_addr_in => "000"&reg_addr_in(4 downto 0),
+		reg_addr_in => "0000"&reg_addr_in(3 downto 0),
 		reg_data_in => reg_data_in,
 		reg_data_out => open,
 		reg_rw => '0',
@@ -108,7 +108,7 @@ channel1 : entity work.sound_controller
 		reset => reset,
 		audiotick => audiotick,
 
-		reg_addr_in => "000"&reg_addr_in(4 downto 0),
+		reg_addr_in => "0000"&reg_addr_in(3 downto 0),
 		reg_data_in => reg_data_in,
 		reg_data_out => open,
 		reg_rw => '0',
@@ -128,7 +128,7 @@ channel2 : entity work.sound_controller
 		reset => reset,
 		audiotick => audiotick,
 
-		reg_addr_in => "000"&reg_addr_in(4 downto 0),
+		reg_addr_in => "0000"&reg_addr_in(3 downto 0),
 		reg_data_in => reg_data_in,
 		reg_data_out => open,
 		reg_rw => '0',
@@ -148,7 +148,7 @@ channel3 : entity work.sound_controller
 		reset => reset,
 		audiotick => audiotick,
 
-		reg_addr_in => "000"&reg_addr_in(4 downto 0),
+		reg_addr_in => "0000"&reg_addr_in(3 downto 0),
 		reg_data_in => reg_data_in,
 		reg_data_out => open,
 		reg_rw => '0',
