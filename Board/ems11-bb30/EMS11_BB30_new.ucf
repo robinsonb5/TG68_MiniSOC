@@ -200,8 +200,6 @@ NET DR_D<*> NODELAY;
 #	VG96 connector with MFM board
 #
 
-
-
 # NET "VG_A2_EMU_DRV_SELECTED_CON3_N" LOC = "AF2";
 # NET "VG_A3_EMU_BUS2_DIRECTION" LOC = "AE2";
 # NET "VG_A4_EMU_DRV_SLCT_3_N" LOC = "AC2";
@@ -304,6 +302,12 @@ NET "GPIO<7>" LOC = "G1";		#-- IO 7
 NET "GPIO<8>" LOC = "J2";		#-- IO 8
 NET "GPIO<9>" LOC = "J1";		#-- IO 9
 
+NET "GPIO<10>" LOC = "E3";		#-- TO LOCK THEM TO THE VG96, NO connection to MIO
+NET "GPIO<11>" LOC = "D3";		#-- TO LOCK THEM TO THE VG96, NO connection to MIO
+NET "GPIO<12>" LOC = "C4";		#-- TO LOCK THEM TO THE VG96, NO connection to MIO
+NET "GPIO<13>" LOC = "C3";		#-- TO LOCK THEM TO THE VG96, NO connection to MIO
+
+
 NET "GPIO<14>" LOC = "U2";		#-- RESET
 NET "GPIO<15>" LOC = "W1";		#-- CLK
 
@@ -327,95 +331,12 @@ NET "GPIO<15>" LOC = "W1";		#-- CLK
 #	EMS11-BB-V2.1e  AND EMS11-BB_V3.0e
 #
 
-NET "GPIO*" IOSTANDARD = LVTTL;
+NET "GPIO*" IOSTANDARD = LVTTL | DRIVE = 4;
 
 #
-#	M1 Graphics connector module
-
-
-# NET "M1_S27_VGA_GREEN<9>" LOC = "B25";
-# NET "M1_S28_VGA_BLUE<3>" LOC = "L23";
-# NET "M1_S29_VGA_GREEN<8>" LOC = "B26";
-# NET "M1_S30_VGA_BLUE<2>" LOC = "M23";
-# NET "M1_S33_VGA_GREEN<7>" LOC = "C25";
-# NET "M1_S34_VGA_BLUE<1>" LOC = "N21";
-# NET "M1_S35_VGA_GREEN<6>" LOC = "C26";
-# NET "M1_S36_VGA_BLUE<0>" LOC = "N23";
-# NET "M1_S37_VGA_GREEN<5>" LOC = "D26";
-# NET "M1_S38_VGA_BLANK_N" LOC = "N22";
-# NET "M1_S41_VGA_GREEN<4>" LOC = "E25";
-# NET "M1_S42_VGA_SYNC_N" LOC = "P20";
-# NET "M1_S43_VGA_GREEN<3>" LOC = "E26";
-# NET "M1_S44_VGA_RED<9>" LOC = "P24";
-# NET "M1_S45_VGA_GREEN<2>" LOC = "F26";
-# NET "M1_S46_VGA_RED<8>" LOC = "R23";
-# NET "M1_S49_VGA_GREEN<1>" LOC = "G25";
-# NET "M1_S50_VGA_RED<7>" LOC = "R24";
-# NET "M1_S51_VGA_GREEN<0>" LOC = "G26";
-# NET "M1_S52_VGA_RED<6>" LOC = "P21";
-# NET "M1_S53_VGA_BLUE<4>" LOC = "H26";
-# NET "M1_S54_VGA_RED<5>" LOC = "T23";
-# NET "M1_S57_VGA_BLUE<5>" LOC = "J25";
-# NET "M1_S58_VGA_RED<4>" LOC = "U23";
-# NET "M1_S59_VGA_BLUE<6>" LOC = "J26";
-# NET "M1_S60_VGA_RED<3>" LOC = "V23";
-# NET "M1_S61_VGA_BLUE<7>" LOC = "K26";
-# NET "M1_S62_VGA_RED<2>" LOC = "AA24";
-# NET "M1_S65_VGA_BLUE<8>" LOC = "L25";
-# NET "M1_S66_VGA_RED<1>" LOC = "AA23";
-# NET "M1_S67_VGA_BLUE<9>" LOC = "L26";
-# NET "M1_S68_VGA_RED<0>" LOC = "L19";
-# NET "M1_S69_VGA_CLOCK" LOC = "M26";
-# NET "M1_S70" LOC = "L24";
-# NET "M1_S73_VGA_PSAVE_N" LOC = "N25";
-# NET "M1_S74" LOC = "M19";
-# NET "M1_S75_VGA_HSYNC" LOC = "N26";
-# NET "M1_S76" LOC = "M24";
-# NET "M1_S77_VGA_VSYNC" LOC = "N24";
-# NET "M1_S78" LOC = "M21";
-
+#	M1 Graphics connector module & MCU Module
+#	please use ems11-tm30-v0.0.ucf
 #
-#	MCU ARM Connector module
-#
-
-# NET "MCU_29" LOC = "P22";
-# NET "MCU_33" LOC = "R26";
-# NET "MCU_34" LOC = "T19";
-# NET "MCU_35" LOC = "R25";
-# NET "MCU_36" LOC = "R19";
-# NET "MCU_37" LOC = "T26";
-# NET "MCU_38" LOC = "N19";
-# NET "MCU_41" LOC = "P26";
-# NET "MCU_42" LOC = "U24";
-# NET "MCU_43" LOC = "U25";
-# NET "MCU_44" LOC = "T22";
-# NET "MCU_45" LOC = "V26";
-# NET "MCU_46" LOC = "U19";
-# NET "MCU_49" LOC = "W26";
-# NET "MCU_50" LOC = "W24";
-# NET "MCU_51" LOC = "W25";
-# NET "MCU_52" LOC = "V22";
-# NET "MCU_53" LOC = "Y26";
-# NET "MCU_54" LOC = "V24";
-# NET "MCU_57" LOC = "AA26";
-# NET "MCU_58" LOC = "AA22";
-# NET "MCU_59" LOC = "AA25";
-# NET "MCU_60" LOC = "Y22";
-# NET "MCU_61" LOC = "AB26";
-# NET "MCU_62" LOC = "Y24";
-# NET "MCU_65" LOC = "AC26";
-# NET "MCU_66" LOC = "AD24";
-# NET "MCU_67" LOC = "AC25";
-# NET "MCU_68" LOC = "Y21";
-# NET "MCU_69" LOC = "AD26";
-# NET "MCU_70" LOC = "W22";
-# NET "MCU_73" LOC = "AE26";
-# NET "MCU_74" LOC = "AF25";
-# NET "MCU_75" LOC = "AE25";
-# NET "MCU_76" LOC = "AE23";
-# NET "MCU_77" LOC = "AF24";
-# NET "MCU_78" LOC = "AE24";
-# NET "MCU_80" LOC = "W19";
 
 #
 #	Weird auxilary pins, JTAG, etc. ---------------------------------

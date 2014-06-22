@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=C:\Users\CHEMSTI\HOME\TG68_MiniSOC.git\branches\burst8\SOC\fpga\ems11-bb30\EMS11_BB30Toplevel.ncd
+OUTFILE=C:\Users\CHEMSTI\HOME\TG68_MiniSOC.git\branches\burst8\SOC\fpga\ems11-bb30\EMS11_BB30Toplevel.bit
+FAMILY=Spartan6
+PART=xc6slx45-3fgg676
+WORKINGDIR=C:\Users\CHEMSTI\HOME\TG68_MiniSOC.git\branches\burst8\SOC\fpga\ems11-bb30
+LICENSE=WebPack
+USER_INFO=174126493_174126494_0_676

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Video/chargen.vhd" Line 66: Actual for formal port <arg fmt="%s" index="1">wren_b</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 91: Actual for formal port <arg fmt="%s" index="1">reg_addr_in</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 95: Actual for formal port <arg fmt="%s" index="1">reg_req</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 111: Actual for formal port <arg fmt="%s" index="1">reg_addr_in</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 115: Actual for formal port <arg fmt="%s" index="1">reg_req</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 131: Actual for formal port <arg fmt="%s" index="1">reg_addr_in</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 135: Actual for formal port <arg fmt="%s" index="1">reg_req</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 151: Actual for formal port <arg fmt="%s" index="1">reg_addr_in</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Sound/sound_wrapper.vhd" Line 155: Actual for formal port <arg fmt="%s" index="1">reg_req</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Peripherals/peripheral_controller.vhd" Line 248: Actual for formal port <arg fmt="%s" index="1">reset</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Peripherals/peripheral_controller.vhd" Line 271: Actual for formal port <arg fmt="%s" index="1">reset</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../RTL/SOC_VirtualToplevel.vhd" Line 265: Actual for formal port <arg fmt="%s" index="1">nreset</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="946" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../RTL/SOC_VirtualToplevel.vhd" Line 596: Actual for formal port <arg fmt="%s" index="1">reg_addr_in</arg> is neither a static name nor a globally static expression
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="919" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Memory/TwoWayCache.v" Line 100: Size mismatch in mixed language port association, vhdl port <arg fmt="%s" index="1">address_a</arg>
+</msg>
+
+<msg type="error" file="HDLCompiler" num="71" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Memory/TwoWayCache.v" Line 63: <arg fmt="%s" index="1">addrbits</arg> is not declared under prefix <arg fmt="%s" index="2">dataram</arg>
+</msg>
+
+<msg type="error" file="HDLCompiler" num="71" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Memory/TwoWayCache.v" Line 64: <arg fmt="%s" index="1">databits</arg> is not declared under prefix <arg fmt="%s" index="2">dataram</arg>
+</msg>
+
+<msg type="error" file="HDLCompiler" num="71" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Memory/TwoWayCache.v" Line 97: <arg fmt="%s" index="1">addrbits</arg> is not declared under prefix <arg fmt="%s" index="2">tagram</arg>
+</msg>
+
+<msg type="error" file="HDLCompiler" num="71" delta="unknown" >"C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/../../../RTL/Memory/TwoWayCache.v" Line 98: <arg fmt="%s" index="1">databits</arg> is not declared under prefix <arg fmt="%s" index="2">tagram</arg>
+</msg>
+
+<msg type="error" file="Simulator" num="777" delta="unknown" >Static elaboration of top level VHDL design unit <arg fmt="%s" index="1">ems11_bb30toplevel</arg> in library <arg fmt="%s" index="2">work</arg> failed
+</msg>
+
+</messages>
+
