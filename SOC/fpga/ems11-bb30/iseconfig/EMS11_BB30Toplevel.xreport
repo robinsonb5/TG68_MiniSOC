@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2014-06-18T08:34:18</DateModified>
+  <DateModified>2014-06-22T22:23:27</DateModified>
   <ModuleName>EMS11_BB30Toplevel</ModuleName>
   <SummaryTimeStamp>2014-06-18T08:22:24</SummaryTimeStamp>
-  <SavedFilePath>C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30/iseconfig/EMS11_BB30Toplevel.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>C:/Users/CHEMSTI/HOME/TG68_MiniSOC.git/branches/burst8/SOC/fpga/ems11-bb30\</ImplementationReportsDirectory>
+  <SavedFilePath>/home/amr/FPGA/TG68MiniSOC/SOC/fpga/ems11-bb30/iseconfig/EMS11_BB30Toplevel.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/amr/FPGA/TG68MiniSOC/SOC/fpga/ems11-bb30/</ImplementationReportsDirectory>
   <DateInitialized>2014-06-11T16:24:12</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
