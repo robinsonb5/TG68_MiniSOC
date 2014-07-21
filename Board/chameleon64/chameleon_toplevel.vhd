@@ -256,7 +256,7 @@ begin
 			outbits => 5
 		)
 		port map(
-			clk=>clk,
+			clk=>clk_fast,
 			hsync=>nHSync,
 			vsync=>nVSync,
 			vid_ena=>vga_window,

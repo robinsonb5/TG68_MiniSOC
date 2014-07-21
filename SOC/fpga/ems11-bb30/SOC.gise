@@ -22,31 +22,59 @@
   <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="SOC.xise"/>
 
   <files xmlns="http://www.xilinx.com/XMLSchema">
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_BITGEN_REPORT" xil_pn:name="EMS11_BB30Toplevel.bgn" xil_pn:subbranch="FPGAConfiguration"/>
+    <file xil_pn:fileType="FILE_BIN" xil_pn:name="EMS11_BB30Toplevel.bin"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_BIT" xil_pn:name="EMS11_BB30Toplevel.bit" xil_pn:subbranch="FPGAConfiguration"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGDBUILD_LOG" xil_pn:name="EMS11_BB30Toplevel.bld"/>
     <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="EMS11_BB30Toplevel.cmd_log"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_BITGEN_DRC" xil_pn:name="EMS11_BB30Toplevel.drc" xil_pn:subbranch="FPGAConfiguration"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_LSO" xil_pn:name="EMS11_BB30Toplevel.lso"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NCD" xil_pn:name="EMS11_BB30Toplevel.ncd" xil_pn:subbranch="Par"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGC" xil_pn:name="EMS11_BB30Toplevel.ngc"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGD" xil_pn:name="EMS11_BB30Toplevel.ngd"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGR" xil_pn:name="EMS11_BB30Toplevel.ngr"/>
+    <file xil_pn:fileType="FILE_PAD_MISC" xil_pn:name="EMS11_BB30Toplevel.pad"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PAR_REPORT" xil_pn:name="EMS11_BB30Toplevel.par" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PCF" xil_pn:name="EMS11_BB30Toplevel.pcf" xil_pn:subbranch="Map"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="EMS11_BB30Toplevel.prj"/>
+    <file xil_pn:fileType="FILE_TRCE_MISC" xil_pn:name="EMS11_BB30Toplevel.ptwx"/>
+    <file xil_pn:fileType="FILE_RBT" xil_pn:name="EMS11_BB30Toplevel.rbt"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_STX" xil_pn:name="EMS11_BB30Toplevel.stx"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="EMS11_BB30Toplevel.syr"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_TSI_REPORT" xil_pn:name="EMS11_BB30Toplevel.tsi" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_TIMING_TXT_REPORT" xil_pn:name="EMS11_BB30Toplevel.twr" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_TIMING_XML_REPORT" xil_pn:name="EMS11_BB30Toplevel.twx" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_UNROUTES" xil_pn:name="EMS11_BB30Toplevel.unroutes" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_BITGEN_REPORT" xil_pn:name="EMS11_BB30Toplevel.ut" xil_pn:subbranch="FPGAConfiguration"/>
+    <file xil_pn:fileType="FILE_XPI" xil_pn:name="EMS11_BB30Toplevel.xpi"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="EMS11_BB30Toplevel.xst"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="EMS11_BB30Toplevel_beh.prj"/>
     <file xil_pn:fileType="FILE_NCD" xil_pn:name="EMS11_BB30Toplevel_guide.ncd" xil_pn:origination="imported"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_MAP_REPORT" xil_pn:name="EMS11_BB30Toplevel_map.map" xil_pn:subbranch="Map"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_MAP_REPORT" xil_pn:name="EMS11_BB30Toplevel_map.mrp" xil_pn:subbranch="Map"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NCD" xil_pn:name="EMS11_BB30Toplevel_map.ncd" xil_pn:subbranch="Map"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGM" xil_pn:name="EMS11_BB30Toplevel_map.ngm" xil_pn:subbranch="Map"/>
+    <file xil_pn:fileType="FILE_PSR" xil_pn:name="EMS11_BB30Toplevel_map.psr"/>
     <file xil_pn:fileType="FILE_XRPT" xil_pn:name="EMS11_BB30Toplevel_map.xrpt"/>
     <file xil_pn:fileType="FILE_XRPT" xil_pn:name="EMS11_BB30Toplevel_ngdbuild.xrpt"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PAD_EXCEL_REPORT" xil_pn:name="EMS11_BB30Toplevel_pad.csv" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PAD_TXT_REPORT" xil_pn:name="EMS11_BB30Toplevel_pad.txt" xil_pn:subbranch="Par"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="EMS11_BB30Toplevel_par.xrpt"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="EMS11_BB30Toplevel_stx_beh.prj"/>
     <file xil_pn:fileType="FILE_HTML" xil_pn:name="EMS11_BB30Toplevel_summary.html"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="EMS11_BB30Toplevel_summary.xml"/>
+    <file xil_pn:fileType="FILE_WEBTALK" xil_pn:name="EMS11_BB30Toplevel_usage.xml"/>
     <file xil_pn:fileType="FILE_XRPT" xil_pn:name="EMS11_BB30Toplevel_xst.xrpt"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="_ngo"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/bitgen.xmsgs"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/map.xmsgs"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/par.xmsgs"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/trce.xmsgs"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="usage_statistics_webtalk.html"/>
+    <file xil_pn:fileType="FILE_LOG" xil_pn:name="webtalk.log"/>
     <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
     <file xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xlnx_auto_0_xdb"/>
@@ -126,6 +154,8 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.lso"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.ngc"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.ngr"/>
@@ -154,14 +184,59 @@
       <outfile xil_pn:name="_ngo"/>
       <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
     </transform>
-    <transform xil_pn:end_ts="1403472938" xil_pn:in_ck="-8021463243216158252" xil_pn:name="TRANEXT_map_spartan6" xil_pn:prop_ck="-7475947245300105764" xil_pn:start_ts="1403472525">
-      <status xil_pn:value="AbortedRun"/>
+    <transform xil_pn:end_ts="1403719258" xil_pn:in_ck="-8021463243216158252" xil_pn:name="TRANEXT_map_spartan6" xil_pn:prop_ck="-7475947245300105764" xil_pn:start_ts="1403718673">
+      <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.pcf"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel_map.map"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel_map.mrp"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel_map.ncd"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel_map.ngm"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel_map.psr"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel_map.xrpt"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel_summary.xml"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel_usage.xml"/>
       <outfile xil_pn:name="_xmsgs/map.xmsgs"/>
+    </transform>
+    <transform xil_pn:end_ts="1403719876" xil_pn:in_ck="-1812740710434530579" xil_pn:name="TRANEXT_par_spartan6" xil_pn:prop_ck="7846039340612803429" xil_pn:start_ts="1403719258">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.ncd"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.pad"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.par"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.ptwx"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.unroutes"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.xpi"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel_pad.csv"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel_pad.txt"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel_par.xrpt"/>
+      <outfile xil_pn:name="_xmsgs/par.xmsgs"/>
+    </transform>
+    <transform xil_pn:end_ts="1403719936" xil_pn:in_ck="-8762705794299877413" xil_pn:name="TRANEXT_bitFile_spartan6" xil_pn:prop_ck="-2418408333432745756" xil_pn:start_ts="1403719876">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.bgn"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.bin"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.bit"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.drc"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.rbt"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.ut"/>
+      <outfile xil_pn:name="_xmsgs/bitgen.xmsgs"/>
+      <outfile xil_pn:name="usage_statistics_webtalk.html"/>
+      <outfile xil_pn:name="webtalk.log"/>
+      <outfile xil_pn:name="webtalk_pn.xml"/>
+    </transform>
+    <transform xil_pn:end_ts="1403719876" xil_pn:in_ck="-8021463243216158384" xil_pn:name="TRAN_postRouteTrce" xil_pn:prop_ck="7007845759391303576" xil_pn:start_ts="1403719847">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.tsi"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.twr"/>
+      <outfile xil_pn:name="EMS11_BB30Toplevel.twx"/>
+      <outfile xil_pn:name="_xmsgs/trce.xmsgs"/>
     </transform>
   </transforms>
 

@@ -60,7 +60,6 @@ begin
 
 	-- Multiplexer, selects between high and low byte of the sampleword.
 	sample <= signed(sampleword(15 downto 8)) when hibyte='1' else signed(sampleword(7 downto 0));
-	sampleout <= sample * volume;
 	audio_out<=sampleout(13 downto 0);
 
 	-- Handle CPU access to hardware registers
@@ -72,6 +71,9 @@ begin
 			channel_fromhost.setreqlen <='1';
 			volume(5 downto 0) <= (others => '0');
 		elsif rising_edge(clk) then
+
+			-- Register sampleout to reduce combinational length and pipeline the multiplication
+			sampleout <= sample * volume;
 
 			channel_fromhost.setaddr <='0';
 			channel_fromhost.setreqlen <='0';
