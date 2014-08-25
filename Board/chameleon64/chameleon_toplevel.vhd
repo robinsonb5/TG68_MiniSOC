@@ -143,7 +143,7 @@ begin
 -- -----------------------------------------------------------------------
 -- Clocks and PLL
 -- -----------------------------------------------------------------------
-	mypll : entity work.Clock_50to100Split
+	mypll : entity work.Clock_8to100Split
 		port map (
 			inclk0 => clk8,
 			c0 => clk_fast,

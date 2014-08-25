@@ -154,6 +154,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
       <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.lso"/>
@@ -178,6 +179,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.bld"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.ngd"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel_ngdbuild.xrpt"/>
@@ -187,6 +189,7 @@
     <transform xil_pn:end_ts="1403719258" xil_pn:in_ck="-8021463243216158252" xil_pn:name="TRANEXT_map_spartan6" xil_pn:prop_ck="-7475947245300105764" xil_pn:start_ts="1403718673">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
       <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.pcf"/>
@@ -204,6 +207,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.ncd"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.pad"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.par"/>
@@ -219,6 +223,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.bgn"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.bin"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.bit"/>
@@ -233,6 +238,7 @@
     <transform xil_pn:end_ts="1403719876" xil_pn:in_ck="-8021463243216158384" xil_pn:name="TRAN_postRouteTrce" xil_pn:prop_ck="7007845759391303576" xil_pn:start_ts="1403719847">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.tsi"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.twr"/>
       <outfile xil_pn:name="EMS11_BB30Toplevel.twx"/>

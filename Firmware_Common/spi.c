@@ -221,8 +221,8 @@ short spi_init()
 	SDHCtype=is_sdhc();
 	if(SDHCtype)
 		printf("SDHC card detected\n");
-
-	cmd_CMD16(1);
+	else	// Not SDHC?  Set blocksize to 512 bytes
+		cmd_CMD16(1);
 	SPI(0xFF);
 	SPI_CS(0);
 

@@ -38,7 +38,7 @@ LINKMAP  = $(STARTUP_DIR)/ldscript_app.ld
 
 CFLAGS  = -m$(ARCH) -fomit-frame-pointer -fno-common -I. -c -O6 -DDISABLE_UART_RX -I$(COMMON_DIR)
 
-LFLAGS  = -m$(ARCH) -nostartfiles -nostdlib -Wl,--relax -O6
+LFLAGS  = -m$(ARCH) -nostartfiles -nostdlib -Wl,--relax -O6 -Wl,--emit-relocs
 
 LIBS = -lgcc
 
