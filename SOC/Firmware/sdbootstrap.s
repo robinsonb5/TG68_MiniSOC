@@ -159,11 +159,11 @@ START:				; first instruction of program
 	move.w	PERREGS,d0
 	btst	#9,d0		; Rx intterupt?
 	beq		.mainloop
-;	move.b	d0,(a5)+
-;	move.l	a5,d1	; Make sure the address doesn't roll past the text buffer
-;	or.l	$00000800,d1
-;	and.l	$ffffefff,d1
-;	move.l	d1,a5
+	move.b	d0,(a5)+
+	move.l	a5,d1	; Make sure the address doesn't roll past the text buffer
+	or.l	$00000800,d1
+	and.l	$ffffefff,d1
+	move.l	d1,a5
 	bsr		HandleByte
 	bra		.mainloop
 

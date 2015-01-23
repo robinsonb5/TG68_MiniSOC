@@ -66,6 +66,7 @@ port
 	Addr1		: in std_logic_vector(31 downto 0);	-- Address in from Minimig - FIXME case
 	req1		: in std_logic;
 	cachesel	: in std_logic :='0'; -- 1 => data cache, 0 => instruction cache
+	cachevalid : out std_logic;
 	wr1			: in std_logic;	-- Read/write from Minimig
 	wrL1		: in std_logic;	-- Minimig write lower byte
 	wrU1		: in std_logic;	-- Minimig write upper byte
@@ -162,6 +163,7 @@ COMPONENT TwoWayCache
 		cpu_addr		:	 IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		cpu_req		:	 IN STD_LOGIC;
 		cpu_ack		:	 OUT STD_LOGIC;
+		cpu_cachevalid		:	 OUT STD_LOGIC;
 		cpu_rw		:	 IN STD_LOGIC;
 		cpu_rwl	: in std_logic;
 		cpu_rwu : in std_logic;
@@ -302,6 +304,7 @@ mytwc : component TwoWayCache
 		cpu_addr => addr1,
 		cpu_req => req1,
 		cpu_ack => readcache_dtack,
+		cpu_cachevalid => cachevalid,
 		cpu_rw => wr1,
 		cpu_rwl => wrL1,
 		cpu_rwu => wrU1,

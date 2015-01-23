@@ -27,11 +27,12 @@ module TwoWayCache
 	input [31:0] cpu_addr,
 	input cpu_req,	// 1 to request attention
 	output reg cpu_ack,	// 1 to signal that data is ready.
+	output cpu_cachevalid, // 1 to indicate that data is already cached and valid
 	input cpu_rw, // 1 for read cycles, 0 for write cycles
 	input cpu_rwl,
 	input cpu_rwu,
 	input [15:0] data_from_cpu,
-	output reg [15:0] data_to_cpu,
+	output [15:0] data_to_cpu,
 //	output reg [31:0] sdram_addr, // The SDRAM controller uses the CPU address directly
 	input [15:0] data_from_sdram,
 	output reg [15:0] data_to_sdram,
@@ -118,7 +119,13 @@ wire [10:0] cacheline1;
 wire [10:0] cacheline2;
 
 reg [10:4] latched_cpuaddr;
+reg [15:0] firstword;
 
+assign data_to_cpu = (readword_burst ? firstword :
+									((tag_hit1 && data_valid1) ? data_port1_r[15:0] : data_port2_r[15:0]));
+
+assign cpu_cachevalid = ((tag_hit1 && data_valid1) || (tag_hit2 && data_valid2)) && !readword_burst;
+								
 reg readword_burst; // Set to 1 when the lsb of the cache address should
 							// track the SDRAM controller.
 reg [2:0] readword;
@@ -268,7 +275,7 @@ begin
 				if(tag_hit1 && data_valid1)
 				begin
 					// Copy data to output
-					data_to_cpu<=data_port1_r;
+//					data_to_cpu<=data_port1_r;
 					cpu_ack<=1'b1;
 
 					// Mark tag1 as most recently used.
@@ -278,7 +285,7 @@ begin
 				else if(tag_hit2 && data_valid2)
 				begin
 					// Copy data to output
-					data_to_cpu<=data_port2_r;
+//					data_to_cpu<=data_port2_r;
 					cpu_ack<=1'b1;
 					
 					// Mark tag2 as most recently used.
@@ -331,7 +338,8 @@ begin
 			begin
 				sdram_req<=1'b0;
 				// Forward data to CPU
-				data_to_cpu<=data_from_sdram;
+//				data_to_cpu<=data_from_sdram;
+				firstword <= data_from_sdram;
 				cpu_ack<=1'b1; // Too soon?
 
 				// write first word to Cache...

@@ -17,44 +17,45 @@ architecture rtl of poweronreset is
 signal counter : unsigned(15 downto 0):=(others => '1');
 signal resetbutton_debounced : std_logic;
 signal powerbutton_debounced : std_logic;
-signal power_cut : std_logic;
+signal powerbutton_posedge : std_logic;
+signal resetbutton_posedge : std_logic;
+signal poweron : std_logic :='1';
 
 begin
 	mydb : entity work.debounce
 		port map(
 			clk=>clk,
-			signal_in=>reset_button,
-			signal_out=>resetbutton_debounced
+			signal_in=>reset_button and power_button,
+			signal_out=>resetbutton_debounced,
+			posedge=>resetbutton_posedge
 		);
 	mydb2 : entity work.debounce
 		generic map(
 			default => '0',	-- Will probably power up with the button held.
-			bits => 22
+			bits => 23
 		)
 		port map(
 			clk=>clk,
 			signal_in=>power_button,
-			signal_out=>powerbutton_debounced
+			signal_out=>powerbutton_debounced,
+			posedge=>powerbutton_posedge
 		);
 	process(clk)
 	begin
 		if(rising_edge(clk)) then
 			reset_out<='0';
-			power_cut<='0';
-			if resetbutton_debounced='0' then
+			if resetbutton_posedge='1' then
 				counter<=X"FFFF";
 			elsif counter=X"0000" then
-				reset_out<='1';
-
-				if powerbutton_debounced='0' then -- If we're not in reset, cut power if the power button is pressed
-					power_cut<='1';
-				elsif power_cut='1' then -- ... but don't actually cut the power until the button's released again.
-					power_hold<='0';
+				if powerbutton_posedge='1' then
+					power_hold<=poweron; -- Ignore the first posedge after poweron.
+					poweron<='0';
 				end if;
-
-			elsif powerbutton_debounced='1' then -- Don't let the reset counter run while the power button's pushed
-				counter <= counter-1;
+				reset_out<='1';
+			else
+				counter<=counter-1;
 			end if;
+
 		end if;
 	end process;
 

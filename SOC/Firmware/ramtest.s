@@ -11,6 +11,8 @@ PERREGS equ $81000000 ; Peripheral registers
 SERPER equ $81000002
 HEX equ $81000006 ; HEX display
 
+PER_KEYBOARD equ $8
+BIT_KEYBOARD_RCV equ 11
 PER_SPI equ $20
 PER_SPI_BLOCKING equ $24
 PER_SPI_CS equ $22
@@ -34,11 +36,18 @@ START:				; first instruction of program
 	move.w	d0,SERPER
 	move.w	#$2700,SR	; Disable all interrupts
 
+.waitkey
+	move.w	PERREGS+PER_KEYBOARD,d0
+	btst #BIT_KEYBOARD_RCV,d0
+	beq	.waitkey
+
 	lea	startmessage,a0
 	bsr	Writeserial
 
 mainloop
-	move.b	#'a',PERREGS;
+	move.b	#'s',PERREGS
+	bsr	SanityCheck
+	move.b	#'a',PERREGS
 	bsr	TestRAM_b
 	move.b	#'b',PERREGS
 	bsr	TestRAM_l
@@ -50,6 +59,29 @@ mainloop
 	bsr	TestRAM_AddByte
 
 	bra	mainloop
+
+SanityCheck
+	lea	$7f0000,a0
+	move.l	#$12345678,(a0)
+	move.l	#$fedcba98,4(a0)
+	move.l	#$aa55cc22,2(a0)
+	move.b	#$33,3(a0)
+	move.b	#$fe,4(a0)
+	move.l	(a0),d0
+	move.l	4(a0),d1
+	sub.l	#$1234aa33,d0
+	sub.l	#$fe22ba98,d1
+	or.l	d1,d0
+	bne .fail
+	rts
+
+.fail
+	move.l	#$ff,d0
+	move.w	#$ffff,HEX
+	lea	failmessage_s,a0
+	bsr	Writeserial
+	tst.w d0
+	rts
 
 
 TestRAM_b
@@ -463,6 +495,8 @@ failmessage_l
 	dc.b	"Longword test failed\n\r",0
 failmessage_b
 	dc.b	"Masked longword test failed\n\r",0
+failmessage_s
+	dc.b	"Sanity check failed\n\r",0
 failmessage_byte
 	dc.b	"Byte test failed\n\r",0
 failmessage_byte2
